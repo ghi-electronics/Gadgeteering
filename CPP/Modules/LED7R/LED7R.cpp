@@ -1,5 +1,9 @@
 #include "LED7R.h"
 
+using namespace GHI;
+using namespace GHI::Modules;
+using namespace GHI::Interfaces;
+
 LED7R::LED7R(int socketNumber) 
 {
 	this->socket = mainboard->getSocket(socketNumber);

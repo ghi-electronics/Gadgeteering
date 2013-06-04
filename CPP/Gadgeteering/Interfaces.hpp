@@ -3,62 +3,66 @@
 
 #include "Mainboard.hpp"
 
-class DigitalOutput {
-	Socket* socket;
-	Socket::Pin pin;
+namespace GHI {
+	namespace Interfaces {
+		class DigitalOutput {
+			Socket* socket;
+			Socket::Pin pin;
 
-	public:
-		DigitalOutput(Socket* socket, Socket::Pin pin, bool initialState = false);
+			public:
+				DigitalOutput(Socket* socket, Socket::Pin pin, bool initialState = false);
 
-		void write(bool value);
-};
+				void write(bool value);
+		};
 
-class DigitalInput {
-	Socket* socket;
-	Socket::Pin pin;
+		class DigitalInput {
+			Socket* socket;
+			Socket::Pin pin;
 
-	public:
-		DigitalInput(Socket* socket, Socket::Pin pin);
+			public:
+				DigitalInput(Socket* socket, Socket::Pin pin);
 
-		bool read();
-};
+				bool read();
+		};
 
-class DigitalInputOutput {
-	Socket* socket;
-	Socket::Pin pin;
-	Socket::IOState ioState;
+		class DigitalInputOutput {
+			Socket* socket;
+			Socket::Pin pin;
+			Socket::IOState ioState;
 	
-	public:
-		DigitalInputOutput(Socket* socket, Socket::Pin pin, Socket::IOState initialIOState = Socket::IOStates::IN, bool initialOutputState = false);
+			public:
+				DigitalInputOutput(Socket* socket, Socket::Pin pin, Socket::IOState initialIOState = Socket::IOStates::IN, bool initialOutputState = false);
 
-		void write(bool value);
-		bool read();
-		void setState(Socket::IOState state);
-};
+				void write(bool value);
+				bool read();
+				void setState(Socket::IOState state);
+		};
 
-class AnalogInput {
-	Socket* socket;
-	Socket::Pin pin;
+		class AnalogInput {
+			Socket* socket;
+			Socket::Pin pin;
 
-	public:
-		AnalogInput(Socket* socket, Socket::Pin pin);
+			public:
+				AnalogInput(Socket* socket, Socket::Pin pin);
 
-		double read();
-};
+				double read();
+		};
 
-class PWMOutput {
-	Socket* socket;
-	Socket::Pin pin;
+		class PWMOutput {
+			Socket* socket;
+			Socket::Pin pin;
 
-	double frequency;
-	double dutyCycle;
+			double frequency;
+			double dutyCycle;
 
-	public:
-		PWMOutput(Socket* socket, Socket::Pin pin);
+			public:
+				PWMOutput(Socket* socket, Socket::Pin pin);
 
-		void set(double frequency, double dutyCycle);
-		void setFrequency(double frequency);
-		void setDutyCycle(double dutyCycle);
-};
+				void set(double frequency, double dutyCycle);
+				void setFrequency(double frequency);
+				void setDutyCycle(double dutyCycle);
+		};
+	}
+}
 
 #endif 

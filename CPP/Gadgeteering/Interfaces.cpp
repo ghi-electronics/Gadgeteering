@@ -1,5 +1,7 @@
 #include "Interfaces.hpp"
 
+using namespace GHI::Interfaces;
+
 DigitalOutput::DigitalOutput(Socket* socket, Socket::Pin pin, bool initialState) : socket(socket), pin(pin) {
 	if (!socket || pin < 3 || pin > 9)
 		mainboard->panic("Pin out of range");

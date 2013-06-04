@@ -1,14 +1,19 @@
 #ifndef _LEDStrip_H_
 #define _LEDStrip_H_
 
-#include "..\GHI\GHI.h"
+#include <Gadgeteering/Gadgeteering.h>
+#include "../LED7R/LED7R.h"
 
-#include "..\LED7R\LED7R.h"
+namespace GHI {
+	namespace Modules {
+		using namespace GHI::Interfaces;
 
-class LEDStrip : public LED7R {
-	public:
-		LEDStrip(int socketNumber);
+		class LEDStrip : public LED7R {
+			public:
+				LEDStrip(int socketNumber);
 
-};
+		};
+	}
+}
 
 #endif

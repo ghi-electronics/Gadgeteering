@@ -38,7 +38,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(ProjectDir);$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(ProjectDir);$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -70,7 +75,11 @@
     <ClInclude Include="Gadgeteering\SerialDevice.hpp" />
     <ClInclude Include="Gadgeteering\SoftwareI2C.hpp" />
     <ClInclude Include="Gadgeteering\SPIDevice.hpp" />
+    <ClInclude Include="Gadgeteering\Types.hpp" />
     <ClInclude Include="Mainboards\FEZLynx\FEZLynx.h" />
+    <ClInclude Include="Mainboards\FEZLynx\Linux\ftd2xx.h" />
+    <ClInclude Include="Mainboards\FEZLynx\Linux\WinTypes.h" />
+    <ClInclude Include="Mainboards\FEZLynx\Windows\FTD2XX.H" />
     <ClInclude Include="Mainboards\FEZMedusa\FEZMedusa.h" />
     <ClInclude Include="Mainboards\FEZMedusa\VirtualSocket.hpp" />
     <ClInclude Include="Modules\CharDisplay\CharDisplay.h" />
@@ -81,7 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp" />
-    <ClCompile Include="Gadgeteering\Mainboard.cpp" />
+    <ClCompile Include="Mainboards\FEZMedusa\Mainboard.cpp" />
     <ClCompile Include="Gadgeteering\SoftwareI2C.cpp" />
     <ClCompile Include="Mainboards\FEZLynx\FEZLynx.cpp" />
     <ClCompile Include="Mainboards\FEZMedusa\FEZMedusa.cpp" />

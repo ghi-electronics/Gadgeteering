@@ -1,5 +1,9 @@
 #include "CharDisplay.h"
 
+using namespace GHI;
+using namespace GHI::Modules;
+using namespace GHI::Interfaces;
+
 CharDisplay::CharDisplay(int socketNumber) {
 	this->socket = mainboard->getSocket(socketNumber);
 	this->socket->ensureTypeIsSupported(Socket::Types::Y);
@@ -18,7 +22,8 @@ CharDisplay::CharDisplay(int socketNumber) {
     this->sendCommand(CharDisplay::DISP_ON);
 	
     this->clear();
-				
+			
+#error MOVE CHAR DISPLAY TO SYSTEM::SLEEP
 	delay(3);
 }
 

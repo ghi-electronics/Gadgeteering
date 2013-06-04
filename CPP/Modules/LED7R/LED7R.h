@@ -1,24 +1,30 @@
 #ifndef _LED7R_H_
 #define _LED7R_H_
 
-#include "..\GHI\GHI.h"
+#include <Gadgeteering/Gadgeteering.h>
 
-class LED7R : public Module {
-	static const int LEDS = 7;
+namespace GHI {
+	namespace Modules {
+		using namespace GHI::Interfaces;
 
-	Socket* socket;
-	DigitalOutput* ports[LED7R::LEDS];
+		class LED7R : public Module {
+			static const int LEDS = 7;
 
-	public:
-		LED7R(int socketNumber);
+			Socket* socket;
+			DigitalOutput* ports[LED7R::LEDS];
 
-		void turnOnLED(int led, bool onlyLED = false);
-		void turnOffLED(int led);
+			public:
+				LED7R(int socketNumber);
 
-		void turnAllOn();
-		void turnAllOff();
+				void turnOnLED(int led, bool onlyLED = false);
+				void turnOffLED(int led);
 
-		void animate(int switchTime, bool clockwise, bool turnOn, bool remainOn = true);
-};
+				void turnAllOn();
+				void turnAllOff();
+
+				void animate(int switchTime, bool clockwise, bool turnOn, bool remainOn = true);
+		};
+	}
+}
 
 #endif

@@ -3,6 +3,8 @@
 #define I2C_READ 1
 #define I2C_WRITE 0
 
+using namespace GHI::Interfaces;
+
 SoftwareI2C::SoftwareI2C(byte address, Socket* socket) {
 	socket->ensureTypeIsSupported(Socket::Types::I);
 
@@ -49,6 +51,7 @@ void SoftwareI2C::sendStopCondition() {
 void SoftwareI2C::waitForSCL() {
 	this->pullSCLHigh();
 
+#error CONVERT TO SYSTEM I2C waitForSCL
 	unsigned long endTime = micros() + 2000;
 	while(!this->readSCL() && micros() < endTime)
 		;

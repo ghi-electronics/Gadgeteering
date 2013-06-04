@@ -1,5 +1,9 @@
 #include "Tunes.h"
 
+using namespace GHI;
+using namespace GHI::Modules;
+using namespace GHI::Interfaces;
+
 Tunes::Tunes(int socketNumber) {
 	this->socket = mainboard->getSocket(socketNumber);
 	this->socket->ensureTypeIsSupported(Socket::Types::P);
