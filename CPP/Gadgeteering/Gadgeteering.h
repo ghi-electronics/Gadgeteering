@@ -7,4 +7,6 @@
 #include "SoftwareI2C.hpp"
 #include "SPIDevice.hpp"
 
+#include "System.h"
+
 #endif

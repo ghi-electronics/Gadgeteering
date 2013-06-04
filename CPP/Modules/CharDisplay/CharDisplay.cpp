@@ -23,8 +23,7 @@ CharDisplay::CharDisplay(int socketNumber) {
 	
     this->clear();
 			
-#error MOVE CHAR DISPLAY TO SYSTEM::SLEEP
-	delay(3);
+	System::msSleep(3);
 }
 
 void CharDisplay::sendNibble(byte b) {
@@ -36,7 +35,7 @@ void CharDisplay::sendNibble(byte b) {
     this->lcdE->write(true);
 	this->lcdE->write(false);
 
-	delay(1);
+	System::Sleep(1);
 }
 
 void CharDisplay::sendByte(byte b) {
@@ -48,7 +47,7 @@ void CharDisplay::sendCommand(byte c) {
     this->lcdRS->write(false); //set LCD to data mode
 	this->sendByte(c);
 
-	delay(2);
+	System::Sleep(2);
 
     this->lcdRS->write(true); //set LCD to data mode  
 }
@@ -64,12 +63,12 @@ void CharDisplay::print(char character) {
 
 void CharDisplay::clear() {
     this->sendCommand(CharDisplay::CLR_DISP);
-	delay(2);
+	System::Sleep(2);
 }
 
 void CharDisplay::cursorHome() {
     this->sendCommand(CharDisplay::CUR_HOME);
-	delay(2);
+	System::Sleep(2);
 }
 
 void CharDisplay::setCursor(byte row, byte col) {
