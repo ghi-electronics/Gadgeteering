@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp" />
+    <ClCompile Include="Gadgeteering\Mainboard.cpp" />
     <ClCompile Include="Gadgeteering\System.cpp" />
     <ClCompile Include="Mainboards\FEZMedusa\Mainboard.cpp" />
     <ClCompile Include="Gadgeteering\SoftwareI2C.cpp" />

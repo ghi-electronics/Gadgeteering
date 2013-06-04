@@ -141,7 +141,7 @@ void FEZMedusa::writeDigital(Socket* socket, Socket::Pin pinNumber, bool value) 
 }
 
 double FEZMedusa::readAnalog(Socket* socket, Socket::Pin pinNumber) {
-	return this->isSocketReal(socket) ? return static_cast<double>(::analogRead(socket->pins[pinNumber])) / 1024 * 3.3 : this->extenderChip->readAnalog(socket->pins[pinNumber]);
+	return this->isSocketReal(socket) ? (static_cast<double>(::analogRead(socket->pins[pinNumber])) / 1024 * 3.3) : this->extenderChip->readAnalog(socket->pins[pinNumber]);
 }
 
 void FEZMedusa::writeAnalog(Socket* socket, Socket::Pin pinNumber, double voltage) {
