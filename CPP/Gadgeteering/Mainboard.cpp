@@ -1,5 +1,7 @@
 #include "Mainboard.hpp"
 
+using namespace GHI;
+
 Module::Module() {
 
 }
@@ -14,36 +16,6 @@ void Socket::ensureTypeIsSupported(Type type) {
 		mainboard->panic("Type not supported");
 }
 
-void Socket::setIOMode(Pin pinNumber, IOState state, ResistorMode resistorMode) {
-	if (state == IOStates::PWM)
-		mainboard->panic("Not supported");
-
-	if (state == IOStates::IN)
-		::pinMode(this->pins[pinNumber], resistorMode == ResistorModes::PULL_UP ? INPUT_PULLUP : INPUT);
-	else
-		::pinMode(this->pins[pinNumber], OUTPUT);
-}
-
-bool Socket::readDigital(Pin pinNumber) {
-	return ::digitalRead(this->pins[pinNumber]) != 0;
-}
-
-void Socket::writeDigital(Pin pinNumber, bool value) {
-	::digitalWrite(this->pins[pinNumber], value ? HIGH : LOW);
-}
-
-double Socket::readAnalog(Pin pinNumber) {
-	return static_cast<double>(::analogRead(this->pins[pinNumber])) / 1024 * 3.3;
-}
-
-void Socket::writeAnalog(Pin pinNumber, double voltage) {
-	::analogWrite(this->pins[pinNumber], voltage * (1024 / 3.3));
-}
-
-void Socket::setPWM(Pin pinNumber, double dutyCycle, double frequency) {
-	mainboard->panic("Not supported");
-}
-
 Mainboard::Mainboard() {
 	this->sockets = NULL;
 	
@@ -53,6 +25,10 @@ Mainboard::Mainboard() {
 #ifdef DEBUG_PRINT
 	Serial.begin(9600);
 #endif
+}
+
+Mainboard::~Mainboard() {
+
 }
 
 void Mainboard::panic(const char* error) {

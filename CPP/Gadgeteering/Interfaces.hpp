@@ -28,14 +28,14 @@ namespace GHI {
 		class DigitalInputOutput {
 			Socket* socket;
 			Socket::Pin pin;
-			Socket::IOState ioState;
+			Mainboard::IOState ioState;
 	
 			public:
-				DigitalInputOutput(Socket* socket, Socket::Pin pin, Socket::IOState initialIOState = Socket::IOStates::IN, bool initialOutputState = false);
+				DigitalInputOutput(Socket* socket, Socket::Pin pin, Mainboard::IOState initialIOState = Mainboard::IOStates::IN, bool initialOutputState = false);
 
 				void write(bool value);
 				bool read();
-				void setState(Socket::IOState state);
+				void setState(Mainboard::IOState state);
 		};
 
 		class AnalogInput {

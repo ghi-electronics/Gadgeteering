@@ -39,9 +39,6 @@
     <ClInclude Include="Mainboards\FEZMedusa\FEZMedusa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Mainboards\FEZMedusa\VirtualSocket.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Modules\CharDisplay\CharDisplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -69,6 +66,9 @@
     <ClInclude Include="Gadgeteering\Types.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Mainboards\FEZMedusa\ExtenderChip.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -89,9 +89,6 @@
     <ClCompile Include="Mainboards\FEZMedusa\SPIDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mainboards\FEZMedusa\VirtualSocket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Modules\CharDisplay\CharDisplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -107,7 +104,10 @@
     <ClCompile Include="Modules\Tunes\Tunes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mainboards\FEZMedusa\Mainboard.cpp">
+    <ClCompile Include="Gadgeteering\Mainboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mainboards\FEZMedusa\ExtenderChip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

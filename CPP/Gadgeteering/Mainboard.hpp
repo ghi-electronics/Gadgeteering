@@ -16,21 +16,10 @@ namespace GHI {
 		public:
 			typedef byte Pin;
 			typedef int Type;
-			typedef byte IOState;
-			typedef byte ResistorMode;
 
 			const int number;
 			const Type type;
 			Pin pins[Socket::PINS_PER_SOCKET];
-		
-			//We didn't use enums because their members are hoisted into and pollute
-			//the parent scope, and Arduino doesn't have C++11 enum class yet.
-			class IOStates {
-				public:
-					static const IOState OUT = 0;
-					static const IOState IN = 1;
-					static const IOState PWM = 2;
-			};
 
 			class Pins {
 				public:
@@ -67,25 +56,11 @@ namespace GHI {
 					static const Type DL = 0x00080000;
 			};
 
-			class ResistorModes {
-				public:
-					static const ResistorMode PULL_UP = 0;
-					static const ResistorMode PULL_DOWN = 1;
-					static const ResistorMode FLOATING = 2;
-			};
-
 			Socket(int number, Type type);
 
 			void ensureTypeIsSupported(Type type);
-
-			virtual void setPWM(Pin pinNumber, double dutyCycle, double frequency);
-			virtual bool readDigital(Pin pinNumber);
-			virtual void writeDigital(Pin pinNumber, bool value);
-			virtual double readAnalog(Pin pinNumber);
-			virtual void writeAnalog(Pin pinNumber, double voltage);
-			virtual void setIOMode(Pin pinNumber, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
 	};
-
+	
 	class Mainboard {
 		struct ListNode {
 			Socket* socket;
@@ -96,15 +71,42 @@ namespace GHI {
 
 		protected:
 			Mainboard();
+			virtual ~Mainboard();
 
 			Socket* registerSocket(Socket* socket);
 
 		public:
+			typedef byte IOState;
+			typedef byte ResistorMode;
+
+			//We didn't use enums because their members are hoisted into and pollute
+			//the parent scope, and Arduino doesn't have C++11 enum class yet.
+			class IOStates {
+				public:
+					static const IOState OUT = 0;
+					static const IOState IN = 1;
+					static const IOState PWM = 2;
+			};
+
+			class ResistorModes {
+				public:
+					static const ResistorMode PULL_UP = 0;
+					static const ResistorMode PULL_DOWN = 1;
+					static const ResistorMode FLOATING = 2;
+			};
+
 			void panic(const char* error);
 			Socket* getSocket(int number);
-	};
 
-	extern Mainboard* mainboard;
+			virtual void setPWM(Socket* socket, Socket::Pin pin, double dutyCycle, double frequency);
+			virtual bool readDigital(Socket* socket, Socket::Pin pin);
+			virtual void writeDigital(Socket* socket, Socket::Pin pin, bool value);
+			virtual double readAnalog(Socket* socket, Socket::Pin pin);
+			virtual void writeAnalog(Socket* socket, Socket::Pin pin, double voltage);
+			virtual void setIOMode(Socket* socket, Socket::Pin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
+	};
 }
+
+extern GHI::Mainboard* mainboard;
 
 #endif

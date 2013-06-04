@@ -6,50 +6,50 @@ DigitalOutput::DigitalOutput(Socket* socket, Socket::Pin pin, bool initialState)
 	if (!socket || pin < 3 || pin > 9)
 		mainboard->panic("Pin out of range");
 
-	this->socket->setIOMode(this->pin, Socket::IOStates::OUT);
+	mainboard->setIOMode(this->socket, this->pin, Mainboard::IOStates::OUT);
 	this->write(initialState);
 }
 
 void DigitalOutput::write(bool value) {
-	this->socket->writeDigital(this->pin, value);
+	mainboard->writeDigital(this->socket, this->pin, value);
 }
 
 DigitalInput::DigitalInput(Socket* socket, Socket::Pin pin) : socket(socket), pin(pin) {
 	if (!socket || pin < 3 || pin > 9)
 		mainboard->panic("Pin out of range");
 
-	this->socket->setIOMode(this->pin, Socket::IOStates::IN, Socket::ResistorModes::PULL_UP);
+	mainboard->setIOMode(this->socket, this->pin, Mainboard::IOStates::IN, Mainboard::ResistorModes::PULL_UP);
 }
 
 bool DigitalInput::read() {
-	return this->socket->readDigital(this->pin);
+	return mainboard->readDigital(this->socket, this->pin);
 }
 
-DigitalInputOutput::DigitalInputOutput(Socket* socket, Socket::Pin pin, Socket::IOState initialIOState, bool initialOutputState) : socket(socket), pin(pin) {
+DigitalInputOutput::DigitalInputOutput(Socket* socket, Socket::Pin pin, Mainboard::IOState initialIOState, bool initialOutputState) : socket(socket), pin(pin) {
 	if (!socket || pin < 3 || pin > 9)
 		mainboard->panic("Pin out of range");
 
 	this->setState(initialIOState);
 
-	if (this->ioState == Socket::IOStates::OUT)
+	if (this->ioState == Mainboard::IOStates::OUT)
 		this->write(initialOutputState);
 }
 
 void DigitalInputOutput::write(bool value) {
-	this->setState(Socket::IOStates::OUT);
-	this->socket->writeDigital(this->pin, value);
+	this->setState(Mainboard::IOStates::OUT);
+	mainboard->writeDigital(this->socket, this->pin, value);
 }
 
 bool DigitalInputOutput::read() {
-	this->setState(Socket::IOStates::IN);
-	return this->socket->readDigital(this->pin);
+	this->setState(Mainboard::IOStates::IN);
+	return mainboard->readDigital(this->socket, this->pin);
 }
 
-void DigitalInputOutput::setState(Socket::IOState state) {
+void DigitalInputOutput::setState(Mainboard::IOState state) {
 	if (this->ioState == state)
 		return;
 
-	this->socket->setIOMode(this->pin, state);
+	mainboard->setIOMode(this->socket, this->pin, state);
 	this->ioState = state;
 }
 
@@ -59,14 +59,14 @@ AnalogInput::AnalogInput(Socket* socket, Socket::Pin pin) : socket(socket), pin(
 }
 
 double AnalogInput::read() {
-	return this->socket->readAnalog(this->pin);
+	return mainboard->readAnalog(this->socket, this->pin);
 }
 
 PWMOutput::PWMOutput(Socket* socket, Socket::Pin pin) : socket(socket), pin(pin) {
 	if (!socket || pin < 3 || pin > 9)
 		mainboard->panic("Pin out of range");
 		
-	this->socket->setIOMode(this->pin, Socket::IOStates::PWM);
+	mainboard->setIOMode(this->socket, this->pin, Mainboard::IOStates::PWM);
 	this->set(0, 1000);
 }
 
@@ -74,7 +74,7 @@ void PWMOutput::set(double frequency, double dutyCycle) {
 	this->dutyCycle = dutyCycle;
 	this->frequency = frequency;
 
-	this->socket->setPWM(this->pin, this->frequency, this->dutyCycle);
+	mainboard->setPWM(this->socket, this->pin, this->frequency, this->dutyCycle);
 }
 
 void PWMOutput::setFrequency(double frequency) {

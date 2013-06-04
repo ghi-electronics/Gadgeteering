@@ -1,12 +1,15 @@
 #include "FEZMedusa.h"
 
+using namespace GHI;
+using namespace GHI::Interfaces;
+
 Mainboard* mainboard;
 
 FEZMedusa::FEZMedusa() {
 	mainboard = this;
 
-	VirtualSocket::initExtenderChip(A4, A5, 0x20);
-
+	this->extenderChip = new ExtenderChip(A4, A5, 0x20);
+	
 	Socket* socket = this->registerSocket(new Socket(1, Socket::Types::I | Socket::Types::S | Socket::Types::Y));
 	socket->pins[3] = 7;
 	socket->pins[4] = 8;
@@ -33,7 +36,7 @@ FEZMedusa::FEZMedusa() {
 	socket->pins[8] = A4;
 	socket->pins[9] = A5;
 
-	socket = this->registerSocket(new VirtualSocket(5, Socket::Types::Y | Socket::Types::P));
+	socket = this->registerSocket(new Socket(5, Socket::Types::Y | Socket::Types::P));
 	socket->pins[3] = 0x00;
 	socket->pins[4] = 0x01;
 	socket->pins[5] = 0x02;
@@ -42,7 +45,7 @@ FEZMedusa::FEZMedusa() {
 	socket->pins[8] = 0x61;
 	socket->pins[9] = 0x62;
 
-	socket = this->registerSocket(new VirtualSocket(6, Socket::Types::Y | Socket::Types::P));
+	socket = this->registerSocket(new Socket(6, Socket::Types::Y | Socket::Types::P));
 	socket->pins[3] = 0x04;
 	socket->pins[4] = 0x05;
 	socket->pins[5] = 0x06;
@@ -51,7 +54,7 @@ FEZMedusa::FEZMedusa() {
 	socket->pins[8] = 0x64;
 	socket->pins[9] = 0x65;
 
-	socket = this->registerSocket(new VirtualSocket(7, Socket::Types::Y | Socket::Types::P));
+	socket = this->registerSocket(new Socket(7, Socket::Types::Y | Socket::Types::P));
 	socket->pins[3] = 0x10;
 	socket->pins[4] = 0x11;
 	socket->pins[5] = 0x12;
@@ -60,7 +63,7 @@ FEZMedusa::FEZMedusa() {
 	socket->pins[8] = 0x67;
 	socket->pins[9] = 0x70;
 
-	socket = this->registerSocket(new VirtualSocket(8, Socket::Types::Y | Socket::Types::P));
+	socket = this->registerSocket(new Socket(8, Socket::Types::Y | Socket::Types::P));
 	socket->pins[3] = 0x14;
 	socket->pins[4] = 0x15;
 	socket->pins[5] = 0x16;
@@ -69,7 +72,7 @@ FEZMedusa::FEZMedusa() {
 	socket->pins[8] = 0x72;
 	socket->pins[9] = 0x73;
 
-	socket = this->registerSocket(new VirtualSocket(9, Socket::Types::Y | Socket::Types::P));
+	socket = this->registerSocket(new Socket(9, Socket::Types::Y | Socket::Types::P));
 	socket->pins[3] = 0x20;
 	socket->pins[4] = 0x21;
 	socket->pins[5] = 0x22;
@@ -78,7 +81,7 @@ FEZMedusa::FEZMedusa() {
 	socket->pins[8] = 0x75;
 	socket->pins[9] = 0x76;
 
-	socket = this->registerSocket(new VirtualSocket(10, Socket::Types::Y));
+	socket = this->registerSocket(new Socket(10, Socket::Types::Y));
 	socket->pins[3] = 0x30;
 	socket->pins[4] = 0x31;
 	socket->pins[5] = 0x32;
@@ -87,7 +90,7 @@ FEZMedusa::FEZMedusa() {
 	socket->pins[8] = 0x35;
 	socket->pins[9] = 0x36;
 
-	socket = this->registerSocket(new VirtualSocket(11, Socket::Types::Y));
+	socket = this->registerSocket(new Socket(11, Socket::Types::Y));
 	socket->pins[3] = 0x40;
 	socket->pins[4] = 0x41;
 	socket->pins[5] = 0x42;
@@ -96,7 +99,7 @@ FEZMedusa::FEZMedusa() {
 	socket->pins[8] = 0x45;
 	socket->pins[9] = 0x46;
 
-	socket = this->registerSocket(new VirtualSocket(12, Socket::Types::Y));
+	socket = this->registerSocket(new Socket(12, Socket::Types::Y));
 	socket->pins[3] = 0x50;
 	socket->pins[4] = 0x51;
 	socket->pins[5] = 0x52;
@@ -104,4 +107,43 @@ FEZMedusa::FEZMedusa() {
 	socket->pins[7] = 0x54;
 	socket->pins[8] = 0x55;
 	socket->pins[9] = 0x56;
+}
+
+bool FEZMedusa::isSocketReal(Socket* socket) {
+	return socket->number < FEZMedusa::VIRTUAL_SOCKET_START;
+}
+
+void FEZMedusa::setIOMode(Socket* socket, Socket::Pin pinNumber, IOState state, ResistorMode resistorMode) {
+	if (this->isSocketReal(socket)) {
+		if (state == IOStates::PWM)
+			mainboard->panic("Not supported");
+
+		if (state == IOStates::IN)
+			::pinMode(socket->pins[pinNumber], resistorMode == ResistorModes::PULL_UP ? INPUT_PULLUP : INPUT);
+		else
+			::pinMode(socket->pins[pinNumber], OUTPUT);
+	}
+	else {
+		this->extenderChip->setIOMode(socket->pins[pinNumber], state, resistorMode);
+	}
+}
+
+void FEZMedusa::setPWM(Socket* socket, Socket::Pin pinNumber, double dutyCycle, double frequency) {
+	this->isSocketReal(socket) ? mainboard->panic("Not supported") : this->extenderChip->setPWM(socket->pins[pinNumber], dutyCycle, frequency);
+}
+
+bool FEZMedusa::readDigital(Socket* socket, Socket::Pin pinNumber) {
+	this->isSocketReal(socket) ? ::digitalRead(socket->pins[pinNumber]) != 0 : this->extenderChip->readDigital(socket->pins[pinNumber]);
+}
+
+void FEZMedusa::writeDigital(Socket* socket, Socket::Pin pinNumber, bool value) {
+	this->isSocketReal(socket) ? ::digitalWrite(socket->pins[pinNumber], value ? HIGH : LOW) : this->extenderChip->writeDigital(socket->pins[pinNumber], value);
+}
+
+double FEZMedusa::readAnalog(Socket* socket, Socket::Pin pinNumber) {
+	return this->isSocketReal(socket) ? return static_cast<double>(::analogRead(socket->pins[pinNumber])) / 1024 * 3.3 : this->extenderChip->readAnalog(socket->pins[pinNumber]);
+}
+
+void FEZMedusa::writeAnalog(Socket* socket, Socket::Pin pinNumber, double voltage) {
+	this->isSocketReal(socket) ? ::analogWrite(socket->pins[pinNumber], voltage * (1024 / 3.3)) : this->extenderChip->writeAnalog(socket->pins[pinNumber], voltage);
 }

@@ -81,7 +81,7 @@
     <ClInclude Include="Mainboards\FEZLynx\Linux\WinTypes.h" />
     <ClInclude Include="Mainboards\FEZLynx\Windows\FTD2XX.H" />
     <ClInclude Include="Mainboards\FEZMedusa\FEZMedusa.h" />
-    <ClInclude Include="Mainboards\FEZMedusa\VirtualSocket.hpp" />
+    <ClInclude Include="Mainboards\FEZMedusa\ExtenderChip.hpp" />
     <ClInclude Include="Modules\CharDisplay\CharDisplay.h" />
     <ClInclude Include="Modules\LED7C\LED7C.h" />
     <ClInclude Include="Modules\LED7R\LED7R.h" />
@@ -90,13 +90,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp" />
-    <ClCompile Include="Mainboards\FEZMedusa\Mainboard.cpp" />
+    <ClCompile Include="Gadgeteering\Mainboard.cpp" />
     <ClCompile Include="Gadgeteering\SoftwareI2C.cpp" />
     <ClCompile Include="Mainboards\FEZLynx\FEZLynx.cpp" />
     <ClCompile Include="Mainboards\FEZMedusa\FEZMedusa.cpp" />
     <ClCompile Include="Mainboards\FEZMedusa\SerialDevice.cpp" />
     <ClCompile Include="Mainboards\FEZMedusa\SPIDevice.cpp" />
-    <ClCompile Include="Mainboards\FEZMedusa\VirtualSocket.cpp" />
+    <ClCompile Include="Mainboards\FEZMedusa\ExtenderChip.cpp" />
     <ClCompile Include="Modules\CharDisplay\CharDisplay.cpp" />
     <ClCompile Include="Modules\LED7C\LED7C.cpp" />
     <ClCompile Include="Modules\LED7R\LED7R.cpp" />
