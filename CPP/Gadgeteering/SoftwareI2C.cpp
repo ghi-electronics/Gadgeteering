@@ -14,27 +14,27 @@ SoftwareI2C::SoftwareI2C(byte address, Socket* socket) {
 
 //inline the below six once the api is stable
 void SoftwareI2C::pullSCLLow() {
-	this->socket->setIOMode(SoftwareI2C::SCL_PIN, Socket::IOStates::OUT);
+	mainboard->setIOMode(this->socket, SoftwareI2C::SCL_PIN, Mainboard::IOStates::OUT);
 }
 
 void SoftwareI2C::pullSCLHigh() {
-	this->socket->setIOMode(SoftwareI2C::SCL_PIN, Socket::IOStates::IN);
+	mainboard->setIOMode(this->socket, SoftwareI2C::SCL_PIN, Mainboard::IOStates::IN);
 }
 
 bool SoftwareI2C::readSCL() {
-	return this->socket->readDigital(SoftwareI2C::SCL_PIN);
+	return mainboard->readDigital(this->socket, SoftwareI2C::SCL_PIN);
 }
 
 void SoftwareI2C::pullSDALow() {
-	this->socket->setIOMode(SoftwareI2C::SDA_PIN, Socket::IOStates::OUT);
+	mainboard->setIOMode(this->socket, SoftwareI2C::SDA_PIN, Mainboard::IOStates::OUT);
 }
 
 void SoftwareI2C::pullSDAHigh() {
-	this->socket->setIOMode(SoftwareI2C::SDA_PIN, Socket::IOStates::IN);
+	mainboard->setIOMode(this->socket, SoftwareI2C::SDA_PIN, Mainboard::IOStates::IN);
 }
 
 bool SoftwareI2C::readSDA() {
-	return this->socket->readDigital(SoftwareI2C::SDA_PIN);
+	mainboard->readDigital(this->socket, SoftwareI2C::SDA_PIN);
 }
 
 bool SoftwareI2C::sendStartCondition(byte address) {
@@ -51,9 +51,8 @@ void SoftwareI2C::sendStopCondition() {
 void SoftwareI2C::waitForSCL() {
 	this->pullSCLHigh();
 
-#error CONVERT TO SYSTEM I2C waitForSCL
-	unsigned long endTime = micros() + 2000;
-	while(!this->readSCL() && micros() < endTime)
+	unsigned long endTime = System::TimeElapsed() + 2000;
+	while(!this->readSCL() && System::TimeElapsed() < endTime)
 		;
 }
 

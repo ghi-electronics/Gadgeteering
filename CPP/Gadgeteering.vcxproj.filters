@@ -110,13 +110,16 @@
     <ClCompile Include="Mainboards\FEZMedusa\ExtenderChip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Gadgeteering\System.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Mainboards\FEZMedusa\Mainboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Gadgeteering\Mainboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mainboards\FEZMedusa\System.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mainboards\FEZLynx\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

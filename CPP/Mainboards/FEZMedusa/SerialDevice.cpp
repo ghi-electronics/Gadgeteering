@@ -1,5 +1,8 @@
-#include "SerialDevice.hpp"
+#include <Gadgeteering/SerialDevice.hpp>
 #include <SoftwareSerial.h>
+
+using namespace GHI;
+using namespace GHI::Interfaces;
 
 SerialDevice::SerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits) {
 	socket->ensureTypeIsSupported(Socket::Types::U);

@@ -1,5 +1,8 @@
-#include "SPIDevice.hpp"
+#include <Gadgeteering/SPIDevice.hpp>
 #include <SPI.h>
+
+using namespace GHI;
+using namespace GHI::Interfaces;
 
 #define SYSTEM_CLOCK 16000 //in KHz
 
@@ -53,11 +56,11 @@ SPIDevice::~SPIDevice() {
 byte SPIDevice::writeReadByte(byte toSend, bool deselectChip) {
 	this->chipSelect->write(this->configuration->chipSelectActiveState);
 
-	delay(this->configuration->chipSelectSetupTime);
+	System::Sleep(this->configuration->chipSelectSetupTime);
 
 	byte result = SPI.transfer(toSend);
-
-	delay(this->configuration->chipSelectHoldTime);
+	
+	System::Sleep(this->configuration->chipSelectHoldTime);
 
 	if (deselectChip)
 		this->chipSelect->write(!this->configuration->chipSelectActiveState);
@@ -67,8 +70,8 @@ byte SPIDevice::writeReadByte(byte toSend, bool deselectChip) {
 
 void SPIDevice::writeAndRead(byte* sendBuffer, byte* receiveBuffer, unsigned int count, bool deselectChip) {
 	this->chipSelect->write(this->configuration->chipSelectActiveState);
-
-	delay(this->configuration->chipSelectSetupTime);
+	
+	System::Sleep(this->configuration->chipSelectSetupTime);
 
 	for (int i = 0; i < count; i++) {
 		if (sendBuffer != NULL && receiveBuffer != NULL)
@@ -78,8 +81,8 @@ void SPIDevice::writeAndRead(byte* sendBuffer, byte* receiveBuffer, unsigned int
 		else if (sendBuffer == NULL && receiveBuffer != NULL)
 			receiveBuffer[i] = SPI.transfer(0);
 	}
-
-	delay(this->configuration->chipSelectHoldTime);
+	
+	System::Sleep(this->configuration->chipSelectHoldTime);
 
 	if (deselectChip)
 		this->chipSelect->write(!this->configuration->chipSelectActiveState);
