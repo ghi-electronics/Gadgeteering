@@ -1,18 +1,20 @@
 #ifndef _FEZLYNX_H_
 #define _FEZLYNX_H_
 
-#include "stdafx.h"
+#define FEZ_LYNX 1
+
+//#include "stdafx.h"
 
 #ifdef WIN32
 #include <Windows.h>
 #include "include\windows\FTD2XX.H"
 
 #else
-#include "include\linux\WinTypes.h"
-#include "include\linux\ftd2xx.h"
+#include "Linux/WinTypes.h"
+#include "Linux/ftd2xx.h"
 #endif
 
-#include "GHI\GHI.h"
+#include "..\..\Gadgeteering\Gadgeteering.h"
 
 struct FEZLynxChannel
 {

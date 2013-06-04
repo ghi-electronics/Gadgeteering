@@ -75,6 +75,7 @@
     <ClInclude Include="Gadgeteering\SerialDevice.hpp" />
     <ClInclude Include="Gadgeteering\SoftwareI2C.hpp" />
     <ClInclude Include="Gadgeteering\SPIDevice.hpp" />
+    <ClInclude Include="Gadgeteering\System.h" />
     <ClInclude Include="Gadgeteering\Types.hpp" />
     <ClInclude Include="Mainboards\FEZLynx\FEZLynx.h" />
     <ClInclude Include="Mainboards\FEZLynx\Linux\ftd2xx.h" />
@@ -90,7 +91,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp" />
-    <ClCompile Include="Gadgeteering\Mainboard.cpp" />
+    <ClCompile Include="Gadgeteering\System.cpp" />
+    <ClCompile Include="Mainboards\FEZMedusa\Mainboard.cpp" />
     <ClCompile Include="Gadgeteering\SoftwareI2C.cpp" />
     <ClCompile Include="Mainboards\FEZLynx\FEZLynx.cpp" />
     <ClCompile Include="Mainboards\FEZMedusa\FEZMedusa.cpp" />

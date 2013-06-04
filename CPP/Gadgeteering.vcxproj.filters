@@ -66,6 +66,9 @@
     <ClInclude Include="Gadgeteering\Types.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Gadgeteering\System.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Mainboards\FEZMedusa\ExtenderChip.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -108,6 +111,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Mainboards\FEZMedusa\ExtenderChip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gadgeteering\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
