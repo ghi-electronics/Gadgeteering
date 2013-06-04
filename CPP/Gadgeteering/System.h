@@ -15,14 +15,11 @@ namespace GHI
 #ifdef _WIN32
 			Sleep(time);
 #else
-	#ifdef ARDUINO
-	#else
 			usleep(1000 * time);
-	#endif
 #endif
 		}
 
-#ifndef WIN32
+#ifndef _WIN32
 		long int EpochWhenStarted = 0;
 #endif
 
@@ -36,7 +33,7 @@ namespace GHI
 			/////////////////////////////////////////////////////////
 	#ifdef _POSIX_TIMERS
 			timespec t;
-			clockgettime(CLOCK_MONOTONIC, &res);
+			clockgettime(CLOCK_MONOTONIC, &t);
 
 			return ((t.tv_sec * 1000) + (t.tv_nsec / 1000000));
 	#else
@@ -45,7 +42,7 @@ namespace GHI
 #endif
 		}
 
-		int TimeElapsed64()
+		long TimeElapsed64()
 		{
 #ifdef _WIN32
 			return GetTickCount64();
@@ -57,7 +54,7 @@ namespace GHI
 			timespec t;
 			clockgettime(CLOCK_MONOTONIC, &res);
 
-			
+			return ((t.tv_sec * 1000) + (t.tv_nsec / 1000000));
 	#endif
 #endif
 		}

@@ -53,7 +53,7 @@ void LED7R::animate(int switchTime, bool clockwise, bool turnOn, bool remainOn) 
 			else
 				this->turnOffLED(i);
 
-			delay(switchTime);
+			System::Sleep(switchTime);
 		}
 	}
 	else {
@@ -63,7 +63,7 @@ void LED7R::animate(int switchTime, bool clockwise, bool turnOn, bool remainOn) 
 			else
 				this->turnOffLED(i);
 
-			delay(switchTime);
+			System::Sleep(switchTime);
 		}
 	}
 }
