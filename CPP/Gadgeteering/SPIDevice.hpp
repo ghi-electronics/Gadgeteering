@@ -7,6 +7,7 @@
 namespace GHI {
 	namespace Interfaces {
 		class DigitalOutput;
+		class SPIBus;
 
 		class SPIDevice {
 			public:

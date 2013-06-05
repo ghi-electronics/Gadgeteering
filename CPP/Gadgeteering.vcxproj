@@ -75,6 +75,7 @@
     <ClInclude Include="Gadgeteering\SerialDevice.hpp" />
     <ClInclude Include="Gadgeteering\Socket.hpp" />
     <ClInclude Include="Gadgeteering\SoftwareI2C.hpp" />
+    <ClInclude Include="Gadgeteering\SPIBus.hpp" />
     <ClInclude Include="Gadgeteering\SPIDevice.hpp" />
     <ClInclude Include="Gadgeteering\System.hpp" />
     <ClInclude Include="Gadgeteering\Types.hpp" />
@@ -96,6 +97,8 @@
     <ClCompile Include="Gadgeteering\SerialDevice.cpp" />
     <ClCompile Include="Gadgeteering\Socket.cpp" />
     <ClCompile Include="Gadgeteering\SPIDevice.cpp" />
+    <ClCompile Include="Mainboards\FEZLynx\SPIBus.cpp" />
+    <ClCompile Include="Mainboards\FEZLynx\SPIDevice.cpp" />
     <ClCompile Include="Mainboards\FEZLynx\System.cpp" />
     <ClCompile Include="Mainboards\FEZMedusa\System.cpp" />
     <ClCompile Include="Mainboards\FEZMedusa\Mainboard.cpp" />
