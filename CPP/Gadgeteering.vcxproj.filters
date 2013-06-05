@@ -69,7 +69,7 @@
     <ClInclude Include="Mainboards\FEZMedusa\ExtenderChip.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Gadgeteering\System.h">
+    <ClInclude Include="Gadgeteering\System.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
