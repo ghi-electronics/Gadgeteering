@@ -92,6 +92,8 @@
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp" />
     <ClCompile Include="Gadgeteering\Mainboard.cpp" />
+    <ClCompile Include="Gadgeteering\SerialDevice.cpp" />
+    <ClCompile Include="Gadgeteering\SPIDevice.cpp" />
     <ClCompile Include="Mainboards\FEZLynx\System.cpp" />
     <ClCompile Include="Mainboards\FEZMedusa\System.cpp" />
     <ClCompile Include="Mainboards\FEZMedusa\Mainboard.cpp" />

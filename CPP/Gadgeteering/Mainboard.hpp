@@ -2,6 +2,8 @@
 #define _MAINBOARD_H_
 
 #include "Types.hpp"
+#include "SPIDevice.hpp"
+#include "SerialDevice.hpp"
 
 namespace GHI {
 	class Module {
@@ -104,6 +106,9 @@ namespace GHI {
 			virtual double readAnalog(Socket* socket, Socket::Pin pin);
 			virtual void writeAnalog(Socket* socket, Socket::Pin pin, double voltage);
 			virtual void setIOMode(Socket* socket, Socket::Pin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
+			
+			virtual SPIDevice* getNewSPIDevice(Socket* socket, Socket::Pin chipSelectPin, SPIDevice::Configuration* configuration);
+			virtual SerialDevice* getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
 	};
 }
 

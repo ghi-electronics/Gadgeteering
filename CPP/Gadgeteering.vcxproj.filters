@@ -122,5 +122,11 @@
     <ClCompile Include="Mainboards\FEZLynx\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Gadgeteering\SPIDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gadgeteering\SerialDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
