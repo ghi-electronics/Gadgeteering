@@ -1,4 +1,5 @@
 #include "LED7R.h"
+#include "../Gadgeteering/System.hpp"
 
 using namespace GHI;
 using namespace GHI::Modules;
@@ -53,7 +54,7 @@ void LED7R::animate(int switchTime, bool clockwise, bool turnOn, bool remainOn) 
 			else
 				this->turnOffLED(i);
 
-			delay(switchTime);
+			GHI::System::Sleep(switchTime);
 		}
 	}
 	else {
@@ -62,8 +63,8 @@ void LED7R::animate(int switchTime, bool clockwise, bool turnOn, bool remainOn) 
 				this->turnOnLED(i, !remainOn);
 			else
 				this->turnOffLED(i);
-
-			delay(switchTime);
+			
+			GHI::System::Sleep(switchTime);
 		}
 	}
 }

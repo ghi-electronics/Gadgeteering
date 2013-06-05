@@ -75,6 +75,9 @@
     <ClInclude Include="LEDStrip\LEDStrip.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Gadgeteering\SPIBus.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">

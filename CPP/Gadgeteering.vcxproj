@@ -75,6 +75,7 @@
     <ClInclude Include="Gadgeteering\SerialDevice.hpp" />
     <ClInclude Include="Gadgeteering\Socket.hpp" />
     <ClInclude Include="Gadgeteering\SoftwareI2C.hpp" />
+    <ClInclude Include="Gadgeteering\SPIBus.hpp" />
     <ClInclude Include="Gadgeteering\SPIDevice.hpp" />
     <ClInclude Include="Gadgeteering\System.hpp" />
     <ClInclude Include="Gadgeteering\Types.hpp" />

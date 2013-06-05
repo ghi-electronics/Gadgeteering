@@ -1,18 +1,17 @@
 #include "../Gadgeteering/System.hpp"
+#include "Arduino.h"
 
-using namespace GHI;
-
-void System::Sleep(int time)
+void GHI::System::Sleep(int time)
 {
 	delay(1000 * time);
 }
 
-int System::TimeElapsed()
+int GHI::System::TimeElapsed()
 {
 	micros();
 }
 
-int System::TimeElapsed64()
+long GHI::System::TimeElapsed64()
 {
 	micros();
 }
