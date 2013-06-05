@@ -1,4 +1,5 @@
 #include "SPIDevice.hpp"
+#include "SPIBus.hpp"
 #include "Interfaces.hpp"
 
 using namespace GHI;
@@ -13,11 +14,13 @@ SPIDevice::Configuration::Configuration(bool chipSelectActiveState, unsigned int
 	this->clockRate = clockRate;
 }
 
-SPIDevice::SPIDevice(Socket* socket, Socket::Pin chipSelectPin, SPIDevice::Configuration* configuration) {
+SPIDevice::SPIDevice(SPIBus *spiBus, Socket* socket, Socket::Pin chipSelectPin, SPIDevice::Configuration* configuration) {
 	socket->ensureTypeIsSupported(Socket::Types::S);
 
 	this->chipSelect = new DigitalOutput(socket, chipSelectPin, true);
 	this->configuration = configuration;
+
+	bus = spiBus;
 }
 
 SPIDevice::~SPIDevice() {
