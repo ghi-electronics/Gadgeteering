@@ -41,7 +41,7 @@ void ExtenderChip::setIOMode(Socket::Pin pinNumber, IOState state, ResistorMode 
 		this->io60Chip->writeRegister(ExtenderChip::ENABLE_PWM_REGISTER, val & ~pin);
 		val = this->io60Chip->readRegister(ExtenderChip::PIN_DIRECTION_REGISTER);
 
-		if (state == IOStates::INPUT) {
+		if (state == IOStates::DIGITAL_INPUT) {
 			char resistorRegister = ExtenderChip::PIN_HIGH_IMPEDENCE;
 			if (resistorMode == ResistorModes::PULL_DOWN)
 				resistorRegister = ExtenderChip::PIN_PULL_DOWN;

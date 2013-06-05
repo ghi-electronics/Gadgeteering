@@ -26,7 +26,7 @@ namespace GHI {
 
 				public:
 					SPIBus(Socket* socket);
-					~SPIBus();
+					virtual ~SPIBus();
 
 					virtual char writeReadByte(char toSend, GHI::Interfaces::SPIDevice::Configuration* configuration);
 					virtual void writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);

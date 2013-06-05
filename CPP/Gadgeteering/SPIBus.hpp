@@ -15,7 +15,7 @@ namespace GHI
 
 				friend class GHI::Interfaces::SPIDevice;
 				
-				~SPIBus();
+				virtual ~SPIBus();
 
 				//Clocks in one char and clocks out one char at the same time. If deselectChip is true, the CS line is set to logic low after the transmission, otherwise it remains logic high.
 				virtual char writeReadByte(char toSend, GHI::Interfaces::SPIDevice::Configuration* configuration);

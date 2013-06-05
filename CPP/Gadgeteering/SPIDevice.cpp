@@ -20,7 +20,7 @@ SPIDevice::SPIDevice(SPIBus *spiBus, Socket* socket, Socket::Pin chipSelectPin, 
 	this->chipSelect = new DigitalOutput(socket, chipSelectPin, true);
 	this->configuration = configuration;
 
-	bus = spiBus;
+	this->bus = spiBus;
 }
 
 SPIDevice::~SPIDevice() {

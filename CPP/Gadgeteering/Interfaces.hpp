@@ -32,7 +32,7 @@ namespace GHI {
 			IOState ioState;
 	
 			public:
-				DigitalInputOutput(Socket* socket, Socket::Pin pin, IOState initialIOState = IOStates::INPUT, bool initialOutputState = false);
+				DigitalInputOutput(Socket* socket, Socket::Pin pin, IOState initialIOState = IOStates::DIGITAL_INPUT, bool initialOutputState = false);
 
 				void write(bool value);
 				bool read();
