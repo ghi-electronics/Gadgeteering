@@ -6,7 +6,7 @@
 using namespace GHI;
 using namespace GHI::Interfaces;
 
-SoftwareI2C::SoftwareI2C(byte address, Socket* socket) {
+SoftwareI2C::SoftwareI2C(char address, Socket* socket) {
 	socket->ensureTypeIsSupported(Socket::Types::I);
 
 	this->address = address << 1;
@@ -38,7 +38,7 @@ bool SoftwareI2C::readSDA() {
 	mainboard->readDigital(this->socket, SoftwareI2C::SDA_PIN);
 }
 
-bool SoftwareI2C::sendStartCondition(byte address) {
+bool SoftwareI2C::sendStartCondition(char address) {
 	this->pullSDALow();
 	this->pullSCLLow();
 	return this->write(address);
@@ -57,8 +57,8 @@ void SoftwareI2C::waitForSCL() {
 		;
 }
 
-bool SoftwareI2C::write(byte data) {
-	for (byte m = 0x80; m != 0; m >>= 1) {
+bool SoftwareI2C::write(char data) {
+	for (char m = 0x80; m != 0; m >>= 1) {
 		if (m & data) 
 			this->pullSDAHigh();
 		else 
@@ -81,11 +81,11 @@ bool SoftwareI2C::write(byte data) {
 	return sda == 0;
 }
 
-byte SoftwareI2C::read(bool isLast) {
+char SoftwareI2C::read(bool isLast) {
 	this->pullSDAHigh();
 	
-	byte result = 0;
-	for (byte i = 0; i < 8; i++) {
+	char result = 0;
+	for (char i = 0; i < 8; i++) {
 		result <<= 1;
 
 		this->waitForSCL();
@@ -108,7 +108,7 @@ byte SoftwareI2C::read(bool isLast) {
 	return result;
 }
 
-bool SoftwareI2C::writeRegisters(byte startAddress, byte count,	byte* data) {
+bool SoftwareI2C::writeRegisters(char startAddress, char count,	char* data) {
 	if (!this->sendStartCondition(this->address | I2C_WRITE)) 
 		return false;
 
@@ -122,7 +122,7 @@ bool SoftwareI2C::writeRegisters(byte startAddress, byte count,	byte* data) {
 	return true;
 }
 
-bool SoftwareI2C::readRegisters(byte startAddress, byte count, byte* data) {
+bool SoftwareI2C::readRegisters(char startAddress, char count, char* data) {
 	if (!this->writeRegisters(startAddress, 0, NULL))
 		return false;
 
@@ -134,7 +134,7 @@ bool SoftwareI2C::readRegisters(byte startAddress, byte count, byte* data) {
 	if (!this->sendStartCondition(this->address | I2C_READ))
 		return false;
 
-	for (byte i = 0; i < count - 1; i++)
+	for (char i = 0; i < count - 1; i++)
 		data[i] = this->read(false);
 
 	data[count - 1] = this->read(true);
@@ -144,12 +144,12 @@ bool SoftwareI2C::readRegisters(byte startAddress, byte count, byte* data) {
 	return true;
 }
 
-bool SoftwareI2C::writeRegister(byte location, byte data) {
+bool SoftwareI2C::writeRegister(char location, char data) {
 	return this->writeRegisters(location, 1, &data);
 }
 
-byte SoftwareI2C::readRegister(byte location) {
-	byte data = 0;
+char SoftwareI2C::readRegister(char location) {
+	char data = 0;
 	this->readRegisters(location, 1, &data);
 	return data;
 }

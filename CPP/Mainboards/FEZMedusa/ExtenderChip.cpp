@@ -3,7 +3,7 @@
 using namespace GHI;
 using namespace GHI::Interfaces;
 
-ExtenderChip::ExtenderChip(Socket::Pin sdaPin, Socket::Pin sclPin, byte address) {
+ExtenderChip::ExtenderChip(Socket::Pin sdaPin, Socket::Pin sclPin, char address) {
 	Socket* socket = new Socket(-1, Socket::Types::I);
 	socket->pins[8] = sdaPin;
 	socket->pins[9] = sclPin;
@@ -15,18 +15,18 @@ ExtenderChip::~ExtenderChip() {
 	delete this->io60Chip;
 }
 
-byte ExtenderChip::getPort(Socket::Pin pin) {
+char ExtenderChip::getPort(Socket::Pin pin) {
 	return pin >> 4;
 }
 
-byte ExtenderChip::getPin(Socket::Pin pin) {
+char ExtenderChip::getPin(Socket::Pin pin) {
 	return 1 << (pin & 0x0F);
 }
 
 void ExtenderChip::setIOMode(Socket::Pin pin, IOState state, ResistorMode resistorMode) {
 	this->io60Chip->writeRegister(ExtenderChip::PORT_SELECT_REGISTER, this->getPort(pin));
-	byte pin = this->getPin(pin);
-	byte val = this->io60Chip->readRegister(ExtenderChip::ENABLE_PWM_REGISTER);
+	char pin = this->getPin(pin);
+	char val = this->io60Chip->readRegister(ExtenderChip::ENABLE_PWM_REGISTER);
 
 	if (state == IOStates::PWM)	{
 		this->io60Chip->writeRegister(ExtenderChip::ENABLE_PWM_REGISTER, val | pin);
@@ -40,7 +40,7 @@ void ExtenderChip::setIOMode(Socket::Pin pin, IOState state, ResistorMode resist
 		val = this->io60Chip->readRegister(ExtenderChip::PIN_DIRECTION_REGISTER);
 
 		if (state == IOStates::IN) {
-			byte resistorRegister = ExtenderChip::PIN_HIGH_IMPEDENCE;
+			char resistorRegister = ExtenderChip::PIN_HIGH_IMPEDENCE;
 			if (resistorMode == ResistorModes::PULL_DOWN)
 				resistorRegister = ExtenderChip::PIN_PULL_DOWN;
 			else if (resistorMode == ResistorModes::PULL_UP)
@@ -62,22 +62,22 @@ void ExtenderChip::setIOMode(Socket::Pin pin, IOState state, ResistorMode resist
 //while still allowing the user to select frequencies such as 10KHz, but with reduced duty cycle
 //resolution.
 void ExtenderChip::setPWM(Socket::Pin pin, double frequency, double dutyCycle) {
-	this->io60Chip->writeRegister(ExtenderChip::PWM_SELECT_REGISTER, (byte)((pin % 8) + (this->getPort(pin) - 6) * 8));
+	this->io60Chip->writeRegister(ExtenderChip::PWM_SELECT_REGISTER, (char)((pin % 8) + (this->getPort(pin) - 6) * 8));
 	
-	byte period = (byte)(93750 / frequency);
+	char period = (char)(93750 / frequency);
 
 	this->io60Chip->writeRegister(ExtenderChip::PERIOD_REGISTER, period);
 	this->io60Chip->writeRegister(ExtenderChip::PULSE_WIDTH_REGISTER, period * dutyCycle);
 }
 
 bool ExtenderChip::readDigital(Socket::Pin pin) {
-	byte b = this->io60Chip->readRegister(ExtenderChip::INPUT_PORT_0_REGISTER + this->getPort(pin));
+	char b = this->io60Chip->readRegister(ExtenderChip::INPUT_PORT_0_REGISTER + this->getPort(pin));
 
 	return b & this->getPin(pin);
 }
 
 void ExtenderChip::writeDigital(Socket::Pin pin, bool value) {
-	byte b = this->io60Chip->readRegister(ExtenderChip::OUTPUT_PORT_0_REGISTER + this->getPort(pin));
+	char b = this->io60Chip->readRegister(ExtenderChip::OUTPUT_PORT_0_REGISTER + this->getPort(pin));
 
 	if (value)
 		b |= this->getPin(pin);

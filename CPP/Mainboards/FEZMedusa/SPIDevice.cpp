@@ -41,12 +41,12 @@ FEZMedusa::SPIDevice::~SPIDevice() {
 	SPI.end();
 }
 
-byte FEZMedusa::SPIDevice::writeReadByte(byte toSend, bool deselectChip) {
+char FEZMedusa::SPIDevice::writeReadByte(char toSend, bool deselectChip) {
 	this->chipSelect->write(this->configuration->chipSelectActiveState);
 
 	System::Sleep(this->configuration->chipSelectSetupTime);
 
-	byte result = SPI.transfer(toSend);
+	char result = SPI.transfer(toSend);
 	
 	System::Sleep(this->configuration->chipSelectHoldTime);
 
@@ -56,7 +56,7 @@ byte FEZMedusa::SPIDevice::writeReadByte(byte toSend, bool deselectChip) {
 	return result;
 }
 
-void FEZMedusa::SPIDevice::writeAndRead(byte* sendBuffer, byte* receiveBuffer, unsigned int count, bool deselectChip) {
+void FEZMedusa::SPIDevice::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, bool deselectChip) {
 	this->chipSelect->write(this->configuration->chipSelectActiveState);
 	
 	System::Sleep(this->configuration->chipSelectSetupTime);
@@ -76,15 +76,15 @@ void FEZMedusa::SPIDevice::writeAndRead(byte* sendBuffer, byte* receiveBuffer, u
 		this->chipSelect->write(!this->configuration->chipSelectActiveState);
 }
 
-void FEZMedusa::SPIDevice::writeThenRead(byte* sendBuffer, byte* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip) {
+void FEZMedusa::SPIDevice::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip) {
 	this->write(sendBuffer, sendCount, deselectChip);
 	this->write(receiveBuffer, receiveCount, deselectChip);
 }
 
-void FEZMedusa::SPIDevice::write(byte* buffer, unsigned int count, bool deselectChip) {
+void FEZMedusa::SPIDevice::write(char* buffer, unsigned int count, bool deselectChip) {
 	this->writeAndRead(buffer, NULL, count, deselectChip);
 }
 
-void FEZMedusa::SPIDevice::read(byte* buffer, unsigned int count, bool deselectChip) {
+void FEZMedusa::SPIDevice::read(char* buffer, unsigned int count, bool deselectChip) {
 	this->writeAndRead(NULL, buffer, count, deselectChip);
 }
