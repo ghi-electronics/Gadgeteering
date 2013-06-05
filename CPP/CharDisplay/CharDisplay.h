@@ -1,7 +1,7 @@
 #ifndef _CHARDISPLAY_H_
 #define _CHARDISPLAY_H_
 
-#include <Gadgeteering/Gadgeteering.h>
+#include "../Gadgeteering/Gadgeteering.h"
 
 namespace GHI {
 	namespace Modules {

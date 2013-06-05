@@ -1,13 +1,21 @@
 #ifndef _FEZMEDUSA_H_
 #define _FEZMEDUSA_H_
 
-#include <Gadgeteering/Gadgeteering.h>
-#include <SoftwareSerial.h>
-#include "ExtenderChip.hpp"
+#include "../Gadgeteering/Mainboard.hpp"
+#include "../Gadgeteering/Socket.hpp"
+
+class SoftwareSerial;
 
 namespace GHI {
+	class ExtenderChip;
+
+	namespace Interfaces {
+		class SPIDevice;
+		class SerialDevice;
+	}
+
 	namespace Mainboards {
-		class FEZMedusa : public Mainboard {
+		class FEZMedusa : public GHI::Mainboard {
 			bool isSocketReal(Socket* socket);
 			char getPort(Socket::Pin pinNumber);
 			char getPin(Socket::Pin pinNumber);

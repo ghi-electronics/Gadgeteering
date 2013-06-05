@@ -1,7 +1,7 @@
 #ifndef _TUNES_H_
 #define _TUNES_H_
 
-#include <Gadgeteering/Gadgeteering.h>
+#include "../Gadgeteering/Gadgeteering.h"
 
 namespace GHI {
 	namespace Modules {

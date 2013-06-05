@@ -1,5 +1,5 @@
-#include <Gadgeteering/SPIDevice.hpp>
 #include <SPI.h>
+#include "../Gadgeteering/SPIDevice.hpp"
 #include "FEZMedusa.h"
 
 using namespace GHI;

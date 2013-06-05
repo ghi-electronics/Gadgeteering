@@ -1,11 +1,14 @@
 #ifndef _EXTENDERCHIP_H_
 #define _EXTENDERCHIP_H_
 
-#include <Gadgeteering/Types.hpp>
-#include <Gadgeteering/SoftwareI2C.hpp>
-#include <Gadgeteering/Socket.hpp>
+#include "Types.hpp"
+#include "Socket.hpp"
 
 namespace GHI {
+	namespace Interfaces {
+		class SoftwareI2C;
+	}
+
 	class ExtenderChip {
 		static const char INPUT_PORT_0_REGISTER = 0x00;
 		static const char OUTPUT_PORT_0_REGISTER = 0x08;

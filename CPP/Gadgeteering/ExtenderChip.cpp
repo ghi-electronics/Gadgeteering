@@ -1,4 +1,5 @@
 #include "ExtenderChip.hpp"
+#include "SoftwareI2C.hpp"
 
 using namespace GHI;
 using namespace GHI::Interfaces;
@@ -23,9 +24,10 @@ char ExtenderChip::getPin(Socket::Pin pin) {
 	return 1 << (pin & 0x0F);
 }
 
-void ExtenderChip::setIOMode(Socket::Pin pin, IOState state, ResistorMode resistorMode) {
-	this->io60Chip->writeRegister(ExtenderChip::PORT_SELECT_REGISTER, this->getPort(pin));
-	char pin = this->getPin(pin);
+void ExtenderChip::setIOMode(Socket::Pin pinNumber, IOState state, ResistorMode resistorMode) {
+	this->io60Chip->writeRegister(ExtenderChip::PORT_SELECT_REGISTER, this->getPort(pinNumber));
+
+	char pin = this->getPin(pinNumber);
 	char val = this->io60Chip->readRegister(ExtenderChip::ENABLE_PWM_REGISTER);
 
 	if (state == IOStates::PWM)	{

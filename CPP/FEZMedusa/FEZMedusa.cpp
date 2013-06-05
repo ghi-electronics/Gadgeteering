@@ -1,4 +1,7 @@
+#include <SoftwareSerial.h>
+#include "Arduino.h"
 #include "FEZMedusa.h"
+#include "../Gadgeteering/ExtenderChip.hpp"
 
 using namespace GHI;
 using namespace GHI::Interfaces;

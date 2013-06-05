@@ -33,46 +33,46 @@
     <ClInclude Include="Gadgeteering\SPIDevice.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Mainboards\FEZLynx\FEZLynx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mainboards\FEZMedusa\FEZMedusa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Modules\CharDisplay\CharDisplay.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Modules\LED7C\LED7C.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Modules\LED7R\LED7R.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Modules\LEDStrip\LEDStrip.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Modules\Tunes\Tunes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mainboards\FEZLynx\Windows\FTD2XX.H">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mainboards\FEZLynx\Linux\ftd2xx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mainboards\FEZLynx\Linux\WinTypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Gadgeteering\Types.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mainboards\FEZMedusa\ExtenderChip.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Gadgeteering\System.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Gadgeteering\Socket.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Gadgeteering\ExtenderChip.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZLynx\Linux\ftd2xx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZLynx\Linux\WinTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZLynx\Windows\FTD2XX.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZLynx\FEZLynx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZMedusa\FEZMedusa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tunes\Tunes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CharDisplay\CharDisplay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LED7C\LED7C.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LED7R\LED7R.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LEDStrip\LEDStrip.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -83,46 +83,10 @@
     <ClCompile Include="Gadgeteering\SoftwareI2C.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mainboards\FEZLynx\FEZLynx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mainboards\FEZMedusa\FEZMedusa.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mainboards\FEZMedusa\SerialDevice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mainboards\FEZMedusa\SPIDevice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Modules\CharDisplay\CharDisplay.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Modules\LED7C\LED7C.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Modules\LED7R\LED7R.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Modules\LEDStrip\LEDStrip.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Modules\Tunes\Tunes.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mainboards\FEZMedusa\ExtenderChip.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Mainboards\FEZMedusa\Mainboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Gadgeteering\Mainboard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mainboards\FEZMedusa\System.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mainboards\FEZLynx\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Gadgeteering\SPIDevice.cpp">
@@ -132,6 +96,42 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Gadgeteering\Socket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gadgeteering\ExtenderChip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZLynx\FEZLynx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZLynx\System.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\FEZMedusa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\SerialDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\SPIDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\System.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tunes\Tunes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CharDisplay\CharDisplay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LED7C\LED7C.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LED7R\LED7R.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LEDStrip\LEDStrip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

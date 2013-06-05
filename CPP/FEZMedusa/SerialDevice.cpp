@@ -1,5 +1,5 @@
-#include <Gadgeteering/SerialDevice.hpp>
 #include <SoftwareSerial.h>
+#include "../Gadgeteering/SerialDevice.hpp"
 #include "FEZMedusa.h"
 
 using namespace GHI;

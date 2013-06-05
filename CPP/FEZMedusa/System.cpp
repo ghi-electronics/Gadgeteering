@@ -1,4 +1,4 @@
-#include <Gadgeteering/System.hpp>
+#include "../Gadgeteering/System.hpp"
 
 using namespace GHI;
 
