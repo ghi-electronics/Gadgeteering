@@ -2,10 +2,12 @@
 #define _SPI_H_
 
 #include "Types.hpp"
-#include "Gadgeteering.h"
+#include "Socket.hpp"
 
 namespace GHI {
 	namespace Interfaces {
+		class DigitalOutput;
+
 		class SPIDevice {
 			public:
 				class Configuration {

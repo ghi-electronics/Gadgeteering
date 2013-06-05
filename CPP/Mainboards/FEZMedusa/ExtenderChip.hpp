@@ -3,6 +3,7 @@
 
 #include <Gadgeteering/Types.hpp>
 #include <Gadgeteering/SoftwareI2C.hpp>
+#include <Gadgeteering/Socket.hpp>
 
 namespace GHI {
 	class ExtenderChip {
@@ -34,7 +35,7 @@ namespace GHI {
 			ExtenderChip(Socket::Pin sdaPin, Socket::Pin sclPin, byte address);
 			~ExtenderChip();
 			
-			void setIOMode(Socket::Pin pin, Mainboard::IOState state, Mainboard::ResistorMode resistorMode);
+			void setIOMode(Socket::Pin pin, IOState state, ResistorMode resistorMode);
 			void setPWM(Socket::Pin pin, double frequency, double dutyCycle);
 			bool readDigital(Socket::Pin pin);
 			void writeDigital(Socket::Pin pin, bool value);

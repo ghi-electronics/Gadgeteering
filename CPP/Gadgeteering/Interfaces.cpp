@@ -1,12 +1,13 @@
 #include "Interfaces.hpp"
 
+using namespace GHI;
 using namespace GHI::Interfaces;
 
 DigitalOutput::DigitalOutput(Socket* socket, Socket::Pin pin, bool initialState) : socket(socket), pin(pin) {
 	if (!socket || pin < 3 || pin > 9)
 		mainboard->panic("Pin out of range");
 
-	mainboard->setIOMode(this->socket, this->pin, Mainboard::IOStates::OUT);
+	mainboard->setIOMode(this->socket, this->pin, IOStates::OUT);
 	this->write(initialState);
 }
 
@@ -18,34 +19,34 @@ DigitalInput::DigitalInput(Socket* socket, Socket::Pin pin) : socket(socket), pi
 	if (!socket || pin < 3 || pin > 9)
 		mainboard->panic("Pin out of range");
 
-	mainboard->setIOMode(this->socket, this->pin, Mainboard::IOStates::IN, Mainboard::ResistorModes::PULL_UP);
+	mainboard->setIOMode(this->socket, this->pin, IOStates::IN, ResistorModes::PULL_UP);
 }
 
 bool DigitalInput::read() {
 	return mainboard->readDigital(this->socket, this->pin);
 }
 
-DigitalInputOutput::DigitalInputOutput(Socket* socket, Socket::Pin pin, Mainboard::IOState initialIOState, bool initialOutputState) : socket(socket), pin(pin) {
+DigitalInputOutput::DigitalInputOutput(Socket* socket, Socket::Pin pin, IOState initialIOState, bool initialOutputState) : socket(socket), pin(pin) {
 	if (!socket || pin < 3 || pin > 9)
 		mainboard->panic("Pin out of range");
 
 	this->setState(initialIOState);
 
-	if (this->ioState == Mainboard::IOStates::OUT)
+	if (this->ioState == IOStates::OUT)
 		this->write(initialOutputState);
 }
 
 void DigitalInputOutput::write(bool value) {
-	this->setState(Mainboard::IOStates::OUT);
+	this->setState(IOStates::OUT);
 	mainboard->writeDigital(this->socket, this->pin, value);
 }
 
 bool DigitalInputOutput::read() {
-	this->setState(Mainboard::IOStates::IN);
+	this->setState(IOStates::IN);
 	return mainboard->readDigital(this->socket, this->pin);
 }
 
-void DigitalInputOutput::setState(Mainboard::IOState state) {
+void DigitalInputOutput::setState(IOState state) {
 	if (this->ioState == state)
 		return;
 
@@ -66,7 +67,7 @@ PWMOutput::PWMOutput(Socket* socket, Socket::Pin pin) : socket(socket), pin(pin)
 	if (!socket || pin < 3 || pin > 9)
 		mainboard->panic("Pin out of range");
 		
-	mainboard->setIOMode(this->socket, this->pin, Mainboard::IOStates::PWM);
+	mainboard->setIOMode(this->socket, this->pin, IOStates::PWM);
 	this->set(0, 1000);
 }
 

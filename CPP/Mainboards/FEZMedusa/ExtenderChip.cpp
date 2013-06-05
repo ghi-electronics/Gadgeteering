@@ -23,12 +23,12 @@ byte ExtenderChip::getPin(Socket::Pin pin) {
 	return 1 << (pin & 0x0F);
 }
 
-void ExtenderChip::setIOMode(Socket::Pin pin, Mainboard::IOState state, Mainboard::ResistorMode resistorMode) {
+void ExtenderChip::setIOMode(Socket::Pin pin, IOState state, ResistorMode resistorMode) {
 	this->io60Chip->writeRegister(ExtenderChip::PORT_SELECT_REGISTER, this->getPort(pin));
 	byte pin = this->getPin(pin);
 	byte val = this->io60Chip->readRegister(ExtenderChip::ENABLE_PWM_REGISTER);
 
-	if (state == Mainboard::IOStates::PWM)	{
+	if (state == IOStates::PWM)	{
 		this->io60Chip->writeRegister(ExtenderChip::ENABLE_PWM_REGISTER, val | pin);
 
 		this->io60Chip->writeRegister(ExtenderChip::PWM_CONFIG, ExtenderChip::CLOCK_SOURCE); //93.75KHz clock
@@ -39,11 +39,11 @@ void ExtenderChip::setIOMode(Socket::Pin pin, Mainboard::IOState state, Mainboar
 		this->io60Chip->writeRegister(ExtenderChip::ENABLE_PWM_REGISTER, val & ~pin);
 		val = this->io60Chip->readRegister(ExtenderChip::PIN_DIRECTION_REGISTER);
 
-		if (state == Mainboard::IOStates::IN) {
+		if (state == IOStates::IN) {
 			byte resistorRegister = ExtenderChip::PIN_HIGH_IMPEDENCE;
-			if (resistorMode == Mainboard::ResistorModes::PULL_DOWN)
+			if (resistorMode == ResistorModes::PULL_DOWN)
 				resistorRegister = ExtenderChip::PIN_PULL_DOWN;
-			else if (resistorMode == Mainboard::ResistorModes::PULL_UP)
+			else if (resistorMode == ResistorModes::PULL_UP)
 				resistorRegister = ExtenderChip::PIN_PULL_UP;
 
 			this->io60Chip->writeRegister(ExtenderChip::PIN_DIRECTION_REGISTER, val | pin);
