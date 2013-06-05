@@ -12,6 +12,6 @@ namespace GHI
 	{
 		void Sleep(int time);
 		int TimeElapsed();
-		int TimeElapsed64();
+		long TimeElapsed64();
 	}
 }

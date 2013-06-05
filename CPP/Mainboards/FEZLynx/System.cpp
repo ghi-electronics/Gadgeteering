@@ -32,7 +32,7 @@ int System::TimeElapsed()
 	/////////////////////////////////////////////////////////
 #ifdef _POSIX_TIMERS
 	timespec t;
-	clockgettime(CLOCK_MONOTONIC, &res);
+	clockgettime(CLOCK_MONOTONIC, &t);
 
 	return ((t.tv_sec * 1000) + (t.tv_nsec / 1000000));
 #else
@@ -41,7 +41,7 @@ int System::TimeElapsed()
 #endif
 }
 
-int System::TimeElapsed64()
+long System::TimeElapsed64()
 {
 #ifdef _WIN32
 	return GetTickCount64();
@@ -51,9 +51,11 @@ int System::TimeElapsed64()
 	/////////////////////////////////////////////////////////
 #ifdef _POSIX_TIMERS
 	timespec t;
-	clockgettime(CLOCK_MONOTONIC, &res);
+	clockgettime(CLOCK_MONOTONIC, &t);
 
-			
+	return ((t.tv_sec * 1000) + (t.tv_nsec / 1000000));
+#else
+#error "Your system does not support POSIX compliant timers"
 #endif
 #endif
 }

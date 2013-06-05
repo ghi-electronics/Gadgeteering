@@ -50,11 +50,15 @@ namespace GHI {
 				void read(byte* buffer, unsigned int count, bool deselectChip = false);
 
 			private:
+
+				/* Socket Code should be moved to SPIBuss.hpp */
 				static const Socket::Pin CLOCK = Socket::Pins::Nine;
 				static const Socket::Pin MISO = Socket::Pins::Eight;
 				static const Socket::Pin MOSI = Socket::Pins::Seven;
 
 				Socket* socket;
+				/////////////////////////////////////////////////
+
 				DigitalOutput* chipSelect;
 				Configuration* configuration;
 		};
