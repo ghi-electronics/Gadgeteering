@@ -78,9 +78,6 @@
     <ClInclude Include="Gadgeteering\SPIBus.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Gadgeteering\SPIBus.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -140,10 +137,7 @@
     <ClCompile Include="LEDStrip\LEDStrip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mainboards\FEZLynx\SPIBus.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mainboards\FEZLynx\SPIDevice.cpp">
+    <ClCompile Include="FEZLynx\SPIBus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
