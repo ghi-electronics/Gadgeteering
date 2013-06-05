@@ -17,6 +17,8 @@ namespace GHI {
 				int stopBits;
 				int dataBits;
 
+				SerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
+
 			public:
 				class Parity {
 					public:
@@ -35,7 +37,6 @@ namespace GHI {
 						static const int TWO = 0;
 				};
 
-				SerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
 				virtual ~SerialDevice();
 		
 				virtual void open();

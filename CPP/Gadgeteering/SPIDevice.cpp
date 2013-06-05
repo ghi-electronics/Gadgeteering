@@ -23,3 +23,13 @@ SPIDevice::SPIDevice(Socket* socket, Socket::Pin chipSelectPin, SPIDevice::Confi
 SPIDevice::~SPIDevice() {
 	delete this->chipSelect;
 }
+
+char SPIDevice::writeReadByte(char toSend, bool deselectChip) { };
+
+void SPIDevice::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, bool deselectChip) { };
+
+void SPIDevice::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip) { };
+
+void SPIDevice::write(char* buffer, unsigned int count, bool deselectChip) { };
+
+void SPIDevice::read(char* buffer, unsigned int count, bool deselectChip) { };

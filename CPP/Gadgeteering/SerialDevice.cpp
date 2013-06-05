@@ -14,3 +14,9 @@ SerialDevice::SerialDevice(Socket* socket, int baudRate, int parity, int stopBit
 SerialDevice::~SerialDevice() {
 
 }
+
+void SerialDevice::open() { };
+void SerialDevice::close() { };
+void SerialDevice::write(const unsigned char* buffer, int count) { };
+void SerialDevice::write(const char* buffer, int count) { };
+void SerialDevice::read(char* buffer, int count) { };

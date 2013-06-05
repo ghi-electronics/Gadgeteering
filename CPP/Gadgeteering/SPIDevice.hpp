@@ -35,7 +35,6 @@ namespace GHI {
 						Configuration(bool chipSelectActiveState, unsigned int chipSelectSetupTime, unsigned int chipSelectHoldTime, bool clockIdleState, bool clockEdge, unsigned int clockRate);
 				};
 
-				SPIDevice(GHI::Socket* socket, GHI::Socket::Pin chipSelectPin, SPIDevice::Configuration* configuration);
 				virtual ~SPIDevice();
 		
 				//Clocks in one char and clocks out one char at the same time. If deselectChip is true, the CS line is set to logic low after the transmission, otherwise it remains logic high.
@@ -54,6 +53,8 @@ namespace GHI {
 				virtual void read(char* buffer, unsigned int count, bool deselectChip = false);
 
 			protected:
+				SPIDevice(GHI::Socket* socket, GHI::Socket::Pin chipSelectPin, SPIDevice::Configuration* configuration);
+
 				SPIBus* bus;
 
 				static const Socket::Pin CLOCK = Socket::Pins::Nine;
