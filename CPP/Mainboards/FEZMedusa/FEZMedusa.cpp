@@ -2,8 +2,9 @@
 
 using namespace GHI;
 using namespace GHI::Interfaces;
+using namespace GHI::Mainboards;
 
-Mainboard* mainboard;
+Mainboard* GHI::mainboard = NULL;
 
 FEZMedusa::FEZMedusa() {
 	mainboard = this;
@@ -146,4 +147,12 @@ double FEZMedusa::readAnalog(Socket* socket, Socket::Pin pinNumber) {
 
 void FEZMedusa::writeAnalog(Socket* socket, Socket::Pin pinNumber, double voltage) {
 	this->isSocketReal(socket) ? ::analogWrite(socket->pins[pinNumber], voltage * (1024 / 3.3)) : this->extenderChip->writeAnalog(socket->pins[pinNumber], voltage);
+}
+
+GHI::Interfaces::SPIDevice* FEZMedusa::getNewSPIDevice(Socket* socket, Socket::Pin chipSelectPin, SPIDevice::Configuration* configuration) {
+	return new FEZMedusa::SPIDevice(socket, chipSelectPin, configuration);
+}
+
+GHI::Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits) {
+	return new SerialDevice(socket, baudRate, parity, stopBits, dataBits);
 }

@@ -69,10 +69,7 @@
     <ClInclude Include="Mainboards\FEZMedusa\ExtenderChip.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Gadgeteering\System.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Gadgeteering\SPIBus.hpp">
+    <ClInclude Include="Gadgeteering\System.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -125,10 +122,10 @@
     <ClCompile Include="Mainboards\FEZLynx\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mainboards\FEZLynx\SPIDevice.cpp">
+    <ClCompile Include="Gadgeteering\SPIDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mainboards\FEZLynx\SPIBus.cpp">
+    <ClCompile Include="Gadgeteering\SerialDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

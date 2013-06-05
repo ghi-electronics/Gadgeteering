@@ -7,14 +7,15 @@
 namespace GHI {
 	namespace Interfaces {
 		class SerialDevice {
-			static const Socket::Pin TX = Socket::Pins::Four;
-			static const Socket::Pin RX = Socket::Pins::Five;
+			protected:
+				static const Socket::Pin TX = Socket::Pins::Four;
+				static const Socket::Pin RX = Socket::Pins::Five;
 
-			Socket* socket;
-			int baudRate;
-			int parity;
-			int stopBits;
-			int dataBits;
+				Socket* socket;
+				int baudRate;
+				int parity;
+				int stopBits;
+				int dataBits;
 
 			public:
 				class Parity {
