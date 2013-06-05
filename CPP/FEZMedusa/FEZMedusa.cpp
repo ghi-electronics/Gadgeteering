@@ -156,8 +156,8 @@ void FEZMedusa::writeAnalog(Socket* socket, Socket::Pin pinNumber, double voltag
 	this->isSocketReal(socket) ? ::analogWrite(socket->pins[pinNumber], voltage * (1024 / 3.3)) : this->extenderChip->writeAnalog(socket->pins[pinNumber], voltage);
 }
 
-GHI::Interfaces::SPIDevice* FEZMedusa::getNewSPIDevice(Socket* socket, Socket::Pin chipSelectPin, SPIDevice::Configuration* configuration) {
-	return new FEZMedusa::SPIDevice(socket, chipSelectPin, configuration);
+GHI::Interfaces::SPIBus* FEZMedusa::getNewSPIBus(Socket* socket, GHI::Interfaces::SPIBus::Configuration* configuration) {
+	return new FEZMedusa::SPIBus(socket, configuration);
 }
 
 GHI::Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits) {

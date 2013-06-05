@@ -19,18 +19,18 @@ namespace GHI {
 
 			static const int VIRTUAL_SOCKET_START = 4;
 	
-			class SPIDevice : public GHI::Interfaces::SPIDevice {
+			class SPIBus : public GHI::Interfaces::SPIBus
+			{
 				SPIClass* spi;
 
 				public:
-					SPIDevice(Socket* socket, Socket::Pin chipSelectPin, SPIDevice::Configuration* configuration);
-					virtual ~SPIDevice();
-		
+					SPIBus(Socket* socket, GHI::Interfaces::SPIBus::Configuration* config);
+
 					virtual char writeReadByte(char toSend, bool deselectChip = false);
-					virtual void writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, bool deselectChip = false);
-					virtual void writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip = false);
-					virtual void write(char* buffer, unsigned int count, bool deselectChip = false);
-					virtual void read(char* buffer, unsigned int count, bool deselectChip = false);
+					virtual void writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count);
+					virtual void writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount);
+					virtual void write(char* buffer, unsigned int count);
+					virtual void read(char* buffer, unsigned int count);
 			};
 
 			class SerialDevice : public GHI::Interfaces::SerialDevice {
@@ -58,7 +58,7 @@ namespace GHI {
 				virtual void writeAnalog(Socket* socket, Socket::Pin pin, double voltage);
 				virtual void setIOMode(Socket* socket, Socket::Pin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
 
-				virtual GHI::Interfaces::SPIDevice* getNewSPIDevice(Socket* socket, Socket::Pin chipSelectPin, SPIDevice::Configuration* configuration);
+				virtual GHI::Interfaces::SPIBus* getNewSPIBus(Socket* socket, GHI::Interfaces::SPIBus::Configuration* configuration);
 				virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
 		};
 	}

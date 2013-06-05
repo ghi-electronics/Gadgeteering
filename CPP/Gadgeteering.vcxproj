@@ -93,10 +93,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FEZLynx\SPIBus.cpp" />
+    <ClCompile Include="FEZMedusa\SPIBus.cpp" />
     <ClCompile Include="Gadgeteering\Interfaces.cpp" />
     <ClCompile Include="Gadgeteering\Mainboard.cpp" />
     <ClCompile Include="Gadgeteering\SerialDevice.cpp" />
     <ClCompile Include="Gadgeteering\Socket.cpp" />
+    <ClCompile Include="Gadgeteering\SPIBus.cpp" />
     <ClCompile Include="Gadgeteering\SPIDevice.cpp" />
     <ClCompile Include="FEZLynx\System.cpp" />
     <ClCompile Include="FEZMedusa\System.cpp" />
@@ -105,7 +107,6 @@
     <ClCompile Include="FEZLynx\FEZLynx.cpp" />
     <ClCompile Include="FEZMedusa\FEZMedusa.cpp" />
     <ClCompile Include="FEZMedusa\SerialDevice.cpp" />
-    <ClCompile Include="FEZMedusa\SPIDevice.cpp" />
     <ClCompile Include="Gadgeteering\ExtenderChip.cpp" />
     <ClCompile Include="CharDisplay\CharDisplay.cpp" />
     <ClCompile Include="LED7C\LED7C.cpp" />

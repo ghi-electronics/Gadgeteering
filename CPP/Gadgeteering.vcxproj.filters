@@ -116,9 +116,6 @@
     <ClCompile Include="FEZMedusa\SerialDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FEZMedusa\SPIDevice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FEZMedusa\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -138,6 +135,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FEZLynx\SPIBus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\SPIBus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gadgeteering\SPIBus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

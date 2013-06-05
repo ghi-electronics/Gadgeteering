@@ -1,17 +1,11 @@
-#include <SPI.h>
-#include "Arduino.h"
-#include "../Gadgeteering/SPIDevice.hpp"
-#include "../Gadgeteering/System.hpp"
-#include "../Gadgeteering/Interfaces.hpp"
+#include "../Gadgeteering/Gadgeteering.h"
+
 #include "FEZMedusa.h"
 
-using namespace GHI;
-using namespace GHI::Interfaces;
 using namespace GHI::Mainboards;
 
-#define SYSTEM_CLOCK 12000 //in KHz
-
-FEZMedusa::SPIDevice::SPIDevice(Socket* socket, Socket::Pin chipSelectPin, SPIDevice::Configuration* configuration) : GHI::Interfaces::SPIDevice(socket, chipSelectPin, configuration) {
+FEZMedusa::SPIBus::SPIBus(Socket* socket, FEZMedusa::SPIBus::Configuration config) : GHI::Interfaces::SPIBus(socket, config)
+{
 	this->spi = new SPIClass();
 	this->spi->begin();
 	
@@ -41,28 +35,23 @@ FEZMedusa::SPIDevice::SPIDevice(Socket* socket, Socket::Pin chipSelectPin, SPIDe
 	}
 }
 
-FEZMedusa::SPIDevice::~SPIDevice() {
+FEZMedusa::SPIBus::~SPIBus() {
 	this->spi->end();
 }
 
-char FEZMedusa::SPIDevice::writeReadByte(char toSend, bool deselectChip) {
-	this->chipSelect->write(this->configuration->chipSelectActiveState);
-	
+char FEZMedusa::SPIBus::writeReadByte(char toSend)
+{
 	System::Sleep(this->configuration->chipSelectSetupTime);
 	
 	char result = this->spi->transfer(toSend);
 	
 	System::Sleep(this->configuration->chipSelectHoldTime);
 	
-	if (deselectChip)
-		this->chipSelect->write(!this->configuration->chipSelectActiveState);
-	
 	return result;
 }
 
-void FEZMedusa::SPIDevice::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, bool deselectChip) {
-	this->chipSelect->write(this->configuration->chipSelectActiveState);
-	
+void FEZMedusa::SPIBus::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count)
+{
 	System::Sleep(this->configuration->chipSelectSetupTime);
 	
 	for (int i = 0; i < count; i++) {
@@ -75,20 +64,20 @@ void FEZMedusa::SPIDevice::writeAndRead(char* sendBuffer, char* receiveBuffer, u
 	}
 	
 	System::Sleep(this->configuration->chipSelectHoldTime);
-	
-	if (deselectChip)
-		this->chipSelect->write(!this->configuration->chipSelectActiveState);
 }
 
-void FEZMedusa::SPIDevice::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip) {
-	this->write(sendBuffer, sendCount, deselectChip);
-	this->write(receiveBuffer, receiveCount, deselectChip);
+void FEZMedusa::SPIBus::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount)
+{
+	this->write(sendBuffer, sendCount);
+	this->write(receiveBuffer, receiveCount);
 }
 
-void FEZMedusa::SPIDevice::write(char* buffer, unsigned int count, bool deselectChip) {
-	this->writeAndRead(buffer, NULL, count, deselectChip);
+void FEZMedusa::SPIBus::write(char* buffer, unsigned int count)
+{	this->writeAndRead(buffer, NULL, count);
+
 }
 
-void FEZMedusa::SPIDevice::read(char* buffer, unsigned int count, bool deselectChip) {
-	this->writeAndRead(NULL, buffer, count, deselectChip);
+void FEZMedusa::SPIBus::read(char* buffer, unsigned int count)
+{
+	this->writeAndRead(NULL, buffer, count);
 }

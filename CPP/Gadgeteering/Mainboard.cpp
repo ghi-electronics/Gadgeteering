@@ -17,7 +17,7 @@ Mainboard::~Mainboard() {
 	ListNode* prev = this->sockets;
 	ListNode* node = this->sockets->next;
 	do {
-		delete node->socket;
+		delete node->node;
 		delete prev;
 		prev = node;
 	} while ((node = node->next) != NULL);
@@ -32,7 +32,7 @@ Socket* Mainboard::registerSocket(Socket* socket) {
 	if (this->sockets == NULL) {
 		this->sockets = new ListNode();
 		this->sockets->next = NULL;
-		this->sockets->socket = NULL;
+		this->sockets->node = NULL;
 	}
 
 	ListNode* node;
@@ -40,7 +40,7 @@ Socket* Mainboard::registerSocket(Socket* socket) {
 		;
 
 	node = node->next = new ListNode();
-	node->socket = socket;
+	node->node = socket;
 	node->next = NULL;
 
 	return socket;
@@ -52,8 +52,8 @@ Socket* Mainboard::getSocket(int number) {
 		this->panic("No sockets present.");
 
 	for (ListNode* node = this->sockets; node != NULL; node = node->next)
-		if (node->socket->number == number)
-			return node->socket;
+		if (static_cast<Socket*>(node->node)->number == number)
+			return static_cast<Socket*>(node->node);
 
 	return NULL;
 }
@@ -65,6 +65,6 @@ double Mainboard::readAnalog(Socket* socket, Socket::Pin pin) { };
 void Mainboard::writeAnalog(Socket* socket, Socket::Pin pin, double voltage) { };
 void Mainboard::setIOMode(Socket* socket, Socket::Pin pin, IOState state, ResistorMode resistorMode) { };
 	
-GHI::Interfaces::SPIDevice* Mainboard::getNewSPIDevice(Socket* socket, Socket::Pin chipSelectPin, GHI::Interfaces::SPIDevice::Configuration* configuration) { };
+GHI::Interfaces::SPIBus* Mainboard::getNewSPIBus(Socket* socket, GHI::Interfaces::SPIBus::Configuration* configuration) { };
 GHI::Interfaces::SerialDevice* Mainboard::getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits) { };
 	
