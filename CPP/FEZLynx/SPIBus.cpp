@@ -11,8 +11,6 @@ FEZLynx::SPIBus::SPIBus(FEZLynx::SPIBus::Configuration config) : GHI::Interfaces
 
 char FEZLynx::SPIBus::writeReadByte(char toSend, bool deselectChip)
 {
-	CLOCK.write(true);
-
 	dwNumBytesToSend = 0; //Clear output buffer
 	OutputBuffer[dwNumBytesToSend++] = 0x10;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
 	OutputBuffer[dwNumBytesToSend++] = 0;
@@ -28,11 +26,8 @@ char FEZLynx::SPIBus::writeReadByte(char toSend, bool deselectChip)
 
 	if(dwNumBytesRead!=1)
 	{
-		//crap!
-		while(1);
+		mainboard->panic("SPI Write/Read Failed");
 	}
-
-	CLOCK.write(false);
 
 	return InputBuffer[0];
 }

@@ -23,7 +23,7 @@ CharDisplay::CharDisplay(int socketNumber) {
 	
     this->clear();
 			
-	System::msSleep(3);
+	System::Sleep(3);
 }
 
 void CharDisplay::sendNibble(char b) {

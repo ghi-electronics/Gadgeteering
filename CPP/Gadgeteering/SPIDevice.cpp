@@ -29,7 +29,7 @@ SPIDevice::~SPIDevice() {
 
 char SPIDevice::writeReadByte(char toSend, bool deselectChip) 
 { 
-	bus->writeReadByte(toSend,deselectChip);
+	return bus->writeReadByte(toSend,deselectChip);
 }
 
 void SPIDevice::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, bool deselectChip) 

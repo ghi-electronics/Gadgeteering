@@ -83,7 +83,6 @@
     <ClInclude Include="FEZLynx\Linux\ftd2xx.h" />
     <ClInclude Include="FEZLynx\Linux\WinTypes.h" />
     <ClInclude Include="FEZLynx\Windows\FTD2XX.H" />
-    <ClInclude Include="FEZMedusa\FEZMedusa.h" />
     <ClInclude Include="Gadgeteering\ExtenderChip.hpp" />
     <ClInclude Include="CharDisplay\CharDisplay.h" />
     <ClInclude Include="LED7C\LED7C.h" />
@@ -99,13 +98,9 @@
     <ClCompile Include="Gadgeteering\Socket.cpp" />
     <ClCompile Include="Gadgeteering\SPIDevice.cpp" />
     <ClCompile Include="FEZLynx\System.cpp" />
-    <ClCompile Include="FEZMedusa\System.cpp" />
     <ClCompile Include="Mainboards\FEZMedusa\Mainboard.cpp" />
     <ClCompile Include="Gadgeteering\SoftwareI2C.cpp" />
     <ClCompile Include="FEZLynx\FEZLynx.cpp" />
-    <ClCompile Include="FEZMedusa\FEZMedusa.cpp" />
-    <ClCompile Include="FEZMedusa\SerialDevice.cpp" />
-    <ClCompile Include="FEZMedusa\SPIDevice.cpp" />
     <ClCompile Include="Gadgeteering\ExtenderChip.cpp" />
     <ClCompile Include="CharDisplay\CharDisplay.cpp" />
     <ClCompile Include="LED7C\LED7C.cpp" />

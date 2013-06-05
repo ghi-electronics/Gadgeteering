@@ -13,8 +13,8 @@ namespace GHI {
 	//the parent scope, and Arduino doesn't have C++11 enum class yet.
 	class IOStates {
 		public:
-			static const IOState OUT = 0;
-			static const IOState IN = 1;
+			static const IOState OUTPUT = 0;
+			static const IOState INPUT = 1;
 			static const IOState PWM = 2;
 	};
 

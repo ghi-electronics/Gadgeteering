@@ -1,9 +1,10 @@
 ﻿// FEZLynx.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
 #include "FEZLynx.h"
 
+using namespace GHI;
+using namespace GHI::Mainboards;
 
 Mainboard* mainboard = new FEZLynx();
 
@@ -119,12 +120,12 @@ FEZLynx::FEZLynx()
 				ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the commands
 				dwNumBytesToSend = 0; //Clear output buffer
 
-				Sleep(20); //Delay for a while
+				System::Sleep(20); //Delay for a while
 				//Turn off loop back in case
 				OutputBuffer[dwNumBytesToSend++] = '\x85'; //Command to turn off loop back of TDI/TDO connection
 				ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the commands
 				dwNumBytesToSend = 0; //Clear output buffer
-				Sleep(30); //Delay for a while
+				System::Sleep(30); //Delay for a while
 			}
 		}
 		else
@@ -185,7 +186,7 @@ FEZLynx::FEZLynx()
 	// Virtual Sockets
 	///////////////////////////////
 
-	socket = this->registerSocket(new VirtualSocket(6, Socket::Types::Y | Socket::Types::P));
+	socket = this->registerSocket(new Socket(6, Socket::Types::Y | Socket::Types::P));
 	socket->pins[3] = 0x04;
 	socket->pins[4] = 0x05;
 	socket->pins[5] = 0x06;
@@ -194,7 +195,7 @@ FEZLynx::FEZLynx()
 	socket->pins[8] = 0x64;
 	socket->pins[9] = 0x65;
 
-	socket = this->registerSocket(new VirtualSocket(7, Socket::Types::Y | Socket::Types::P));
+	socket = this->registerSocket(new Socket(7, Socket::Types::Y | Socket::Types::P));
 	socket->pins[3] = 0x10;
 	socket->pins[4] = 0x11;
 	socket->pins[5] = 0x12;
@@ -203,7 +204,7 @@ FEZLynx::FEZLynx()
 	socket->pins[8] = 0x67;
 	socket->pins[9] = 0x70;
 
-	socket = this->registerSocket(new VirtualSocket(8, Socket::Types::Y | Socket::Types::P));
+	socket = this->registerSocket(new Socket(8, Socket::Types::Y | Socket::Types::P));
 	socket->pins[3] = 0x14;
 	socket->pins[4] = 0x15;
 	socket->pins[5] = 0x16;
@@ -212,7 +213,7 @@ FEZLynx::FEZLynx()
 	socket->pins[8] = 0x72;
 	socket->pins[9] = 0x73;
 
-	socket = this->registerSocket(new VirtualSocket(9, Socket::Types::Y | Socket::Types::P));
+	socket = this->registerSocket(new Socket(9, Socket::Types::Y | Socket::Types::P));
 	socket->pins[3] = 0x20;
 	socket->pins[4] = 0x21;
 	socket->pins[5] = 0x22;
@@ -221,7 +222,7 @@ FEZLynx::FEZLynx()
 	socket->pins[8] = 0x75;
 	socket->pins[9] = 0x76;
 
-	socket = this->registerSocket(new VirtualSocket(10, Socket::Types::Y));
+	socket = this->registerSocket(new Socket(10, Socket::Types::Y));
 	socket->pins[3] = 0x30;
 	socket->pins[4] = 0x31;
 	socket->pins[5] = 0x32;
@@ -230,7 +231,7 @@ FEZLynx::FEZLynx()
 	socket->pins[8] = 0x35;
 	socket->pins[9] = 0x36;
 
-	socket = this->registerSocket(new VirtualSocket(11, Socket::Types::Y));
+	socket = this->registerSocket(new Socket(11, Socket::Types::Y));
 	socket->pins[3] = 0x40;
 	socket->pins[4] = 0x41;
 	socket->pins[5] = 0x42;
@@ -239,7 +240,7 @@ FEZLynx::FEZLynx()
 	socket->pins[8] = 0x45;
 	socket->pins[9] = 0x46;
 
-	socket = this->registerSocket(new VirtualSocket(12, Socket::Types::Y));
+	socket = this->registerSocket(new Socket(12, Socket::Types::Y));
 	socket->pins[3] = 0x50;
 	socket->pins[4] = 0x51;
 	socket->pins[5] = 0x52;
@@ -259,7 +260,7 @@ void FEZLynx::SleepInMS(int msToSleep)
 #endif
 }
 
-bool FEZLynx::isVirtual(Pin pinNumber)
+bool FEZLynx::isVirtual(Socket::Pin pinNumber)
 {
 	if(((int)pinNumber & (int)ExtenderMask) == ExtenderMask)
 		return true;
@@ -277,17 +278,17 @@ void FEZLynx::SetFTDIPins(int channel)
 	ftStatus = FT_Write(Channels[channel].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); //Send off the commands
 }
 
-void FEZLynx::setIOMode(Pin pinNumber, Socket::IOState state, Socket::ResistorMode resistorMode) {
+void FEZLynx::setIOMode(Socket::Pin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode) {
 	//if (state == IOStates::PWM)
 	//	mainboard->panic("Not supported");
 
-	//if (state == IOStates::IN)
+	//if (state == IOStates::INPUT)
 	//	::pinMode(this->pins[pinNumber], resistorMode == ResistorModes::PULL_UP ? INPUT_PULLUP : INPUT);
 	//else
 	//	::pinMode(this->pins[pinNumber], OUTPUT);
 }
 
-int FEZLynx::GetChannel(Pin pinNumber)
+int FEZLynx::GetChannel(Socket::Pin pinNumber)
 {
 	int chanCount = 0;
 
@@ -300,7 +301,7 @@ int FEZLynx::GetChannel(Pin pinNumber)
 	return chanCount;
 }
 
-byte FEZLynx::GetChannelPin(Pin pinNumber)
+char FEZLynx::GetChannelPin(Socket::Pin pinNumber)
 {
 	while(((byte) pinNumber) == 0)
 	{
@@ -310,7 +311,7 @@ byte FEZLynx::GetChannelPin(Pin pinNumber)
 	return (byte)pinNumber;
 }
 
-bool FEZLynx::readDigital(Pin pinNumber) {
+bool FEZLynx::readDigital(Socket::Pin pinNumber) {
 	if((pinNumber & ExtenderMask) == ExtenderMask)
 	{
 	}
@@ -335,7 +336,7 @@ bool FEZLynx::readDigital(Pin pinNumber) {
 	return false;
 }
 
-void FEZLynx::writeDigital(Pin pinNumber, bool value) {
+void FEZLynx::writeDigital(Socket::Pin pinNumber, bool value) {
 	if((pinNumber & ExtenderMask) == ExtenderMask)
 	{
 	}
@@ -356,16 +357,16 @@ void FEZLynx::writeDigital(Pin pinNumber, bool value) {
 	}
 }
 
-double FEZLynx::readAnalog(Pin pinNumber) {
+double FEZLynx::readAnalog(Socket::Pin pinNumber) {
 	//return static_cast<double>(::analogRead(this->pins[pinNumber])) / 1024 * 3.3;
 	return 0;
 }
 
-void FEZLynx::writeAnalog(Pin pinNumber, double voltage) {
+void FEZLynx::writeAnalog(Socket::Pin pinNumber, double voltage) {
 	//::analogWrite(this->pins[pinNumber], voltage * (1024 / 3.3));
 }
 
-void FEZLynx::setPWM(Pin pinNumber, double dutyCycle, double frequency) {
+void FEZLynx::setPWM(Socket::Pin pinNumber, double dutyCycle, double frequency) {
 
 	//Only virtual sockets support PWM
 	if(!isVirtual(pinNumber))

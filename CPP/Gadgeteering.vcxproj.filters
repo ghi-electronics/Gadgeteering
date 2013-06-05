@@ -57,9 +57,6 @@
     <ClInclude Include="FEZLynx\FEZLynx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FEZMedusa\FEZMedusa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Tunes\Tunes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -108,18 +105,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FEZLynx\System.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZMedusa\FEZMedusa.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZMedusa\SerialDevice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZMedusa\SPIDevice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZMedusa\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Tunes\Tunes.cpp">
