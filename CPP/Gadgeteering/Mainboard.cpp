@@ -57,3 +57,14 @@ Socket* Mainboard::getSocket(int number) {
 
 	return NULL;
 }
+
+void Mainboard::setPWM(Socket* socket, Socket::Pin pin, double dutyCycle, double frequency) { };
+bool Mainboard::readDigital(Socket* socket, Socket::Pin pin) { };
+void Mainboard::writeDigital(Socket* socket, Socket::Pin pin, bool value) { };
+double Mainboard::readAnalog(Socket* socket, Socket::Pin pin) { };
+void Mainboard::writeAnalog(Socket* socket, Socket::Pin pin, double voltage) { };
+void Mainboard::setIOMode(Socket* socket, Socket::Pin pin, IOState state, ResistorMode resistorMode) { };
+	
+GHI::Interfaces::SPIDevice* Mainboard::getNewSPIDevice(Socket* socket, Socket::Pin chipSelectPin, GHI::Interfaces::SPIDevice::Configuration* configuration) { };
+GHI::Interfaces::SerialDevice* Mainboard::getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits) { };
+	
