@@ -31,7 +31,7 @@ SPIDevice::~SPIDevice() {
 char SPIDevice::writeReadByte(char toSend, bool deselectChip) 
 { 
 	this->chipSelect->write(this->configuration->chipSelectActiveState);
-	this->bus->writeReadByte(toSend);
+	this->bus->writeReadByte(toSend, configuration);
 	if (deselectChip)
 		this->chipSelect->write(!this->configuration->chipSelectActiveState);
 }
@@ -39,7 +39,7 @@ char SPIDevice::writeReadByte(char toSend, bool deselectChip)
 void SPIDevice::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, bool deselectChip) 
 {
 	this->chipSelect->write(this->configuration->chipSelectActiveState);
-	this->bus->writeAndRead(sendBuffer, receiveBuffer, count);
+	this->bus->writeAndRead(sendBuffer, receiveBuffer, count, configuration);
 	if (deselectChip)
 		this->chipSelect->write(!this->configuration->chipSelectActiveState);
 }
@@ -47,23 +47,23 @@ void SPIDevice::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int
 void SPIDevice::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip) 
 {
 	this->chipSelect->write(this->configuration->chipSelectActiveState);
-	this->bus->writeThenRead(sendBuffer, receiveBuffer, sendCount, receiveCount);
+	this->bus->writeThenRead(sendBuffer, receiveBuffer, sendCount, receiveCount, configuration);
 	if (deselectChip)
-		this->chipSelect->write(!this->bus->configuration->chipSelectActiveState);
+		this->chipSelect->write(!this->configuration->chipSelectActiveState);
 }
 
 void SPIDevice::write(char* buffer, unsigned int count, bool deselectChip) 
 { 
-	this->chipSelect->write(this->bus->configuration->chipSelectActiveState);
-	this->bus->write(buffer, count);
+	this->chipSelect->write(this->configuration->chipSelectActiveState);
+	this->bus->write(buffer, count, configuration);
 	if (deselectChip)
-		this->chipSelect->write(!this->bus->configuration->chipSelectActiveState);
+		this->chipSelect->write(!this->configuration->chipSelectActiveState);
 }
 
 void SPIDevice::read(char* buffer, unsigned int count, bool deselectChip) 
 {
-	this->chipSelect->write(this->bus->configuration->chipSelectActiveState);
-	this->bus->read(buffer, count);
+	this->chipSelect->write(this->configuration->chipSelectActiveState);
+	this->bus->read(buffer, count, configuration);
 	if (deselectChip)
-		this->chipSelect->write(!this->bus->configuration->chipSelectActiveState);
+		this->chipSelect->write(!this->configuration->chipSelectActiveState);
 }

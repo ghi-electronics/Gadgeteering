@@ -1,6 +1,9 @@
 #include "../Gadgeteering/Gadgeteering.h"
+#include <SPI.h>
 
 #include "FEZMedusa.h"
+
+#define SYSTEM_CLOCK 12000 /*KHz*/
 
 using namespace GHI::Mainboards;
 
