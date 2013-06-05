@@ -222,7 +222,7 @@ namespace GHI
 				virtual void writeAnalog(GHI::Socket* socket, GHI::Socket::Pin pin, double voltage);
 				virtual void setIOMode(GHI::Socket* socket, GHI::Socket::Pin pin, GHI::IOState state, GHI::ResistorMode resistorMode = GHI::ResistorModes::FLOATING);
 			
-				virtual GHI::Interfaces::SPIDevice* getNewSPIDevice(GHI::Socket* socket, GHI::Socket::Pin chipSelectPin, GHI::Interfaces::SPIDevice::Configuration* configuration);
+				virtual GHI::Interfaces::SPIBus* getNewSPIBus(GHI::Socket* socket, GHI::Socket::Pin chipSelectPin, GHI::Interfaces::SPIDevice::Configuration* configuration);
 				virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(GHI::Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
 
 				protected:

@@ -52,19 +52,19 @@ Socket* Mainboard::getSocket(int number) {
 		this->panic("No sockets present.");
 
 	for (ListNode* node = this->sockets; node != NULL; node = node->next)
-		if (((Socket*)(node->node))->number == number)
-			return (Socket*)node->node;
+		if (static_cast<Socket*>(node->node)->number == number)
+			return static_cast<Socket*>(node->node);
 
 	return NULL;
 }
 
 void Mainboard::setPWM(Socket* socket, Socket::Pin pin, double dutyCycle, double frequency) { };
-bool Mainboard::readDigital(Socket* socket, Socket::Pin pin) { mainboard->panic("No Mainboard Found"); return false; };
+bool Mainboard::readDigital(Socket* socket, Socket::Pin pin) { };
 void Mainboard::writeDigital(Socket* socket, Socket::Pin pin, bool value) { };
-double Mainboard::readAnalog(Socket* socket, Socket::Pin pin) { mainboard->panic("No Mainboard Found"); return 0.0; };
+double Mainboard::readAnalog(Socket* socket, Socket::Pin pin) { };
 void Mainboard::writeAnalog(Socket* socket, Socket::Pin pin, double voltage) { };
 void Mainboard::setIOMode(Socket* socket, Socket::Pin pin, IOState state, ResistorMode resistorMode) { };
 	
-GHI::Interfaces::SPIDevice* Mainboard::getNewSPIDevice(Socket* socket, Socket::Pin chipSelectPin, GHI::Interfaces::SPIDevice::Configuration* configuration) { return NULL; };
-GHI::Interfaces::SerialDevice* Mainboard::getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits) { return NULL; };
+GHI::Interfaces::SPIBus* Mainboard::getNewSPIBus(Socket* socket, GHI::Interfaces::SPIBus::Configuration* configuration) { };
+GHI::Interfaces::SerialDevice* Mainboard::getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits) { };
 	

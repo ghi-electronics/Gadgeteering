@@ -57,6 +57,9 @@
     <ClInclude Include="FEZLynx\FEZLynx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FEZMedusa\FEZMedusa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Tunes\Tunes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -107,6 +110,15 @@
     <ClCompile Include="FEZLynx\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FEZMedusa\FEZMedusa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\SerialDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\System.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Tunes\Tunes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -123,6 +135,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FEZLynx\SPIBus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\SPIBus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gadgeteering\SPIBus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
