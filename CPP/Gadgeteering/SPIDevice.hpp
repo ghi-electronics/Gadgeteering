@@ -2,7 +2,8 @@
 #define _SPI_H_
 
 #include "Types.hpp"
-#include "Gadgeteering.h"
+#include "Interfaces.hpp"
+#include "Socket.hpp"
 
 namespace GHI {
 	namespace Interfaces {

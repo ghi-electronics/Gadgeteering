@@ -1,6 +1,7 @@
 #ifndef _INTERFACES_H_
 #define _INTERFACES_H_
 
+#include "Socket.hpp"
 #include "Mainboard.hpp"
 
 namespace GHI {
@@ -28,14 +29,14 @@ namespace GHI {
 		class DigitalInputOutput {
 			Socket* socket;
 			Socket::Pin pin;
-			Mainboard::IOState ioState;
+			IOState ioState;
 	
 			public:
-				DigitalInputOutput(Socket* socket, Socket::Pin pin, Mainboard::IOState initialIOState = Mainboard::IOStates::IN, bool initialOutputState = false);
+				DigitalInputOutput(Socket* socket, Socket::Pin pin, IOState initialIOState = IOStates::IN, bool initialOutputState = false);
 
 				void write(bool value);
 				bool read();
-				void setState(Mainboard::IOState state);
+				void setState(IOState state);
 		};
 
 		class AnalogInput {

@@ -1,6 +1,7 @@
-#ifndef _GHI_H_
-#define _GHI_H_
+#ifndef _GADGETEERING_H_
+#define _GADGETEERING_H_
 
+#include "Socket.hpp"
 #include "Interfaces.hpp"
 #include "Mainboard.hpp"
 #include "SerialDevice.hpp"

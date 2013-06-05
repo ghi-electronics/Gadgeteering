@@ -2,7 +2,7 @@
 #define _SERIALDEVICE_H_
 
 #include "Types.hpp"
-#include "Gadgeteering.h"
+#include "Socket.hpp"
 
 namespace GHI {
 	namespace Interfaces {

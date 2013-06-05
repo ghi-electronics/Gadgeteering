@@ -110,6 +110,10 @@ FEZMedusa::FEZMedusa() {
 	socket->pins[9] = 0x56;
 }
 
+FEZMedusa::~FEZMedusa() {
+
+}
+
 bool FEZMedusa::isSocketReal(Socket* socket) {
 	return socket->number < FEZMedusa::VIRTUAL_SOCKET_START;
 }

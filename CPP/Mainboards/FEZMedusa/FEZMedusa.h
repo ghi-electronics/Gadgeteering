@@ -2,6 +2,7 @@
 #define _FEZMEDUSA_H_
 
 #include <Gadgeteering/Gadgeteering.h>
+#include <SoftwareSerial.h>
 #include "ExtenderChip.hpp"
 
 namespace GHI {
@@ -43,6 +44,7 @@ namespace GHI {
 
 			public:
 				FEZMedusa();
+				virtual ~FEZMedusa();
 
 				virtual void setPWM(Socket* socket, Socket::Pin pin, double dutyCycle, double frequency);
 				virtual bool readDigital(Socket* socket, Socket::Pin pin);

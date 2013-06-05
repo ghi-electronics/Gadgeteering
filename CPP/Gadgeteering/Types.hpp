@@ -14,4 +14,25 @@ typedef uint8 byte;
 #define NULL 0
 #endif
 
+namespace GHI {
+	typedef byte IOState;
+	typedef byte ResistorMode;
+
+	//We didn't use enums because their members are hoisted into and pollute
+	//the parent scope, and Arduino doesn't have C++11 enum class yet.
+	class IOStates {
+		public:
+			static const IOState OUT = 0;
+			static const IOState IN = 1;
+			static const IOState PWM = 2;
+	};
+
+	class ResistorModes {
+		public:
+			static const ResistorMode PULL_UP = 0;
+			static const ResistorMode PULL_DOWN = 1;
+			static const ResistorMode FLOATING = 2;
+	};
+}
+
 #endif
