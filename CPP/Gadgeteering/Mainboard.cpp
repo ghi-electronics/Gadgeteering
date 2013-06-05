@@ -11,10 +11,6 @@ Mainboard::Mainboard() {
 	
 	if (mainboard != NULL)
 		mainboard->panic("You can only have one mainboard.");
-
-#ifdef DEBUG_PRINT
-	Serial.begin(9600);
-#endif
 }
 
 Mainboard::~Mainboard() {
@@ -29,11 +25,7 @@ Mainboard::~Mainboard() {
 
 void Mainboard::panic(const char* error) {
 	while (true)
-	#ifdef DEBUG_PRINT
-		Serial.println(error);
-	#else
 		;
-	#endif
 }
 
 Socket* Mainboard::registerSocket(Socket* socket) {
