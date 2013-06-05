@@ -16,7 +16,7 @@ namespace GHI {
 	
 	class Mainboard {
 		struct ListNode {
-			Socket* socket;
+			void* node;
 			ListNode* next;
 		};
 

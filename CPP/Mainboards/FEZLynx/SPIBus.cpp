@@ -4,14 +4,14 @@
 
 using namespace GHI::Interfaces;
 
-byte SPIBus::writeReadByte(byte toSend, bool deselectChip)
+char SPIBus::writeReadByte(char toSend, bool deselectChip)
 {
 	setClockHigh();
 	dwNumBytesToSend = 0; //Clear output buffer
 	OutputBuffer[dwNumBytesToSend++] = 0x10;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
 	OutputBuffer[dwNumBytesToSend++] = 0;
 	OutputBuffer[dwNumBytesToSend++] = 0; //Data length of 0x0000 means 1 byte data to clock out
-	OutputBuffer[dwNumBytesToSend++] = (data); //Add data to be send
+	OutputBuffer[dwNumBytesToSend++] = (toSend); //Add data to be send
 	ftStatus = FT_Write(ftHandle, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); //Send off the commands
 
 	dwNumBytesToSend = 0; //Clear output buffer

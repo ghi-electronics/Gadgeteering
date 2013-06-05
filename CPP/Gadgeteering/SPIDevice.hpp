@@ -4,6 +4,8 @@
 #include "Types.hpp"
 #include "Socket.hpp"
 #include "SPIBus.hpp"
+#include "SPIDevice.hpp"
+#include "Interfaces.hpp"
 
 namespace GHI {
 	namespace Interfaces {
@@ -53,7 +55,7 @@ namespace GHI {
 				virtual void read(char* buffer, unsigned int count, bool deselectChip = false);
 
 			protected:
-				SPIDevice(GHI::Socket* socket, GHI::Socket::Pin chipSelectPin, SPIDevice::Configuration* configuration);
+				SPIDevice(GHI::Interfaces::SPIBus *bus, GHI::Socket* socket, GHI::Socket::Pin chipSelectPin, SPIDevice::Configuration* configuration);
 
 				SPIBus* bus;
 

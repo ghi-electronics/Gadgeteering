@@ -24,12 +24,27 @@ SPIDevice::~SPIDevice() {
 	delete this->chipSelect;
 }
 
-char SPIDevice::writeReadByte(char toSend, bool deselectChip) { };
+char SPIDevice::writeReadByte(char toSend, bool deselectChip) 
+{ 
+	bus->writeReadByte(toSend,deselectChip);
+}
 
-void SPIDevice::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, bool deselectChip) { };
+void SPIDevice::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, bool deselectChip) 
+{
+	bus->writeAndRead(sendBuffer,receiveBuffer,count,deselectChip);
+}
 
-void SPIDevice::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip) { };
+void SPIDevice::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip) 
+{
+	bus->writeThenRead(sendBuffer, receiveBuffer, sendCount, receiveCount, deselectChip);
+}
 
-void SPIDevice::write(char* buffer, unsigned int count, bool deselectChip) { };
+void SPIDevice::write(char* buffer, unsigned int count, bool deselectChip) 
+{ 
+	bus->write(buffer,count,deselectChip);
+}
 
-void SPIDevice::read(char* buffer, unsigned int count, bool deselectChip) { };
+void SPIDevice::read(char* buffer, unsigned int count, bool deselectChip) 
+{
+	bus->read(buffer, count, deselectChip);
+}
