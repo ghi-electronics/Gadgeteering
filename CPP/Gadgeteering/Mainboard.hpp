@@ -110,8 +110,9 @@ namespace GHI {
 			virtual SPIDevice* getNewSPIDevice(Socket* socket, Socket::Pin chipSelectPin, SPIDevice::Configuration* configuration);
 			virtual SerialDevice* getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
 	};
+
+	extern GHI::Mainboard* mainboard;
 }
 
-extern GHI::Mainboard* mainboard;
 
 #endif

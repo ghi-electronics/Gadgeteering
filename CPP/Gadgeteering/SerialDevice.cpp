@@ -3,7 +3,6 @@
 using namespace GHI;
 using namespace GHI::Interfaces;
 
-
 SerialDevice::SerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits) {
 	this->socket = socket;
 	this->baudRate = baudRate;

@@ -4,7 +4,7 @@ using namespace GHI;
 using namespace GHI::Interfaces;
 using namespace GHI::Mainboards;
 
-Mainboard* mainboard;
+Mainboard* GHI::mainboard = NULL;
 
 FEZMedusa::FEZMedusa() {
 	mainboard = this;
