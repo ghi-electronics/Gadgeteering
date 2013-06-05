@@ -1,16 +1,24 @@
 #ifndef _FEZMEDUSA_H_
 #define _FEZMEDUSA_H_
 
-#include <Gadgeteering/Gadgeteering.h>
-#include <SoftwareSerial.h>
-#include "ExtenderChip.hpp"
+#include "../Gadgeteering/Mainboard.hpp"
+#include "../Gadgeteering/Socket.hpp"
+
+class SoftwareSerial;
 
 namespace GHI {
+	class ExtenderChip;
+
+	namespace Interfaces {
+		class SPIDevice;
+		class SerialDevice;
+	}
+
 	namespace Mainboards {
-		class FEZMedusa : public Mainboard {
+		class FEZMedusa : public GHI::Mainboard {
 			bool isSocketReal(Socket* socket);
-			byte getPort(Socket::Pin pinNumber);
-			byte getPin(Socket::Pin pinNumber);
+			char getPort(Socket::Pin pinNumber);
+			char getPin(Socket::Pin pinNumber);
 	
 			ExtenderChip* extenderChip;
 
@@ -21,11 +29,11 @@ namespace GHI {
 					SPIDevice(Socket* socket, Socket::Pin chipSelectPin, SPIDevice::Configuration* configuration);
 					virtual ~SPIDevice();
 		
-					virtual byte writeReadByte(byte toSend, bool deselectChip = false);
-					virtual void writeAndRead(byte* sendBuffer, byte* receiveBuffer, unsigned int count, bool deselectChip = false);
-					virtual void writeThenRead(byte* sendBuffer, byte* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip = false);
-					virtual void write(byte* buffer, unsigned int count, bool deselectChip = false);
-					virtual void read(byte* buffer, unsigned int count, bool deselectChip = false);
+					virtual char writeReadByte(char toSend, bool deselectChip = false);
+					virtual void writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, bool deselectChip = false);
+					virtual void writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip = false);
+					virtual void write(char* buffer, unsigned int count, bool deselectChip = false);
+					virtual void read(char* buffer, unsigned int count, bool deselectChip = false);
 			};
 
 			class SerialDevice : public GHI::Interfaces::SerialDevice {
@@ -39,7 +47,7 @@ namespace GHI {
 					virtual void close();
 					virtual void write(const unsigned char* buffer, int count);
 					virtual void write(const char* buffer, int count);
-					virtual void read(byte* buffer, int count);
+					virtual void read(char* buffer, int count);
 			};
 
 			public:

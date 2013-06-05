@@ -1,5 +1,5 @@
-#include <Gadgeteering/SerialDevice.hpp>
 #include <SoftwareSerial.h>
+#include "../Gadgeteering/SerialDevice.hpp"
 #include "FEZMedusa.h"
 
 using namespace GHI;
@@ -32,7 +32,7 @@ void FEZMedusa::SerialDevice::write(const char* buffer, int count) {
 		this->port->write(buffer[i]);
 }
 
-void FEZMedusa::SerialDevice::read(byte* buffer, int count) {
+void FEZMedusa::SerialDevice::read(char* buffer, int count) {
 	for (int i = 0; i < count; i++)
 		buffer[i] = this->port->read();
 }

@@ -1,22 +1,13 @@
 #ifndef _TYPES_H_
 #define _TYPES_H_
 
-typedef unsigned char uint8;
-typedef unsigned short uint16;
-typedef unsigned int uint32;
-typedef char int8;
-typedef short int16;
-typedef int int32;
-
-typedef uint8 byte;
-
 #ifndef NULL
 #define NULL 0
 #endif
 
 namespace GHI {
-	typedef byte IOState;
-	typedef byte ResistorMode;
+	typedef char IOState;
+	typedef char ResistorMode;
 
 	//We didn't use enums because their members are hoisted into and pollute
 	//the parent scope, and Arduino doesn't have C++11 enum class yet.

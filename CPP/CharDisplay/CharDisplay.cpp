@@ -26,7 +26,7 @@ CharDisplay::CharDisplay(int socketNumber) {
 	System::msSleep(3);
 }
 
-void CharDisplay::sendNibble(byte b) {
+void CharDisplay::sendNibble(char b) {
     this->lcdD7->write((b & 0x8) != 0);
     this->lcdD6->write((b & 0x4) != 0);
     this->lcdD5->write((b & 0x2) != 0);
@@ -38,12 +38,12 @@ void CharDisplay::sendNibble(byte b) {
 	System::Sleep(1);
 }
 
-void CharDisplay::sendByte(byte b) {
-    this->sendNibble((byte)(b >> 4));
+void CharDisplay::sendByte(char b) {
+    this->sendNibble((char)(b >> 4));
     this->sendNibble(b);
 }
 
-void CharDisplay::sendCommand(byte c) {
+void CharDisplay::sendCommand(char c) {
     this->lcdRS->write(false); //set LCD to data mode
 	this->sendByte(c);
 
@@ -71,9 +71,9 @@ void CharDisplay::cursorHome() {
 	System::Sleep(2);
 }
 
-void CharDisplay::setCursor(byte row, byte col) {
-    byte offsets[] = { 0x00, 0x40, 0x14, 0x54 };
-    this->sendCommand((byte)(CharDisplay::SET_CURSOR | offsets[row] | col));
+void CharDisplay::setCursor(char row, char col) {
+    char offsets[] = { 0x00, 0x40, 0x14, 0x54 };
+    this->sendCommand((char)(CharDisplay::SET_CURSOR | offsets[row] | col));
 }
 
 void CharDisplay::setBacklight(bool state) {

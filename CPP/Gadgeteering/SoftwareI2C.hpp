@@ -11,7 +11,7 @@ namespace GHI {
 			static const Socket::Pin SDA_PIN = Socket::Pins::Eight;
 
 			Socket* socket;
-			byte address;
+			char address;
 	
 			void pullSCLLow();
 			void pullSCLHigh();
@@ -20,21 +20,21 @@ namespace GHI {
 			void pullSDAHigh();
 			bool readSDA();
 	
-			bool sendStartCondition(byte address);
+			bool sendStartCondition(char address);
 			void sendStopCondition();
 			void waitForSCL();
 	
-			bool write(byte data);
-			byte read(bool isLast);
+			bool write(char data);
+			char read(bool isLast);
 
 			public:
-				SoftwareI2C(byte address, Socket* socket);
+				SoftwareI2C(char address, Socket* socket);
 
-				bool writeRegisters(byte startAddress, byte count, byte* data);
-				bool readRegisters(byte startAddress, byte count, byte* data);
+				bool writeRegisters(char startAddress, char count, char* data);
+				bool readRegisters(char startAddress, char count, char* data);
 
-				bool writeRegister(byte location, byte data);
-				byte readRegister(byte location);
+				bool writeRegister(char location, char data);
+				char readRegister(char location);
 		};
 	}
 }

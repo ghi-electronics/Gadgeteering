@@ -7,6 +7,8 @@
 #include "SerialDevice.hpp"
 
 namespace GHI {
+	class ExtenderChip;
+
 	class Module {
 		protected:
 			Module();

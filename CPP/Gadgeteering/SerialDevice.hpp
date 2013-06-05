@@ -42,7 +42,7 @@ namespace GHI {
 				virtual void close();
 				virtual void write(const unsigned char* buffer, int count);
 				virtual void write(const char* buffer, int count);
-				virtual void read(byte* buffer, int count);
+				virtual void read(char* buffer, int count);
 		};
 	}
 }

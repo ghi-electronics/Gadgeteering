@@ -9,7 +9,7 @@ namespace GHI {
 		static const int PIN_UNCONNECTED = -1;
 	
 		public:
-			typedef byte Pin;
+			typedef char Pin;
 			typedef int Type;
 
 			const int number;

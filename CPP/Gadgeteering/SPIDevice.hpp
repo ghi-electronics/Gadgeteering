@@ -3,6 +3,7 @@
 
 #include "Types.hpp"
 #include "Socket.hpp"
+#include "SPIBus.hpp"
 
 namespace GHI {
 	namespace Interfaces {
@@ -37,20 +38,20 @@ namespace GHI {
 				SPIDevice(GHI::Socket* socket, GHI::Socket::Pin chipSelectPin, SPIDevice::Configuration* configuration);
 				virtual ~SPIDevice();
 		
-				//Clocks in one byte and clocks out one byte at the same time. If deselectChip is true, the CS line is set to logic low after the transmission, otherwise it remains logic high.
-				virtual byte writeReadByte(byte toSend, bool deselectChip = false);
+				//Clocks in one char and clocks out one char at the same time. If deselectChip is true, the CS line is set to logic low after the transmission, otherwise it remains logic high.
+				virtual char writeReadByte(char toSend, bool deselectChip = false);
 
 				//Clocks count bytes in and out at the same time to and from the receive and send buffer respectively.
-				virtual void writeAndRead(byte* sendBuffer, byte* receiveBuffer, unsigned int count, bool deselectChip = false);
+				virtual void writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, bool deselectChip = false);
 
 				//Clocks sendCount bytes from sendBuffer out while ignoring the received bytes and then clocks receiveCount bytes into the receiveBuffer while clocking 0's out.
-				virtual void writeThenRead(byte* sendBuffer, byte* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip = false);
+				virtual void writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip = false);
 
 				//Clocks count bytes out from the buffer while ignoring the bytes clocked in.
-				virtual void write(byte* buffer, unsigned int count, bool deselectChip = false);
+				virtual void write(char* buffer, unsigned int count, bool deselectChip = false);
 
 				//Clocks count bytes in while clocking 0's out.
-				virtual void read(byte* buffer, unsigned int count, bool deselectChip = false);
+				virtual void read(char* buffer, unsigned int count, bool deselectChip = false);
 
 			protected:
 				SPIBus* bus;
