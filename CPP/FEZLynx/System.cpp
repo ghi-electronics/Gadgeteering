@@ -42,7 +42,7 @@ int System::TimeElapsed()
 #endif
 }
 
-int System::TimeElapsed64()
+long System::TimeElapsed64()
 {
 #ifdef _WIN32
 	return GetTickCount64();
