@@ -55,6 +55,7 @@ Socket* Mainboard::registerSocket(Socket* socket) {
 }
 
 Socket* Mainboard::getSocket(int number) {
+
 	if (this->sockets == NULL)
 		this->panic("No sockets present.");
 

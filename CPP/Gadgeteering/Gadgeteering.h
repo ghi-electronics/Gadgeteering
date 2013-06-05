@@ -7,6 +7,7 @@
 #include "SerialDevice.hpp"
 #include "SoftwareI2C.hpp"
 #include "SPIDevice.hpp"
+#include "SPIBus.hpp"
 #include "System.hpp"
 
 #endif
