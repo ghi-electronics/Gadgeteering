@@ -4,11 +4,17 @@
 
 using namespace GHI::Mainboards;
 
-FEZMedusa::SPIBus::SPIBus(Socket* socket, FEZMedusa::SPIBus::Configuration config) : GHI::Interfaces::SPIBus(socket, config)
+FEZMedusa::SPIBus::SPIBus(Socket* socket) : GHI::Interfaces::SPIBus(socket)
 {
 	this->spi = new SPIClass();
 	this->spi->begin();
-	
+}
+
+FEZMedusa::SPIBus::~SPIBus() {
+	this->spi->end();
+}
+
+void FEZMedusa::SPIBus::setup(GHI::Interfaces::SPIDevice::Configuration* configuration) {
 	if (!configuration->clockIdleState && configuration->clockEdge)
 		this->spi->setDataMode(SPI_MODE0);
 	else if (!configuration->clockIdleState && !configuration->clockEdge)
@@ -17,7 +23,7 @@ FEZMedusa::SPIBus::SPIBus(Socket* socket, FEZMedusa::SPIBus::Configuration confi
 		this->spi->setDataMode(SPI_MODE2);
 	else if (configuration->clockIdleState && configuration->clockEdge)
 		this->spi->setDataMode(SPI_MODE3);
-	
+
 	int divider = SYSTEM_CLOCK / configuration->clockRate;
 	int count = 1;
 	while ((divider >>= 1) > 0)
@@ -35,24 +41,24 @@ FEZMedusa::SPIBus::SPIBus(Socket* socket, FEZMedusa::SPIBus::Configuration confi
 	}
 }
 
-FEZMedusa::SPIBus::~SPIBus() {
-	this->spi->end();
-}
-
-char FEZMedusa::SPIBus::writeReadByte(char toSend)
+char FEZMedusa::SPIBus::writeReadByte(char toSend, GHI::Interfaces::SPIDevice::Configuration* configuration)
 {
-	System::Sleep(this->configuration->chipSelectSetupTime);
+	this->setup(configuration);
+
+	System::Sleep(configuration->chipSelectSetupTime);
 	
 	char result = this->spi->transfer(toSend);
 	
-	System::Sleep(this->configuration->chipSelectHoldTime);
+	System::Sleep(configuration->chipSelectHoldTime);
 	
 	return result;
 }
 
-void FEZMedusa::SPIBus::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count)
+void FEZMedusa::SPIBus::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration)
 {
-	System::Sleep(this->configuration->chipSelectSetupTime);
+	this->setup(configuration);
+
+	System::Sleep(configuration->chipSelectSetupTime);
 	
 	for (int i = 0; i < count; i++) {
 		if (sendBuffer != NULL && receiveBuffer != NULL)
@@ -63,21 +69,21 @@ void FEZMedusa::SPIBus::writeAndRead(char* sendBuffer, char* receiveBuffer, unsi
 			receiveBuffer[i] = this->spi->transfer(0);
 	}
 	
-	System::Sleep(this->configuration->chipSelectHoldTime);
+	System::Sleep(configuration->chipSelectHoldTime);
 }
 
-void FEZMedusa::SPIBus::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount)
+void FEZMedusa::SPIBus::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, GHI::Interfaces::SPIDevice::Configuration* configuration)
 {
-	this->write(sendBuffer, sendCount);
-	this->write(receiveBuffer, receiveCount);
+	this->write(sendBuffer, sendCount, configuration);
+	this->read(receiveBuffer, receiveCount, configuration);
 }
 
-void FEZMedusa::SPIBus::write(char* buffer, unsigned int count)
-{	this->writeAndRead(buffer, NULL, count);
+void FEZMedusa::SPIBus::write(char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration)
+{	this->writeAndRead(buffer, NULL, count, configuration);
 
 }
 
-void FEZMedusa::SPIBus::read(char* buffer, unsigned int count)
+void FEZMedusa::SPIBus::read(char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration)
 {
-	this->writeAndRead(NULL, buffer, count);
+	this->writeAndRead(NULL, buffer, count, configuration);
 }
