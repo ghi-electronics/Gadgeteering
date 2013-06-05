@@ -3,9 +3,7 @@
 
 #include "Types.hpp"
 #include "Socket.hpp"
-#include "SPIBus.hpp"
 #include "SPIDevice.hpp"
-#include "Interfaces.hpp"
 
 namespace GHI {
 	namespace Interfaces {
