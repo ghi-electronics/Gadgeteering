@@ -126,7 +126,7 @@ void FEZMedusa::setIOMode(Socket* socket, Socket::Pin pinNumber, IOState state, 
 		if (state == IOStates::PWM)
 			mainboard->panic("Not supported");
 
-		if (state == IOStates::IN)
+		if (state == IOStates::DIGITAL_INPUT)
 			::pinMode(socket->pins[pinNumber], resistorMode == ResistorModes::PULL_UP ? INPUT_PULLUP : INPUT);
 		else
 			::pinMode(socket->pins[pinNumber], OUTPUT);

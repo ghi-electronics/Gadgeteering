@@ -282,7 +282,7 @@ void FEZLynx::setIOMode(Socket::Pin pinNumber, GHI::IOState state, GHI::Resistor
 	//if (state == IOStates::PWM)
 	//	mainboard->panic("Not supported");
 
-	//if (state == IOStates::INPUT)
+	//if (state == IOStates::DIGITAL_INPUT)
 	//	::pinMode(this->pins[pinNumber], resistorMode == ResistorModes::PULL_UP ? INPUT_PULLUP : INPUT);
 	//else
 	//	::pinMode(this->pins[pinNumber], OUTPUT);

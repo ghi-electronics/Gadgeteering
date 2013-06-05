@@ -15,11 +15,11 @@ SoftwareI2C::SoftwareI2C(char address, Socket* socket) {
 
 //inline the below six once the api is stable
 void SoftwareI2C::pullSCLLow() {
-	mainboard->setIOMode(this->socket, SoftwareI2C::SCL_PIN, IOStates::OUTPUT);
+	mainboard->setIOMode(this->socket, SoftwareI2C::SCL_PIN, IOStates::DIGITAL_OUTPUT);
 }
 
 void SoftwareI2C::pullSCLHigh() {
-	mainboard->setIOMode(this->socket, SoftwareI2C::SCL_PIN, IOStates::INPUT);
+	mainboard->setIOMode(this->socket, SoftwareI2C::SCL_PIN, IOStates::DIGITAL_INPUT);
 }
 
 bool SoftwareI2C::readSCL() {
@@ -27,11 +27,11 @@ bool SoftwareI2C::readSCL() {
 }
 
 void SoftwareI2C::pullSDALow() {
-	mainboard->setIOMode(this->socket, SoftwareI2C::SDA_PIN, IOStates::OUTPUT);
+	mainboard->setIOMode(this->socket, SoftwareI2C::SDA_PIN, IOStates::DIGITAL_OUTPUT);
 }
 
 void SoftwareI2C::pullSDAHigh() {
-	mainboard->setIOMode(this->socket, SoftwareI2C::SDA_PIN, IOStates::INPUT);
+	mainboard->setIOMode(this->socket, SoftwareI2C::SDA_PIN, IOStates::DIGITAL_INPUT);
 }
 
 bool SoftwareI2C::readSDA() {
