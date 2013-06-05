@@ -3,6 +3,7 @@
 #define I2C_READ 1
 #define I2C_WRITE 0
 
+using namespace GHI;
 using namespace GHI::Interfaces;
 
 SoftwareI2C::SoftwareI2C(byte address, Socket* socket) {
@@ -14,11 +15,11 @@ SoftwareI2C::SoftwareI2C(byte address, Socket* socket) {
 
 //inline the below six once the api is stable
 void SoftwareI2C::pullSCLLow() {
-	mainboard->setIOMode(this->socket, SoftwareI2C::SCL_PIN, Mainboard::IOStates::OUT);
+	mainboard->setIOMode(this->socket, SoftwareI2C::SCL_PIN, IOStates::OUT);
 }
 
 void SoftwareI2C::pullSCLHigh() {
-	mainboard->setIOMode(this->socket, SoftwareI2C::SCL_PIN, Mainboard::IOStates::IN);
+	mainboard->setIOMode(this->socket, SoftwareI2C::SCL_PIN, IOStates::IN);
 }
 
 bool SoftwareI2C::readSCL() {
@@ -26,11 +27,11 @@ bool SoftwareI2C::readSCL() {
 }
 
 void SoftwareI2C::pullSDALow() {
-	mainboard->setIOMode(this->socket, SoftwareI2C::SDA_PIN, Mainboard::IOStates::OUT);
+	mainboard->setIOMode(this->socket, SoftwareI2C::SDA_PIN, IOStates::OUT);
 }
 
 void SoftwareI2C::pullSDAHigh() {
-	mainboard->setIOMode(this->socket, SoftwareI2C::SDA_PIN, Mainboard::IOStates::IN);
+	mainboard->setIOMode(this->socket, SoftwareI2C::SDA_PIN, IOStates::IN);
 }
 
 bool SoftwareI2C::readSDA() {

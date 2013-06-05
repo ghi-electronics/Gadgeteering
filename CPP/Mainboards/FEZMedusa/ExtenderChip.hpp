@@ -3,6 +3,7 @@
 
 #include <Gadgeteering/Types.hpp>
 #include <Gadgeteering/SoftwareI2C.hpp>
+#include <Gadgeteering/Socket.hpp>
 
 namespace GHI {
 	class ExtenderChip {

@@ -1,4 +1,5 @@
 #include "SPIDevice.hpp"
+#include "Interfaces.hpp"
 
 using namespace GHI;
 using namespace GHI::Interfaces;
