@@ -3,17 +3,12 @@
 
 #include "../Gadgeteering/Mainboard.hpp"
 #include "../Gadgeteering/Socket.hpp"
+#include "../Gadgeteering/ExtenderChip.hpp"
 
 class SoftwareSerial;
+class SPIClass;
 
 namespace GHI {
-	class ExtenderChip;
-
-	namespace Interfaces {
-		class SPIDevice;
-		class SerialDevice;
-	}
-
 	namespace Mainboards {
 		class FEZMedusa : public GHI::Mainboard {
 			bool isSocketReal(Socket* socket);
@@ -25,6 +20,8 @@ namespace GHI {
 			static const int VIRTUAL_SOCKET_START = 4;
 	
 			class SPIDevice : public GHI::Interfaces::SPIDevice {
+				SPIClass* spi;
+
 				public:
 					SPIDevice(Socket* socket, Socket::Pin chipSelectPin, SPIDevice::Configuration* configuration);
 					virtual ~SPIDevice();
