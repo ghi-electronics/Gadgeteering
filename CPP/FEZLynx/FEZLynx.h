@@ -14,7 +14,8 @@
 #include "Linux/ftd2xx.h"
 #endif
 
-#include "..\Gadgeteering\Gadgeteering.h"
+#include "../Gadgeteering/Mainboard.hpp"
+#include "../Gadgeteering/Socket.hpp"
 
 struct FEZLynxChannel
 {
@@ -77,32 +78,31 @@ namespace GHI
 					FT_HANDLE channel;
 
 				public:
+					
 
 					struct Configuration
 					{
 						Socket::Pin MISO;
 						Socket::Pin MOSI;
 						Socket::Pin CLOCK;
-
-						FT_HANDLE Channel;
 					};
 
-					SPIBus(Configuration config);
+					SPIBus(Socket* socket, FT_HANDLE Channel);
 
 					//Clocks in one char and clocks out one char at the same time. If deselectChip is true, the CS line is set to logic low after the transmission, otherwise it remains logic high.
-					virtual char writeReadByte(char toSend, bool deselectChip = false);
+					virtual char writeReadByte(char toSend, GHI::Interfaces::SPIDevice::Configuration* configuration);
 
 					//Clocks count bytes in and out at the same time to and from the receive and send buffer respectively.
-					virtual void writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, bool deselectChip = false);
+					virtual void writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
 
 					//Clocks sendCount bytes from sendBuffer out while ignoring the received bytes and then clocks receiveCount bytes into the receiveBuffer while clocking 0's out.
-					virtual void writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip = false);
+					virtual void writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, GHI::Interfaces::SPIDevice::Configuration* configuration);
 
 					//Clocks count bytes out from the buffer while ignoring the bytes clocked in.
-					virtual void write(char* buffer, unsigned int count, bool deselectChip = false);
+					virtual void write(char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
 
 					//Clocks count bytes in while clocking 0's out.
-					virtual void read(char* buffer, unsigned int count, bool deselectChip = false);
+					virtual void read(char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
 				};
 
 				class Pins
@@ -222,7 +222,7 @@ namespace GHI
 				virtual void writeAnalog(GHI::Socket* socket, GHI::Socket::Pin pin, double voltage);
 				virtual void setIOMode(GHI::Socket* socket, GHI::Socket::Pin pin, GHI::IOState state, GHI::ResistorMode resistorMode = GHI::ResistorModes::FLOATING);
 			
-				virtual GHI::Interfaces::SPIBus* getNewSPIBus(GHI::Socket* socket, GHI::Socket::Pin chipSelectPin, GHI::Interfaces::SPIDevice::Configuration* configuration);
+				virtual GHI::Interfaces::SPIBus* getNewSPIBus(GHI::Socket* socket);
 				virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(GHI::Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
 
 				protected:

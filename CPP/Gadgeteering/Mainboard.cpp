@@ -59,12 +59,12 @@ Socket* Mainboard::getSocket(int number) {
 }
 
 void Mainboard::setPWM(Socket* socket, Socket::Pin pin, double dutyCycle, double frequency) { };
-bool Mainboard::readDigital(Socket* socket, Socket::Pin pin) { };
+bool Mainboard::readDigital(Socket* socket, Socket::Pin pin) { mainboard->panic("Not Supported"); return false; };
 void Mainboard::writeDigital(Socket* socket, Socket::Pin pin, bool value) { };
-double Mainboard::readAnalog(Socket* socket, Socket::Pin pin) { };
+double Mainboard::readAnalog(Socket* socket, Socket::Pin pin) { mainboard->panic("Not Supported"); return 0.0; };
 void Mainboard::writeAnalog(Socket* socket, Socket::Pin pin, double voltage) { };
 void Mainboard::setIOMode(Socket* socket, Socket::Pin pin, IOState state, ResistorMode resistorMode) { };
 	
-GHI::Interfaces::SPIBus* Mainboard::getNewSPIBus(Socket* socket) { };
-GHI::Interfaces::SerialDevice* Mainboard::getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits) { };
+GHI::Interfaces::SPIBus* Mainboard::getNewSPIBus(Socket* socket) { mainboard->panic("Not Supported"); return NULL; };
+GHI::Interfaces::SerialDevice* Mainboard::getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits) { mainboard->panic("Not Supported"); return NULL; };
 	

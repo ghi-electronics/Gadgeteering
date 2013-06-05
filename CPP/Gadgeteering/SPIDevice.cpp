@@ -31,9 +31,12 @@ SPIDevice::~SPIDevice() {
 char SPIDevice::writeReadByte(char toSend, bool deselectChip) 
 { 
 	this->chipSelect->write(this->configuration->chipSelectActiveState);
-	this->bus->writeReadByte(toSend, configuration);
+	char out = this->bus->writeReadByte(toSend, configuration);
+
 	if (deselectChip)
 		this->chipSelect->write(!this->configuration->chipSelectActiveState);
+
+	return out;
 }
 
 void SPIDevice::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, bool deselectChip) 

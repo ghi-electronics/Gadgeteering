@@ -11,22 +11,24 @@ SPIBus::~SPIBus() {
 
 }
 
-char writeReadByte(char toSend, bool deselectChip, GHI::Interfaces::SPIDevice::Configuration* configuration) {
+char SPIBus::writeReadByte(char toSend, GHI::Interfaces::SPIDevice::Configuration* configuration) {
+	mainboard->panic("No mainboard");
+
+	return NULL;
+}
+
+void SPIBus::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration) {
 
 }
 
-void writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, bool deselectChip, GHI::Interfaces::SPIDevice::Configuration* configuration) {
+void SPIBus::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, GHI::Interfaces::SPIDevice::Configuration* configuration) {
 
 }
 
-void writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip, GHI::Interfaces::SPIDevice::Configuration* configuration) {
+void SPIBus::write(char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration) {
 
 }
 
-void write(char* buffer, unsigned int count, bool deselectChip, GHI::Interfaces::SPIDevice::Configuration* configuration) {
-
-}
-
-void read(char* buffer, unsigned int count, bool deselectChip, GHI::Interfaces::SPIDevice::Configuration* configuration) {
+void SPIBus::read(char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration) {
 
 }

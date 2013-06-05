@@ -1,16 +1,14 @@
-#include <Gadgeteering\Gadgeteering.h>
-
 #include "FEZLynx.h"
 
+using namespace GHI;
 using namespace GHI::Mainboards;
 
-FEZLynx::SPIBus::SPIBus(FEZLynx::SPIBus::Configuration config) : GHI::Interfaces::SPIBus(config.MISO, config.MOSI, config.CLOCK)
+FEZLynx::SPIBus::SPIBus(Socket* socket, FT_HANDLE Channel) : GHI::Interfaces::SPIBus(socket)
 {
-	channel = config.Channel;
+	channel = Channel;
 }
 
-char FEZLynx::SPIBus::writeReadByte(char toSend, bool deselectChip)
-{
+char FEZLynx::SPIBus::writeReadByte(char toSend, GHI::Interfaces::SPIDevice::Configuration* configuration) {
 	dwNumBytesToSend = 0; //Clear output buffer
 	OutputBuffer[dwNumBytesToSend++] = 0x10;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
 	OutputBuffer[dwNumBytesToSend++] = 0;
@@ -32,22 +30,18 @@ char FEZLynx::SPIBus::writeReadByte(char toSend, bool deselectChip)
 	return InputBuffer[0];
 }
 
-void FEZLynx::SPIBus::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, bool deselectChip)
-{
+void FEZLynx::SPIBus::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration) {
 
 }
 
-void FEZLynx::SPIBus::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip)
-{
+void FEZLynx::SPIBus::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, GHI::Interfaces::SPIDevice::Configuration* configuration) {
 
 }
 
-void FEZLynx::SPIBus::write(char* buffer, unsigned int count, bool deselectChip)
-{
+void FEZLynx::SPIBus::write(char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration) {
 
 }
 
-void FEZLynx::SPIBus::read(char* buffer, unsigned int count, bool deselectChip)
-{
+void FEZLynx::SPIBus::read(char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration) {
 
 }

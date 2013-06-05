@@ -2,11 +2,12 @@
 //
 
 #include "FEZLynx.h"
+#include "../Gadgeteering/System.hpp"
 
 using namespace GHI;
 using namespace GHI::Mainboards;
 
-Mainboard* mainboard = new FEZLynx();
+GHI::Mainboard* GHI::mainboard = new FEZLynx();
 
 FEZLynx::FEZLynx() 
 {
@@ -373,6 +374,46 @@ void FEZLynx::setPWM(Socket::Pin pinNumber, double dutyCycle, double frequency) 
 		this->panic("Not supported");
 
 
+}
+
+void FEZLynx::setPWM(GHI::Socket* socket, GHI::Socket::Pin pin, double dutyCycle, double frequency)
+{
+}
+
+bool FEZLynx::readDigital(GHI::Socket* socket, GHI::Socket::Pin pin)
+{
+	return this->readDigital(socket->pins[pin]);
+}
+
+void FEZLynx::writeDigital(GHI::Socket* socket, GHI::Socket::Pin pin, bool value)
+{
+}
+
+double FEZLynx::readAnalog(GHI::Socket* socket, GHI::Socket::Pin pin)
+{
+	return this->readAnalog(socket->pins[pin]);
+}
+
+void FEZLynx::writeAnalog(GHI::Socket* socket, GHI::Socket::Pin pin, double voltage)
+{
+}
+
+void FEZLynx::setIOMode(GHI::Socket* socket, GHI::Socket::Pin pin, GHI::IOState state, GHI::ResistorMode resistorMode)
+{
+}
+
+GHI::Interfaces::SPIBus* getNewSPIBus(GHI::Socket* socket)
+{
+	return NULL;
+}
+
+GHI::Interfaces::SerialDevice* getNewSerialDevice(GHI::Socket* socket, int baudRate, int parity, int stopBits, int dataBits)
+{
+	return NULL;
+}
+
+int main()
+{
 }
 
 //////////////////////////////////////////////////////////////////////
