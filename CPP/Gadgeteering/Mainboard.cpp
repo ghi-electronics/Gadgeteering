@@ -65,6 +65,6 @@ double Mainboard::readAnalog(Socket* socket, Socket::Pin pin) { };
 void Mainboard::writeAnalog(Socket* socket, Socket::Pin pin, double voltage) { };
 void Mainboard::setIOMode(Socket* socket, Socket::Pin pin, IOState state, ResistorMode resistorMode) { };
 	
-GHI::Interfaces::SPIBus* Mainboard::getNewSPIBus(Socket* socket, GHI::Interfaces::SPIBus::Configuration* configuration) { };
+GHI::Interfaces::SPIBus* Mainboard::getNewSPIBus(Socket* socket) { };
 GHI::Interfaces::SerialDevice* Mainboard::getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits) { };
 	

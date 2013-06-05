@@ -39,7 +39,7 @@ namespace GHI {
 			virtual void writeAnalog(Socket* socket, Socket::Pin pin, double voltage);
 			virtual void setIOMode(Socket* socket, Socket::Pin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
 			
-			virtual GHI::Interfaces::SPIBus* getNewSPIBus(Socket* socket, GHI::Interfaces::SPIBus::Configuration* configuration);
+			virtual GHI::Interfaces::SPIBus* getNewSPIBus(Socket* socket);
 			virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
 	};
 

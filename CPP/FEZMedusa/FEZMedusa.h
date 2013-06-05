@@ -22,15 +22,17 @@ namespace GHI {
 			class SPIBus : public GHI::Interfaces::SPIBus
 			{
 				SPIClass* spi;
+				void setup(GHI::Interfaces::SPIDevice::Configuration* configuration);
 
 				public:
-					SPIBus(Socket* socket, GHI::Interfaces::SPIBus::Configuration* config);
+					SPIBus(Socket* socket);
+					~SPIBus();
 
-					virtual char writeReadByte(char toSend, bool deselectChip = false);
-					virtual void writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count);
-					virtual void writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount);
-					virtual void write(char* buffer, unsigned int count);
-					virtual void read(char* buffer, unsigned int count);
+					virtual char writeReadByte(char toSend, GHI::Interfaces::SPIDevice::Configuration* configuration);
+					virtual void writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
+					virtual void writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, GHI::Interfaces::SPIDevice::Configuration* configuration);
+					virtual void write(char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
+					virtual void read(char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
 			};
 
 			class SerialDevice : public GHI::Interfaces::SerialDevice {
@@ -58,7 +60,7 @@ namespace GHI {
 				virtual void writeAnalog(Socket* socket, Socket::Pin pin, double voltage);
 				virtual void setIOMode(Socket* socket, Socket::Pin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
 
-				virtual GHI::Interfaces::SPIBus* getNewSPIBus(Socket* socket, GHI::Interfaces::SPIBus::Configuration* configuration);
+				virtual GHI::Interfaces::SPIBus* getNewSPIBus(Socket* socket);
 				virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
 		};
 	}
