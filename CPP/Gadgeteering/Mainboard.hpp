@@ -41,6 +41,9 @@ namespace GHI {
 			
 			virtual GHI::Interfaces::SPIBus* getNewSPIBus(Socket* socket);
 			virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
+
+			virtual void ReservePin(Socket::Pin pinNumber);
+			virtual void ReleasePin(Socket::Pin pinNumber);
 	};
 
 	extern GHI::Mainboard* mainboard;

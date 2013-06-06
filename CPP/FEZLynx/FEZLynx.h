@@ -16,6 +16,7 @@
 
 #include "../Gadgeteering/Mainboard.hpp"
 #include "../Gadgeteering/Socket.hpp"
+#include "../Gadgeteering/SPIBus.hpp"
 
 struct FEZLynxChannel
 {
@@ -88,6 +89,8 @@ namespace GHI
 					};
 
 					SPIBus(Socket* socket, FT_HANDLE Channel);
+
+					virtual ~SPIBus();
 
 					//Clocks in one char and clocks out one char at the same time. If deselectChip is true, the CS line is set to logic low after the transmission, otherwise it remains logic high.
 					virtual char writeReadByte(char toSend, GHI::Interfaces::SPIDevice::Configuration* configuration);

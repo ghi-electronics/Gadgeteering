@@ -402,18 +402,19 @@ void FEZLynx::setIOMode(GHI::Socket* socket, GHI::Socket::Pin pin, GHI::IOState 
 {
 }
 
-GHI::Interfaces::SPIBus* getNewSPIBus(GHI::Socket* socket)
+GHI::Interfaces::SPIBus* FEZLynx::getNewSPIBus(GHI::Socket* socket)
 {
 	return NULL;
 }
 
-GHI::Interfaces::SerialDevice* getNewSerialDevice(GHI::Socket* socket, int baudRate, int parity, int stopBits, int dataBits)
+GHI::Interfaces::SerialDevice* FEZLynx::getNewSerialDevice(GHI::Socket* socket, int baudRate, int parity, int stopBits, int dataBits)
 {
 	return NULL;
 }
 
 int main()
 {
+
 }
 
 //////////////////////////////////////////////////////////////////////
