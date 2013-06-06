@@ -21,6 +21,8 @@ namespace GHI {
 		};
 
 		ListNode* sockets;
+		ListNode* pins;
+		ListNode* SPIBusses;
 
 		protected:
 			Mainboard();
@@ -29,7 +31,7 @@ namespace GHI {
 			Socket* registerSocket(Socket* socket);
 
 		public:
-			void panic(const char* error);
+			virtual void panic(const char* error);
 			Socket* getSocket(int number);
 
 			virtual void setPWM(Socket* socket, Socket::Pin pin, double dutyCycle, double frequency);

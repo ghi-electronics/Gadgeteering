@@ -21,6 +21,16 @@ Mainboard::~Mainboard() {
 		delete prev;
 		prev = node;
 	} while ((node = node->next) != NULL);
+
+	//Pin reservation is not garunteed, avoid do:while
+	prev = this->pins;
+	node = this->pins->next;
+
+	do {
+		delete node->node;
+		delete prev;
+		prev = node;
+	} while ((node = node->next) != NULL);
 }
 
 void Mainboard::panic(const char* error) {
@@ -67,4 +77,42 @@ void Mainboard::setIOMode(Socket* socket, Socket::Pin pin, IOState state, Resist
 	
 GHI::Interfaces::SPIBus* Mainboard::getNewSPIBus(Socket* socket) { mainboard->panic("Not Supported"); return NULL; };
 GHI::Interfaces::SerialDevice* Mainboard::getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits) { mainboard->panic("Not Supported"); return NULL; };
+
+void Mainboard::ReleasePin(Socket::Pin pinNumber)
+{
+	if (this->pins == NULL) {
+		this->pins = new ListNode();
+		this->pins->next = NULL;
+		this->pins->node = NULL;
+
+		return;
+	}
+
+	ListNode* node;
+	for (node = this->pins; node->next != NULL; node = node->next)
+	{
+		if(node->node == (int *)(pinNumber))
+			node->node = node->next;
+	}
+}
+
+void Mainboard::ReservePin(Socket::Pin pinNumber)
+{
+	if (this->pins == NULL) {
+		this->pins = new ListNode();
+		this->pins->next = NULL;
+		this->pins->node = NULL;
+	}
+
+	ListNode* node;
+	for (node = this->pins; node->next != NULL; node = node->next)
+	{
+		if(node->node == (int *)(pinNumber))
+			mainboard->panic("Pin already reserved");
+	}
+
+	node = node->next = new ListNode();
+	node->node = (int *)(pinNumber);
+	node->next = NULL;
+}
 	

@@ -211,6 +211,8 @@ namespace GHI
 					static const int PD_7 = 0x40000000;
 				};
 
+				virtual void panic(const char* error);
+
 				virtual void setPWM(GHI::Socket::Pin pinNumber, double dutyCycle, double frequency);
 				virtual bool readDigital(GHI::Socket::Pin pinNumber);
 				virtual void writeDigital(GHI::Socket::Pin pinNumber, bool value);

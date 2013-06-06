@@ -4,6 +4,8 @@
 #include "FEZLynx.h"
 #include "../Gadgeteering/System.hpp"
 
+#include <iostream>
+
 using namespace GHI;
 using namespace GHI::Mainboards;
 
@@ -55,7 +57,10 @@ FEZLynx::FEZLynx()
 			}
 
 			//Allow USB stuff to complete..
-			SleepInMS(50);
+			System::Sleep(50);
+
+			for(int i_input = 0; i_input < 1024; i_input++)
+				InputBuffer[i_input] = 0;
 			
 			dwNumBytesToSend = 0;
 
@@ -66,9 +71,11 @@ FEZLynx::FEZLynx()
 			OutputBuffer[dwNumBytesToSend++] = 0xAA; //Add BAD command 0xAA
 			ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the BAD commands
 			dwNumBytesToSend = 0; //Clear output buffer
+
 			do{
 				ftStatus = FT_GetQueueStatus(Channels[i].device, &dwNumInputBuffer); // Get the number of bytes in the device input buffer
 			}while ((dwNumInputBuffer == 0) && (ftStatus == FT_OK)); //or Timeout
+			
 			bool bCommandEchod = false;
 			ftStatus = FT_Read(Channels[i].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from input buffer
 			for (dwCount = 0; dwCount < dwNumBytesRead - 1; dwCount++) //Check if Bad command and echo command received
@@ -79,6 +86,7 @@ FEZLynx::FEZLynx()
 					break;
 				}
 			}
+
 			if (bCommandEchod == false) 
 			{
 				this->panic("Could not synchronize the device");
@@ -261,6 +269,16 @@ void FEZLynx::SleepInMS(int msToSleep)
 #endif
 }
 
+void FEZLynx::panic(const char* error)
+{
+	while(1)
+	{
+		std::cout << error << std::endl;
+
+		System::Sleep(100);
+	}
+}
+
 bool FEZLynx::isVirtual(Socket::Pin pinNumber)
 {
 	if(((int)pinNumber & (int)ExtenderMask) == ExtenderMask)
@@ -404,6 +422,8 @@ void FEZLynx::setIOMode(GHI::Socket* socket, GHI::Socket::Pin pin, GHI::IOState 
 
 GHI::Interfaces::SPIBus* FEZLynx::getNewSPIBus(GHI::Socket* socket)
 {
+
+
 	return NULL;
 }
 
@@ -414,7 +434,7 @@ GHI::Interfaces::SerialDevice* FEZLynx::getNewSerialDevice(GHI::Socket* socket, 
 
 int main()
 {
-
+	std::cout << "loaded" << std::endl;
 }
 
 //////////////////////////////////////////////////////////////////////
