@@ -80,7 +80,7 @@ FEZLynx::FEZLynx()
 			ftStatus = FT_Read(Channels[i].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from input buffer
 			for (dwCount = 0; dwCount < dwNumBytesRead - 1; dwCount++) //Check if Bad command and echo command received
 			{
-				if ((InputBuffer[dwCount] == BYTE(0xFA)) && (InputBuffer[dwCount+1] == BYTE(0XAA)))
+				if ((InputBuffer[dwCount] == unsigned char(0xFA)) && (InputBuffer[dwCount+1] == unsigned char(0XAA)))
 				{
 					bCommandEchod = true;
 					break;
@@ -271,12 +271,14 @@ void FEZLynx::SleepInMS(int msToSleep)
 
 void FEZLynx::panic(const char* error)
 {
-	while(1)
-	{
-		std::cout << error << std::endl;
+	//while(1)
+	//{
+	//	std::cout << error << std::endl;
 
-		System::Sleep(100);
-	}
+	//	System::Sleep(100);
+	//}
+
+	throw error;
 }
 
 bool FEZLynx::isVirtual(Socket::Pin pinNumber)

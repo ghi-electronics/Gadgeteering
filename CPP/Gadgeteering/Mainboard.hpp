@@ -15,16 +15,18 @@ namespace GHI {
 	};
 	
 	class Mainboard {
-		struct ListNode {
-			void* node;
-			ListNode* next;
-		};
-
-		ListNode* sockets;
-		ListNode* pins;
-		ListNode* SPIBusses;
 
 		protected:
+
+			struct ListNode {
+				void* node;
+				ListNode* next;
+			};
+
+			ListNode* sockets;
+			ListNode* pins;
+			ListNode* SPIBusses;
+
 			Mainboard();
 			virtual ~Mainboard();
 

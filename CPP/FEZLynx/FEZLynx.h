@@ -49,7 +49,7 @@ namespace GHI
 				FT_STATUS ftStatus; //Status defined in D2XX to indicate operation result
 				FT_HANDLE ftHandle; //Handle of FT2232H device port 
 				char OutputBuffer[1024]; //Buffer to hold MPSSE commands and data to be sent to FT2232H
-				char InputBuffer[1024]; //Buffer to hold Data bytes to be read from FT2232H
+				unsigned char InputBuffer[1024]; //Buffer to hold Data bytes to be read from FT2232H
 
 				DWORD dwNumBytesToSend; //Index of output buffer
 				DWORD dwNumBytesSent, dwNumBytesRead, dwNumInputBuffer;
