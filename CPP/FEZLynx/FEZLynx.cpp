@@ -3,7 +3,7 @@
 
 #include "FEZLynx.h"
 #include "../Gadgeteering/System.hpp"
-
+#include "../LED7R/LED7R.h"
 #include <iostream>
 
 using namespace GHI;
@@ -22,9 +22,14 @@ FEZLynx::FEZLynx()
 	//Set serial number to 3395969
 
 	//Get Device Serial Numbers
-	DWORD dwCount;
+	DWORD dwCount = 0;
 	//Try to open the FT2232H device port and get the valid handle for subsequent access
 	char SerialNumBuf[64];
+
+	dwNumBytesRead = 0;
+	dwNumBytesSent = 0;
+	dwNumBytesToSend = 0;
+	dwNumInputBuffer = 0;
 
 	for(int i = 0; i < 4; i++)
 	{
@@ -48,7 +53,10 @@ FEZLynx::FEZLynx()
 			ftStatus |= FT_SetTimeouts(Channels[i].device, 0, 5000); //Sets the read and write timeouts in milliseconds for the FT2232H
 			ftStatus |= FT_SetLatencyTimer(Channels[i].device, 10); //Set the latency timer
 			ftStatus |= FT_SetBitMode(Channels[i].device, 0x0, 0x00); //Reset controller
-			ftStatus |= FT_SetBitMode(Channels[i].device, 0x0, 0x02); //Enable MPSSE mode
+
+			//Only channel A and B support MPSSE mode
+			if(i == 0 || i == 1)
+				ftStatus |= FT_SetBitMode(Channels[i].device, 0x0, 0x02); //Enable MPSSE mode
 
 			if (ftStatus != FT_OK)
 			{
@@ -64,36 +72,42 @@ FEZLynx::FEZLynx()
 			
 			dwNumBytesToSend = 0;
 
-			//////////////////////////////////////////////////////////////////
-			// Below codes will synchronize the MPSSE interface by sending bad command 0xAA and checking if the echo command followed by 
-			// bad command „AA‟ can be received, this will make sure the MPSSE interface enabled and synchronized successfully
-			//////////////////////////////////////////////////////////////////
-			OutputBuffer[dwNumBytesToSend++] = 0xAA; //Add BAD command 0xAA
-			ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the BAD commands
-			dwNumBytesToSend = 0; //Clear output buffer
-
-			do{
-				ftStatus = FT_GetQueueStatus(Channels[i].device, &dwNumInputBuffer); // Get the number of bytes in the device input buffer
-			}while ((dwNumInputBuffer == 0) && (ftStatus == FT_OK)); //or Timeout
-			
-			bool bCommandEchod = false;
-			ftStatus = FT_Read(Channels[i].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from input buffer
-			for (dwCount = 0; dwCount < dwNumBytesRead - 1; dwCount++) //Check if Bad command and echo command received
+			//only channel A and B support MPSSE
+			if(i == 0 || i == 1)
 			{
-				if ((InputBuffer[dwCount] == unsigned char(0xFA)) && (InputBuffer[dwCount+1] == unsigned char(0XAA)))
+				//////////////////////////////////////////////////////////////////
+				// Below codes will synchronize the MPSSE interface by sending bad command 0xAA and checking if the echo command followed by 
+				// bad command „AA‟ can be received, this will make sure the MPSSE interface enabled and synchronized successfully
+				//////////////////////////////////////////////////////////////////
+				OutputBuffer[dwNumBytesToSend++] = 0xAA; //Add BAD command 0xAA
+				ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the BAD commands
+				dwNumBytesToSend = 0; //Clear output buffer
+
+				do{
+					ftStatus = FT_GetQueueStatus(Channels[i].device, &dwNumInputBuffer); // Get the number of bytes in the device input buffer
+				}while ((dwNumInputBuffer == 0) && (ftStatus == FT_OK)); //or Timeout
+			
+				bool bCommandEchod = false;
+				ftStatus = FT_Read(Channels[i].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from input buffer
+				for (dwCount = 0; dwCount < dwNumBytesRead - 1; dwCount++) //Check if Bad command and echo command received
 				{
-					bCommandEchod = true;
-					break;
+					if ((InputBuffer[dwCount] == unsigned char(0xFA)) && (InputBuffer[dwCount+1] == unsigned char(0XAA)))
+					{
+						bCommandEchod = true;
+						break;
+					}
+				}
+
+				if (bCommandEchod == false) 
+				{
+					this->panic("Could not synchronize the device");
+					return;
 				}
 			}
 
-			if (bCommandEchod == false) 
-			{
-				this->panic("Could not synchronize the device");
-				return;
-			}
-
 			dwNumBytesToSend = 0;
+
+
 
 			if(i == 1)
 			{
@@ -112,10 +126,6 @@ FEZLynx::FEZLynx()
 
 				ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the commands
 				dwNumBytesToSend = 0; //Clear output buffer
-
-				//OutputBuffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output 
-				//OutputBuffer[dwNumBytesToSend++] = ChannelData; //Set SDA, SCL high, WP disabled by SK, DO at bit „1‟, GPIOL0 at bit „0‟
-				//OutputBuffer[dwNumBytesToSend++] = ChannelDirection; //Set SK,DO,GPIOL0 pins as output with bit ‟, other pins as input with bit „‟
 			}
 
 			if( i == 1 || i == 0)
@@ -136,6 +146,14 @@ FEZLynx::FEZLynx()
 				dwNumBytesToSend = 0; //Clear output buffer
 				System::Sleep(30); //Delay for a while
 			}
+			
+			OutputBuffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output 
+			OutputBuffer[dwNumBytesToSend++] = Channels[i].data; //Set SDA, SCL high, WP disabled by SK, DO at bit „1‟, GPIOL0 at bit „0‟
+			OutputBuffer[dwNumBytesToSend++] = Channels[i].direction; //Set SK,DO,GPIOL0 pins as output with bit ‟, other pins as input with bit „‟
+	
+			ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the commands
+			dwNumBytesToSend = 0;
+
 		}
 		else
 			this->panic("Could not list and/or open the device channel");
@@ -164,7 +182,7 @@ FEZLynx::FEZLynx()
 	socket->pins[8] = Pins::PB_1;
 	socket->pins[9] = Pins::PB_0;
 
-	socket = this->registerSocket(new Socket(3, Socket::Types::K | Socket::Types::I | Socket::Types::X | Socket::Types::U));
+	socket = this->registerSocket(new Socket(3, Socket::Types::K | Socket::Types::I | Socket::Types::X | Socket::Types::U | Socket::Types::Y));
 	socket->pins[3] = Pins::PD_0;
 	socket->pins[4] = Pins::PC_0;
 	socket->pins[5] = Pins::PC_1;
@@ -313,7 +331,7 @@ int FEZLynx::GetChannel(Socket::Pin pinNumber)
 {
 	int chanCount = 0;
 
-	while(((byte) pinNumber) == 0)
+	while(((unsigned char) pinNumber) == 0)
 	{
 		pinNumber = ((unsigned int)pinNumber >> 8);
 		chanCount++;
@@ -324,12 +342,12 @@ int FEZLynx::GetChannel(Socket::Pin pinNumber)
 
 char FEZLynx::GetChannelPin(Socket::Pin pinNumber)
 {
-	while(((byte) pinNumber) == 0)
+	while(((unsigned char) pinNumber) == 0)
 	{
 		pinNumber = ((unsigned int)pinNumber >> 8);
 	}
 
-	return (byte)pinNumber;
+	return (unsigned char)pinNumber;
 }
 
 bool FEZLynx::readDigital(Socket::Pin pinNumber) {
@@ -367,7 +385,7 @@ void FEZLynx::writeDigital(Socket::Pin pinNumber, bool value) {
 		BYTE buffer[3];
 
 		int channel = this->GetChannel(pinNumber);
-		byte pin = this->GetChannelPin(pinNumber);
+		unsigned char pin = this->GetChannelPin(pinNumber);
 
 		if(value)
 			Channels[channel].data |= pin;
@@ -393,11 +411,14 @@ void FEZLynx::setPWM(Socket::Pin pinNumber, double dutyCycle, double frequency) 
 	if(!isVirtual(pinNumber))
 		this->panic("Not supported");
 
-
+	this->panic("Not implemented");
 }
 
 void FEZLynx::setPWM(GHI::Socket* socket, GHI::Socket::Pin pin, double dutyCycle, double frequency)
 {
+	Socket::Pin _pin = socket->pins[pin];
+
+	this->setPWM(_pin, dutyCycle, frequency);
 }
 
 bool FEZLynx::readDigital(GHI::Socket* socket, GHI::Socket::Pin pin)
@@ -407,6 +428,7 @@ bool FEZLynx::readDigital(GHI::Socket* socket, GHI::Socket::Pin pin)
 
 void FEZLynx::writeDigital(GHI::Socket* socket, GHI::Socket::Pin pin, bool value)
 {
+	this->writeDigital(socket->pins[pin], value);
 }
 
 double FEZLynx::readAnalog(GHI::Socket* socket, GHI::Socket::Pin pin)
@@ -416,16 +438,16 @@ double FEZLynx::readAnalog(GHI::Socket* socket, GHI::Socket::Pin pin)
 
 void FEZLynx::writeAnalog(GHI::Socket* socket, GHI::Socket::Pin pin, double voltage)
 {
+	this->writeAnalog(socket->pins[pin], voltage);
 }
 
 void FEZLynx::setIOMode(GHI::Socket* socket, GHI::Socket::Pin pin, GHI::IOState state, GHI::ResistorMode resistorMode)
 {
+	this->setIOMode(socket->pins[pin], state, resistorMode);
 }
 
 GHI::Interfaces::SPIBus* FEZLynx::getNewSPIBus(GHI::Socket* socket)
 {
-
-
 	return NULL;
 }
 
@@ -437,6 +459,16 @@ GHI::Interfaces::SerialDevice* FEZLynx::getNewSerialDevice(GHI::Socket* socket, 
 int main()
 {
 	std::cout << "loaded" << std::endl;
+
+	GHI::Interfaces::DigitalOutput out(mainboard->getSocket(3), 5, false);
+
+	while(1)
+	{
+		out.write(true);
+		GHI::System::Sleep(100);
+		out.write(false);
+		GHI::System::Sleep(100);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////

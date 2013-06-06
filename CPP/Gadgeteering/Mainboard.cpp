@@ -43,6 +43,10 @@ Socket* Mainboard::registerSocket(Socket* socket) {
 		this->sockets = new ListNode();
 		this->sockets->next = NULL;
 		this->sockets->node = NULL;
+
+		this->sockets->node = socket;
+
+		return socket;
 	}
 
 	ListNode* node;
@@ -102,6 +106,10 @@ void Mainboard::ReservePin(Socket::Pin pinNumber)
 		this->pins = new ListNode();
 		this->pins->next = NULL;
 		this->pins->node = NULL;
+
+		this->pins->node = (int *)pinNumber;
+
+		return;
 	}
 
 	ListNode* node;
