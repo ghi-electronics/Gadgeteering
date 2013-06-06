@@ -16,6 +16,7 @@ SoftwareI2C::SoftwareI2C(char address, Socket* socket) {
 //inline the below six once the api is stable
 void SoftwareI2C::pullSCLLow() {
 	mainboard->setIOMode(this->socket, SoftwareI2C::SCL_PIN, IOStates::DIGITAL_OUTPUT);
+	mainboard->writeDigital(this->socket, SoftwareI2C::SCL_PIN, false);
 }
 
 void SoftwareI2C::pullSCLHigh() {
@@ -28,6 +29,7 @@ bool SoftwareI2C::readSCL() {
 
 void SoftwareI2C::pullSDALow() {
 	mainboard->setIOMode(this->socket, SoftwareI2C::SDA_PIN, IOStates::DIGITAL_OUTPUT);
+	mainboard->writeDigital(this->socket, SoftwareI2C::SDA_PIN, false);
 }
 
 void SoftwareI2C::pullSDAHigh() {
@@ -58,7 +60,7 @@ void SoftwareI2C::waitForSCL() {
 }
 
 bool SoftwareI2C::write(char data) {
-	for (char m = 0x80; m != 0; m >>= 1) {
+	for (int m = 0x80; m != 0; m >>= 1) {
 		if (m & data) 
 			this->pullSDAHigh();
 		else 
@@ -85,7 +87,7 @@ char SoftwareI2C::read(bool isLast) {
 	this->pullSDAHigh();
 	
 	char result = 0;
-	for (char i = 0; i < 8; i++) {
+	for (int i = 0; i < 8; i++) {
 		result <<= 1;
 
 		this->waitForSCL();
