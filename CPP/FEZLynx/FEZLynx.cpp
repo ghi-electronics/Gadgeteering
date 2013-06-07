@@ -210,11 +210,7 @@ FEZLynx::FEZLynx()
 	socket->pins[6] = Pins::PA_7;
 	socket->pins[7] = Pins::PA_1;
 	socket->pins[8] = Pins::PA_2;
-	socket->pins[9] = Pins::PB_0;
-
-	///////////////////////////////
-	// Virtual Sockets
-	///////////////////////////////
+    socket->pins[9] = Pins::PB_0;
 
 	socket = this->registerSocket(new Socket(6, Socket::Types::Y | Socket::Types::P));
 	socket->pins[3] = 0x04;
@@ -234,50 +230,81 @@ FEZLynx::FEZLynx()
 	socket->pins[8] = 0x67;
 	socket->pins[9] = 0x70;
 
-	socket = this->registerSocket(new Socket(8, Socket::Types::Y | Socket::Types::P));
-	socket->pins[3] = 0x14;
-	socket->pins[4] = 0x15;
-	socket->pins[5] = 0x16;
-	socket->pins[6] = 0x17;
-	socket->pins[7] = 0x71;
-	socket->pins[8] = 0x72;
-	socket->pins[9] = 0x73;
+    ///////////////////////////////
+    // Virtual Sockets
+    ///////////////////////////////
 
-	socket = this->registerSocket(new Socket(9, Socket::Types::Y | Socket::Types::P));
-	socket->pins[3] = 0x20;
-	socket->pins[4] = 0x21;
-	socket->pins[5] = 0x22;
-	socket->pins[6] = 0x23;
-	socket->pins[7] = 0x74;
-	socket->pins[8] = 0x75;
-	socket->pins[9] = 0x76;
+    socket = this->registerSocket(new Socket(8, Socket::Types::Y | Socket::Types::P));
+    socket->pins[3] = Pins::P2_0;
+    socket->pins[4] = Pins::P2_1;
+    socket->pins[5] = Pins::P2_2;
+    socket->pins[6] = Pins::P2_3;
+    socket->pins[7] = Pins::P7_4;
+    socket->pins[8] = Pins::P7_5;
+    socket->pins[9] = Pins::P7_6;
 
-	socket = this->registerSocket(new Socket(10, Socket::Types::Y));
-	socket->pins[3] = 0x30;
-	socket->pins[4] = 0x31;
-	socket->pins[5] = 0x32;
-	socket->pins[6] = 0x33;
-	socket->pins[7] = 0x34;
-	socket->pins[8] = 0x35;
-	socket->pins[9] = 0x36;
+    socket = this->registerSocket(new Socket(9, Socket::Types::Y | Socket::Types::P));
+    socket->pins[3] = Pins::P1_4;
+    socket->pins[4] = Pins::P1_5;
+    socket->pins[5] = Pins::P1_6;
+    socket->pins[6] = Pins::P1_7;
+    socket->pins[7] = Pins::P7_1;
+    socket->pins[8] = Pins::P7_2;
+    socket->pins[9] = Pins::P7_3;
 
-	socket = this->registerSocket(new Socket(11, Socket::Types::Y));
-	socket->pins[3] = 0x40;
-	socket->pins[4] = 0x41;
-	socket->pins[5] = 0x42;
-	socket->pins[6] = 0x43;
-	socket->pins[7] = 0x44;
-	socket->pins[8] = 0x45;
-	socket->pins[9] = 0x46;
+    socket = this->registerSocket(new Socket(10, Socket::Types::Y));
+    socket->pins[3] = Pins::P3_0;
+    socket->pins[4] = Pins::P3_1;
+    socket->pins[5] = Pins::P3_2;
+    socket->pins[6] = Pins::P3_3;
+    socket->pins[7] = Pins::P3_4;
+    socket->pins[8] = Pins::P3_5;
+    socket->pins[9] = Pins::P3_6;
+
+    socket = this->registerSocket(new Socket(11, Socket::Types::Y | Socket::Types::P));
+    socket->pins[3] = Pins::P0_0;
+    socket->pins[4] = Pins::P0_1;
+    socket->pins[5] = Pins::P0_2;
+    socket->pins[6] = Pins::P0_3;
+    socket->pins[7] = Pins::P6_0;
+    socket->pins[8] = Pins::P6_1;
+    socket->pins[9] = Pins::P6_2;
 
 	socket = this->registerSocket(new Socket(12, Socket::Types::Y));
-	socket->pins[3] = 0x50;
-	socket->pins[4] = 0x51;
-	socket->pins[5] = 0x52;
-	socket->pins[6] = 0x53;
-	socket->pins[7] = 0x54;
-	socket->pins[8] = 0x55;
-	socket->pins[9] = 0x56;
+    socket->pins[3] = Pins::P4_0;
+    socket->pins[4] = Pins::P4_1;
+    socket->pins[5] = Pins::P4_2;
+    socket->pins[6] = Pins::P4_3;
+    socket->pins[7] = Pins::P4_4;
+    socket->pins[8] = Pins::P4_5;
+    socket->pins[9] = Pins::P4_6;
+
+    socket = this->registerSocket(new Socket(13, Socket::Types::Y | Socket::Types::P));
+    socket->pins[3] = Pins::P0_4;
+    socket->pins[4] = Pins::P0_5;
+    socket->pins[5] = Pins::P0_6;
+    socket->pins[6] = Pins::P0_7;
+    socket->pins[7] = Pins::P6_3;
+    socket->pins[8] = Pins::P6_4;
+    socket->pins[9] = Pins::P6_5;
+
+    socket = this->registerSocket(new Socket(14, Socket::Types::Y));
+    socket->pins[3] = Pins::P4_0;
+    socket->pins[4] = Pins::P4_1;
+    socket->pins[5] = Pins::P4_2;
+    socket->pins[6] = Pins::P4_3;
+    socket->pins[7] = Pins::P4_4;
+    socket->pins[8] = Pins::P4_5;
+    socket->pins[9] = Pins::P4_6;
+
+    socket = this->registerSocket(new Socket(15, Socket::Types::Y | Socket::Types::P));
+    socket->pins[3] = Pins::P5_0;
+    socket->pins[4] = Pins::P5_1;
+    socket->pins[5] = Pins::P5_2;
+    socket->pins[6] = Pins::P5_3;
+    socket->pins[7] = Pins::P5_4;
+    socket->pins[8] = Pins::P5_5;
+    socket->pins[9] = Pins::P5_6;
 }
 
 void FEZLynx::panic(const char* error)

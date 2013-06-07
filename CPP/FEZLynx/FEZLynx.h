@@ -167,6 +167,54 @@ namespace GHI
 					static const int P3_6 = 0x20000000 | ExtenderMask;
 					static const int P3_7 = 0x40000000 | ExtenderMask;
 
+                    ///////////////////////////////
+                    // Extender Chip Pins Port 4 //
+                    ///////////////////////////////
+                    static const int P4_0 = 0x00800000 | ExtenderMask;
+                    static const int P4_1 = 0x01000000 | ExtenderMask;
+                    static const int P4_2 = 0x02000000 | ExtenderMask;
+                    static const int P4_3 = 0x04000000 | ExtenderMask;
+                    static const int P4_4 = 0x08000000 | ExtenderMask;
+                    static const int P4_5 = 0x10000000 | ExtenderMask;
+                    static const int P4_6 = 0x20000000 | ExtenderMask;
+                    static const int P4_7 = 0x40000000 | ExtenderMask;
+
+                    ///////////////////////////////
+                    // Extender Chip Pins Port 5 //
+                    ///////////////////////////////
+                    static const int P5_0 = 0x00800000 | ExtenderMask;
+                    static const int P5_1 = 0x01000000 | ExtenderMask;
+                    static const int P5_2 = 0x02000000 | ExtenderMask;
+                    static const int P5_3 = 0x04000000 | ExtenderMask;
+                    static const int P5_4 = 0x08000000 | ExtenderMask;
+                    static const int P5_5 = 0x10000000 | ExtenderMask;
+                    static const int P5_6 = 0x20000000 | ExtenderMask;
+                    static const int P5_7 = 0x40000000 | ExtenderMask;
+
+                    ///////////////////////////////
+                    // Extender Chip Pins Port 6 //
+                    ///////////////////////////////
+                    static const int P6_0 = 0x00800000 | ExtenderMask;
+                    static const int P6_1 = 0x01000000 | ExtenderMask;
+                    static const int P6_2 = 0x02000000 | ExtenderMask;
+                    static const int P6_3 = 0x04000000 | ExtenderMask;
+                    static const int P6_4 = 0x08000000 | ExtenderMask;
+                    static const int P6_5 = 0x10000000 | ExtenderMask;
+                    static const int P6_6 = 0x20000000 | ExtenderMask;
+                    static const int P6_7 = 0x40000000 | ExtenderMask;
+
+                    ///////////////////////////////
+                    // Extender Chip Pins Port 7 //
+                    ///////////////////////////////
+                    static const int P7_0 = 0x00800000 | ExtenderMask;
+                    static const int P7_1 = 0x01000000 | ExtenderMask;
+                    static const int P7_2 = 0x02000000 | ExtenderMask;
+                    static const int P7_3 = 0x04000000 | ExtenderMask;
+                    static const int P7_4 = 0x08000000 | ExtenderMask;
+                    static const int P7_5 = 0x10000000 | ExtenderMask;
+                    static const int P7_6 = 0x20000000 | ExtenderMask;
+                    static const int P7_7 = 0x40000000 | ExtenderMask;
+
 					///////////////////////////////
 					//    Standard Pins Port A   //
 					///////////////////////////////
