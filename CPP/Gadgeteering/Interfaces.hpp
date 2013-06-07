@@ -22,6 +22,7 @@ namespace GHI {
 
 			public:
 				DigitalInput(Socket* socket, Socket::Pin pin);
+				DigitalInput(Socket::Pin pinNumber);
 
 				bool read();
 		};
@@ -33,6 +34,7 @@ namespace GHI {
 	
 			public:
 				DigitalInputOutput(Socket* socket, Socket::Pin pin, IOState initialIOState = IOStates::DIGITAL_INPUT, bool initialOutputState = false);
+				DigitalInputOutput(Socket::Pin pinNumber, IOState initialIOState = IOStates::DIGITAL_INPUT, bool initialOutputState = false);
 
 				void write(bool value);
 				bool read();

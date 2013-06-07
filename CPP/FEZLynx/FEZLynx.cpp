@@ -9,11 +9,11 @@
 using namespace GHI;
 using namespace GHI::Mainboards;
 
-GHI::Mainboard* GHI::mainboard = new FEZLynx();
+GHI::Mainboard* GHI::mainboard;
 
 FEZLynx::FEZLynx() 
 {
-	//mainboard = this;
+	GHI::mainboard = this;
 
 	/////////////////////////////////////
 	// FTDI Setup Code                 //
@@ -310,7 +310,7 @@ FEZLynx::FEZLynx()
 	// Extender Chip Setup     //
 	/////////////////////////////
 
-	Extender = new FEZLynx::ExtendedSockets(Channels[1].device, 0x40, mainboard->getSocket(1));
+	Extender = new FEZLynx::ExtendedSockets(Channels[1].device, 0x40,mainboard->getSocket(3));
 
 }
 
@@ -347,6 +347,7 @@ void FEZLynx::SetFTDIPins(int channel)
 void FEZLynx::setIOMode(Socket::Pin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode) {
 	if(isVirtual(pinNumber))
 	{
+		Extender->setIOMode(pinNumber, state, resistorMode);
 	}
 	else
 	{
@@ -362,6 +363,8 @@ void FEZLynx::setIOMode(Socket::Pin pinNumber, GHI::IOState state, GHI::Resistor
 			Channels[channel].direction &= ~pin;
 
 			SetFTDIPins(channel);
+
+			return;
 		}
 		else if(state == GHI::IOStates::DIGITAL_OUTPUT)
 		{
@@ -372,6 +375,8 @@ void FEZLynx::setIOMode(Socket::Pin pinNumber, GHI::IOState state, GHI::Resistor
 			Channels[channel].direction |= pin;
 
 			SetFTDIPins(channel);
+
+			return;
 		}
 
 		mainboard->panic("Pin is not capable of IOState");
@@ -425,7 +430,7 @@ unsigned char FEZLynx::GetChannelPin(Socket::Pin pinNumber)
 bool FEZLynx::readDigital(Socket::Pin pinNumber) {
 	if((pinNumber & ExtenderMask) == ExtenderMask)
 	{
-
+		return Extender->readDigital(pinNumber);
 	}
 	else
 	{
@@ -454,6 +459,7 @@ bool FEZLynx::readDigital(Socket::Pin pinNumber) {
 void FEZLynx::writeDigital(Socket::Pin pinNumber, bool value) {
 	if((pinNumber & ExtenderMask) == ExtenderMask)
 	{
+		Extender->writeDigital(pinNumber,value);
 	}
 	else
 	{
@@ -539,9 +545,11 @@ GHI::Interfaces::SerialDevice* FEZLynx::getNewSerialDevice(GHI::Socket* socket, 
 
 int main()
 {
+	FEZLynx board;
+
 	std::cout << "loaded" << std::endl;
 
-	GHI::Interfaces::DigitalOutput out(mainboard->getSocket(4), 5, false);
+	GHI::Interfaces::DigitalOutput out(mainboard->getSocket(9), 5, false);
 
 	while(1)
 	{

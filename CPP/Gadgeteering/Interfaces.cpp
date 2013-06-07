@@ -42,6 +42,16 @@ DigitalInputOutput::DigitalInputOutput(Socket* socket, Socket::Pin pin, IOState 
 		this->write(initialOutputState);
 }
 
+DigitalInputOutput::DigitalInputOutput(Socket::Pin pinNumber, IOState initialIOState, bool initialOutputState) : socket(socket), pin(pinNumber) {
+
+	this->setState(initialIOState);
+
+	mainboard->ReservePin(pinNumber);
+
+	if (this->ioState == IOStates::DIGITAL_OUTPUT)
+		this->write(initialOutputState);
+}
+
 void DigitalInputOutput::write(bool value) {
 	this->setState(IOStates::DIGITAL_OUTPUT);
 	mainboard->writeDigital(this->socket, this->pin, value);

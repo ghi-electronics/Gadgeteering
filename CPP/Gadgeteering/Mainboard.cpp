@@ -57,6 +57,10 @@ Socket* Mainboard::registerSocket(Socket* socket) {
 	node->node = socket;
 	node->next = NULL;
 
+	/*node->next = new ListNode();
+	node->next->node = socket;
+	node->next->next = NULL;*/
+
 	return socket;
 }
 
@@ -66,8 +70,10 @@ Socket* Mainboard::getSocket(int number) {
 		this->panic("No sockets present.");
 
 	for (ListNode* node = this->sockets; node != NULL; node = node->next)
+	{
 		if (static_cast<Socket*>(node->node)->number == number)
 			return static_cast<Socket*>(node->node);
+	}
 
 	return NULL;
 }
