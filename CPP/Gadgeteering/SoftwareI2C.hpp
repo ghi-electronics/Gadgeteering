@@ -11,30 +11,34 @@ namespace GHI {
 			static const Socket::Pin SDA_PIN = Socket::Pins::Eight;
 
 			Socket* socket;
-			char address;
+			unsigned char address;
+			bool start;
 	
-			void pullSCLLow();
-			void pullSCLHigh();
+			void clearSCL();
 			bool readSCL();
-			void pullSDALow();
-			void pullSDAHigh();
+			void clearSDA();
 			bool readSDA();
-	
-			bool sendStartCondition(char address);
-			void sendStopCondition();
-			void waitForSCL();
-	
-			bool write(char data);
-			char read(bool isLast);
 
+			bool writeBit(bool bit);
+			bool readBit();
+	
+			bool sendStartCondition();
+			bool sendStopCondition();
+			
+
+			bool transmit(bool sendStart, bool sendStop, unsigned char data);
+			unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
+			
 			public:
 				SoftwareI2C(char address, Socket* socket);
 
-				bool writeRegisters(char startAddress, char count, char* data);
-				bool readRegisters(char startAddress, char count, char* data);
+				unsigned int writeBytes(unsigned char* data, unsigned int length);
+				unsigned int readBytes(unsigned char* data, unsigned int length);
+				bool writeRead(unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead);
+				
+				bool writeRegister(unsigned char registerAddress, unsigned char value);
+				unsigned char readRegister(unsigned char registerAddress);
 
-				bool writeRegister(char location, char data);
-				char readRegister(char location);
 		};
 	}
 }

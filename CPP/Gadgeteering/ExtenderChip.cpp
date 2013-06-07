@@ -9,7 +9,7 @@ ExtenderChip::ExtenderChip(Socket::Pin sdaPin, Socket::Pin sclPin, char address)
 	socket->pins[8] = sdaPin;
 	socket->pins[9] = sclPin;
 
-	this->io60Chip = new SoftwareI2C(0x20, socket);
+	this->io60Chip = new SoftwareI2C(address, socket);
 }
 
 ExtenderChip::~ExtenderChip() {

@@ -70,6 +70,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FEZMedusa\FEZMedusa.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Gadgeteering\Gadgeteering.h" />
     <ClInclude Include="Gadgeteering\Interfaces.hpp" />
     <ClInclude Include="Gadgeteering\Mainboard.hpp" />
@@ -93,6 +96,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FEZLynx\SPIBus_Lynx.cpp" />
+    <ClCompile Include="FEZMedusa\FEZMedusa.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\SerialDevice.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\SPIBus.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\System.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Gadgeteering\Interfaces.cpp" />
     <ClCompile Include="Gadgeteering\Mainboard.cpp" />
     <ClCompile Include="Gadgeteering\SerialDevice.cpp" />

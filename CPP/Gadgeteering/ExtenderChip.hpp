@@ -10,6 +10,7 @@ namespace GHI {
 	}
 
 	class ExtenderChip {
+		public:
 		static const char INPUT_PORT_0_REGISTER = 0x00;
 		static const char OUTPUT_PORT_0_REGISTER = 0x08;
 		static const char PORT_SELECT_REGISTER = 0x18;
@@ -34,7 +35,6 @@ namespace GHI {
 		char getPort(Socket::Pin pin);
 		char getPin(Socket::Pin pin);
 
-		public:
 			ExtenderChip(Socket::Pin sdaPin, Socket::Pin sclPin, char address);
 			~ExtenderChip();
 			

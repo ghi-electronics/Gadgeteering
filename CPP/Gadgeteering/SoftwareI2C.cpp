@@ -1,157 +1,243 @@
 #include "SoftwareI2C.hpp"
 
-#define I2C_READ 1
-#define I2C_WRITE 0
-
 using namespace GHI;
 using namespace GHI::Interfaces;
+
+#define I2C_DELAY() ;
 
 SoftwareI2C::SoftwareI2C(char address, Socket* socket) {
 	socket->ensureTypeIsSupported(Socket::Types::I);
 
 	this->address = address << 1;
 	this->socket = socket;
+	
+	this->start = false;
+	this->readSCL();
+	this->readSDA();
 }
 
-//inline the below six once the api is stable
-void SoftwareI2C::pullSCLLow() {
+void SoftwareI2C::clearSCL() {
 	mainboard->setIOMode(this->socket, SoftwareI2C::SCL_PIN, IOStates::DIGITAL_OUTPUT);
-	mainboard->writeDigital(this->socket, SoftwareI2C::SCL_PIN, false);
-}
-
-void SoftwareI2C::pullSCLHigh() {
-	mainboard->setIOMode(this->socket, SoftwareI2C::SCL_PIN, IOStates::DIGITAL_INPUT);
 }
 
 bool SoftwareI2C::readSCL() {
+	mainboard->setIOMode(this->socket, SoftwareI2C::SCL_PIN, IOStates::DIGITAL_INPUT);
 	return mainboard->readDigital(this->socket, SoftwareI2C::SCL_PIN);
 }
 
-void SoftwareI2C::pullSDALow() {
+void SoftwareI2C::clearSDA() {
 	mainboard->setIOMode(this->socket, SoftwareI2C::SDA_PIN, IOStates::DIGITAL_OUTPUT);
-	mainboard->writeDigital(this->socket, SoftwareI2C::SDA_PIN, false);
-}
-
-void SoftwareI2C::pullSDAHigh() {
-	mainboard->setIOMode(this->socket, SoftwareI2C::SDA_PIN, IOStates::DIGITAL_INPUT);
 }
 
 bool SoftwareI2C::readSDA() {
+	mainboard->setIOMode(this->socket, SoftwareI2C::SDA_PIN, IOStates::DIGITAL_INPUT);
 	return mainboard->readDigital(this->socket, SoftwareI2C::SDA_PIN);
 }
 
-bool SoftwareI2C::sendStartCondition(char address) {
-	this->pullSDALow();
-	this->pullSCLLow();
-	return this->write(address);
-}
+bool SoftwareI2C::writeBit(bool bit) {
+    if (bit)
+		this->readSDA();
+    else
+		this->clearSDA();
+	
+    I2C_DELAY();
 
-void SoftwareI2C::sendStopCondition() {
-	this->waitForSCL();
-	this->pullSDAHigh();
-}
-
-void SoftwareI2C::waitForSCL() {
-	this->pullSCLHigh();
-
-	unsigned long endTime = System::TimeElapsed() + 2000;
-	while(!this->readSCL() && System::TimeElapsed() < endTime)
+	unsigned long endTime = System::TimeElapsed() + 5000;
+	while (!this->readSCL() && System::TimeElapsed() < endTime)
 		;
+	
+    if (bit && !this->readSDA())
+		return false;
+	
+    I2C_DELAY();
+	this->clearSCL();
+
+    return true;
 }
 
-bool SoftwareI2C::write(char data) {
-	for (int m = 0x80; m != 0; m >>= 1) {
-		if (m & data) 
-			this->pullSDAHigh();
-		else 
-			this->pullSDALow();
-			
-		this->waitForSCL();
-		this->pullSCLLow();
+bool SoftwareI2C::readBit() {
+    this->readSDA();
+	
+    I2C_DELAY();
+	
+	unsigned long endTime = System::TimeElapsed() + 5000;
+	while (!this->readSCL() && System::TimeElapsed() < endTime)
+		;
+
+    bool bit = this->readSDA();
+	
+    I2C_DELAY();
+	this->clearSCL();
+
+    return bit;
+}
+
+bool SoftwareI2C::sendStartCondition() {
+	if (this->start) {
+		this->readSDA();
+		I2C_DELAY();
+
+		unsigned long endTime = System::TimeElapsed() + 5000;
+		while (!this->readSCL() && System::TimeElapsed() < endTime)
+			;
+
 	}
 
-	this->pullSDAHigh();
-	this->waitForSCL();
+    if (!this->readSDA())
+		return false;
 
-	bool sda = this->readSDA();
-	this->pullSCLLow();
-	this->pullSDALow();
+	this->clearSDA();
+	I2C_DELAY();
+	this->clearSCL();
 
-	if (sda != 0)
+	this->start = true;
+
+	return true;
+}
+
+bool SoftwareI2C::sendStopCondition() {
+	this->clearSDA();
+	I2C_DELAY();
+
+	unsigned long endTime = System::TimeElapsed() + 5000;
+	while (!this->readSCL() && System::TimeElapsed() < endTime)
+		;
+
+	if (!this->readSDA())
+		return false;
+	
+	I2C_DELAY();
+	this->start = false;
+
+	return true;
+}
+
+bool SoftwareI2C::transmit(bool sendStart, bool sendStop, unsigned char data) {
+	unsigned int bit;
+	bool nack;
+	
+	if (sendStart)
+		this->sendStartCondition();
+	
+    for (bit = 0; bit < 8; bit++) {
+		this->writeBit((data & 0x80) != 0);
+
+		data <<= 1;
+    }
+    
+    nack = this->readBit();
+
+	if (sendStop)
+		this->sendStopCondition();
+	
+     return nack;
+}
+
+unsigned char SoftwareI2C::receive(bool sendAcknowledgeBit, bool sendStopCondition) {
+	unsigned char d = 0;
+	unsigned int bit = 0;
+
+	for (bit = 0; bit < 8; bit++) {
+		d <<= 1;
+
+		if (this->readBit())
+			d |= 1;
+	}
+
+	this->writeBit(sendAcknowledgeBit);
+
+	if (sendStopCondition)
 		this->sendStopCondition();
 
-	return sda == 0;
+	return d;
 }
 
-char SoftwareI2C::read(bool isLast) {
-	this->pullSDAHigh();
+unsigned int SoftwareI2C::writeBytes(unsigned char* data, unsigned int length) {
+	if (!length) 
+		return 0;
+
+	unsigned int numWrite = 0;
+	unsigned int i = 0;
 	
-	char result = 0;
-	for (int i = 0; i < 8; i++) {
-		result <<= 1;
+	if (!this->transmit(true, false, this->address))
+		for (i = 0; i < length - 1; i++)
+			if (!this->transmit(false, false, data[i]))
+				numWrite++;
+	
+	if (!this->transmit(false, true, data[i]))
+		numWrite++;
+	
+	return numWrite;
+ }
 
-		this->waitForSCL();
+unsigned int SoftwareI2C::readBytes(unsigned char* data, unsigned int length) {	if (!length) 
+		return 0;
 
-		if (this->readSDA()) 
-			result |= 1;
+	unsigned int numRead = 0;
+	unsigned int i = 0;
 
-		this->pullSCLLow();
+	if (!this->transmit(true, false, this->address | 1)) {
+		for (i = 0; i < length - 1; i++) {
+			data[i] = this->receive(true, false);
+			numRead++;
+		}
 	}
 
-	if (!isLast)  
-		this->pullSDALow();
-		
-	this->waitForSCL();
-	this->pullSCLLow();
+    data[i] = this->receive(false, true);
+	numRead++;
 
-	if (isLast) 
-		this->pullSDAHigh();
-
-	return result;
+    return numRead;
 }
 
-bool SoftwareI2C::writeRegisters(char startAddress, char count,	char* data) {
-	if (!this->sendStartCondition(this->address | I2C_WRITE)) 
-		return false;
+bool SoftwareI2C::writeRead(unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead) {
+	*numWritten = 0;
+	*numRead = 0;
 
-	this->write(startAddress);
-	for (int i = 0; i < count; i++)
-		if (!this->write(data[i]))  
-			return false;
+	unsigned int i = 0;
+	unsigned char write = 0;
+	unsigned char read = 0;
 
-	this->sendStopCondition();
+    if (writeLength > 0) {
+		if (!this->transmit(true, false, this->address)) {
+			for (i = 0; i < writeLength - 1; i++) {
+				if (!this->transmit(false, false, writeBuffer[i])) {
+					(write)++;
+				}
+			}
+		}
 
-	return true;
+		if (!this->transmit(false, (readLength == 0), writeBuffer[i]))
+			write++; 
+
+		*numWritten = write;
+    }
+
+    if (readLength > 0) {
+		if (!this->transmit(true, false, this->address | 1)) {
+			for (i = 0; i < readLength - 1; i++) {
+				readBuffer[i] = this->receive(true, false);
+				read++;
+			}
+		}
+
+		readBuffer[i] = this->receive(false, true);
+		read++;
+		*numRead = read;
+    }
+
+	return (write + read) == (writeLength + readLength);
 }
 
-bool SoftwareI2C::readRegisters(char startAddress, char count, char* data) {
-	if (!this->writeRegisters(startAddress, 0, NULL))
-		return false;
-
-	this->pullSCLLow();
-	this->waitForSCL();
-
-	this->sendStopCondition();
-
-	if (!this->sendStartCondition(this->address | I2C_READ))
-		return false;
-
-	for (char i = 0; i < count - 1; i++)
-		data[i] = this->read(false);
-
-	data[count - 1] = this->read(true);
-
-	this->sendStopCondition();
-
-	return true;
+bool SoftwareI2C::writeRegister(unsigned char registerAddress, unsigned char value) {
+	unsigned char data[2] = {registerAddress, value};
+	return this->writeBytes(data, 2) == 2;
 }
 
-bool SoftwareI2C::writeRegister(char location, char data) {
-	return this->writeRegisters(location, 1, &data);
-}
+unsigned char SoftwareI2C::readRegister(unsigned char registerAddress) {
+	unsigned char value = 0xFF;
+	unsigned int written, read;
 
-char SoftwareI2C::readRegister(char location) {
-	char data = 0;
-	this->readRegisters(location, 1, &data);
-	return data;
+	this->writeRead(&registerAddress, 1, &value, 1, &written, &read);
+
+	return value;
 }
