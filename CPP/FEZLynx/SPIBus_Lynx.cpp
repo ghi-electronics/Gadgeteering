@@ -8,6 +8,10 @@ FEZLynx::SPIBus::SPIBus(Socket* socket, FT_HANDLE Channel) : GHI::Interfaces::SP
 	channel = Channel;
 }
 
+FEZLynx::SPIBus::~SPIBus()
+{
+}
+
 char FEZLynx::SPIBus::writeReadByte(char toSend, GHI::Interfaces::SPIDevice::Configuration* configuration) {
 	dwNumBytesToSend = 0; //Clear output buffer
 	OutputBuffer[dwNumBytesToSend++] = 0x10;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first

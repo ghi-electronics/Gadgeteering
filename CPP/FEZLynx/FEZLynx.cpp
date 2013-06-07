@@ -185,7 +185,7 @@ FEZLynx::FEZLynx()
 	socket->pins[8] = Pins::PB_1;
 	socket->pins[9] = Pins::PB_0;
 
-	socket = this->registerSocket(new Socket(3, Socket::Types::K | Socket::Types::I | Socket::Types::X | Socket::Types::U | Socket::Types::Y));
+	socket = this->registerSocket(new Socket(3, Socket::Types::K | Socket::Types::I | Socket::Types::X | Socket::Types::U));
 	socket->pins[3] = Pins::PD_0;
 	socket->pins[4] = Pins::PC_0;
 	socket->pins[5] = Pins::PC_1;
@@ -213,22 +213,22 @@ FEZLynx::FEZLynx()
     socket->pins[9] = Pins::PB_0;
 
 	socket = this->registerSocket(new Socket(6, Socket::Types::Y | Socket::Types::P));
-	socket->pins[3] = 0x04;
-	socket->pins[4] = 0x05;
-	socket->pins[5] = 0x06;
-	socket->pins[6] = 0x07;
-	socket->pins[7] = 0x63;
-	socket->pins[8] = 0x64;
-	socket->pins[9] = 0x65;
+	socket->pins[3] = Pins::P5_7;
+	socket->pins[4] = Pins::NotConnected;
+	socket->pins[5] = Pins::NotConnected;
+	socket->pins[6] = Pins::P7_7;
+	socket->pins[7] = Pins::NotConnected;
+	socket->pins[8] = Pins::PB_1;
+	socket->pins[9] = Pins::PB_0;
 
 	socket = this->registerSocket(new Socket(7, Socket::Types::Y | Socket::Types::P));
-	socket->pins[3] = 0x10;
-	socket->pins[4] = 0x11;
-	socket->pins[5] = 0x12;
-	socket->pins[6] = 0x13;
-	socket->pins[7] = 0x66;
-	socket->pins[8] = 0x67;
-	socket->pins[9] = 0x70;
+	socket->pins[3] = Pins::P3_7;
+	socket->pins[4] = Pins::NotConnected;
+	socket->pins[5] = Pins::NotConnected;
+	socket->pins[6] = Pins::P4_7;
+	socket->pins[7] = Pins::NotConnected;
+	socket->pins[8] = Pins::PB_1;
+	socket->pins[9] = Pins::PB_0;
 
     ///////////////////////////////
     // Virtual Sockets
@@ -305,6 +305,13 @@ FEZLynx::FEZLynx()
     socket->pins[7] = Pins::P5_4;
     socket->pins[8] = Pins::P5_5;
     socket->pins[9] = Pins::P5_6;
+
+	/////////////////////////////
+	// Extender Chip Setup     //
+	/////////////////////////////
+
+	Extender = new FEZLynx::ExtendedSockets(Channels[1].device, 0x40, mainboard->getSocket(1));
+
 }
 
 void FEZLynx::panic(const char* error)
@@ -338,47 +345,77 @@ void FEZLynx::SetFTDIPins(int channel)
 }
 
 void FEZLynx::setIOMode(Socket::Pin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode) {
-	//if (state == IOStates::PWM)
-	//	mainboard->panic("Not supported");
+	if(isVirtual(pinNumber))
+	{
+	}
+	else
+	{
+		if(state == GHI::IOStates::PWM)
+			mainboard->panic("PWM not supported on this pin");
 
-	//if (state == IOStates::DIGITAL_INPUT)
-	//	::pinMode(this->pins[pinNumber], resistorMode == ResistorModes::PULL_UP ? INPUT_PULLUP : INPUT);
-	//else
-	//	::pinMode(this->pins[pinNumber], OUTPUT);
+		if(state == GHI::IOStates::DIGITAL_INPUT)
+		{
+			int channel = this->GetChannel(pinNumber);
+
+			unsigned char pin = this->GetChannelPin(pinNumber);
+
+			Channels[channel].direction &= ~pin;
+
+			SetFTDIPins(channel);
+		}
+		else if(state == GHI::IOStates::DIGITAL_OUTPUT)
+		{
+			int channel = this->GetChannel(pinNumber);
+
+			unsigned char pin = this->GetChannelPin(pinNumber);
+
+			Channels[channel].direction |= pin;
+
+			SetFTDIPins(channel);
+		}
+
+		mainboard->panic("Pin is not capable of IOState");
+	}
 }
 
 int FEZLynx::GetChannel(Socket::Pin pinNumber)
 {
-    if((pinNumber & Channel1Mask) == Channel1Mask)
-        return 0;
+	if(!isVirtual(pinNumber))
+	{
+		if((pinNumber & Channel1Mask) == Channel1Mask)
+			return 0;
 
-    if((pinNumber & Channel2Mask) == Channel2Mask)
-        return 1;
+		if((pinNumber & Channel2Mask) == Channel2Mask)
+			return 1;
 
-    if((pinNumber & Channel3Mask) == Channel3Mask)
-        return 2;
+		if((pinNumber & Channel3Mask) == Channel3Mask)
+			return 2;
 
-    if((pinNumber & Channel4Mask) == Channel4Mask)
-        return 3;
+		if((pinNumber & Channel4Mask) == Channel4Mask)
+			return 3;
+	}
 
     this->panic("Invalid Channel");
 
     return -1;
 }
 
-char FEZLynx::GetChannelPin(Socket::Pin pinNumber)
+unsigned char FEZLynx::GetChannelPin(Socket::Pin pinNumber)
 {
-    if((pinNumber & Channel1Mask) == Channel1Mask)
-        return (pinNumber & (~Channel1Mask));
+	if(!isVirtual(pinNumber))
+	{
+		if((pinNumber & Channel1Mask) == Channel1Mask)
+			return (pinNumber & (~Channel1Mask));
 
-    if((pinNumber & Channel2Mask) == Channel2Mask)
-        return (pinNumber & (~Channel2Mask));
+		if((pinNumber & Channel2Mask) == Channel2Mask)
+			return (pinNumber & (~Channel2Mask));
 
-    if((pinNumber & Channel3Mask) == Channel3Mask)
-        return (pinNumber & (~Channel3Mask));
+		if((pinNumber & Channel3Mask) == Channel3Mask)
+			return (pinNumber & (~Channel3Mask));
 
-    if((pinNumber & Channel4Mask) == Channel4Mask)
-        return (pinNumber & (~Channel4Mask));
+		if((pinNumber & Channel4Mask) == Channel4Mask)
+			return (pinNumber & (~Channel4Mask));
+	}
 
     this->panic("Invalid Channel");
 
@@ -388,6 +425,7 @@ char FEZLynx::GetChannelPin(Socket::Pin pinNumber)
 bool FEZLynx::readDigital(Socket::Pin pinNumber) {
 	if((pinNumber & ExtenderMask) == ExtenderMask)
 	{
+
 	}
 	else
 	{
@@ -395,16 +433,19 @@ bool FEZLynx::readDigital(Socket::Pin pinNumber) {
 		BYTE buffer[3];
 
 		int channel = this->GetChannel(pinNumber);
+		unsigned char pin = this->GetChannelPin(pinNumber);
 
+		dwNumBytesToSend = 0;
 		buffer[0] = 0x81;
 		FT_STATUS status = FT_Write(Channels[channel].device, buffer, 1, &sent); 
+		dwNumBytesToSend = 0;
 
         System::Sleep(2);
 
 		status = FT_GetQueueStatus(Channels[channel].device, &sent);        
 		status = FT_Read(Channels[channel].device, buffer, 1, &sent);   
 
-		return buffer[0];
+		return (buffer[0] & pin) == pin ? true : false;
 	}
 
 	return false;
@@ -433,11 +474,16 @@ void FEZLynx::writeDigital(Socket::Pin pinNumber, bool value) {
 
 double FEZLynx::readAnalog(Socket::Pin pinNumber) {
 	//return static_cast<double>(::analogRead(this->pins[pinNumber])) / 1024 * 3.3;
+
+	this->panic("Not implemented");
+
 	return 0;
 }
 
 void FEZLynx::writeAnalog(Socket::Pin pinNumber, double voltage) {
 	//::analogWrite(this->pins[pinNumber], voltage * (1024 / 3.3));
+
+	this->panic("Not implemented");
 }
 
 void FEZLynx::setPWM(Socket::Pin pinNumber, double dutyCycle, double frequency) {
@@ -495,7 +541,7 @@ int main()
 {
 	std::cout << "loaded" << std::endl;
 
-	GHI::Interfaces::DigitalOutput out(mainboard->getSocket(3), 5, false);
+	GHI::Interfaces::DigitalOutput out(mainboard->getSocket(4), 5, false);
 
 	while(1)
 	{

@@ -92,7 +92,7 @@
     <ClInclude Include="Tunes\Tunes.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FEZLynx\SPIBus.cpp" />
+    <ClCompile Include="FEZLynx\SPIBus_Lynx.cpp" />
     <ClCompile Include="Gadgeteering\Interfaces.cpp" />
     <ClCompile Include="Gadgeteering\Mainboard.cpp" />
     <ClCompile Include="Gadgeteering\SerialDevice.cpp" />

@@ -125,5 +125,8 @@
     <ClCompile Include="Gadgeteering\SPIBus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FEZLynx\SPIBus_Lynx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
