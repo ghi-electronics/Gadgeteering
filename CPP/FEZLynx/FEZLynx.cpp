@@ -91,7 +91,10 @@ FEZLynx::FEZLynx()
 				ftStatus = FT_Read(Channels[i].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from input buffer
 				for (dwCount = 0; dwCount < dwNumBytesRead - 1; dwCount++) //Check if Bad command and echo command received
 				{
-					if ((InputBuffer[dwCount] == unsigned char(0xFA)) && (InputBuffer[dwCount+1] == unsigned char(0XAA)))
+                    unsigned char FA = 0xFA;
+                    unsigned char AA = 0xAA;
+
+                    if ((InputBuffer[dwCount] == FA) && (InputBuffer[dwCount+1] == AA))
 					{
 						bCommandEchod = true;
 						break;
@@ -277,16 +280,6 @@ FEZLynx::FEZLynx()
 	socket->pins[9] = 0x56;
 }
 
-void FEZLynx::SleepInMS(int msToSleep)
-{
-	//sleep on linux is in second resolution
-#ifdef WIN32
-	Sleep(50);
-#else
-	usleep(1000 * 50);
-#endif
-}
-
 void FEZLynx::panic(const char* error)
 {
 	//while(1)
@@ -329,25 +322,40 @@ void FEZLynx::setIOMode(Socket::Pin pinNumber, GHI::IOState state, GHI::Resistor
 
 int FEZLynx::GetChannel(Socket::Pin pinNumber)
 {
-	int chanCount = 0;
+    if((pinNumber & Channel1Mask) == Channel1Mask)
+        return 0;
 
-	while(((unsigned char) pinNumber) == 0)
-	{
-		pinNumber = ((unsigned int)pinNumber >> 8);
-		chanCount++;
-	}
+    if((pinNumber & Channel2Mask) == Channel2Mask)
+        return 1;
 
-	return chanCount;
+    if((pinNumber & Channel3Mask) == Channel3Mask)
+        return 2;
+
+    if((pinNumber & Channel4Mask) == Channel4Mask)
+        return 3;
+
+    this->panic("Invalid Channel");
+
+    return -1;
 }
 
 char FEZLynx::GetChannelPin(Socket::Pin pinNumber)
 {
-	while(((unsigned char) pinNumber) == 0)
-	{
-		pinNumber = ((unsigned int)pinNumber >> 8);
-	}
+    if((pinNumber & Channel1Mask) == Channel1Mask)
+        return (pinNumber & (~Channel1Mask));
 
-	return (unsigned char)pinNumber;
+    if((pinNumber & Channel2Mask) == Channel2Mask)
+        return (pinNumber & (~Channel2Mask));
+
+    if((pinNumber & Channel3Mask) == Channel3Mask)
+        return (pinNumber & (~Channel3Mask));
+
+    if((pinNumber & Channel4Mask) == Channel4Mask)
+        return (pinNumber & (~Channel4Mask));
+
+    this->panic("Invalid Channel");
+
+    return NULL;
 }
 
 bool FEZLynx::readDigital(Socket::Pin pinNumber) {
@@ -364,7 +372,7 @@ bool FEZLynx::readDigital(Socket::Pin pinNumber) {
 		buffer[0] = 0x81;
 		FT_STATUS status = FT_Write(Channels[channel].device, buffer, 1, &sent); 
 
-		SleepInMS(2);
+        System::Sleep(2);
 
 		status = FT_GetQueueStatus(Channels[channel].device, &sent);        
 		status = FT_Read(Channels[channel].device, buffer, 1, &sent);   

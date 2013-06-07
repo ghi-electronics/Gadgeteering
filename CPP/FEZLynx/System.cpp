@@ -1,7 +1,7 @@
 #ifdef _WIN32
 #include <Windows.h>
 #else
-#include <time.h>
+#include <sys/time.h>
 #endif
 
 
@@ -14,12 +14,28 @@ void System::Sleep(int time)
 {
 #ifdef _WIN32
 	::Sleep(time);
-#else
-	usleep(1000 * time);
+#endif
+
+#ifdef linux
+    timespec t_Sleep;
+    timespec t_Remaining;
+
+    int seconds = 0;
+
+    while(time > 1000)
+    {
+        seconds++;
+        time -= 1000;
+    }
+
+    t_Sleep.tv_nsec = (time * 1000000);
+    t_Sleep.tv_sec = seconds;
+
+    nanosleep(&t_Sleep,&t_Remaining);
 #endif
 }
 
-#ifndef WIN32
+#ifdef linux
 long int EpochWhenStarted = 0;
 #endif
 
@@ -28,14 +44,10 @@ int System::TimeElapsed()
 #ifdef _WIN32
 	return GetTickCount();
 #else
-#ifdef _POSIX_TIMERS
 	timespec t;
-	clockgettime(CLOCK_MONOTONIC, &t);
+    clock_gettime(CLOCK_MONOTONIC, &t);
 
-	return ((t.tv_sec * 1000) + (t.tv_nsec / 1000000));
-#else
-#error "Your system does not support POSIX compliant timers"
-#endif
+    return ((t.tv_sec * 1000) + (t.tv_nsec / 1000000));
 #endif
 }
 
@@ -44,13 +56,9 @@ long System::TimeElapsed64()
 #ifdef _WIN32
 	return GetTickCount64();
 #else
-#ifdef _POSIX_TIMERS
 	timespec t;
-	clockgettime(CLOCK_MONOTONIC, &t);
+    clock_gettime(CLOCK_MONOTONIC, &t);
 
-	return ((t.tv_sec * 1000) + (t.tv_nsec / 1000000));
-#else
-#error "Your system does not support POSIX compliant timers"
-#endif
+    return ((t.tv_sec * 1000) + (t.tv_nsec / 1000000));
 #endif
 }

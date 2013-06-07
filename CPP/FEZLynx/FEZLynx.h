@@ -54,7 +54,12 @@ namespace GHI
 				DWORD dwNumBytesToSend; //Index of output buffer
 				DWORD dwNumBytesSent, dwNumBytesRead, dwNumInputBuffer;
 
-				static const int ExtenderMask = 0xC0000000;
+                static const int Channel1Mask = 0x00000100;
+                static const int Channel2Mask = 0x00000200;
+                static const int Channel3Mask = 0x00000400;
+                static const int Channel4Mask = 0x00000800;
+                static const int ExtenderMask = 0xC0000000;
+
 				FEZLynxChannel Channels[4];
 
 			public:
@@ -165,50 +170,50 @@ namespace GHI
 					///////////////////////////////
 					//    Standard Pins Port A   //
 					///////////////////////////////
-					static const int PA_0 = 0x00000001;
-					static const int PA_1 = 0x00000002;
-					static const int PA_2 = 0x00000004;
-					static const int PA_3 = 0x00000006;
-					static const int PA_4 = 0x00000008;
-					static const int PA_5 = 0x00000010;
-					static const int PA_6 = 0x00000020;
-					static const int PA_7 = 0x00000040;
+                    static const int PA_0 = 0x00000001 | Channel1Mask;
+                    static const int PA_1 = 0x00000002 | Channel1Mask;
+                    static const int PA_2 = 0x00000004 | Channel1Mask;
+                    static const int PA_3 = 0x00000006 | Channel1Mask;
+                    static const int PA_4 = 0x00000008 | Channel1Mask;
+                    static const int PA_5 = 0x00000010 | Channel1Mask;
+                    static const int PA_6 = 0x00000020 | Channel1Mask;
+                    static const int PA_7 = 0x00000040 | Channel1Mask;
 
 					///////////////////////////////
 					//    Standard Pins Port B   //
-					///////////////////////////////
-					static const int PB_0 = 0x00000080;
-					static const int PB_1 = 0x00000100;
-					static const int PB_2 = 0x00000200;
-					static const int PB_3 = 0x00000400;
-					static const int PB_4 = 0x00000800;
-					static const int PB_5 = 0x00001000;
-					static const int PB_6 = 0x00002000;
-					static const int PB_7 = 0x00004000;
+                    ///////////////////////////////
+                    static const int PB_0 = 0x00000001 | Channel2Mask;
+                    static const int PB_1 = 0x00000002 | Channel2Mask;
+                    static const int PB_2 = 0x00000004 | Channel2Mask;
+                    static const int PB_3 = 0x00000006 | Channel2Mask;
+                    static const int PB_4 = 0x00000008 | Channel2Mask;
+                    static const int PB_5 = 0x00000010 | Channel2Mask;
+                    static const int PB_6 = 0x00000020 | Channel2Mask;
+                    static const int PB_7 = 0x00000040 | Channel2Mask;
 
 					///////////////////////////////
 					//    Standard Pins Port C   //
-					///////////////////////////////
-					static const int PC_0 = 0x00008000;
-					static const int PC_1 = 0x00010000;
-					static const int PC_2 = 0x00020000;
-					static const int PC_3 = 0x00040000;
-					static const int PC_4 = 0x00080000;
-					static const int PC_5 = 0x00100000;
-					static const int PC_6 = 0x00200000;
-					static const int PC_7 = 0x00400000;
+                    ///////////////////////////////
+                    static const int PC_0 = 0x00000001 | Channel3Mask;
+                    static const int PC_1 = 0x00000002 | Channel3Mask;
+                    static const int PC_2 = 0x00000004 | Channel3Mask;
+                    static const int PC_3 = 0x00000006 | Channel3Mask;
+                    static const int PC_4 = 0x00000008 | Channel3Mask;
+                    static const int PC_5 = 0x00000010 | Channel3Mask;
+                    static const int PC_6 = 0x00000020 | Channel3Mask;
+                    static const int PC_7 = 0x00000040 | Channel3Mask;
 
 					///////////////////////////////
 					//    Standard Pins Port D   //
-					///////////////////////////////
-					static const int PD_0 = 0x00800000;
-					static const int PD_1 = 0x01000000;
-					static const int PD_2 = 0x02000000;
-					static const int PD_3 = 0x04000000;
-					static const int PD_4 = 0x08000000;
-					static const int PD_5 = 0x10000000;
-					static const int PD_6 = 0x20000000;
-					static const int PD_7 = 0x40000000;
+                    ///////////////////////////////
+                    static const int PD_0 = 0x00000001 | Channel4Mask;
+                    static const int PD_1 = 0x00000002 | Channel4Mask;
+                    static const int PD_2 = 0x00000004 | Channel4Mask;
+                    static const int PD_3 = 0x00000006 | Channel4Mask;
+                    static const int PD_4 = 0x00000008 | Channel4Mask;
+                    static const int PD_5 = 0x00000010 | Channel4Mask;
+                    static const int PD_6 = 0x00000020 | Channel4Mask;
+                    static const int PD_7 = 0x00000040 | Channel4Mask;
 				};
 
 				virtual void panic(const char* error);
@@ -233,8 +238,7 @@ namespace GHI
 				protected:
 					bool isVirtual(GHI::Socket::Pin pinNumber);
 
-					void SetPinState(bool extended);
-					void SleepInMS(int msToSleep);
+                    void SetPinState(bool extended);
 					void SetFTDIPins(int channel);
 
 					int GetChannel(GHI::Socket::Pin pinNumber);
