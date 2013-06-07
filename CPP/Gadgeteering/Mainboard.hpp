@@ -15,21 +15,25 @@ namespace GHI {
 	};
 	
 	class Mainboard {
-		struct ListNode {
-			void* node;
-			ListNode* next;
-		};
-
-		ListNode* sockets;
 
 		protected:
+
+			struct ListNode {
+				void* node;
+				ListNode* next;
+			};
+
+			ListNode* sockets;
+			ListNode* pins;
+			ListNode* SPIBusses;
+
 			Mainboard();
 			virtual ~Mainboard();
 
 			Socket* registerSocket(Socket* socket);
 
 		public:
-			void panic(const char* error);
+			virtual void panic(const char* error);
 			Socket* getSocket(int number);
 
 			virtual void setPWM(Socket* socket, Socket::Pin pin, double dutyCycle, double frequency);
@@ -41,6 +45,9 @@ namespace GHI {
 			
 			virtual GHI::Interfaces::SPIBus* getNewSPIBus(Socket* socket);
 			virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
+
+			virtual void ReservePin(Socket::Pin pinNumber);
+			virtual void ReleasePin(Socket::Pin pinNumber);
 	};
 
 	extern GHI::Mainboard* mainboard;

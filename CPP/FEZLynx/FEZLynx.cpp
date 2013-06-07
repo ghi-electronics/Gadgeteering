@@ -3,6 +3,8 @@
 
 #include "FEZLynx.h"
 #include "../Gadgeteering/System.hpp"
+#include "../LED7R/LED7R.h"
+#include <iostream>
 
 using namespace GHI;
 using namespace GHI::Mainboards;
@@ -20,9 +22,14 @@ FEZLynx::FEZLynx()
 	//Set serial number to 3395969
 
 	//Get Device Serial Numbers
-	DWORD dwCount;
+	DWORD dwCount = 0;
 	//Try to open the FT2232H device port and get the valid handle for subsequent access
 	char SerialNumBuf[64];
+
+	dwNumBytesRead = 0;
+	dwNumBytesSent = 0;
+	dwNumBytesToSend = 0;
+	dwNumInputBuffer = 0;
 
 	for(int i = 0; i < 4; i++)
 	{
@@ -46,7 +53,10 @@ FEZLynx::FEZLynx()
 			ftStatus |= FT_SetTimeouts(Channels[i].device, 0, 5000); //Sets the read and write timeouts in milliseconds for the FT2232H
 			ftStatus |= FT_SetLatencyTimer(Channels[i].device, 10); //Set the latency timer
 			ftStatus |= FT_SetBitMode(Channels[i].device, 0x0, 0x00); //Reset controller
-			ftStatus |= FT_SetBitMode(Channels[i].device, 0x0, 0x02); //Enable MPSSE mode
+
+			//Only channel A and B support MPSSE mode
+			if(i == 0 || i == 1)
+				ftStatus |= FT_SetBitMode(Channels[i].device, 0x0, 0x02); //Enable MPSSE mode
 
 			if (ftStatus != FT_OK)
 			{
@@ -55,37 +65,52 @@ FEZLynx::FEZLynx()
 			}
 
 			//Allow USB stuff to complete..
-			SleepInMS(50);
+			System::Sleep(50);
+
+			for(int i_input = 0; i_input < 1024; i_input++)
+				InputBuffer[i_input] = 0;
 			
 			dwNumBytesToSend = 0;
 
-			//////////////////////////////////////////////////////////////////
-			// Below codes will synchronize the MPSSE interface by sending bad command 0xAA and checking if the echo command followed by 
-			// bad command „AA‟ can be received, this will make sure the MPSSE interface enabled and synchronized successfully
-			//////////////////////////////////////////////////////////////////
-			OutputBuffer[dwNumBytesToSend++] = 0xAA; //Add BAD command 0xAA
-			ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the BAD commands
-			dwNumBytesToSend = 0; //Clear output buffer
-			do{
-				ftStatus = FT_GetQueueStatus(Channels[i].device, &dwNumInputBuffer); // Get the number of bytes in the device input buffer
-			}while ((dwNumInputBuffer == 0) && (ftStatus == FT_OK)); //or Timeout
-			bool bCommandEchod = false;
-			ftStatus = FT_Read(Channels[i].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from input buffer
-			for (dwCount = 0; dwCount < dwNumBytesRead - 1; dwCount++) //Check if Bad command and echo command received
+			//only channel A and B support MPSSE
+			if(i == 0 || i == 1)
 			{
-				if ((InputBuffer[dwCount] == BYTE(0xFA)) && (InputBuffer[dwCount+1] == BYTE(0XAA)))
+				//////////////////////////////////////////////////////////////////
+				// Below codes will synchronize the MPSSE interface by sending bad command 0xAA and checking if the echo command followed by 
+				// bad command „AA‟ can be received, this will make sure the MPSSE interface enabled and synchronized successfully
+				//////////////////////////////////////////////////////////////////
+				OutputBuffer[dwNumBytesToSend++] = 0xAA; //Add BAD command 0xAA
+				ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the BAD commands
+				dwNumBytesToSend = 0; //Clear output buffer
+
+				do{
+					ftStatus = FT_GetQueueStatus(Channels[i].device, &dwNumInputBuffer); // Get the number of bytes in the device input buffer
+				}while ((dwNumInputBuffer == 0) && (ftStatus == FT_OK)); //or Timeout
+			
+				bool bCommandEchod = false;
+				ftStatus = FT_Read(Channels[i].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from input buffer
+				for (dwCount = 0; dwCount < dwNumBytesRead - 1; dwCount++) //Check if Bad command and echo command received
 				{
-					bCommandEchod = true;
-					break;
+                    unsigned char FA = 0xFA;
+                    unsigned char AA = 0xAA;
+
+                    if ((InputBuffer[dwCount] == FA) && (InputBuffer[dwCount+1] == AA))
+					{
+						bCommandEchod = true;
+						break;
+					}
 				}
-			}
-			if (bCommandEchod == false) 
-			{
-				this->panic("Could not synchronize the device");
-				return;
+
+				if (bCommandEchod == false) 
+				{
+					this->panic("Could not synchronize the device");
+					return;
+				}
 			}
 
 			dwNumBytesToSend = 0;
+
+
 
 			if(i == 1)
 			{
@@ -104,10 +129,6 @@ FEZLynx::FEZLynx()
 
 				ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the commands
 				dwNumBytesToSend = 0; //Clear output buffer
-
-				//OutputBuffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output 
-				//OutputBuffer[dwNumBytesToSend++] = ChannelData; //Set SDA, SCL high, WP disabled by SK, DO at bit „1‟, GPIOL0 at bit „0‟
-				//OutputBuffer[dwNumBytesToSend++] = ChannelDirection; //Set SK,DO,GPIOL0 pins as output with bit ‟, other pins as input with bit „‟
 			}
 
 			if( i == 1 || i == 0)
@@ -128,6 +149,14 @@ FEZLynx::FEZLynx()
 				dwNumBytesToSend = 0; //Clear output buffer
 				System::Sleep(30); //Delay for a while
 			}
+			
+			OutputBuffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output 
+			OutputBuffer[dwNumBytesToSend++] = Channels[i].data; //Set SDA, SCL high, WP disabled by SK, DO at bit „1‟, GPIOL0 at bit „0‟
+			OutputBuffer[dwNumBytesToSend++] = Channels[i].direction; //Set SK,DO,GPIOL0 pins as output with bit ‟, other pins as input with bit „‟
+	
+			ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the commands
+			dwNumBytesToSend = 0;
+
 		}
 		else
 			this->panic("Could not list and/or open the device channel");
@@ -156,7 +185,7 @@ FEZLynx::FEZLynx()
 	socket->pins[8] = Pins::PB_1;
 	socket->pins[9] = Pins::PB_0;
 
-	socket = this->registerSocket(new Socket(3, Socket::Types::K | Socket::Types::I | Socket::Types::X | Socket::Types::U));
+	socket = this->registerSocket(new Socket(3, Socket::Types::K | Socket::Types::I | Socket::Types::X | Socket::Types::U | Socket::Types::Y));
 	socket->pins[3] = Pins::PD_0;
 	socket->pins[4] = Pins::PC_0;
 	socket->pins[5] = Pins::PC_1;
@@ -181,11 +210,7 @@ FEZLynx::FEZLynx()
 	socket->pins[6] = Pins::PA_7;
 	socket->pins[7] = Pins::PA_1;
 	socket->pins[8] = Pins::PA_2;
-	socket->pins[9] = Pins::PB_0;
-
-	///////////////////////////////
-	// Virtual Sockets
-	///////////////////////////////
+    socket->pins[9] = Pins::PB_0;
 
 	socket = this->registerSocket(new Socket(6, Socket::Types::Y | Socket::Types::P));
 	socket->pins[3] = 0x04;
@@ -205,60 +230,93 @@ FEZLynx::FEZLynx()
 	socket->pins[8] = 0x67;
 	socket->pins[9] = 0x70;
 
-	socket = this->registerSocket(new Socket(8, Socket::Types::Y | Socket::Types::P));
-	socket->pins[3] = 0x14;
-	socket->pins[4] = 0x15;
-	socket->pins[5] = 0x16;
-	socket->pins[6] = 0x17;
-	socket->pins[7] = 0x71;
-	socket->pins[8] = 0x72;
-	socket->pins[9] = 0x73;
+    ///////////////////////////////
+    // Virtual Sockets
+    ///////////////////////////////
 
-	socket = this->registerSocket(new Socket(9, Socket::Types::Y | Socket::Types::P));
-	socket->pins[3] = 0x20;
-	socket->pins[4] = 0x21;
-	socket->pins[5] = 0x22;
-	socket->pins[6] = 0x23;
-	socket->pins[7] = 0x74;
-	socket->pins[8] = 0x75;
-	socket->pins[9] = 0x76;
+    socket = this->registerSocket(new Socket(8, Socket::Types::Y | Socket::Types::P));
+    socket->pins[3] = Pins::P2_0;
+    socket->pins[4] = Pins::P2_1;
+    socket->pins[5] = Pins::P2_2;
+    socket->pins[6] = Pins::P2_3;
+    socket->pins[7] = Pins::P7_4;
+    socket->pins[8] = Pins::P7_5;
+    socket->pins[9] = Pins::P7_6;
 
-	socket = this->registerSocket(new Socket(10, Socket::Types::Y));
-	socket->pins[3] = 0x30;
-	socket->pins[4] = 0x31;
-	socket->pins[5] = 0x32;
-	socket->pins[6] = 0x33;
-	socket->pins[7] = 0x34;
-	socket->pins[8] = 0x35;
-	socket->pins[9] = 0x36;
+    socket = this->registerSocket(new Socket(9, Socket::Types::Y | Socket::Types::P));
+    socket->pins[3] = Pins::P1_4;
+    socket->pins[4] = Pins::P1_5;
+    socket->pins[5] = Pins::P1_6;
+    socket->pins[6] = Pins::P1_7;
+    socket->pins[7] = Pins::P7_1;
+    socket->pins[8] = Pins::P7_2;
+    socket->pins[9] = Pins::P7_3;
 
-	socket = this->registerSocket(new Socket(11, Socket::Types::Y));
-	socket->pins[3] = 0x40;
-	socket->pins[4] = 0x41;
-	socket->pins[5] = 0x42;
-	socket->pins[6] = 0x43;
-	socket->pins[7] = 0x44;
-	socket->pins[8] = 0x45;
-	socket->pins[9] = 0x46;
+    socket = this->registerSocket(new Socket(10, Socket::Types::Y));
+    socket->pins[3] = Pins::P3_0;
+    socket->pins[4] = Pins::P3_1;
+    socket->pins[5] = Pins::P3_2;
+    socket->pins[6] = Pins::P3_3;
+    socket->pins[7] = Pins::P3_4;
+    socket->pins[8] = Pins::P3_5;
+    socket->pins[9] = Pins::P3_6;
+
+    socket = this->registerSocket(new Socket(11, Socket::Types::Y | Socket::Types::P));
+    socket->pins[3] = Pins::P0_0;
+    socket->pins[4] = Pins::P0_1;
+    socket->pins[5] = Pins::P0_2;
+    socket->pins[6] = Pins::P0_3;
+    socket->pins[7] = Pins::P6_0;
+    socket->pins[8] = Pins::P6_1;
+    socket->pins[9] = Pins::P6_2;
 
 	socket = this->registerSocket(new Socket(12, Socket::Types::Y));
-	socket->pins[3] = 0x50;
-	socket->pins[4] = 0x51;
-	socket->pins[5] = 0x52;
-	socket->pins[6] = 0x53;
-	socket->pins[7] = 0x54;
-	socket->pins[8] = 0x55;
-	socket->pins[9] = 0x56;
+    socket->pins[3] = Pins::P4_0;
+    socket->pins[4] = Pins::P4_1;
+    socket->pins[5] = Pins::P4_2;
+    socket->pins[6] = Pins::P4_3;
+    socket->pins[7] = Pins::P4_4;
+    socket->pins[8] = Pins::P4_5;
+    socket->pins[9] = Pins::P4_6;
+
+    socket = this->registerSocket(new Socket(13, Socket::Types::Y | Socket::Types::P));
+    socket->pins[3] = Pins::P0_4;
+    socket->pins[4] = Pins::P0_5;
+    socket->pins[5] = Pins::P0_6;
+    socket->pins[6] = Pins::P0_7;
+    socket->pins[7] = Pins::P6_3;
+    socket->pins[8] = Pins::P6_4;
+    socket->pins[9] = Pins::P6_5;
+
+    socket = this->registerSocket(new Socket(14, Socket::Types::Y));
+    socket->pins[3] = Pins::P4_0;
+    socket->pins[4] = Pins::P4_1;
+    socket->pins[5] = Pins::P4_2;
+    socket->pins[6] = Pins::P4_3;
+    socket->pins[7] = Pins::P4_4;
+    socket->pins[8] = Pins::P4_5;
+    socket->pins[9] = Pins::P4_6;
+
+    socket = this->registerSocket(new Socket(15, Socket::Types::Y | Socket::Types::P));
+    socket->pins[3] = Pins::P5_0;
+    socket->pins[4] = Pins::P5_1;
+    socket->pins[5] = Pins::P5_2;
+    socket->pins[6] = Pins::P5_3;
+    socket->pins[7] = Pins::P5_4;
+    socket->pins[8] = Pins::P5_5;
+    socket->pins[9] = Pins::P5_6;
 }
 
-void FEZLynx::SleepInMS(int msToSleep)
+void FEZLynx::panic(const char* error)
 {
-	//sleep on linux is in second resolution
-#ifdef WIN32
-	Sleep(50);
-#else
-	usleep(1000 * 50);
-#endif
+	//while(1)
+	//{
+	//	std::cout << error << std::endl;
+
+	//	System::Sleep(100);
+	//}
+
+	throw error;
 }
 
 bool FEZLynx::isVirtual(Socket::Pin pinNumber)
@@ -291,25 +349,40 @@ void FEZLynx::setIOMode(Socket::Pin pinNumber, GHI::IOState state, GHI::Resistor
 
 int FEZLynx::GetChannel(Socket::Pin pinNumber)
 {
-	int chanCount = 0;
+    if((pinNumber & Channel1Mask) == Channel1Mask)
+        return 0;
 
-	while(((byte) pinNumber) == 0)
-	{
-		pinNumber = ((unsigned int)pinNumber >> 8);
-		chanCount++;
-	}
+    if((pinNumber & Channel2Mask) == Channel2Mask)
+        return 1;
 
-	return chanCount;
+    if((pinNumber & Channel3Mask) == Channel3Mask)
+        return 2;
+
+    if((pinNumber & Channel4Mask) == Channel4Mask)
+        return 3;
+
+    this->panic("Invalid Channel");
+
+    return -1;
 }
 
 char FEZLynx::GetChannelPin(Socket::Pin pinNumber)
 {
-	while(((byte) pinNumber) == 0)
-	{
-		pinNumber = ((unsigned int)pinNumber >> 8);
-	}
+    if((pinNumber & Channel1Mask) == Channel1Mask)
+        return (pinNumber & (~Channel1Mask));
 
-	return (byte)pinNumber;
+    if((pinNumber & Channel2Mask) == Channel2Mask)
+        return (pinNumber & (~Channel2Mask));
+
+    if((pinNumber & Channel3Mask) == Channel3Mask)
+        return (pinNumber & (~Channel3Mask));
+
+    if((pinNumber & Channel4Mask) == Channel4Mask)
+        return (pinNumber & (~Channel4Mask));
+
+    this->panic("Invalid Channel");
+
+    return NULL;
 }
 
 bool FEZLynx::readDigital(Socket::Pin pinNumber) {
@@ -326,7 +399,7 @@ bool FEZLynx::readDigital(Socket::Pin pinNumber) {
 		buffer[0] = 0x81;
 		FT_STATUS status = FT_Write(Channels[channel].device, buffer, 1, &sent); 
 
-		SleepInMS(2);
+        System::Sleep(2);
 
 		status = FT_GetQueueStatus(Channels[channel].device, &sent);        
 		status = FT_Read(Channels[channel].device, buffer, 1, &sent);   
@@ -347,7 +420,7 @@ void FEZLynx::writeDigital(Socket::Pin pinNumber, bool value) {
 		BYTE buffer[3];
 
 		int channel = this->GetChannel(pinNumber);
-		byte pin = this->GetChannelPin(pinNumber);
+		unsigned char pin = this->GetChannelPin(pinNumber);
 
 		if(value)
 			Channels[channel].data |= pin;
@@ -373,11 +446,14 @@ void FEZLynx::setPWM(Socket::Pin pinNumber, double dutyCycle, double frequency) 
 	if(!isVirtual(pinNumber))
 		this->panic("Not supported");
 
-
+	this->panic("Not implemented");
 }
 
 void FEZLynx::setPWM(GHI::Socket* socket, GHI::Socket::Pin pin, double dutyCycle, double frequency)
 {
+	Socket::Pin _pin = socket->pins[pin];
+
+	this->setPWM(_pin, dutyCycle, frequency);
 }
 
 bool FEZLynx::readDigital(GHI::Socket* socket, GHI::Socket::Pin pin)
@@ -387,6 +463,7 @@ bool FEZLynx::readDigital(GHI::Socket* socket, GHI::Socket::Pin pin)
 
 void FEZLynx::writeDigital(GHI::Socket* socket, GHI::Socket::Pin pin, bool value)
 {
+	this->writeDigital(socket->pins[pin], value);
 }
 
 double FEZLynx::readAnalog(GHI::Socket* socket, GHI::Socket::Pin pin)
@@ -396,24 +473,37 @@ double FEZLynx::readAnalog(GHI::Socket* socket, GHI::Socket::Pin pin)
 
 void FEZLynx::writeAnalog(GHI::Socket* socket, GHI::Socket::Pin pin, double voltage)
 {
+	this->writeAnalog(socket->pins[pin], voltage);
 }
 
 void FEZLynx::setIOMode(GHI::Socket* socket, GHI::Socket::Pin pin, GHI::IOState state, GHI::ResistorMode resistorMode)
 {
+	this->setIOMode(socket->pins[pin], state, resistorMode);
 }
 
-GHI::Interfaces::SPIBus* getNewSPIBus(GHI::Socket* socket)
+GHI::Interfaces::SPIBus* FEZLynx::getNewSPIBus(GHI::Socket* socket)
 {
 	return NULL;
 }
 
-GHI::Interfaces::SerialDevice* getNewSerialDevice(GHI::Socket* socket, int baudRate, int parity, int stopBits, int dataBits)
+GHI::Interfaces::SerialDevice* FEZLynx::getNewSerialDevice(GHI::Socket* socket, int baudRate, int parity, int stopBits, int dataBits)
 {
 	return NULL;
 }
 
 int main()
 {
+	std::cout << "loaded" << std::endl;
+
+	GHI::Interfaces::DigitalOutput out(mainboard->getSocket(3), 5, false);
+
+	while(1)
+	{
+		out.write(true);
+		GHI::System::Sleep(100);
+		out.write(false);
+		GHI::System::Sleep(100);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////

@@ -5,6 +5,7 @@
 
 namespace GHI {
 	namespace Modules {
+
 		using namespace GHI::Interfaces;
 
 		class LED7R : public Module {
