@@ -1,4 +1,5 @@
 #include "Mainboard.hpp"
+#include "Arduino.h"
 
 using namespace GHI;
 
@@ -16,18 +17,19 @@ Mainboard::Mainboard() {
 Mainboard::~Mainboard() {
 	ListNode* prev = this->sockets;
 	ListNode* node = this->sockets->next;
+
 	do {
-		delete node->node;
+		delete node->data;
 		delete prev;
 		prev = node;
 	} while ((node = node->next) != NULL);
 
-	//Pin reservation is not garunteed, avoid do:while
+	//Pin reservation is not gauranteed, avoid do:while
 	prev = this->pins;
 	node = this->pins->next;
 
 	do {
-		delete node->node;
+		delete node->data;
 		delete prev;
 		prev = node;
 	} while ((node = node->next) != NULL);
@@ -35,16 +37,14 @@ Mainboard::~Mainboard() {
 
 void Mainboard::panic(const char* error) {
 	while (true)
-		;
+		Serial.println(error);
 }
 
 Socket* Mainboard::registerSocket(Socket* socket) {
 	if (this->sockets == NULL) {
 		this->sockets = new ListNode();
 		this->sockets->next = NULL;
-		this->sockets->node = NULL;
-
-		this->sockets->node = socket;
+		this->sockets->data = socket;
 
 		return socket;
 	}
@@ -54,79 +54,80 @@ Socket* Mainboard::registerSocket(Socket* socket) {
 		;
 
 	node = node->next = new ListNode();
-	node->node = socket;
+	node->data = socket;
 	node->next = NULL;
-
-	/*node->next = new ListNode();
-	node->next->node = socket;
-	node->next->next = NULL;*/
 
 	return socket;
 }
 
 Socket* Mainboard::getSocket(int number) {
-
 	if (this->sockets == NULL)
 		this->panic("No sockets present.");
 
 	for (ListNode* node = this->sockets; node != NULL; node = node->next)
-	{
-		if (static_cast<Socket*>(node->node)->number == number)
-			return static_cast<Socket*>(node->node);
-	}
+		if (static_cast<Socket*>(node->data)->number == number)
+			return static_cast<Socket*>(node->data);
 
 	return NULL;
 }
 
-void Mainboard::setPWM(Socket* socket, Socket::Pin pin, double dutyCycle, double frequency) { };
-bool Mainboard::readDigital(Socket* socket, Socket::Pin pin) { mainboard->panic("Not Supported"); return false; };
-void Mainboard::writeDigital(Socket* socket, Socket::Pin pin, bool value) { };
-double Mainboard::readAnalog(Socket* socket, Socket::Pin pin) { mainboard->panic("Not Supported"); return 0.0; };
-void Mainboard::writeAnalog(Socket* socket, Socket::Pin pin, double voltage) { };
-void Mainboard::setIOMode(Socket* socket, Socket::Pin pin, IOState state, ResistorMode resistorMode) { };
+void Mainboard::setPWM(CPUPin pin, double dutyCycle, double frequency) { };
+bool Mainboard::readDigital(CPUPin pin) { mainboard->panic("Not Supported"); return false; };
+void Mainboard::writeDigital(CPUPin pin, bool value) { };
+double Mainboard::readAnalog(CPUPin pin) { mainboard->panic("Not Supported"); return 0.0; };
+void Mainboard::writeAnalog(CPUPin pin, double voltage) { };
+void Mainboard::setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode) { };
 	
 GHI::Interfaces::SPIBus* Mainboard::getNewSPIBus(Socket* socket) { mainboard->panic("Not Supported"); return NULL; };
 GHI::Interfaces::SerialDevice* Mainboard::getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits) { mainboard->panic("Not Supported"); return NULL; };
 
-void Mainboard::ReleasePin(Socket::Pin pinNumber)
+void Mainboard::ReleasePin(CPUPin pinNumber)
 {
 	if (this->pins == NULL) {
 		this->pins = new ListNode();
 		this->pins->next = NULL;
-		this->pins->node = NULL;
+		this->pins->data = NULL;
 
 		return;
 	}
 
 	ListNode* node;
-	for (node = this->pins; node->next != NULL; node = node->next)
-	{
-		if(node->node == (int *)(pinNumber))
-			node->node = node->next;
+	ListNode* prev;
+
+	if (this->pins && this->pins[0].data == (CPUPin*)(pinNumber)) {
+		prev = this->pins;
+		this->pins = this->pins->next;
+		delete prev;
+		return;
+	}
+
+	prev = this->pins;
+	for (node = prev->next; node->next != NULL; node = node->next) {
+		if(node->data == (CPUPin*)(pinNumber)) {
+			prev->next = node->next;
+			delete node;
+		}
+		prev = node;
 	}
 }
 
-void Mainboard::ReservePin(Socket::Pin pinNumber)
+void Mainboard::ReservePin(CPUPin pinNumber)
 {
 	if (this->pins == NULL) {
 		this->pins = new ListNode();
 		this->pins->next = NULL;
-		this->pins->node = NULL;
-
-		this->pins->node = (int *)pinNumber;
+		this->pins->data = (CPUPin*)pinNumber;
 
 		return;
 	}
 
 	ListNode* node;
 	for (node = this->pins; node->next != NULL; node = node->next)
-	{
-		if(node->node == (int *)(pinNumber))
+		if(node->data == (CPUPin*)(pinNumber))
 			mainboard->panic("Pin already reserved");
-	}
 
 	node = node->next = new ListNode();
-	node->node = (int *)(pinNumber);
+	node->data = (CPUPin*)(pinNumber);
 	node->next = NULL;
 }
 	

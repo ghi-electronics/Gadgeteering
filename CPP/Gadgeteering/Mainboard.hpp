@@ -15,11 +15,9 @@ namespace GHI {
 	};
 	
 	class Mainboard {
-
 		protected:
-
 			struct ListNode {
-				void* node;
+				void* data;
 				ListNode* next;
 			};
 
@@ -36,18 +34,18 @@ namespace GHI {
 			virtual void panic(const char* error);
 			Socket* getSocket(int number);
 
-			virtual void setPWM(Socket* socket, Socket::Pin pin, double dutyCycle, double frequency);
-			virtual bool readDigital(Socket* socket, Socket::Pin pin);
-			virtual void writeDigital(Socket* socket, Socket::Pin pin, bool value);
-			virtual double readAnalog(Socket* socket, Socket::Pin pin);
-			virtual void writeAnalog(Socket* socket, Socket::Pin pin, double voltage);
-			virtual void setIOMode(Socket* socket, Socket::Pin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
+			virtual void setPWM(CPUPin pin, double dutyCycle, double frequency);
+			virtual bool readDigital(CPUPin pin);
+			virtual void writeDigital(CPUPin pin, bool value);
+			virtual double readAnalog(CPUPin pin);
+			virtual void writeAnalog(CPUPin pin, double voltage);
+			virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
 			
 			virtual GHI::Interfaces::SPIBus* getNewSPIBus(Socket* socket);
 			virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
 
-			virtual void ReservePin(Socket::Pin pinNumber);
-			virtual void ReleasePin(Socket::Pin pinNumber);
+			virtual void ReservePin(CPUPin pin);
+			virtual void ReleasePin(CPUPin pin);
 	};
 
 	extern GHI::Mainboard* mainboard;

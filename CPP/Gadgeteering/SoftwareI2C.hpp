@@ -7,10 +7,8 @@
 namespace GHI {
 	namespace Interfaces {
 		class SoftwareI2C {
-			static const Socket::Pin SCL_PIN = Socket::Pins::Nine;
-			static const Socket::Pin SDA_PIN = Socket::Pins::Eight;
-
-			Socket* socket;
+			CPUPin sda;
+			CPUPin scl;
 			unsigned char address;
 			bool start;
 	
@@ -30,9 +28,9 @@ namespace GHI {
 			unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
 			
 			public:
-				SoftwareI2C(char address, Socket* socket);
+				SoftwareI2C(char address, CPUPin sda, CPUPin scl);
 
-				unsigned int writeBytes(unsigned char* data, unsigned int length);
+				unsigned int writeBytes(unsigned char* data, unsigned int length, bool sendStop = true);
 				unsigned int readBytes(unsigned char* data, unsigned int length);
 				bool writeRead(unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead);
 				

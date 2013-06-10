@@ -5,11 +5,10 @@ using namespace GHI::Interfaces;
 
 #define I2C_DELAY() ;
 
-SoftwareI2C::SoftwareI2C(char address, Socket* socket) {
-	socket->ensureTypeIsSupported(Socket::Types::I);
-
+SoftwareI2C::SoftwareI2C(char address, CPUPin sda, CPUPin scl) {
 	this->address = address << 1;
-	this->socket = socket;
+	this->scl = scl;
+	this->sda = sda;
 	
 	this->start = false;
 	this->readSCL();
@@ -17,21 +16,21 @@ SoftwareI2C::SoftwareI2C(char address, Socket* socket) {
 }
 
 void SoftwareI2C::clearSCL() {
-	mainboard->setIOMode(this->socket, SoftwareI2C::SCL_PIN, IOStates::DIGITAL_OUTPUT);
+	mainboard->setIOMode(this->scl, IOStates::DIGITAL_OUTPUT);
 }
 
 bool SoftwareI2C::readSCL() {
-	mainboard->setIOMode(this->socket, SoftwareI2C::SCL_PIN, IOStates::DIGITAL_INPUT);
-	return mainboard->readDigital(this->socket, SoftwareI2C::SCL_PIN);
+	mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT);
+	return mainboard->readDigital(this->scl);
 }
 
 void SoftwareI2C::clearSDA() {
-	mainboard->setIOMode(this->socket, SoftwareI2C::SDA_PIN, IOStates::DIGITAL_OUTPUT);
+	mainboard->setIOMode(this->sda, IOStates::DIGITAL_OUTPUT);
 }
 
 bool SoftwareI2C::readSDA() {
-	mainboard->setIOMode(this->socket, SoftwareI2C::SDA_PIN, IOStates::DIGITAL_INPUT);
-	return mainboard->readDigital(this->socket, SoftwareI2C::SDA_PIN);
+	mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT);
+	return mainboard->readDigital(this->sda);
 }
 
 bool SoftwareI2C::writeBit(bool bit) {
@@ -143,8 +142,8 @@ unsigned char SoftwareI2C::receive(bool sendAcknowledgeBit, bool sendStopConditi
 		if (this->readBit())
 			d |= 1;
 	}
-
-	this->writeBit(sendAcknowledgeBit);
+	
+	this->writeBit(!sendAcknowledgeBit);
 
 	if (sendStopCondition)
 		this->sendStopCondition();
@@ -152,7 +151,7 @@ unsigned char SoftwareI2C::receive(bool sendAcknowledgeBit, bool sendStopConditi
 	return d;
 }
 
-unsigned int SoftwareI2C::writeBytes(unsigned char* data, unsigned int length) {
+unsigned int SoftwareI2C::writeBytes(unsigned char* data, unsigned int length, bool sendStop) {
 	if (!length) 
 		return 0;
 
@@ -164,13 +163,14 @@ unsigned int SoftwareI2C::writeBytes(unsigned char* data, unsigned int length) {
 			if (!this->transmit(false, false, data[i]))
 				numWrite++;
 	
-	if (!this->transmit(false, true, data[i]))
+	if (!this->transmit(false, sendStop, data[i]))
 		numWrite++;
 	
 	return numWrite;
  }
 
-unsigned int SoftwareI2C::readBytes(unsigned char* data, unsigned int length) {	if (!length) 
+unsigned int SoftwareI2C::readBytes(unsigned char* data, unsigned int length) {	
+	if (!length) 
 		return 0;
 
 	unsigned int numRead = 0;

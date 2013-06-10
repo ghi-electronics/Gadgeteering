@@ -3,50 +3,45 @@
 using namespace GHI;
 using namespace GHI::Interfaces;
 
-DigitalOutput::DigitalOutput(Socket* socket, Socket::Pin pin, bool initialState) : socket(socket), pin(pin) {
+DigitalOutput::DigitalOutput(Socket* socket, Socket::Pin pin, bool initialState) {
 	if (!socket || pin < 3 || pin > 9)
 		mainboard->panic("Pin out of range");
 	
-	mainboard->ReservePin(socket->pins[pin]);
+	this->cpuPin = socket->pins[pin];
 
-	mainboard->setIOMode(this->socket, this->pin, IOStates::DIGITAL_OUTPUT);
+	mainboard->ReservePin(this->cpuPin);
+	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_OUTPUT);
+
 	this->write(initialState);
 }
 
 void DigitalOutput::write(bool value) {
-	mainboard->writeDigital(this->socket, this->pin, value);
+	mainboard->writeDigital(this->cpuPin, value);
 }
 
-DigitalInput::DigitalInput(Socket* socket, Socket::Pin pin) : socket(socket), pin(pin) {
+DigitalInput::DigitalInput(Socket* socket, Socket::Pin pin) {
 	if (!socket || pin < 3 || pin > 9)
 		mainboard->panic("Pin out of range");
 	
-	mainboard->ReservePin(socket->pins[pin]);
-
-	mainboard->setIOMode(this->socket, this->pin, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
+	this->cpuPin = socket->pins[pin];
+	
+	mainboard->ReservePin(this->cpuPin);
+	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
 }
 
 bool DigitalInput::read() {
-	return mainboard->readDigital(this->socket, this->pin);
+	return mainboard->readDigital(this->cpuPin);
 }
 
-DigitalInputOutput::DigitalInputOutput(Socket* socket, Socket::Pin pin, IOState initialIOState, bool initialOutputState) : socket(socket), pin(pin) {
+DigitalInputOutput::DigitalInputOutput(Socket* socket, Socket::Pin pin, IOState initialIOState, bool initialOutputState) {
 	if (!socket || pin < 3 || pin > 9)
 		mainboard->panic("Pin out of range");
 
-	this->setState(initialIOState);
-
-	mainboard->ReservePin(socket->pins[pin]);
-
-	if (this->ioState == IOStates::DIGITAL_OUTPUT)
-		this->write(initialOutputState);
-}
-
-DigitalInputOutput::DigitalInputOutput(Socket::Pin pinNumber, IOState initialIOState, bool initialOutputState) : socket(socket), pin(pinNumber) {
+	this->cpuPin = socket->pins[pin];
 
 	this->setState(initialIOState);
 
-	mainboard->ReservePin(pinNumber);
+	mainboard->ReservePin(this->cpuPin);
 
 	if (this->ioState == IOStates::DIGITAL_OUTPUT)
 		this->write(initialOutputState);
@@ -54,36 +49,40 @@ DigitalInputOutput::DigitalInputOutput(Socket::Pin pinNumber, IOState initialIOS
 
 void DigitalInputOutput::write(bool value) {
 	this->setState(IOStates::DIGITAL_OUTPUT);
-	mainboard->writeDigital(this->socket, this->pin, value);
+	mainboard->writeDigital(this->cpuPin, value);
 }
 
 bool DigitalInputOutput::read() {
 	this->setState(IOStates::DIGITAL_INPUT);
-	return mainboard->readDigital(this->socket, this->pin);
+	return mainboard->readDigital(this->cpuPin);
 }
 
 void DigitalInputOutput::setState(IOState state) {
 	if (this->ioState == state)
 		return;
 
-	mainboard->setIOMode(this->socket, this->pin, state);
+	mainboard->setIOMode(this->cpuPin, state);
 	this->ioState = state;
 }
 
-AnalogInput::AnalogInput(Socket* socket, Socket::Pin pin) : socket(socket), pin(pin) {
+AnalogInput::AnalogInput(Socket* socket, Socket::Pin pin) {
 	if (!socket || pin < 3 || pin > 9)
 		mainboard->panic("Pin out of range");
+
+	this->cpuPin = socket->pins[pin];
 }
 
 double AnalogInput::read() {
-	return mainboard->readAnalog(this->socket, this->pin);
+	return mainboard->readAnalog(this->cpuPin);
 }
 
-PWMOutput::PWMOutput(Socket* socket, Socket::Pin pin) : socket(socket), pin(pin) {
+PWMOutput::PWMOutput(Socket* socket, Socket::Pin pin) {
 	if (!socket || pin < 3 || pin > 9)
 		mainboard->panic("Pin out of range");
+
+	this->cpuPin = socket->pins[pin];
 		
-	mainboard->setIOMode(this->socket, this->pin, IOStates::PWM);
+	mainboard->setIOMode(this->cpuPin, IOStates::PWM);
 	this->set(0, 1000);
 }
 
@@ -91,7 +90,7 @@ void PWMOutput::set(double frequency, double dutyCycle) {
 	this->dutyCycle = dutyCycle;
 	this->frequency = frequency;
 
-	mainboard->setPWM(this->socket, this->pin, this->frequency, this->dutyCycle);
+	mainboard->setPWM(this->cpuPin, this->frequency, this->dutyCycle);
 }
 
 void PWMOutput::setFrequency(double frequency) {

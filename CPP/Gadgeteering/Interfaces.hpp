@@ -7,8 +7,7 @@
 namespace GHI {
 	namespace Interfaces {
 		class DigitalOutput {
-			Socket* socket;
-			Socket::Pin pin;
+			CPUPin cpuPin;
 
 			public:
 				DigitalOutput(Socket* socket, Socket::Pin pin, bool initialState = false);
@@ -17,24 +16,20 @@ namespace GHI {
 		};
 
 		class DigitalInput {
-			Socket* socket;
-			Socket::Pin pin;
+			CPUPin cpuPin;
 
 			public:
 				DigitalInput(Socket* socket, Socket::Pin pin);
-				DigitalInput(Socket::Pin pinNumber);
 
 				bool read();
 		};
 
 		class DigitalInputOutput {
-			Socket* socket;
-			Socket::Pin pin;
+			CPUPin cpuPin;
 			IOState ioState;
 	
 			public:
 				DigitalInputOutput(Socket* socket, Socket::Pin pin, IOState initialIOState = IOStates::DIGITAL_INPUT, bool initialOutputState = false);
-				DigitalInputOutput(Socket::Pin pinNumber, IOState initialIOState = IOStates::DIGITAL_INPUT, bool initialOutputState = false);
 
 				void write(bool value);
 				bool read();
@@ -42,8 +37,7 @@ namespace GHI {
 		};
 
 		class AnalogInput {
-			Socket* socket;
-			Socket::Pin pin;
+			CPUPin cpuPin;
 
 			public:
 				AnalogInput(Socket* socket, Socket::Pin pin);
@@ -52,8 +46,7 @@ namespace GHI {
 		};
 
 		class PWMOutput {
-			Socket* socket;
-			Socket::Pin pin;
+			CPUPin cpuPin;
 
 			double frequency;
 			double dutyCycle;

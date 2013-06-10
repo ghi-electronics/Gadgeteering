@@ -8,6 +8,7 @@
 namespace GHI {
 	typedef char IOState;
 	typedef char ResistorMode;
+	typedef unsigned int CPUPin;
 
 	//We didn't use enums because their members are hoisted into and pollute
 	//the parent scope, and Arduino doesn't have C++11 enum class yet.

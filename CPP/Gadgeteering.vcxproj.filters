@@ -75,6 +75,9 @@
     <ClInclude Include="Gadgeteering\SPIBus.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FEZMedusa\FEZMedusa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -126,6 +129,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FEZLynx\ExtendedSockets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\FEZMedusa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\SerialDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\SPIBus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

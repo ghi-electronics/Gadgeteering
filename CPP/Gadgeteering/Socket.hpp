@@ -9,12 +9,12 @@ namespace GHI {
 		static const int PIN_UNCONNECTED = -1;
 	
 		public:
-			typedef int Pin;
 			typedef int Type;
+			typedef unsigned char Pin;
 
 			const int number;
 			const Type type;
-			Pin pins[Socket::PINS_PER_SOCKET];
+			CPUPin pins[Socket::PINS_PER_SOCKET];
 
 			class Pins {
 				public:

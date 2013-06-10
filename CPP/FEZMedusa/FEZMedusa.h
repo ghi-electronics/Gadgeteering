@@ -11,13 +11,9 @@ class SPIClass;
 namespace GHI {
 	namespace Mainboards {
 		class FEZMedusa : public GHI::Mainboard {
-			bool isSocketReal(Socket* socket);
-			char getPort(Socket::Pin pinNumber);
-			char getPin(Socket::Pin pinNumber);
-	
-			ExtenderChip* extenderChip;
+			static const int EXTENDER_MASK = 0x8000;
 
-			static const int VIRTUAL_SOCKET_START = 4;
+			ExtenderChip* extenderChip;
 	
 			class SPIBus : public GHI::Interfaces::SPIBus
 			{
@@ -53,12 +49,12 @@ namespace GHI {
 				FEZMedusa();
 				virtual ~FEZMedusa();
 
-				virtual void setPWM(Socket* socket, Socket::Pin pin, double dutyCycle, double frequency);
-				virtual bool readDigital(Socket* socket, Socket::Pin pin);
-				virtual void writeDigital(Socket* socket, Socket::Pin pin, bool value);
-				virtual double readAnalog(Socket* socket, Socket::Pin pin);
-				virtual void writeAnalog(Socket* socket, Socket::Pin pin, double voltage);
-				virtual void setIOMode(Socket* socket, Socket::Pin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
+				virtual void setPWM(CPUPin pin, double dutyCycle, double frequency);
+				virtual bool readDigital(CPUPin pin);
+				virtual void writeDigital(CPUPin pin, bool value);
+				virtual double readAnalog(CPUPin pin);
+				virtual void writeAnalog(CPUPin pin, double voltage);
+				virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
 
 				virtual GHI::Interfaces::SPIBus* getNewSPIBus(Socket* socket);
 				virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
