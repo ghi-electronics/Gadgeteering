@@ -345,16 +345,14 @@ namespace GHI
 						public:
 							ExtendedSockets(FT_HANDLE Channel, unsigned char Address, Socket *socket);
 
-							bool Write(unsigned char data);
+							unsigned int writeBytes(unsigned char* data, unsigned int length);
+							unsigned int readBytes(unsigned char* data, unsigned int length);
+							bool writeRead(unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead);
+				
+							bool writeRegister(unsigned char registerAddress, unsigned char value);
+							unsigned char readRegister(unsigned char registerAddress);
 
-							bool readRegisters(unsigned char startAddress, unsigned char count, unsigned char* data);
-
-							bool writeRegisters(unsigned char startAddress, unsigned char count, unsigned char* data);
-							bool writeRegister(unsigned char location, unsigned char data);
-
-							unsigned char FEZLynx::ExtendedSockets::read(bool isLast); 
-							unsigned char readRegister(unsigned char location);
-
+							//Extender Pin Functionality
 							void setIOMode(Socket::Pin pin, IOState state, ResistorMode resistorMode);
 							void setPWM(Socket::Pin pin, double frequency, double dutyCycle);
 							bool readDigital(Socket::Pin pin);
@@ -363,17 +361,22 @@ namespace GHI
 							void writeAnalog(Socket::Pin pin, double voltage);
 
 						protected:
+							bool start;
+	
+							void clearSCL();
 							bool readSCL();
+							void clearSDA();
 							bool readSDA();
 
-							void pullSCLHigh();
-							void pullSCLLow();
-							void pullSDAHigh();
-							void pullSDALow();
-							void waitForSCL();
+							bool writeBit(bool bit);
+							bool readBit();
+	
+							bool sendStartCondition();
+							bool sendStopCondition();
+			
 
-							void sendStopCondition();
-							bool sendStartCondition(unsigned char startAddress);
+							bool transmit(bool sendStart, bool sendStop, unsigned char data);
+							unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
 
 							unsigned char FEZLynx::ExtendedSockets::getPort(Socket::Pin pin);
 							unsigned char FEZLynx::ExtendedSockets::getPin(Socket::Pin pin);
