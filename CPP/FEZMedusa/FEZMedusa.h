@@ -12,7 +12,7 @@ namespace GHI {
 	namespace Mainboards {
 		class FEZMedusa : public GHI::Mainboard {
 			static const int EXTENDER_MASK = 0x8000;
-
+			
 			ExtenderChip* extenderChip;
 	
 			class SPIBus : public GHI::Interfaces::SPIBus

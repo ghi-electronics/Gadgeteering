@@ -8,7 +8,7 @@ DigitalOutput::DigitalOutput(Socket* socket, Socket::Pin pin, bool initialState)
 		mainboard->panic("Pin out of range");
 	
 	this->cpuPin = socket->pins[pin];
-
+	
 	mainboard->ReservePin(this->cpuPin);
 	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_OUTPUT);
 
@@ -19,14 +19,14 @@ void DigitalOutput::write(bool value) {
 	mainboard->writeDigital(this->cpuPin, value);
 }
 
-DigitalInput::DigitalInput(Socket* socket, Socket::Pin pin) {
+DigitalInput::DigitalInput(Socket* socket, Socket::Pin pin, ResistorMode resistorMode) {
 	if (!socket || pin < 3 || pin > 9)
 		mainboard->panic("Pin out of range");
 	
 	this->cpuPin = socket->pins[pin];
 	
 	mainboard->ReservePin(this->cpuPin);
-	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
+	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_INPUT, resistorMode);
 }
 
 bool DigitalInput::read() {

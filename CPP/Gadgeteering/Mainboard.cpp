@@ -1,5 +1,4 @@
 #include "Mainboard.hpp"
-#include "Arduino.h"
 
 using namespace GHI;
 
@@ -37,7 +36,7 @@ Mainboard::~Mainboard() {
 
 void Mainboard::panic(const char* error) {
 	while (true)
-		Serial.println(error);
+		; //
 }
 
 Socket* Mainboard::registerSocket(Socket* socket) {
@@ -45,17 +44,17 @@ Socket* Mainboard::registerSocket(Socket* socket) {
 		this->sockets = new ListNode();
 		this->sockets->next = NULL;
 		this->sockets->data = socket;
-
+	
 		return socket;
 	}
-
-	ListNode* node;
-	for (node = this->sockets; node->next != NULL; node = node->next)
+	
+	ListNode* endNode;
+	for (endNode = this->sockets; endNode->next != NULL; endNode = endNode->next)
 		;
-
-	node = node->next = new ListNode();
-	node->data = socket;
-	node->next = NULL;
+	
+	endNode->next = new ListNode();
+	endNode->next->data = socket;
+	endNode->next->next = NULL;
 
 	return socket;
 }
@@ -63,7 +62,7 @@ Socket* Mainboard::registerSocket(Socket* socket) {
 Socket* Mainboard::getSocket(int number) {
 	if (this->sockets == NULL)
 		this->panic("No sockets present.");
-
+	
 	for (ListNode* node = this->sockets; node != NULL; node = node->next)
 		if (static_cast<Socket*>(node->data)->number == number)
 			return static_cast<Socket*>(node->data);
@@ -113,21 +112,25 @@ void Mainboard::ReleasePin(CPUPin pinNumber)
 
 void Mainboard::ReservePin(CPUPin pinNumber)
 {
+	return;
+	/*
+	//Arduino crashes in this code after several calls.
 	if (this->pins == NULL) {
 		this->pins = new ListNode();
 		this->pins->next = NULL;
 		this->pins->data = (CPUPin*)pinNumber;
-
+	
 		return;
 	}
-
+	
 	ListNode* node;
 	for (node = this->pins; node->next != NULL; node = node->next)
-		if(node->data == (CPUPin*)(pinNumber))
+		if (node->data == (CPUPin*)(pinNumber))
 			mainboard->panic("Pin already reserved");
-
-	node = node->next = new ListNode();
-	node->data = (CPUPin*)(pinNumber);
-	node->next = NULL;
+	
+	node->next = new ListNode();
+	node->next->data = (CPUPin*)(pinNumber);
+	node->next->next = NULL;
+	*/
 }
 	

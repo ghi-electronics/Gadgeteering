@@ -9,14 +9,14 @@ LED7R::LED7R(int socketNumber)
 {
 	this->socket = mainboard->getSocket(socketNumber);
 	this->socket->ensureTypeIsSupported(Socket::Types::Y);
-
+	
 	for (int i = 0; i < LED7R::LEDS; i++)
 		this->ports[i] = new DigitalOutput(this->socket, i + 3, false);
 }
 
 void LED7R::turnOnLED(int led, bool onlyLED) {
 	if (led < 1 || led > LED7R::LEDS)
-		mainboard->panic("led out of range");
+		mainboard->panic("LED out of range");
 
 	if (onlyLED)
 		this->turnAllOff();
@@ -26,7 +26,7 @@ void LED7R::turnOnLED(int led, bool onlyLED) {
 
 void LED7R::turnOffLED(int led) {
 	if (led < 1 || led > 7)
-		mainboard->panic("led out of range");
+		mainboard->panic("LED out of range");
 
 	this->ports[led - 1]->write(false);
 }

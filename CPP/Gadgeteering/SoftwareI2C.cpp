@@ -17,19 +17,21 @@ SoftwareI2C::SoftwareI2C(char address, CPUPin sda, CPUPin scl) {
 
 void SoftwareI2C::clearSCL() {
 	mainboard->setIOMode(this->scl, IOStates::DIGITAL_OUTPUT);
+	mainboard->writeDigital(this->scl, false);
 }
 
 bool SoftwareI2C::readSCL() {
-	mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT);
+	mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
 	return mainboard->readDigital(this->scl);
 }
 
 void SoftwareI2C::clearSDA() {
 	mainboard->setIOMode(this->sda, IOStates::DIGITAL_OUTPUT);
+	mainboard->writeDigital(this->sda, false);
 }
 
 bool SoftwareI2C::readSDA() {
-	mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT);
+	mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
 	return mainboard->readDigital(this->sda);
 }
 

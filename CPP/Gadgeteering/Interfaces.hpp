@@ -19,7 +19,7 @@ namespace GHI {
 			CPUPin cpuPin;
 
 			public:
-				DigitalInput(Socket* socket, Socket::Pin pin);
+				DigitalInput(Socket* socket, Socket::Pin pin, ResistorMode resistorMode = ResistorModes::FLOATING);
 
 				bool read();
 		};

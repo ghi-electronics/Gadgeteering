@@ -33,12 +33,12 @@ FEZMedusa::FEZMedusa() {
 	socket->pins[9] = 6;
 
 	socket = this->registerSocket(new Socket(3, Socket::Types::A | Socket::Types::I | Socket::Types::X));
-	socket->pins[3] = A0;
-	socket->pins[4] = A1;
-	socket->pins[5] = A2;
-	socket->pins[6] = A3;
-	socket->pins[8] = A4;
-	socket->pins[9] = A5;
+	socket->pins[3] = A0; //A0 = 14
+	socket->pins[4] = A1; //A1 = 15
+	socket->pins[5] = A2; //A2 = 16
+	socket->pins[6] = A3; //A3 = 17
+	socket->pins[8] = A4; //A4 = 18
+	socket->pins[9] = A5; //A5 = 19
 
 	socket = this->registerSocket(new Socket(5, Socket::Types::Y | Socket::Types::P));
 	socket->pins[3] = 0x00 | FEZMedusa::EXTENDER_MASK;
@@ -66,7 +66,7 @@ FEZMedusa::FEZMedusa() {
 	socket->pins[7] = 0x66 | FEZMedusa::EXTENDER_MASK;
 	socket->pins[8] = 0x67 | FEZMedusa::EXTENDER_MASK;
 	socket->pins[9] = 0x70 | FEZMedusa::EXTENDER_MASK;
-
+	
 	socket = this->registerSocket(new Socket(8, Socket::Types::Y | Socket::Types::P));
 	socket->pins[3] = 0x14 | FEZMedusa::EXTENDER_MASK;
 	socket->pins[4] = 0x15 | FEZMedusa::EXTENDER_MASK;
@@ -136,7 +136,7 @@ void FEZMedusa::setPWM(CPUPin pinNumber, double dutyCycle, double frequency) {
 }
 
 bool FEZMedusa::readDigital(CPUPin pinNumber) {
-	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? ::digitalRead(pinNumber) != 0 : this->extenderChip->readDigital(pinNumber & ~FEZMedusa::EXTENDER_MASK);
+	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? ::digitalRead(pinNumber) == HIGH : this->extenderChip->readDigital(pinNumber & ~FEZMedusa::EXTENDER_MASK);
 }
 
 void FEZMedusa::writeDigital(CPUPin pinNumber, bool value) {
