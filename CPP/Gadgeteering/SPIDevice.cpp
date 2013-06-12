@@ -28,7 +28,7 @@ SPIDevice::~SPIDevice() {
 	delete this->chipSelect;
 }
 
-char SPIDevice::writeReadByte(char toSend, bool deselectChip) 
+char SPIDevice::writeReadByte(unsigned char toSend, bool deselectChip) 
 { 
 	this->chipSelect->write(this->configuration->chipSelectActiveState);
 	char out = this->bus->writeReadByte(toSend, configuration);
@@ -39,7 +39,7 @@ char SPIDevice::writeReadByte(char toSend, bool deselectChip)
 	return out;
 }
 
-void SPIDevice::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, bool deselectChip) 
+void SPIDevice::writeAndRead(unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, bool deselectChip) 
 {
 	this->chipSelect->write(this->configuration->chipSelectActiveState);
 	this->bus->writeAndRead(sendBuffer, receiveBuffer, count, configuration);
@@ -47,7 +47,7 @@ void SPIDevice::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int
 		this->chipSelect->write(!this->configuration->chipSelectActiveState);
 }
 
-void SPIDevice::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip) 
+void SPIDevice::writeThenRead(unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip) 
 {
 	this->chipSelect->write(this->configuration->chipSelectActiveState);
 	this->bus->writeThenRead(sendBuffer, receiveBuffer, sendCount, receiveCount, configuration);
@@ -55,7 +55,7 @@ void SPIDevice::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned in
 		this->chipSelect->write(!this->configuration->chipSelectActiveState);
 }
 
-void SPIDevice::write(char* buffer, unsigned int count, bool deselectChip) 
+void SPIDevice::write(unsigned char* buffer, unsigned int count, bool deselectChip) 
 { 
 	this->chipSelect->write(this->configuration->chipSelectActiveState);
 	this->bus->write(buffer, count, configuration);
@@ -63,7 +63,7 @@ void SPIDevice::write(char* buffer, unsigned int count, bool deselectChip)
 		this->chipSelect->write(!this->configuration->chipSelectActiveState);
 }
 
-void SPIDevice::read(char* buffer, unsigned int count, bool deselectChip) 
+void SPIDevice::read(unsigned char* buffer, unsigned int count, bool deselectChip) 
 {
 	this->chipSelect->write(this->configuration->chipSelectActiveState);
 	this->bus->read(buffer, count, configuration);

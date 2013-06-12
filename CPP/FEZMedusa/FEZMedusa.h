@@ -24,11 +24,11 @@ namespace GHI {
 					SPIBus(Socket* socket);
 					virtual ~SPIBus();
 
-					virtual char writeReadByte(char toSend, GHI::Interfaces::SPIDevice::Configuration* configuration);
-					virtual void writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
-					virtual void writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, GHI::Interfaces::SPIDevice::Configuration* configuration);
-					virtual void write(char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
-					virtual void read(char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
+					virtual char writeReadByte(unsigned char toSend, GHI::Interfaces::SPIDevice::Configuration* configuration);
+					virtual void writeAndRead(unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
+					virtual void writeThenRead(unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, GHI::Interfaces::SPIDevice::Configuration* configuration);
+					virtual void write(unsigned char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
+					virtual void read(unsigned char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
 			};
 
 			class SerialDevice : public GHI::Interfaces::SerialDevice {
