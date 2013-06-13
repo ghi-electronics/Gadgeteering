@@ -10,7 +10,8 @@ namespace GHI {
 			CPUPin cpuPin;
 
 			public:
-				DigitalOutput(Socket* socket, Socket::Pin pin, bool initialState = false);
+				DigitalOutput(Socket* socket, Socket::Pin pinNumber, bool initialState = false);
+				DigitalOutput(CPUPin pin, bool initialState = false);
 
 				void write(bool value);
 		};
@@ -19,28 +20,34 @@ namespace GHI {
 			CPUPin cpuPin;
 
 			public:
-				DigitalInput(Socket* socket, Socket::Pin pin, ResistorMode resistorMode = ResistorModes::FLOATING);
+				DigitalInput(Socket* socket, Socket::Pin pinNumber, ResistorMode resistorMode = ResistorModes::FLOATING);
+				DigitalInput(CPUPin pin, ResistorMode resistorMode = ResistorModes::FLOATING);
 
 				bool read();
+				void setResistorMode(ResistorMode resistorMode);
 		};
 
 		class DigitalInputOutput {
 			CPUPin cpuPin;
 			IOState ioState;
+			ResistorMode resistorMode;
 	
 			public:
-				DigitalInputOutput(Socket* socket, Socket::Pin pin, IOState initialIOState = IOStates::DIGITAL_INPUT, bool initialOutputState = false);
+				DigitalInputOutput(Socket* socket, Socket::Pin pinNumber);
+				DigitalInputOutput(CPUPin pin);
 
 				void write(bool value);
 				bool read();
-				void setState(IOState state);
+				void setIOState(IOState state);
+				void setResistorMode(ResistorMode resistorMode);
 		};
 
 		class AnalogInput {
 			CPUPin cpuPin;
 
 			public:
-				AnalogInput(Socket* socket, Socket::Pin pin);
+				AnalogInput(Socket* socket, Socket::Pin pinNumber);
+				AnalogInput(CPUPin pin);
 
 				double read();
 		};
@@ -52,7 +59,8 @@ namespace GHI {
 			double dutyCycle;
 
 			public:
-				PWMOutput(Socket* socket, Socket::Pin pin);
+				PWMOutput(Socket* socket, Socket::Pin pinNumber);
+				PWMOutput(CPUPin pin);
 
 				void set(double frequency, double dutyCycle);
 				void setFrequency(double frequency);

@@ -78,6 +78,9 @@
     <ClInclude Include="FEZMedusa\FEZMedusa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Gadgeteering\List.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -141,6 +144,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FEZMedusa\System.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gadgeteering\List.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

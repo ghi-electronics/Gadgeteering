@@ -5,10 +5,22 @@ using namespace GHI::Interfaces;
 
 #define I2C_DELAY() ;
 
-SoftwareI2C::SoftwareI2C(char address, CPUPin sda, CPUPin scl) {
+SoftwareI2C::SoftwareI2C(unsigned char address, CPUPin sda, CPUPin scl) {
 	this->address = address << 1;
+
 	this->scl = scl;
 	this->sda = sda;
+	
+	this->start = false;
+	this->readSCL();
+	this->readSDA();
+}
+
+SoftwareI2C::SoftwareI2C(unsigned char address, Socket* socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber) {
+	this->address = address << 1;
+
+	this->scl = socket->pins[sclPinNumber];
+	this->sda = socket->pins[sdaPinNumber];
 	
 	this->start = false;
 	this->readSCL();

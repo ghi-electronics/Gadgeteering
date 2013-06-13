@@ -9,5 +9,6 @@
 #include "SPIDevice.hpp"
 #include "SPIBus.hpp"
 #include "System.hpp"
+#include "List.hpp"
 
 #endif

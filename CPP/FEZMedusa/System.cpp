@@ -1,17 +1,17 @@
 #include "../Gadgeteering/System.hpp"
 #include "Arduino.h"
 
-void GHI::System::Sleep(int time)
+void GHI::System::Sleep(unsigned int time)
 {
-	delay(1000 * time);
+	delay(time);
 }
 
-int GHI::System::TimeElapsed()
+unsigned int GHI::System::TimeElapsed()
 {
-	micros();
+	return micros();
 }
 
-long GHI::System::TimeElapsed64()
+unsigned long GHI::System::TimeElapsed64()
 {
-	micros();
+	return micros();
 }

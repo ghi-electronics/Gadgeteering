@@ -34,12 +34,13 @@ namespace GHI {
 
 						Configuration(bool chipSelectActiveState, unsigned int chipSelectSetupTime, unsigned int chipSelectHoldTime, bool clockIdleState, bool clockEdge, unsigned int clockRate);
 				};
-
-				SPIDevice(GHI::Interfaces::SPIBus *bus, GHI::Socket* socket, GHI::Socket::Pin chipSelectPin, Configuration* configuration);
+				
+				SPIDevice(Interfaces::SPIBus* bus, CPUPin chipSelectPin, Configuration* configuration);
+				SPIDevice(Interfaces::SPIBus* bus, Socket* socket, Socket::Pin chipSelectPinNumber, Configuration* configuration);
 				~SPIDevice();
 
 				//Clocks in one char and clocks out one char at the same time. If deselectChip is true, the CS line is set to logic low after the transmission, otherwise it remains logic high.
-				char writeReadByte(unsigned char toSend, bool deselectChip = false);
+				unsigned char writeReadByte(unsigned char toSend, bool deselectChip = false);
 
 				//Clocks count bytes in and out at the same time to and from the receive and send buffer respectively.
 				void writeAndRead(unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, bool deselectChip = false);
@@ -56,12 +57,6 @@ namespace GHI {
 			protected:
 				SPIBus* bus;
 				Configuration* configuration;
-
-				static const Socket::Pin CLOCK = Socket::Pins::Nine;
-				static const Socket::Pin MISO = Socket::Pins::Eight;
-				static const Socket::Pin MOSI = Socket::Pins::Seven;
-
-				Socket* socket;
 				DigitalOutput* chipSelect;
 		};
 	}

@@ -4,6 +4,7 @@
 #include "../Gadgeteering/Mainboard.hpp"
 #include "../Gadgeteering/Socket.hpp"
 #include "../Gadgeteering/ExtenderChip.hpp"
+#include "../Gadgeteering/SPIDevice.hpp"
 
 class SoftwareSerial;
 class SPIClass;
@@ -21,33 +22,31 @@ namespace GHI {
 				void setup(GHI::Interfaces::SPIDevice::Configuration* configuration);
 
 				public:
-					SPIBus(Socket* socket);
+					SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck);
 					virtual ~SPIBus();
-
-					virtual char writeReadByte(unsigned char toSend, GHI::Interfaces::SPIDevice::Configuration* configuration);
-					virtual void writeAndRead(unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
-					virtual void writeThenRead(unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, GHI::Interfaces::SPIDevice::Configuration* configuration);
-					virtual void write(unsigned char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
-					virtual void read(unsigned char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
+					
+					virtual void writeRead(unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIDevice::Configuration* configuration);
 			};
 
 			class SerialDevice : public GHI::Interfaces::SerialDevice {
 				SoftwareSerial* port;
 
 				public:
-					SerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
+					SerialDevice(CPUPin tx, CPUPin rx, int baudRate, int parity, int stopBits, int dataBits);
 					virtual ~SerialDevice();
 		
 					virtual void open();
 					virtual void close();
 					virtual void write(const unsigned char* buffer, int count);
 					virtual void write(const char* buffer, int count);
-					virtual void read(char* buffer, int count);
+					virtual void read(unsigned char* buffer, int count);
 			};
 
 			public:
 				FEZMedusa();
 				virtual ~FEZMedusa();
+
+				virtual void panic(const char* error);
 
 				virtual void setPWM(CPUPin pin, double dutyCycle, double frequency);
 				virtual bool readDigital(CPUPin pin);
@@ -55,9 +54,11 @@ namespace GHI {
 				virtual double readAnalog(CPUPin pin);
 				virtual void writeAnalog(CPUPin pin, double voltage);
 				virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
-
-				virtual GHI::Interfaces::SPIBus* getNewSPIBus(Socket* socket);
-				virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
+		
+				virtual Interfaces::SPIBus* getNewSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
+				virtual Interfaces::SPIBus* getNewSPIBus(Socket* socket, Socket::Pin mosiPinNumber = Socket::Pins::Seven, Socket::Pin misoPinNumber = Socket::Pins::Eight, Socket::Pin sckPinNumber = Socket::Pins::Nine);
+				virtual Interfaces::SerialDevice* getNewSerialDevice(CPUPin txPin, CPUPin rxPin, int baudRate, int parity, int stopBits, int dataBits);
+				virtual Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, int baudRate, int parity, int stopBits, int dataBits);
 		};
 	}
 }

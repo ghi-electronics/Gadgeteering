@@ -8,16 +8,14 @@ namespace GHI {
 	namespace Interfaces {
 		class SerialDevice {
 			protected:
-				static const Socket::Pin TX = Socket::Pins::Four;
-				static const Socket::Pin RX = Socket::Pins::Five;
-
-				Socket* socket;
+				CPUPin tx;
+				CPUPin rx;
 				int baudRate;
 				int parity;
 				int stopBits;
 				int dataBits;
 
-				SerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
+				SerialDevice(CPUPin tx, CPUPin rx, int baudRate, int parity, int stopBits, int dataBits);
 
 			public:
 				class Parity {
@@ -43,7 +41,7 @@ namespace GHI {
 				virtual void close();
 				virtual void write(const unsigned char* buffer, int count);
 				virtual void write(const char* buffer, int count);
-				virtual void read(char* buffer, int count);
+				virtual void read(unsigned char* buffer, int count);
 		};
 	}
 }

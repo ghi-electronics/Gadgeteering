@@ -6,8 +6,8 @@ using namespace GHI;
 using namespace GHI::Interfaces;
 using namespace GHI::Mainboards;
 
-FEZMedusa::SerialDevice::SerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits) : GHI::Interfaces::SerialDevice(socket, baudRate, parity, stopBits, dataBits) {
-	this->port = new SoftwareSerial(socket->pins[SerialDevice::RX], socket->pins[SerialDevice::TX]);
+FEZMedusa::SerialDevice::SerialDevice(CPUPin tx, CPUPin rx, int baudRate, int parity, int stopBits, int dataBits) : Interfaces::SerialDevice(tx, rx, baudRate, parity, stopBits, dataBits) {
+	this->port = new SoftwareSerial(tx, rx);
 }
 
 FEZMedusa::SerialDevice::~SerialDevice() {
@@ -32,7 +32,7 @@ void FEZMedusa::SerialDevice::write(const char* buffer, int count) {
 		this->port->write(buffer[i]);
 }
 
-void FEZMedusa::SerialDevice::read(char* buffer, int count) {
+void FEZMedusa::SerialDevice::read(unsigned char* buffer, int count) {
 	for (int i = 0; i < count; i++)
 		buffer[i] = this->port->read();
 }

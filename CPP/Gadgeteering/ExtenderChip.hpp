@@ -31,19 +31,17 @@ namespace GHI {
 	
 		Interfaces::SoftwareI2C* io60Chip;
 
-		char getPort(CPUPin pin);
-		char getPin(CPUPin pin);
+		unsigned char getPort(CPUPin pin);
+		unsigned char getMask(CPUPin pin);
 
 		public:
-			ExtenderChip(CPUPin sdaPin, CPUPin sclPin, char address);
+			ExtenderChip(CPUPin sdaPin, CPUPin sclPin, unsigned char address);
 			~ExtenderChip();
 			
 			void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode);
 			void setPWM(CPUPin pin, double frequency, double dutyCycle);
 			bool readDigital(CPUPin pin);
 			void writeDigital(CPUPin pin, bool value);
-			double readAnalog(CPUPin pin);
-			void writeAnalog(CPUPin pin, double voltage);
 	};
 }
 

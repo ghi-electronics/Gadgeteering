@@ -5,19 +5,17 @@
 
 namespace GHI {
 	class Socket {
-		static const int PINS_PER_SOCKET = 10;
-		static const int PIN_UNCONNECTED = -1;
-	
 		public:
 			typedef int Type;
 			typedef unsigned char Pin;
 
 			const int number;
 			const Type type;
-			CPUPin pins[Socket::PINS_PER_SOCKET];
+			CPUPin pins[10];
 
 			class Pins {
 				public:
+					static const Pin Unconnected = 0;
 					static const Pin Three = 3;
 					static const Pin Four = 4;
 					static const Pin Five = 5;

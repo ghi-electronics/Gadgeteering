@@ -73,6 +73,7 @@
     <ClInclude Include="FEZMedusa\FEZMedusa.h" />
     <ClInclude Include="Gadgeteering\Gadgeteering.h" />
     <ClInclude Include="Gadgeteering\Interfaces.hpp" />
+    <ClInclude Include="Gadgeteering\List.hpp" />
     <ClInclude Include="Gadgeteering\Mainboard.hpp" />
     <ClInclude Include="Gadgeteering\SerialDevice.hpp" />
     <ClInclude Include="Gadgeteering\Socket.hpp" />
@@ -100,6 +101,7 @@
     <ClCompile Include="FEZMedusa\SPIBus.cpp" />
     <ClCompile Include="FEZMedusa\System.cpp" />
     <ClCompile Include="Gadgeteering\Interfaces.cpp" />
+    <ClCompile Include="Gadgeteering\List.cpp" />
     <ClCompile Include="Gadgeteering\Mainboard.cpp" />
     <ClCompile Include="Gadgeteering\SerialDevice.cpp" />
     <ClCompile Include="Gadgeteering\Socket.cpp" />
