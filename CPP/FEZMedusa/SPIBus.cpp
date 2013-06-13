@@ -34,7 +34,7 @@ void FEZMedusa::SPIBus::setup(GHI::Interfaces::SPIDevice::Configuration* configu
 		count++;
 	
 	switch (count) {
-		case 1: mainboard->panic("Speed not supported."); break;
+		case 1: mainboard->panic(ERR_SPI_NOT_SUPPORTED); break;
 		case 2: this->spi->setClockDivider(SPI_CLOCK_DIV2); break;
 		case 3: this->spi->setClockDivider(SPI_CLOCK_DIV4); break;
 		case 4: this->spi->setClockDivider(SPI_CLOCK_DIV8); break;

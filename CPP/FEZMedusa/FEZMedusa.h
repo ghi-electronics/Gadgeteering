@@ -46,7 +46,7 @@ namespace GHI {
 				FEZMedusa();
 				virtual ~FEZMedusa();
 
-				virtual void panic(const char* error);
+				virtual void panic(unsigned char error);
 
 				virtual void setPWM(CPUPin pin, double dutyCycle, double frequency);
 				virtual bool readDigital(CPUPin pin);

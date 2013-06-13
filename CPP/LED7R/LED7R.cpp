@@ -16,7 +16,7 @@ LED7R::LED7R(int socketNumber)
 
 void LED7R::turnOnLED(int led, bool onlyLED) {
 	if (led < 1 || led > LED7R::LEDS)
-		mainboard->panic("LED out of range");
+		mainboard->panic(ERR_MODULE_ERROR);
 
 	if (onlyLED)
 		this->turnAllOff();
@@ -26,7 +26,7 @@ void LED7R::turnOnLED(int led, bool onlyLED) {
 
 void LED7R::turnOffLED(int led) {
 	if (led < 1 || led > 7)
-		mainboard->panic("LED out of range");
+		mainboard->panic(ERR_MODULE_ERROR);
 
 	this->ports[led - 1]->write(false);
 }

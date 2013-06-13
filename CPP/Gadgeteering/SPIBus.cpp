@@ -14,5 +14,5 @@ SPIBus::~SPIBus() {
 }
 
 void SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration) {
-	mainboard->panic("Mainboard does not support SPI.");
+	mainboard->panic(ERR_SPI_NOT_SUPPORTED);
 }

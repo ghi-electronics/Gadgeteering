@@ -1,6 +1,7 @@
 #include <SoftwareSerial.h>
 #include "Arduino.h"
 #include "FEZMedusa.h"
+#include "../Gadgeteering/Types.hpp"
 #include "../Gadgeteering/ExtenderChip.hpp"
 
 using namespace GHI;
@@ -117,16 +118,16 @@ FEZMedusa::~FEZMedusa() {
 
 }
 				
-void FEZMedusa::panic(const char* error) {
+void FEZMedusa::panic(unsigned char error) {
 	Serial.begin(9600);
 	while (true)
-		Serial.println(error);
+		Serial.println((int)error);
 }
 
 void FEZMedusa::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistorMode) {
 	if (!(pinNumber & FEZMedusa::EXTENDER_MASK)) {
 		if (state == IOStates::PWM)
-			mainboard->panic("Not supported");
+			mainboard->panic(ERR_PWM_NOT_SUPPORTED);
 		else if (state == IOStates::DIGITAL_INPUT)
 			::pinMode(pinNumber, resistorMode == ResistorModes::PULL_UP ? INPUT_PULLUP : INPUT);
 		else
@@ -138,7 +139,7 @@ void FEZMedusa::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistor
 }
 
 void FEZMedusa::setPWM(CPUPin pinNumber, double dutyCycle, double frequency) {
-	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? mainboard->panic("SetPWM supported") : this->extenderChip->setPWM(pinNumber & ~FEZMedusa::EXTENDER_MASK, dutyCycle, frequency);
+	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? mainboard->panic(ERR_PWM_NOT_SUPPORTED) : this->extenderChip->setPWM(pinNumber & ~FEZMedusa::EXTENDER_MASK, dutyCycle, frequency);
 }
 
 bool FEZMedusa::readDigital(CPUPin pinNumber) {
@@ -156,13 +157,13 @@ double FEZMedusa::readAnalog(CPUPin pinNumber) {
 	}
 	else
 	{
-		mainboard->panic("ReadAnalog not supported.");
+		mainboard->panic(ERR_READ_ANALOG_NOT_SUPPORTED);
 		return 0.0;
 	}
 }
 
 void FEZMedusa::writeAnalog(CPUPin pinNumber, double voltage) {
-	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? ::analogWrite(pinNumber, voltage * (1024 / 3.3)) : mainboard->panic("WriteAnalog not supported.");
+	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? ::analogWrite(pinNumber, voltage * (1024 / 3.3)) : mainboard->panic(ERR_WRITE_ANALOG_NOT_SUPPORTED);
 }
 
 Interfaces::SPIBus* FEZMedusa::getNewSPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) {

@@ -5,9 +5,9 @@ using namespace GHI::Interfaces;
 
 DigitalOutput::DigitalOutput(Socket* socket, Socket::Pin pinNumber, bool initialState) {
 	if (!socket)
-		mainboard->panic("Invalid socket.");
+		mainboard->panic(ERR_INVALID_SOCKET);
 	if (pinNumber < 3 || pinNumber > 9)
-		mainboard->panic("Pin out of range");
+		mainboard->panic(ERR_PIN_OUT_OF_RANGE);
 	
 	this->cpuPin = socket->pins[pinNumber];
 	
@@ -32,9 +32,9 @@ void DigitalOutput::write(bool value) {
 
 DigitalInput::DigitalInput(Socket* socket, Socket::Pin pinNumber, ResistorMode resistorMode) {
 	if (!socket)
-		mainboard->panic("Invalid socket.");
+		mainboard->panic(ERR_INVALID_SOCKET);
 	if (pinNumber < 3 || pinNumber > 9)
-		mainboard->panic("Pin out of range");
+		mainboard->panic(ERR_PIN_OUT_OF_RANGE);
 	
 	this->cpuPin = socket->pins[pinNumber];
 	
@@ -52,9 +52,9 @@ void DigitalInput::setResistorMode(ResistorMode resistorMode) {
 
 DigitalInputOutput::DigitalInputOutput(Socket* socket, Socket::Pin pinNumber) {
 	if (!socket)
-		mainboard->panic("Invalid socket.");
+		mainboard->panic(ERR_INVALID_SOCKET);
 	if (pinNumber < 3 || pinNumber > 9)
-		mainboard->panic("Pin out of range");
+		mainboard->panic(ERR_PIN_OUT_OF_RANGE);
 
 	this->cpuPin = socket->pins[pinNumber];
 	mainboard->ReservePin(this->cpuPin);
@@ -99,9 +99,9 @@ void DigitalInputOutput::setResistorMode(ResistorMode mode) {
 
 AnalogInput::AnalogInput(Socket* socket, Socket::Pin pinNumber) {
 	if (!socket)
-		mainboard->panic("Invalid socket.");
+		mainboard->panic(ERR_INVALID_SOCKET);
 	if (!socket || pinNumber < 3 || pinNumber > 9)
-		mainboard->panic("Pin out of range");
+		mainboard->panic(ERR_PIN_OUT_OF_RANGE);
 
 	this->cpuPin = socket->pins[pinNumber];
 	mainboard->ReservePin(this->cpuPin);
@@ -118,9 +118,9 @@ double AnalogInput::read() {
 
 PWMOutput::PWMOutput(Socket* socket, Socket::Pin pinNumber) {
 	if (!socket)
-		mainboard->panic("Invalid socket.");
+		mainboard->panic(ERR_INVALID_SOCKET);
 	if (pinNumber < 3 || pinNumber > 9)
-		mainboard->panic("Pin out of range");
+		mainboard->panic(ERR_PIN_OUT_OF_RANGE);
 
 	this->cpuPin = socket->pins[pinNumber];
 		
