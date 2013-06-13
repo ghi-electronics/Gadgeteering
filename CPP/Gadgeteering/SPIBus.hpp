@@ -18,7 +18,7 @@ namespace GHI
 				CPUPin miso;
 				CPUPin sck;
 
-				virtual void writeRead(unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, SPIDevice::Configuration* configuration);
+				virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, SPIDevice::Configuration* configuration);
 
 			public:
 				friend class SPIDevice;

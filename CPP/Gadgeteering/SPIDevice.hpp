@@ -43,13 +43,13 @@ namespace GHI {
 				unsigned char writeReadByte(unsigned char toSend, bool deselectChip = false);
 
 				//Clocks count bytes in and out at the same time to and from the receive and send buffer respectively.
-				void writeAndRead(unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, bool deselectChip = false);
+				void writeAndRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, bool deselectChip = false);
 
 				//Clocks sendCount bytes from sendBuffer out while ignoring the received bytes and then clocks receiveCount bytes into the receiveBuffer while clocking 0's out.
-				void writeThenRead(unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip = false);
+				void writeThenRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip = false);
 
 				//Clocks count bytes out from the buffer while ignoring the bytes clocked in.
-				void write(unsigned char* buffer, unsigned int count, bool deselectChip = false);
+				void write(const unsigned char* buffer, unsigned int count, bool deselectChip = false);
 
 				//Clocks count bytes in while clocking 0's out.
 				void read(unsigned char* buffer, unsigned int count, bool deselectChip = false);

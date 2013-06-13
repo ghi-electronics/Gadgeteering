@@ -45,7 +45,7 @@ void FEZMedusa::SPIBus::setup(GHI::Interfaces::SPIDevice::Configuration* configu
 	}
 }
 
-void FEZMedusa::SPIBus::writeRead(unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIDevice::Configuration* configuration)
+void FEZMedusa::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIDevice::Configuration* configuration)
 {
 	this->setup(configuration);
 

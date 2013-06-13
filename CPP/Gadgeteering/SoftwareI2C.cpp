@@ -165,7 +165,7 @@ unsigned char SoftwareI2C::receive(bool sendAcknowledgeBit, bool sendStopConditi
 	return d;
 }
 
-unsigned int SoftwareI2C::writeBytes(unsigned char* data, unsigned int length, bool sendStop) {
+unsigned int SoftwareI2C::writeBytes(const unsigned char* data, unsigned int length, bool sendStop) {
 	if (!length) 
 		return 0;
 
@@ -203,7 +203,7 @@ unsigned int SoftwareI2C::readBytes(unsigned char* data, unsigned int length) {
     return numRead;
 }
 
-bool SoftwareI2C::writeRead(unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead) {
+bool SoftwareI2C::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead) {
 	*numWritten = 0;
 	*numRead = 0;
 

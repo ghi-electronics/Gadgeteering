@@ -25,7 +25,7 @@ namespace GHI {
 					SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck);
 					virtual ~SPIBus();
 					
-					virtual void writeRead(unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIDevice::Configuration* configuration);
+					virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIDevice::Configuration* configuration);
 			};
 
 			class SerialDevice : public GHI::Interfaces::SerialDevice {

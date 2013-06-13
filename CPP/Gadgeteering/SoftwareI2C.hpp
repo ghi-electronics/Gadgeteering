@@ -30,9 +30,9 @@ namespace GHI {
 				SoftwareI2C(unsigned char address, CPUPin sda, CPUPin scl);
 				SoftwareI2C(unsigned char address, Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine);
 
-				unsigned int writeBytes(unsigned char* data, unsigned int length, bool sendStop = true);
+				unsigned int writeBytes(const unsigned char* data, unsigned int length, bool sendStop = true);
 				unsigned int readBytes(unsigned char* data, unsigned int length);
-				bool writeRead(unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead);
+				bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead);
 				
 				bool writeRegister(unsigned char registerAddress, unsigned char value);
 				unsigned char readRegister(unsigned char registerAddress);
