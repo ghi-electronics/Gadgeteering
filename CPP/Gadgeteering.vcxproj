@@ -70,7 +70,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="FEZMedusa\FEZMedusa.h" />
+    <ClInclude Include="FEZLynx\SoftwareI2C_Lynx.h" />
     <ClInclude Include="Gadgeteering\Gadgeteering.h" />
     <ClInclude Include="Gadgeteering\Interfaces.hpp" />
     <ClInclude Include="Gadgeteering\List.hpp" />
@@ -96,10 +96,6 @@
   <ItemGroup>
     <ClCompile Include="FEZLynx\ExtendedSockets.cpp" />
     <ClCompile Include="FEZLynx\SPIBus_Lynx.cpp" />
-    <ClCompile Include="FEZMedusa\FEZMedusa.cpp" />
-    <ClCompile Include="FEZMedusa\SerialDevice.cpp" />
-    <ClCompile Include="FEZMedusa\SPIBus.cpp" />
-    <ClCompile Include="FEZMedusa\System.cpp" />
     <ClCompile Include="Gadgeteering\Interfaces.cpp" />
     <ClCompile Include="Gadgeteering\List.cpp" />
     <ClCompile Include="Gadgeteering\Mainboard.cpp" />
