@@ -160,7 +160,7 @@ unsigned int FEZLynx::ExtendedSockets::writeBytes(unsigned char* data, unsigned 
 		numWrite++;*/
 
 	dwNumBytesToSend = 0; //Clear output buffer
-	OutputBuffer[dwNumBytesToSend++] = 0x10;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
+	OutputBuffer[dwNumBytesToSend++] = 0x11; //Clock data byte out on +ve Clock Edge LSB first
 	OutputBuffer[dwNumBytesToSend++] = 0;
 	OutputBuffer[dwNumBytesToSend++] = (length - 1); //Data length of 0x0000 means 1 byte data to clock out
 
@@ -179,6 +179,14 @@ unsigned int FEZLynx::ExtendedSockets::readBytes(unsigned char* data, unsigned i
 	unsigned int i = 0;
 
 	DWORD bytesAvail = 0;
+	DWORD numWrite = 0;
+
+	dwNumBytesToSend = 0; //Clear output buffer
+	OutputBuffer[dwNumBytesToSend++] = 0x20;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
+	OutputBuffer[dwNumBytesToSend++] = 0;
+	OutputBuffer[dwNumBytesToSend++] = 0;
+
+	ftStatus = FT_Write(ftHandle, OutputBuffer, dwNumBytesToSend, &numWrite); //Send off the commands
 
 	FT_STATUS status = FT_GetQueueStatus(ftHandle, &bytesAvail);
 
@@ -210,7 +218,7 @@ bool FEZLynx::ExtendedSockets::writeRead(unsigned char* writeBuffer, unsigned in
 		DWORD numWrite = 0;
 
 		dwNumBytesToSend = 0; //Clear output buffer
-		OutputBuffer[dwNumBytesToSend++] = 0x10;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
+		OutputBuffer[dwNumBytesToSend++] = 0x31 ; //Clock data byte out on +ve Clock Edge LSB first
 		OutputBuffer[dwNumBytesToSend++] = 0;
 		OutputBuffer[dwNumBytesToSend++] = (writeLength - 1); //Data length of 0x0000 means 1 byte data to clock out
 
@@ -261,7 +269,7 @@ unsigned char FEZLynx::ExtendedSockets::readRegister(unsigned char registerAddre
 	return value;
 }
 
-unsigned char FEZLynx::ExtendedSockets::getPort(Socket::Pin pinNumber) {
+unsigned char FEZLynx::ExtendedSockets::getPort(GHI::CPUPin pinNumber) {
 
 	if((pinNumber & FEZLynx::Port1Mask) == FEZLynx::Port1Mask)
 		return 0;
@@ -292,7 +300,7 @@ unsigned char FEZLynx::ExtendedSockets::getPort(Socket::Pin pinNumber) {
 	return NULL;
 }
 
-unsigned char FEZLynx::ExtendedSockets::getPin(Socket::Pin pinNumber) {
+unsigned char FEZLynx::ExtendedSockets::getPin(GHI::CPUPin pinNumber) {
 	pinNumber &= ~FEZLynx::ExtenderMask;
 
 	if((pinNumber & FEZLynx::Port1Mask) == FEZLynx::Port1Mask)
@@ -319,12 +327,12 @@ unsigned char FEZLynx::ExtendedSockets::getPin(Socket::Pin pinNumber) {
 	if((pinNumber & FEZLynx::Port8Mask) == FEZLynx::Port8Mask)
 		return pinNumber &= ~FEZLynx::Port8Mask;
 
-	mainboard->panic("Port out of range");
+	mainboard->panic("Pin out of range");
 
 	return NULL;
 }
 
-void FEZLynx::ExtendedSockets::setIOMode(Socket::Pin pinNumber, IOState state, ResistorMode resistorMode) {
+void FEZLynx::ExtendedSockets::setIOMode(GHI::CPUPin pinNumber, IOState state, ResistorMode resistorMode) {
 	this->writeRegister(FEZLynx::ExtendedSockets::PORT_SELECT_REGISTER, this->getPort(pinNumber));
 
 	char pin = this->getPin(pinNumber);
@@ -363,7 +371,7 @@ void FEZLynx::ExtendedSockets::setIOMode(Socket::Pin pinNumber, IOState state, R
 //We're using the 93.75KHz clock source because it gives a good resolution around the 1KHz frequency
 //while still allowing the user to select frequencies such as 10KHz, but with reduced duty cycle
 //resolution.
-void FEZLynx::ExtendedSockets::setPWM(Socket::Pin pin, double frequency, double dutyCycle) {
+void FEZLynx::ExtendedSockets::setPWM(GHI::CPUPin pin, double frequency, double dutyCycle) {
 	this->writeRegister(FEZLynx::ExtendedSockets::PWM_SELECT_REGISTER, (char)((pin % 8) + (this->getPort(pin) - 6) * 8));
 	
 	char period = (char)(93750 / frequency);
@@ -372,30 +380,32 @@ void FEZLynx::ExtendedSockets::setPWM(Socket::Pin pin, double frequency, double 
 	this->writeRegister(FEZLynx::ExtendedSockets::PULSE_WIDTH_REGISTER, period * dutyCycle);
 }
 
-bool FEZLynx::ExtendedSockets::readDigital(Socket::Pin pin) {
+bool FEZLynx::ExtendedSockets::readDigital(GHI::CPUPin pin) {
 	char b = this->readRegister(FEZLynx::ExtendedSockets::INPUT_PORT_0_REGISTER + this->getPort(pin));
 
 	return b & this->getPin(pin);
 }
 
-void FEZLynx::ExtendedSockets::writeDigital(Socket::Pin pin, bool value) {
-	char b = this->readRegister(FEZLynx::ExtendedSockets::OUTPUT_PORT_0_REGISTER + this->getPort(pin));
+void FEZLynx::ExtendedSockets::writeDigital(GHI::CPUPin pin, bool value) {
+	unsigned int port = this->getPort(pin);
+
+	unsigned char b = this->readRegister(FEZLynx::ExtendedSockets::OUTPUT_PORT_0_REGISTER + port);
 
 	if (value)
 		b |= this->getPin(pin);
 	else
 		b &= ~this->getPin(pin);
 
-	this->writeRegister(FEZLynx::ExtendedSockets::OUTPUT_PORT_0_REGISTER + this->getPort(pin), b);
+	this->writeRegister(FEZLynx::ExtendedSockets::OUTPUT_PORT_0_REGISTER + port, b);
 }
 
-double FEZLynx::ExtendedSockets::readAnalog(Socket::Pin pin) {
+double FEZLynx::ExtendedSockets::readAnalog(GHI::CPUPin pin) {
 	mainboard->panic("Not supported");
 
 	return 0.0;
 }
 
-void FEZLynx::ExtendedSockets::writeAnalog(Socket::Pin pin, double voltage) {
+void FEZLynx::ExtendedSockets::writeAnalog(GHI::CPUPin pin, double voltage) {
 	mainboard->panic("Not supported");
 
 }

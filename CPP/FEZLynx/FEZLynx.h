@@ -276,12 +276,12 @@ namespace GHI
 
 				virtual void panic(const char* error);
 
-				virtual void setPWM(GHI::Socket::Pin pinNumber, double dutyCycle, double frequency);
-				virtual bool readDigital(GHI::Socket::Pin pinNumber);
-				virtual void writeDigital(GHI::Socket::Pin pinNumber, bool value);
-				virtual double readAnalog(GHI::Socket::Pin pinNumber);
-				virtual void writeAnalog(GHI::Socket::Pin pinNumber, double voltage);
-				virtual void setIOMode(GHI::Socket::Pin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode = GHI::ResistorModes::FLOATING);
+				virtual void setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency);
+				virtual bool readDigital(GHI::CPUPin pinNumber);
+				virtual void writeDigital(GHI::CPUPin pinNumber, bool value);
+				virtual double readAnalog(GHI::CPUPin pinNumber);
+				virtual void writeAnalog(GHI::CPUPin pinNumber, double voltage);
+				virtual void setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode = GHI::ResistorModes::FLOATING);
 
 				virtual void setPWM(GHI::Socket* socket, GHI::Socket::Pin pin, double dutyCycle, double frequency);
 				virtual bool readDigital(GHI::Socket* socket, GHI::Socket::Pin pin);
@@ -294,14 +294,14 @@ namespace GHI
 				virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(GHI::Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
 
 				protected:
-					bool isVirtual(GHI::Socket::Pin pinNumber);
+					bool isVirtual(GHI::CPUPin pinNumber);
 
                     void SetPinState(bool extended);
 					void SetFTDIPins(int channel);
 
-					int GetChannel(GHI::Socket::Pin pinNumber);
+					int GetChannel(GHI::CPUPin pinNumber);
 			
-					unsigned char GetChannelPin(GHI::Socket::Pin pinNumber);
+					unsigned char GetChannelPin(GHI::CPUPin pinNumber);
 
 					class ExtendedSockets
 					{
@@ -353,12 +353,12 @@ namespace GHI
 							unsigned char readRegister(unsigned char registerAddress);
 
 							//Extender Pin Functionality
-							void setIOMode(Socket::Pin pin, IOState state, ResistorMode resistorMode);
-							void setPWM(Socket::Pin pin, double frequency, double dutyCycle);
-							bool readDigital(Socket::Pin pin);
-							void writeDigital(Socket::Pin pin, bool value);
-							double readAnalog(Socket::Pin pin);
-							void writeAnalog(Socket::Pin pin, double voltage);
+							void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode);
+							void setPWM(CPUPin pin, double frequency, double dutyCycle);
+							bool readDigital(CPUPin pin);
+							void writeDigital(CPUPin pin, bool value);
+							double readAnalog(CPUPin pin);
+							void writeAnalog(CPUPin pin, double voltage);
 
 						protected:
 							bool start;
@@ -378,8 +378,8 @@ namespace GHI
 							bool transmit(bool sendStart, bool sendStop, unsigned char data);
 							unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
 
-							unsigned char FEZLynx::ExtendedSockets::getPort(Socket::Pin pin);
-							unsigned char FEZLynx::ExtendedSockets::getPin(Socket::Pin pin);
+							unsigned char FEZLynx::ExtendedSockets::getPort(CPUPin pin);
+							unsigned char FEZLynx::ExtendedSockets::getPin(CPUPin pin);
 
 							GHI::Interfaces::DigitalInputOutput* SCL;
 							GHI::Interfaces::DigitalInputOutput* SDA;

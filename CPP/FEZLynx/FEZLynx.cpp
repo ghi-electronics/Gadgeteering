@@ -326,7 +326,7 @@ void FEZLynx::panic(const char* error)
 	throw error;
 }
 
-bool FEZLynx::isVirtual(Socket::Pin pinNumber)
+bool FEZLynx::isVirtual(GHI::CPUPin pinNumber)
 {
 	if(((int)pinNumber & (int)ExtenderMask) == ExtenderMask)
 		return true;
@@ -344,7 +344,7 @@ void FEZLynx::SetFTDIPins(int channel)
 	ftStatus = FT_Write(Channels[channel].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); //Send off the commands
 }
 
-void FEZLynx::setIOMode(Socket::Pin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode) {
+void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode) {
 	if(isVirtual(pinNumber))
 	{
 		Extender->setIOMode(pinNumber, state, resistorMode);
@@ -383,7 +383,7 @@ void FEZLynx::setIOMode(Socket::Pin pinNumber, GHI::IOState state, GHI::Resistor
 	}
 }
 
-int FEZLynx::GetChannel(Socket::Pin pinNumber)
+int FEZLynx::GetChannel(GHI::CPUPin pinNumber)
 {
 	if(!isVirtual(pinNumber))
 	{
@@ -405,7 +405,7 @@ int FEZLynx::GetChannel(Socket::Pin pinNumber)
     return -1;
 }
 
-unsigned char FEZLynx::GetChannelPin(Socket::Pin pinNumber)
+unsigned char FEZLynx::GetChannelPin(GHI::CPUPin pinNumber)
 {
 	if(!isVirtual(pinNumber))
 	{
@@ -427,7 +427,7 @@ unsigned char FEZLynx::GetChannelPin(Socket::Pin pinNumber)
     return NULL;
 }
 
-bool FEZLynx::readDigital(Socket::Pin pinNumber) {
+bool FEZLynx::readDigital(GHI::CPUPin pinNumber) {
 	if((pinNumber & ExtenderMask) == ExtenderMask)
 	{
 		return Extender->readDigital(pinNumber);
@@ -456,7 +456,7 @@ bool FEZLynx::readDigital(Socket::Pin pinNumber) {
 	return false;
 }
 
-void FEZLynx::writeDigital(Socket::Pin pinNumber, bool value) {
+void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value) {
 	if((pinNumber & ExtenderMask) == ExtenderMask)
 	{
 		Extender->writeDigital(pinNumber,value);
@@ -478,7 +478,7 @@ void FEZLynx::writeDigital(Socket::Pin pinNumber, bool value) {
 	}
 }
 
-double FEZLynx::readAnalog(Socket::Pin pinNumber) {
+double FEZLynx::readAnalog(GHI::CPUPin pinNumber) {
 	//return static_cast<double>(::analogRead(this->pins[pinNumber])) / 1024 * 3.3;
 
 	this->panic("Not implemented");
@@ -486,13 +486,13 @@ double FEZLynx::readAnalog(Socket::Pin pinNumber) {
 	return 0;
 }
 
-void FEZLynx::writeAnalog(Socket::Pin pinNumber, double voltage) {
+void FEZLynx::writeAnalog(GHI::CPUPin pinNumber, double voltage) {
 	//::analogWrite(this->pins[pinNumber], voltage * (1024 / 3.3));
 
 	this->panic("Not implemented");
 }
 
-void FEZLynx::setPWM(Socket::Pin pinNumber, double dutyCycle, double frequency) {
+void FEZLynx::setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency) {
 
 	//Only virtual sockets support PWM
 	if(!isVirtual(pinNumber))

@@ -64,8 +64,10 @@ Socket* Mainboard::getSocket(int number) {
 		this->panic("No sockets present.");
 	
 	for (ListNode* node = this->sockets; node != NULL; node = node->next)
+	{
 		if (static_cast<Socket*>(node->data)->number == number)
 			return static_cast<Socket*>(node->data);
+	}
 
 	return NULL;
 }
