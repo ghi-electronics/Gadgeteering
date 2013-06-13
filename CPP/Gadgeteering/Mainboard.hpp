@@ -5,10 +5,9 @@
 #include "Socket.hpp"
 #include "SPIBus.hpp"
 #include "SerialDevice.hpp"
+#include "List.hpp"
 
 namespace GHI {
-	class ExtenderChip;
-
 	class Module {
 		protected:
 			Module();
@@ -16,14 +15,9 @@ namespace GHI {
 	
 	class Mainboard {
 		protected:
-			struct ListNode {
-				void* data;
-				ListNode* next;
-			};
-
-			ListNode* sockets;
-			ListNode* pins;
-			ListNode* SPIBusses;
+			List sockets;
+			List pins;
+			List SPIBusses;
 
 			Mainboard();
 			virtual ~Mainboard();
@@ -31,8 +25,11 @@ namespace GHI {
 			Socket* registerSocket(Socket* socket);
 
 		public:
-			virtual void panic(const char* error);
 			Socket* getSocket(int number);
+			void ReservePin(CPUPin pin);
+			void ReleasePin(CPUPin pin);
+
+			virtual void panic(const char* error);
 
 			virtual void setPWM(CPUPin pin, double dutyCycle, double frequency);
 			virtual bool readDigital(CPUPin pin);
@@ -41,11 +38,10 @@ namespace GHI {
 			virtual void writeAnalog(CPUPin pin, double voltage);
 			virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
 			
-			virtual GHI::Interfaces::SPIBus* getNewSPIBus(Socket* socket);
-			virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
-
-			virtual void ReservePin(CPUPin pin);
-			virtual void ReleasePin(CPUPin pin);
+			virtual GHI::Interfaces::SPIBus* getNewSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
+			virtual GHI::Interfaces::SPIBus* getNewSPIBus(Socket* socket, Socket::Pin mosiPinNumber = Socket::Pins::Seven, Socket::Pin misoPinNumber = Socket::Pins::Eight, Socket::Pin sckPinNumber = Socket::Pins::Nine);
+			virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(CPUPin txPin, CPUPin rxPin, int baudRate, int parity, int stopBits, int dataBits);
+			virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, int baudRate, int parity, int stopBits, int dataBits);
 	};
 
 	extern GHI::Mainboard* mainboard;

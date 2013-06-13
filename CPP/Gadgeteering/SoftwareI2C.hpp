@@ -21,14 +21,14 @@ namespace GHI {
 			bool readBit();
 	
 			bool sendStartCondition();
-			bool sendStopCondition();
-			
+			bool sendStopCondition();			
 
 			bool transmit(bool sendStart, bool sendStop, unsigned char data);
 			unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
 			
 			public:
-				SoftwareI2C(char address, CPUPin sda, CPUPin scl);
+				SoftwareI2C(unsigned char address, CPUPin sda, CPUPin scl);
+				SoftwareI2C(unsigned char address, Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine);
 
 				unsigned int writeBytes(unsigned char* data, unsigned int length, bool sendStop = true);
 				unsigned int readBytes(unsigned char* data, unsigned int length);
@@ -36,7 +36,6 @@ namespace GHI {
 				
 				bool writeRegister(unsigned char registerAddress, unsigned char value);
 				unsigned char readRegister(unsigned char registerAddress);
-
 		};
 	}
 }

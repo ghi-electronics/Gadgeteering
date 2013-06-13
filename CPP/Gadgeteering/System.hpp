@@ -1,9 +1,14 @@
+#ifndef _SYSTEM_H_
+#define _SYSTEM_H_
+
 namespace GHI
 {
 	namespace System
 	{
-		void Sleep(int time);
-		int TimeElapsed();
-		long TimeElapsed64();
+		void Sleep(unsigned int time);
+		unsigned int TimeElapsed();
+		unsigned long TimeElapsed64();
 	}
 }
+
+#endif

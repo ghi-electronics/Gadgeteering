@@ -4,11 +4,11 @@
 using namespace GHI;
 
 Socket::Socket(int number, Type type) : number(number), type(type) {
-	for (int i = 0; i < Socket::PINS_PER_SOCKET; i++)
-		this->pins[i] = Socket::PIN_UNCONNECTED;
+	for (int i = 0; i < 10; i++)
+		this->pins[i] = Socket::Pins::Unconnected;
 }
 
 void Socket::ensureTypeIsSupported(Type type) {
-	if (this->type & type == 0)
-		mainboard->panic("Type not supported");
+	if ((this->type & type) == 0)
+		mainboard->panic("Socket does not support that type.");
 }

@@ -3,11 +3,22 @@
 using namespace GHI;
 using namespace GHI::Interfaces;
 
-DigitalOutput::DigitalOutput(Socket* socket, Socket::Pin pin, bool initialState) {
-	if (!socket || pin < 3 || pin > 9)
+DigitalOutput::DigitalOutput(Socket* socket, Socket::Pin pinNumber, bool initialState) {
+	if (!socket)
+		mainboard->panic("Invalid socket.");
+	if (pinNumber < 3 || pinNumber > 9)
 		mainboard->panic("Pin out of range");
 	
-	this->cpuPin = socket->pins[pin];
+	this->cpuPin = socket->pins[pinNumber];
+	
+	mainboard->ReservePin(this->cpuPin);
+	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_OUTPUT);
+
+	this->write(initialState);
+}
+
+DigitalOutput::DigitalOutput(CPUPin pin, bool initialState) {
+	this->cpuPin = pin;
 	
 	mainboard->ReservePin(this->cpuPin);
 	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_OUTPUT);
@@ -19,11 +30,13 @@ void DigitalOutput::write(bool value) {
 	mainboard->writeDigital(this->cpuPin, value);
 }
 
-DigitalInput::DigitalInput(Socket* socket, Socket::Pin pin, ResistorMode resistorMode) {
-	if (!socket || pin < 3 || pin > 9)
+DigitalInput::DigitalInput(Socket* socket, Socket::Pin pinNumber, ResistorMode resistorMode) {
+	if (!socket)
+		mainboard->panic("Invalid socket.");
+	if (pinNumber < 3 || pinNumber > 9)
 		mainboard->panic("Pin out of range");
 	
-	this->cpuPin = socket->pins[pin];
+	this->cpuPin = socket->pins[pinNumber];
 	
 	mainboard->ReservePin(this->cpuPin);
 	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_INPUT, resistorMode);
@@ -33,57 +46,97 @@ bool DigitalInput::read() {
 	return mainboard->readDigital(this->cpuPin);
 }
 
-DigitalInputOutput::DigitalInputOutput(Socket* socket, Socket::Pin pin, IOState initialIOState, bool initialOutputState) {
-	if (!socket || pin < 3 || pin > 9)
+void DigitalInput::setResistorMode(ResistorMode resistorMode) {
+	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_INPUT, resistorMode);
+}
+
+DigitalInputOutput::DigitalInputOutput(Socket* socket, Socket::Pin pinNumber) {
+	if (!socket)
+		mainboard->panic("Invalid socket.");
+	if (pinNumber < 3 || pinNumber > 9)
 		mainboard->panic("Pin out of range");
 
-	this->cpuPin = socket->pins[pin];
-
-	this->setState(initialIOState);
-
+	this->cpuPin = socket->pins[pinNumber];
 	mainboard->ReservePin(this->cpuPin);
 
-	if (this->ioState == IOStates::DIGITAL_OUTPUT)
-		this->write(initialOutputState);
+	this->resistorMode == ResistorModes::FLOATING;
+	this->ioState = static_cast<IOState>(0xFF);
+}
+
+DigitalInputOutput::DigitalInputOutput(CPUPin pin) {
+	this->cpuPin = pin;
+	mainboard->ReservePin(this->cpuPin);
+
+	this->resistorMode == ResistorModes::FLOATING;
+	this->ioState = static_cast<IOState>(0xFF);
 }
 
 void DigitalInputOutput::write(bool value) {
-	this->setState(IOStates::DIGITAL_OUTPUT);
+	this->setIOState(IOStates::DIGITAL_OUTPUT);
 	mainboard->writeDigital(this->cpuPin, value);
 }
 
 bool DigitalInputOutput::read() {
-	this->setState(IOStates::DIGITAL_INPUT);
+	this->setIOState(IOStates::DIGITAL_INPUT);
 	return mainboard->readDigital(this->cpuPin);
 }
 
-void DigitalInputOutput::setState(IOState state) {
+void DigitalInputOutput::setIOState(IOState state) {
 	if (this->ioState == state)
 		return;
-
-	mainboard->setIOMode(this->cpuPin, state);
+	
 	this->ioState = state;
+	mainboard->setIOMode(this->cpuPin, this->ioState, this->resistorMode);
 }
 
-AnalogInput::AnalogInput(Socket* socket, Socket::Pin pin) {
-	if (!socket || pin < 3 || pin > 9)
+void DigitalInputOutput::setResistorMode(ResistorMode mode) {
+	if (this->resistorMode == mode)
+		return;
+	
+	this->resistorMode = mode;
+	mainboard->setIOMode(this->cpuPin, this->ioState, this->resistorMode);
+}
+
+AnalogInput::AnalogInput(Socket* socket, Socket::Pin pinNumber) {
+	if (!socket)
+		mainboard->panic("Invalid socket.");
+	if (!socket || pinNumber < 3 || pinNumber > 9)
 		mainboard->panic("Pin out of range");
 
-	this->cpuPin = socket->pins[pin];
+	this->cpuPin = socket->pins[pinNumber];
+	mainboard->ReservePin(this->cpuPin);
+}
+
+AnalogInput::AnalogInput(CPUPin pin) {
+	this->cpuPin = pin;
+	mainboard->ReservePin(this->cpuPin);
 }
 
 double AnalogInput::read() {
 	return mainboard->readAnalog(this->cpuPin);
 }
 
-PWMOutput::PWMOutput(Socket* socket, Socket::Pin pin) {
-	if (!socket || pin < 3 || pin > 9)
+PWMOutput::PWMOutput(Socket* socket, Socket::Pin pinNumber) {
+	if (!socket)
+		mainboard->panic("Invalid socket.");
+	if (pinNumber < 3 || pinNumber > 9)
 		mainboard->panic("Pin out of range");
 
-	this->cpuPin = socket->pins[pin];
+	this->cpuPin = socket->pins[pinNumber];
 		
 	mainboard->setIOMode(this->cpuPin, IOStates::PWM);
-	this->set(0, 1000);
+	mainboard->ReservePin(this->cpuPin);
+
+	this->set(0, 0);
+}
+
+PWMOutput::PWMOutput(CPUPin pin) {
+	this->cpuPin = pin;
+		
+	mainboard->setIOMode(this->cpuPin, IOStates::PWM);
+	mainboard->ReservePin(this->cpuPin);
+
+	this->set(0, 0);
 }
 
 void PWMOutput::set(double frequency, double dutyCycle) {

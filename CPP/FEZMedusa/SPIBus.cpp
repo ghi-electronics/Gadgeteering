@@ -5,9 +5,10 @@
 
 #define SYSTEM_CLOCK 12000 /*KHz*/
 
+using namespace GHI;
 using namespace GHI::Mainboards;
 
-FEZMedusa::SPIBus::SPIBus(Socket* socket) : GHI::Interfaces::SPIBus(socket)
+FEZMedusa::SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : Interfaces::SPIBus(mosi, miso, sck)
 {
 	this->spi = new SPIClass();
 	this->spi->begin();
@@ -44,20 +45,7 @@ void FEZMedusa::SPIBus::setup(GHI::Interfaces::SPIDevice::Configuration* configu
 	}
 }
 
-char FEZMedusa::SPIBus::writeReadByte(unsigned char toSend, GHI::Interfaces::SPIDevice::Configuration* configuration)
-{
-	this->setup(configuration);
-
-	System::Sleep(configuration->chipSelectSetupTime);
-	
-	char result = this->spi->transfer(toSend);
-	
-	System::Sleep(configuration->chipSelectHoldTime);
-	
-	return result;
-}
-
-void FEZMedusa::SPIBus::writeAndRead(unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration)
+void FEZMedusa::SPIBus::writeRead(unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIDevice::Configuration* configuration)
 {
 	this->setup(configuration);
 
@@ -73,20 +61,4 @@ void FEZMedusa::SPIBus::writeAndRead(unsigned char* sendBuffer, unsigned char* r
 	}
 	
 	System::Sleep(configuration->chipSelectHoldTime);
-}
-
-void FEZMedusa::SPIBus::writeThenRead(unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, GHI::Interfaces::SPIDevice::Configuration* configuration)
-{
-	this->write(sendBuffer, sendCount, configuration);
-	this->read(receiveBuffer, receiveCount, configuration);
-}
-
-void FEZMedusa::SPIBus::write(unsigned char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration)
-{	this->writeAndRead(buffer, NULL, count, configuration);
-
-}
-
-void FEZMedusa::SPIBus::read(unsigned char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration)
-{
-	this->writeAndRead(NULL, buffer, count, configuration);
 }

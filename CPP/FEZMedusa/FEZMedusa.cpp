@@ -116,6 +116,12 @@ FEZMedusa::FEZMedusa() {
 FEZMedusa::~FEZMedusa() {
 
 }
+				
+void FEZMedusa::panic(const char* error) {
+	Serial.begin(9600);
+	while (true)
+		Serial.println(error);
+}
 
 void FEZMedusa::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistorMode) {
 	if (!(pinNumber & FEZMedusa::EXTENDER_MASK)) {
@@ -132,7 +138,7 @@ void FEZMedusa::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistor
 }
 
 void FEZMedusa::setPWM(CPUPin pinNumber, double dutyCycle, double frequency) {
-	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? mainboard->panic("Not supported") : this->extenderChip->setPWM(pinNumber & ~FEZMedusa::EXTENDER_MASK, dutyCycle, frequency);
+	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? mainboard->panic("SetPWM supported") : this->extenderChip->setPWM(pinNumber & ~FEZMedusa::EXTENDER_MASK, dutyCycle, frequency);
 }
 
 bool FEZMedusa::readDigital(CPUPin pinNumber) {
@@ -144,17 +150,33 @@ void FEZMedusa::writeDigital(CPUPin pinNumber, bool value) {
 }
 
 double FEZMedusa::readAnalog(CPUPin pinNumber) {
-	return !(pinNumber & FEZMedusa::EXTENDER_MASK) ? (static_cast<double>(::analogRead(pinNumber)) / 1024 * 3.3) : this->extenderChip->readAnalog(pinNumber & ~FEZMedusa::EXTENDER_MASK);
+	if (!(pinNumber & FEZMedusa::EXTENDER_MASK)) 
+	{
+		return static_cast<double>(::analogRead(pinNumber)) / 1024 * 3.3;
+	}
+	else
+	{
+		mainboard->panic("ReadAnalog not supported.");
+		return 0.0;
+	}
 }
 
 void FEZMedusa::writeAnalog(CPUPin pinNumber, double voltage) {
-	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? ::analogWrite(pinNumber, voltage * (1024 / 3.3)) : this->extenderChip->writeAnalog(pinNumber & ~FEZMedusa::EXTENDER_MASK, voltage);
+	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? ::analogWrite(pinNumber, voltage * (1024 / 3.3)) : mainboard->panic("WriteAnalog not supported.");
 }
 
-GHI::Interfaces::SPIBus* FEZMedusa::getNewSPIBus(Socket* socket) {
-	return new FEZMedusa::SPIBus(socket);
+Interfaces::SPIBus* FEZMedusa::getNewSPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) {
+	return new FEZMedusa::SPIBus(mosi, miso, sck);
 }
 
-GHI::Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(Socket* socket, int baudRate, int parity, int stopBits, int dataBits) {
-	return new SerialDevice(socket, baudRate, parity, stopBits, dataBits);
+Interfaces::SPIBus* FEZMedusa::getNewSPIBus(Socket* socket, Socket::Pin mosiPinNumber, Socket::Pin misoPinNumber, Socket::Pin sckPinNumber) {
+	return new FEZMedusa::SPIBus(socket->pins[mosiPinNumber], socket->pins[misoPinNumber], socket->pins[sckPinNumber]);
+}
+
+Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(CPUPin txPin, CPUPin rxPin, int baudRate, int parity, int stopBits, int dataBits) {
+	return new FEZMedusa::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits);
+}
+
+Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, int baudRate, int parity, int stopBits, int dataBits) {
+	return new FEZMedusa::SerialDevice(socket->pins[txPinNumber], socket->pins[rxPinNumber], baudRate, parity, stopBits, dataBits);
 }
