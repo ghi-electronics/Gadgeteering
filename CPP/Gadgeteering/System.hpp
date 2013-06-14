@@ -5,9 +5,9 @@ namespace GHI
 {
 	namespace System
 	{
-		void Sleep(unsigned int time);
-		unsigned int TimeElapsed();
-		unsigned long TimeElapsed64();
+		void Sleep(unsigned long time);
+		void SleepMicro(unsigned long time);
+		unsigned long TimeElapsed();
 	}
 }
 

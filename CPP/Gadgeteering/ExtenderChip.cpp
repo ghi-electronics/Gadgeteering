@@ -31,7 +31,7 @@ void ExtenderChip::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resis
 		
 		this->writeDigital(pinNumber, true);
 
-		this->io60Chip->writeRegister(ExtenderChip::PWM_SELECT_REGISTER, (char)((pinNumber % 8) + (this->getPort(pinNumber) - 6) * 8));
+		this->io60Chip->writeRegister(ExtenderChip::PWM_SELECT_REGISTER, (unsigned char)((pinNumber % 8) + (this->getPort(pinNumber) - 6) * 8));
 		this->io60Chip->writeRegister(ExtenderChip::PWM_CONFIG, ExtenderChip::CLOCK_SOURCE); //93.75KHz clock
 	}
 	else {
@@ -41,7 +41,7 @@ void ExtenderChip::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resis
 		if (state == IOStates::DIGITAL_INPUT) {
 			this->io60Chip->writeRegister(ExtenderChip::PIN_DIRECTION_REGISTER, val | mask);
 
-			char resistorRegister = ExtenderChip::PIN_HIGH_IMPEDENCE;
+			unsigned char resistorRegister = ExtenderChip::PIN_HIGH_IMPEDENCE;
 			if (resistorMode == ResistorModes::PULL_DOWN)
 				resistorRegister = ExtenderChip::PIN_PULL_DOWN;
 			else if (resistorMode == ResistorModes::PULL_UP)

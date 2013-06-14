@@ -10,7 +10,7 @@
 
 using namespace GHI;
 
-void System::Sleep(int time)
+void System::Sleep(unsigned long time)
 {
 #ifdef _WIN32
 	::Sleep(time);
@@ -39,19 +39,7 @@ void System::Sleep(int time)
 long int EpochWhenStarted = 0;
 #endif
 
-int System::TimeElapsed()
-{
-#ifdef _WIN32
-	return GetTickCount();
-#else
-	timespec t;
-    clock_gettime(CLOCK_MONOTONIC, &t);
-
-    return ((t.tv_sec * 1000) + (t.tv_nsec / 1000000));
-#endif
-}
-
-long System::TimeElapsed64()
+unsigned long System::TimeElapsed()
 {
 #ifdef _WIN32
 	return GetTickCount64();
