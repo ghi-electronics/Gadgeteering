@@ -1,4 +1,4 @@
-#ifndef _SERIALDEVICE_H_
+/*#ifndef _SERIALDEVICE_H_
 #define _SERIALDEVICE_H_
 
 #include "Types.hpp"
@@ -46,4 +46,4 @@ namespace GHI {
 	}
 }
 
-#endif
+#endif*/

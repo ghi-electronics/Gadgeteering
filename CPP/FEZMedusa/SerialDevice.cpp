@@ -1,4 +1,4 @@
-#include <SoftwareSerial.h>
+/*#include <SoftwareSerial.h>
 #include "../Gadgeteering/SerialDevice.hpp"
 #include "FEZMedusa.h"
 
@@ -36,3 +36,4 @@ void FEZMedusa::SerialDevice::read(unsigned char* buffer, unsigned int count) {
 	for (unsigned int i = 0; i < count; i++)
 		buffer[i] = this->port->read();
 }
+*/
