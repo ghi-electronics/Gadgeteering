@@ -4,7 +4,7 @@ using namespace GHI;
 using namespace GHI::Modules;
 using namespace GHI::Interfaces;
 
-CharDisplay::CharDisplay(unsigned char socketNumber) {
+CharDisplay::CharDisplay(int socketNumber) {
 	this->socket = mainboard->getSocket(socketNumber);
 	this->socket->ensureTypeIsSupported(Socket::Types::Y);
 
@@ -24,6 +24,16 @@ CharDisplay::CharDisplay(unsigned char socketNumber) {
     this->clear();
 			
 	System::Sleep(3);
+}
+
+CharDisplay::~CharDisplay() {
+    delete this->lcdRS;
+    delete this->lcdE;
+    delete this->lcdD4;
+    delete this->lcdD5;
+    delete this->lcdD6;
+    delete this->lcdD7;
+    delete this->backlight;
 }
 
 void CharDisplay::sendNibble(char b) {

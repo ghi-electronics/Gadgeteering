@@ -10,7 +10,8 @@ namespace GHI {
 
 		class LEDStrip : public LED7R {
 			public:
-				LEDStrip(unsigned char socketNumber);
+				LEDStrip(int socketNumber);
+				~LEDStrip();
 
 		};
 	}

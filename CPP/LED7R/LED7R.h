@@ -9,21 +9,22 @@ namespace GHI {
 		using namespace GHI::Interfaces;
 
 		class LED7R : public Module {
-			static const unsigned char LEDS = 7;
+			static const int LEDS = 7;
 
 			Socket* socket;
 			DigitalOutput* ports[LED7R::LEDS];
 
 			public:
-				LED7R(unsigned char socketNumber);
+				LED7R(int socketNumber);
+				~LED7R();
 
-				void turnOnLED(unsigned char led, bool onlyLED = false);
-				void turnOffLED(unsigned char led);
+				void turnOnLED(int led, bool onlyLED = false);
+				void turnOffLED(int led);
 
 				void turnAllOn();
 				void turnAllOff();
 
-				void animate(unsigned int switchTime, bool clockwise, bool turnOn, bool remainOn = true);
+				void animate(int switchTime, bool clockwise, bool turnOn, bool remainOn = true);
 		};
 	}
 }

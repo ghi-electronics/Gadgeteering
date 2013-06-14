@@ -9,11 +9,11 @@ namespace GHI {
 
 		class Tunes : public Module {
 			static const Socket::Pin PWM_PIN = 9;
-			Socket* socket;
 			PWMOutput* pwm;
 
 			public:
-				Tunes(unsigned char socketNumber);
+				Tunes(int socketNumber);
+				~Tunes();
 
 				void set(double frequency, double dutyCycle);
 				void setFrequency(double frequency);

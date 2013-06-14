@@ -30,7 +30,8 @@ namespace GHI {
 			void sendCommand(char c);
 
 			public:
-				CharDisplay(unsigned char socketNumber);
+				CharDisplay(int socketNumber);
+				~CharDisplay();
 
 				void print(const char* string);
 				void print(char character);

@@ -70,7 +70,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Button\Button.h" />
+    <ClInclude Include="FEZLynx\FEZLynx.h" />
+    <ClInclude Include="FEZLynx\include\libMPSSE_i2c.h" />
+    <ClInclude Include="FEZLynx\include\libMPSSE_spi.h" />
+    <ClInclude Include="FEZLynx\include\linux\ftd2xx.h" />
+    <ClInclude Include="FEZLynx\include\linux\WinTypes.h" />
+    <ClInclude Include="FEZLynx\include\windows\FTD2XX.H" />
+    <ClInclude Include="FEZLynx\Linux\ftd2xx.h" />
+    <ClInclude Include="FEZLynx\Linux\WinTypes.h" />
     <ClInclude Include="FEZLynx\SoftwareI2C_Lynx.h" />
+    <ClInclude Include="FEZLynx\Windows\FTD2XX.H" />
     <ClInclude Include="FEZMedusa\FEZMedusa.h" />
     <ClInclude Include="Gadgeteering\Gadgeteering.h" />
     <ClInclude Include="Gadgeteering\Interfaces.hpp" />
@@ -88,9 +98,17 @@
     <ClInclude Include="LED7C\LED7C.h" />
     <ClInclude Include="LED7R\LED7R.h" />
     <ClInclude Include="LEDStrip\LEDStrip.h" />
+    <ClInclude Include="LightSensor\LightSensor.h" />
+    <ClInclude Include="Load\Load.h" />
+    <ClInclude Include="TemperatureHumidity\TemperatureHumidity.h" />
     <ClInclude Include="Tunes\Tunes.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Button\Button.cpp" />
+    <ClCompile Include="FEZLynx\ExtendedSockets.cpp" />
+    <ClCompile Include="FEZLynx\FEZLynx.cpp" />
+    <ClCompile Include="FEZLynx\SPIBus_Lynx.cpp" />
+    <ClCompile Include="FEZLynx\System.cpp" />
     <ClCompile Include="FEZMedusa\FEZMedusa.cpp" />
     <ClCompile Include="FEZMedusa\SerialDevice.cpp" />
     <ClCompile Include="FEZMedusa\SPIBus.cpp" />
@@ -108,6 +126,9 @@
     <ClCompile Include="LED7C\LED7C.cpp" />
     <ClCompile Include="LED7R\LED7R.cpp" />
     <ClCompile Include="LEDStrip\LEDStrip.cpp" />
+    <ClCompile Include="LightSensor\LightSensor.cpp" />
+    <ClCompile Include="Load\Load.cpp" />
+    <ClCompile Include="TemperatureHumidity\TemperatureHumidity.cpp" />
     <ClCompile Include="Tunes\Tunes.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
