@@ -174,10 +174,10 @@ Interfaces::SPIBus* FEZMedusa::getNewSPIBus(Socket* socket, Socket::Pin mosiPinN
 	return new FEZMedusa::SPIBus(socket->pins[mosiPinNumber], socket->pins[misoPinNumber], socket->pins[sckPinNumber]);
 }
 
-Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(CPUPin txPin, CPUPin rxPin, int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) {
+Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(CPUPin txPin, CPUPin rxPin, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) {
 	return new FEZMedusa::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits);
 }
 
-Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) {
+Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) {
 	return new FEZMedusa::SerialDevice(socket->pins[txPinNumber], socket->pins[rxPinNumber], baudRate, parity, stopBits, dataBits);
 }

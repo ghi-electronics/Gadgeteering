@@ -32,7 +32,7 @@ namespace GHI {
 				SoftwareSerial* port;
 
 				public:
-					SerialDevice(CPUPin tx, CPUPin rx, int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
+					SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
 					virtual ~SerialDevice();
 		
 					virtual void open();
@@ -57,8 +57,8 @@ namespace GHI {
 		
 				virtual Interfaces::SPIBus* getNewSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
 				virtual Interfaces::SPIBus* getNewSPIBus(Socket* socket, Socket::Pin mosiPinNumber = Socket::Pins::Seven, Socket::Pin misoPinNumber = Socket::Pins::Eight, Socket::Pin sckPinNumber = Socket::Pins::Nine);
-				virtual Interfaces::SerialDevice* getNewSerialDevice(CPUPin txPin, CPUPin rxPin, int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
-				virtual Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
+				virtual Interfaces::SerialDevice* getNewSerialDevice(CPUPin txPin, CPUPin rxPin, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
+				virtual Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
 		};
 	}
 }

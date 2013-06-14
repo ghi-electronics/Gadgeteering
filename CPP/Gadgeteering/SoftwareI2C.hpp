@@ -7,7 +7,6 @@
 namespace GHI {
 	namespace Interfaces {
 		class SoftwareI2C {
-			public:
 			CPUPin sda;
 			CPUPin scl;
 			unsigned char address;
@@ -27,6 +26,7 @@ namespace GHI {
 			bool transmit(bool sendStart, bool sendStop, unsigned char data);
 			unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
 			
+			public:
 				SoftwareI2C(unsigned char address, CPUPin sda, CPUPin scl);
 				SoftwareI2C(unsigned char address, Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine);
 

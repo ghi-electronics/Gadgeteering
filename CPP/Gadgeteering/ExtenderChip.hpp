@@ -10,7 +10,6 @@ namespace GHI {
 	}
 
 	class ExtenderChip {
-		public:
 		static const unsigned char INPUT_PORT_0_REGISTER = 0x00;
 		static const unsigned char OUTPUT_PORT_0_REGISTER = 0x08;
 		static const unsigned char PORT_SELECT_REGISTER = 0x18;
@@ -33,7 +32,8 @@ namespace GHI {
 
 		unsigned char getPort(CPUPin pin);
 		unsigned char getMask(CPUPin pin);
-
+		
+		public:
 			ExtenderChip(CPUPin sdaPin, CPUPin sclPin, unsigned char address);
 			~ExtenderChip();
 			

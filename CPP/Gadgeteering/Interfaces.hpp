@@ -27,14 +27,14 @@ namespace GHI {
 				void setResistorMode(ResistorMode resistorMode);
 		};
 
-		class DigitalInputOutput {
+		class DigitalIO {
 			CPUPin cpuPin;
 			IOState ioState;
 			ResistorMode resistorMode;
 	
 			public:
-				DigitalInputOutput(Socket* socket, Socket::Pin pinNumber);
-				DigitalInputOutput(CPUPin pin);
+				DigitalIO(Socket* socket, Socket::Pin pinNumber);
+				DigitalIO(CPUPin pin);
 
 				void write(bool value);
 				bool read();

@@ -4,12 +4,13 @@ using namespace GHI;
 using namespace GHI::Modules;
 using namespace GHI::Interfaces;
 
-TemperatureHumidity::TemperatureHumidity(int socketNumber) {
+TemperatureHumidity::TemperatureHumidity(unsigned char socketNumber) {
 	Socket* socket = mainboard->getSocket(socketNumber);
 	socket->ensureTypeIsSupported(Socket::Types::X);
-
-    this->_data = new DigitalInputOutput(socket, Socket::Pins::Three, ResistorModes::PULL_UP);
+	
+    this->_data = new DigitalIO(socket, Socket::Pins::Three);
 	this->_sck = new DigitalOutput(socket, Socket::Pins::Four);
+	this->_data->setResistorMode(ResistorModes::PULL_UP);
 }
 
 TemperatureHumidity::~TemperatureHumidity() {

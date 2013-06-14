@@ -16,8 +16,8 @@ namespace GHI {
 				DigitalOutput* P6;
 				DigitalOutput* P7;
 				
-				Load(int socketNumber);
-				~Load(int socketNumber);
+				Load(unsigned char socketNumber);
+				~Load();
 		};
 	}
 }

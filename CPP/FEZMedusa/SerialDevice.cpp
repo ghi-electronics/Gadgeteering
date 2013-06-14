@@ -6,7 +6,7 @@ using namespace GHI;
 using namespace GHI::Interfaces;
 using namespace GHI::Mainboards;
 
-FEZMedusa::SerialDevice::SerialDevice(CPUPin tx, CPUPin rx, int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) : Interfaces::SerialDevice(tx, rx, baudRate, parity, stopBits, dataBits) {
+FEZMedusa::SerialDevice::SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) : Interfaces::SerialDevice(tx, rx, baudRate, parity, stopBits, dataBits) {
 	this->port = new SoftwareSerial(tx, rx);
 }
 

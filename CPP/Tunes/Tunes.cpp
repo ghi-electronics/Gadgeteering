@@ -4,7 +4,7 @@ using namespace GHI;
 using namespace GHI::Modules;
 using namespace GHI::Interfaces;
 
-Tunes::Tunes(int socketNumber) {
+Tunes::Tunes(unsigned char socketNumber) {
 	Socket* socket = mainboard->getSocket(socketNumber);
 	socket->ensureTypeIsSupported(Socket::Types::P);
 

@@ -8,7 +8,7 @@ namespace GHI {
 		using namespace GHI::Interfaces;
 
 		class TemperatureHumidity : public Module {
-			DigitalInputOutput* _data;
+			DigitalIO* _data;
 			DigitalOutput* _sck;
 
 			void ResetCommuncation();
@@ -20,7 +20,7 @@ namespace GHI {
 			int SHT_MeasureRH();
 
 			public:
-				TemperatureHumidity(int socketNumber);
+				TemperatureHumidity(unsigned char socketNumber);
 				~TemperatureHumidity();
 				
 				void TakeMeasurements(double* temperature, double* humidity);

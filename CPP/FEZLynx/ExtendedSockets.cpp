@@ -9,8 +9,8 @@ using namespace std;
 
 FEZLynx::ExtendedSockets::ExtendedSockets(FT_HANDLE Channel, unsigned char Address, Socket *socket)
 {
-	SCL = new GHI::Interfaces::DigitalInputOutput(socket, 9, GHI::IOStates::DIGITAL_OUTPUT, false);
-	SDA = new GHI::Interfaces::DigitalInputOutput(socket, 8, GHI::IOStates::DIGITAL_OUTPUT, false);
+	SCL = new GHI::Interfaces::DigitalIO(socket, 9, GHI::IOStates::DIGITAL_OUTPUT, false);
+	SDA = new GHI::Interfaces::DigitalIO(socket, 8, GHI::IOStates::DIGITAL_OUTPUT, false);
 
 	address = Address;
 	ftHandle = Channel;

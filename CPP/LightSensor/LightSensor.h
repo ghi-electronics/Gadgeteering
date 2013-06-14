@@ -11,7 +11,7 @@ namespace GHI {
 			AnalogInput* input;
 
 			public:
-				LightSensor(int socketNumber);
+				LightSensor(unsigned char socketNumber);
 				~LightSensor();
 
 				double ReadLightSensorVoltage();

@@ -4,7 +4,7 @@ using namespace GHI;
 using namespace GHI::Modules;
 using namespace GHI::Interfaces;
 
-Load::Load(int socketNumber) {
+Load::Load(unsigned char socketNumber) {
 	Socket* socket = mainboard->getSocket(socketNumber);
 	socket->ensureTypeIsSupported(Socket::Types::Y);
 	

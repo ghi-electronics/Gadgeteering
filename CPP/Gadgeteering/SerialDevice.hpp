@@ -10,12 +10,12 @@ namespace GHI {
 			protected:
 				CPUPin tx;
 				CPUPin rx;
-				int baudRate;
+				unsigned int baudRate;
 				unsigned char parity;
 				unsigned char stopBits;
 				unsigned char dataBits;
 
-				SerialDevice(CPUPin tx, CPUPin rx, int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
+				SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
 
 			public:
 				class Parity {

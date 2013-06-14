@@ -50,7 +50,7 @@ void DigitalInput::setResistorMode(ResistorMode resistorMode) {
 	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_INPUT, resistorMode);
 }
 
-DigitalInputOutput::DigitalInputOutput(Socket* socket, Socket::Pin pinNumber) {
+DigitalIO::DigitalIO(Socket* socket, Socket::Pin pinNumber) {
 	if (!socket)
 		mainboard->panic(ERR_INVALID_SOCKET);
 	if (pinNumber < 3 || pinNumber > 9)
@@ -63,7 +63,7 @@ DigitalInputOutput::DigitalInputOutput(Socket* socket, Socket::Pin pinNumber) {
 	this->ioState = static_cast<IOState>(0xFF);
 }
 
-DigitalInputOutput::DigitalInputOutput(CPUPin pin) {
+DigitalIO::DigitalIO(CPUPin pin) {
 	this->cpuPin = pin;
 	mainboard->ReservePin(this->cpuPin);
 
@@ -71,17 +71,17 @@ DigitalInputOutput::DigitalInputOutput(CPUPin pin) {
 	this->ioState = static_cast<IOState>(0xFF);
 }
 
-void DigitalInputOutput::write(bool value) {
+void DigitalIO::write(bool value) {
 	this->setIOState(IOStates::DIGITAL_OUTPUT);
 	mainboard->writeDigital(this->cpuPin, value);
 }
 
-bool DigitalInputOutput::read() {
+bool DigitalIO::read() {
 	this->setIOState(IOStates::DIGITAL_INPUT);
 	return mainboard->readDigital(this->cpuPin);
 }
 
-void DigitalInputOutput::setIOState(IOState state) {
+void DigitalIO::setIOState(IOState state) {
 	if (this->ioState == state)
 		return;
 	
@@ -89,7 +89,7 @@ void DigitalInputOutput::setIOState(IOState state) {
 	mainboard->setIOMode(this->cpuPin, this->ioState, this->resistorMode);
 }
 
-void DigitalInputOutput::setResistorMode(ResistorMode mode) {
+void DigitalIO::setResistorMode(ResistorMode mode) {
 	if (this->resistorMode == mode)
 		return;
 	

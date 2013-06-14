@@ -4,7 +4,7 @@ using namespace GHI;
 using namespace GHI::Modules;
 using namespace GHI::Interfaces;
 
-CharDisplay::CharDisplay(int socketNumber) {
+CharDisplay::CharDisplay(unsigned char socketNumber) {
 	this->socket = mainboard->getSocket(socketNumber);
 	this->socket->ensureTypeIsSupported(Socket::Types::Y);
 
@@ -36,7 +36,7 @@ CharDisplay::~CharDisplay() {
     delete this->backlight;
 }
 
-void CharDisplay::sendNibble(char b) {
+void CharDisplay::sendNibble(unsigned char b) {
     this->lcdD7->write((b & 0x8) != 0);
     this->lcdD6->write((b & 0x4) != 0);
     this->lcdD5->write((b & 0x2) != 0);
@@ -48,12 +48,12 @@ void CharDisplay::sendNibble(char b) {
 	System::Sleep(1);
 }
 
-void CharDisplay::sendByte(char b) {
+void CharDisplay::sendByte(unsigned char b) {
     this->sendNibble((char)(b >> 4));
     this->sendNibble(b);
 }
 
-void CharDisplay::sendCommand(char c) {
+void CharDisplay::sendCommand(unsigned char c) {
     this->lcdRS->write(false); //set LCD to data mode
 	this->sendByte(c);
 
@@ -81,9 +81,9 @@ void CharDisplay::cursorHome() {
 	System::Sleep(2);
 }
 
-void CharDisplay::setCursor(char row, char col) {
+void CharDisplay::setCursor(unsigned char row, unsigned char col) {
     char offsets[] = { 0x00, 0x40, 0x14, 0x54 };
-    this->sendCommand((char)(CharDisplay::SET_CURSOR | offsets[row] | col));
+    this->sendCommand(CharDisplay::SET_CURSOR | offsets[row] | col);
 }
 
 void CharDisplay::setBacklight(bool state) {

@@ -20,24 +20,24 @@ namespace GHI {
 				 
 			DigitalOutput* backlight;
 
-			static const char DISP_ON = 0xC;
-			static const char CLR_DISP = 1;
-			static const char CUR_HOME = 2;
-			static const char SET_CURSOR = 0x80;
+			static const unsigned char DISP_ON = 0xC;
+			static const unsigned char CLR_DISP = 1;
+			static const unsigned char CUR_HOME = 2;
+			static const unsigned char SET_CURSOR = 0x80;
 	
-			void sendNibble(char b);
-			void sendByte(char b);
-			void sendCommand(char c);
+			void sendNibble(unsigned char b);
+			void sendByte(unsigned char b);
+			void sendCommand(unsigned char c);
 
 			public:
-				CharDisplay(int socketNumber);
+				CharDisplay(unsigned char socketNumber);
 				~CharDisplay();
 
 				void print(const char* string);
 				void print(char character);
 				void clear();
 				void cursorHome();
-				void setCursor(char row, char col);
+				void setCursor(unsigned char row, unsigned char col);
 				void setBacklight(bool state);
 		};
 	}

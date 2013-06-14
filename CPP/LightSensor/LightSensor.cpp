@@ -4,7 +4,7 @@ using namespace GHI;
 using namespace GHI::Modules;
 using namespace GHI::Interfaces;
 
-LightSensor::LightSensor(int socketNumber) {
+LightSensor::LightSensor(unsigned char socketNumber) {
 	Socket* socket = mainboard->getSocket(socketNumber);
 	socket->ensureTypeIsSupported(Socket::Types::A);
 	

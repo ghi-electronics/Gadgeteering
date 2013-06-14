@@ -13,7 +13,7 @@ namespace GHI {
 			bool ledState;
 
 			public:
-				Button(int socketNumber);
+				Button(unsigned char socketNumber);
 				~Button();
 
 				bool isPressed();
