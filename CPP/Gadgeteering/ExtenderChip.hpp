@@ -10,6 +10,7 @@ namespace GHI {
 	}
 
 	class ExtenderChip {
+		public:
 		static const unsigned char INPUT_PORT_0_REGISTER = 0x00;
 		static const unsigned char OUTPUT_PORT_0_REGISTER = 0x08;
 		static const unsigned char PORT_SELECT_REGISTER = 0x18;
@@ -27,14 +28,12 @@ namespace GHI {
 		static const unsigned char PULSE_WIDTH_REGISTER = 0x2B;
 					  
 		static const unsigned char CLOCK_SOURCE = 0x3;
-		static const unsigned int CLOCK_FREQUENCY = 93750;
 	
 		Interfaces::SoftwareI2C* io60Chip;
 
 		unsigned char getPort(CPUPin pin);
 		unsigned char getMask(CPUPin pin);
 
-		public:
 			ExtenderChip(CPUPin sdaPin, CPUPin sclPin, unsigned char address);
 			~ExtenderChip();
 			

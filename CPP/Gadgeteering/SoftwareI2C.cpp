@@ -126,7 +126,7 @@ bool SoftwareI2C::sendStopCondition() {
 }
 
 bool SoftwareI2C::transmit(bool sendStart, bool sendStop, unsigned char data) {
-	unsigned int bit;
+	unsigned char bit;
 	bool nack;
 	
 	if (sendStart)
@@ -148,7 +148,7 @@ bool SoftwareI2C::transmit(bool sendStart, bool sendStop, unsigned char data) {
 
 unsigned char SoftwareI2C::receive(bool sendAcknowledgeBit, bool sendStopCondition) {
 	unsigned char d = 0;
-	unsigned int bit = 0;
+	unsigned char bit = 0;
 
 	for (bit = 0; bit < 8; bit++) {
 		d <<= 1;
@@ -208,8 +208,8 @@ bool SoftwareI2C::writeRead(const unsigned char* writeBuffer, unsigned int write
 	*numRead = 0;
 
 	unsigned int i = 0;
-	unsigned char write = 0;
-	unsigned char read = 0;
+	unsigned int write = 0;
+	unsigned int read = 0;
 
     if (writeLength > 0) {
 		if (!this->transmit(true, false, this->address)) {

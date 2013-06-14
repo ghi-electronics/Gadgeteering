@@ -13,7 +13,7 @@ namespace GHI {
 			PWMOutput* pwm;
 
 			public:
-				Tunes(int socketNumber);
+				Tunes(unsigned char socketNumber);
 
 				void set(double frequency, double dutyCycle);
 				void setFrequency(double frequency);

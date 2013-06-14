@@ -25,7 +25,7 @@ namespace GHI {
 			Socket* registerSocket(Socket* socket);
 
 		public:
-			Socket* getSocket(int number);
+			Socket* getSocket(unsigned char number);
 			void ReservePin(CPUPin pin);
 			void ReleasePin(CPUPin pin);
 
@@ -40,8 +40,8 @@ namespace GHI {
 			
 			virtual GHI::Interfaces::SPIBus* getNewSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
 			virtual GHI::Interfaces::SPIBus* getNewSPIBus(Socket* socket, Socket::Pin mosiPinNumber = Socket::Pins::Seven, Socket::Pin misoPinNumber = Socket::Pins::Eight, Socket::Pin sckPinNumber = Socket::Pins::Nine);
-			virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(CPUPin txPin, CPUPin rxPin, int baudRate, int parity, int stopBits, int dataBits);
-			virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, int baudRate, int parity, int stopBits, int dataBits);
+			virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(CPUPin txPin, CPUPin rxPin, int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
+			virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
 	};
 
 	extern GHI::Mainboard* mainboard;
