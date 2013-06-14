@@ -20,7 +20,7 @@ TemperatureHumidity::~TemperatureHumidity() {
 
 void TemperatureHumidity::TakeMeasurements(double* temperature, double* humidity) {
     double temperatureReading;
-    int rawRHReading;
+    unsigned int rawRHReading;
     double rhReading;
 
     // Wait for SHT10 sensor to start-up and get to sleep mode
@@ -44,6 +44,8 @@ void TemperatureHumidity::TakeMeasurements(double* temperature, double* humidity
 	
     *temperature = temperatureReading;
     *humidity = rhReading;
+
+	System::Sleep(3600);
 }
 
 void TemperatureHumidity::SHT_TransmissionStart() {
@@ -57,7 +59,7 @@ void TemperatureHumidity::SHT_TransmissionStart() {
     _sck->write(false);
 }
 
-int TemperatureHumidity::SHT_MeasureTemperature() {
+unsigned int TemperatureHumidity::SHT_MeasureTemperature() {
     bool ack;
     bool reading[16];
 
@@ -103,7 +105,7 @@ int TemperatureHumidity::SHT_MeasureTemperature() {
 
     //TEMP
     if (ack) 
-		mainboard->panic("Communication failure when trying to read temperature.");
+		mainboard->panic(ERR_MODULE_ERROR);
 
     //It will take up to 80ms to read. Sensor will
     // pull DATA line low when ready
@@ -114,7 +116,7 @@ int TemperatureHumidity::SHT_MeasureTemperature() {
     }
 
     // Read first byte in
-    for (char i = 0; i < 8; i++)
+    for (unsigned int i = 0; i < 8; i++)
     {
 
         reading[i] = _data->read();
@@ -131,7 +133,7 @@ int TemperatureHumidity::SHT_MeasureTemperature() {
     _sck->write(false);
 
     // Read second byte in
-    for (char i = 8; i < 16; i++)
+    for (unsigned int i = 8; i < 16; i++)
     {
 
         reading[i] = _data->read();
@@ -142,9 +144,9 @@ int TemperatureHumidity::SHT_MeasureTemperature() {
     //  Skip CRC by keeping ACK high
     _data->write(true);
 
-	int temp = 0;
+	unsigned int temp = 0;
 
-    for (int i = 0; i < 16; i++)
+    for (unsigned int i = 0; i < 16; i++)
     {
         if (reading[i]) temp += 1 << (16 - 1 - i);
     }
@@ -152,7 +154,7 @@ int TemperatureHumidity::SHT_MeasureTemperature() {
 	return temp;
 }
 
-int TemperatureHumidity::SHT_MeasureRH() {
+unsigned int TemperatureHumidity::SHT_MeasureRH() {
 	bool ack;
     bool reading[16];
 
@@ -205,7 +207,7 @@ int TemperatureHumidity::SHT_MeasureRH() {
     }
 
     // Read first byte in
-    for (short i = 0; i < 8; i++)
+    for (unsigned int i = 0; i < 8; i++)
     {
         reading[i] = _data->read();
         _sck->write(true);
@@ -220,7 +222,7 @@ int TemperatureHumidity::SHT_MeasureRH() {
     _sck->write(false);
 
     // Read second byte in
-    for (short i = 8; i < 16; i++)
+    for (unsigned int i = 8; i < 16; i++)
     {
         reading[i] = _data->read();
         _sck->write(true);
@@ -230,9 +232,9 @@ int TemperatureHumidity::SHT_MeasureRH() {
     //  Skip CRC by keeping ACK high
     _data->write(true);
 
-	int temp = 0;
+	unsigned int temp = 0;
 
-    for (int i = 0; i < 16; i++)
+    for (unsigned int i = 0; i < 16; i++)
     {
         if (reading[i]) temp += 1 << (16 - 1 - i);
     }
@@ -275,12 +277,12 @@ void TemperatureHumidity::ResetCommuncation()
 
 }
 
-double TemperatureHumidity::TranslateRH(int rawRH)
+double TemperatureHumidity::TranslateRH(unsigned int rawRH)
 {
     return -2.0468 + 0.0367 * rawRH - 1.5955E-6 * rawRH * rawRH;
 }
 
-double TemperatureHumidity::TranslateTemperature(int rawTemp)
+double TemperatureHumidity::TranslateTemperature(unsigned int rawTemp)
 {
     return -39.65 + 0.01 * rawTemp;
 }

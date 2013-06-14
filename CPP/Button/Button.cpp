@@ -9,7 +9,7 @@ Button::Button(unsigned char socketNumber) {
 	socket->ensureTypeIsSupported(Socket::Types::X);
 
     this->input = new DigitalInput(socket, Socket::Pins::Three, ResistorModes::PULL_UP);
-	this->led = new DigitalOutput(socket, Socket::Pins::Four);
+	this->led = new DigitalOutput(socket, Socket::Pins::Four, false);
 
 	this->ledState = false;
 }

@@ -12,12 +12,12 @@ namespace GHI {
 			DigitalOutput* _sck;
 
 			void ResetCommuncation();
-			double TranslateRH(int rawRH);
-			double TranslateTemperature(int rawTemperature);
+			double TranslateRH(unsigned int rawRH);
+			double TranslateTemperature(unsigned int rawTemperature);
 
 			void SHT_TransmissionStart();
-			int SHT_MeasureTemperature();
-			int SHT_MeasureRH();
+			unsigned int SHT_MeasureTemperature();
+			unsigned int SHT_MeasureRH();
 
 			public:
 				TemperatureHumidity(unsigned char socketNumber);

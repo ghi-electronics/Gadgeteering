@@ -16,7 +16,7 @@ namespace GHI {
 
 			public:
 				LED7R(unsigned char socketNumber);
-				~LED7R();
+				virtual ~LED7R();
 
 				void turnOnLED(unsigned char led, bool onlyLED = false);
 				void turnOffLED(unsigned char led);
