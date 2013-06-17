@@ -41,7 +41,7 @@ namespace GHI {
 				virtual void close();
 				virtual void write(const unsigned char* buffer, unsigned int count);
 				virtual void write(const char* buffer, unsigned int count);
-				virtual void read(unsigned char* buffer, unsigned int count);
+				virtual unsigned int read(unsigned char* buffer, unsigned int count);
 		};
 	}
 }
