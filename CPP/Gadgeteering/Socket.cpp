@@ -10,5 +10,5 @@ Socket::Socket(int number, Type type) : number(number), type(type) {
 
 void Socket::ensureTypeIsSupported(Type type) {
 	if ((this->type & type) == 0)
-		mainboard->panic(ERR_SOCKET_NOT_HAVE_TYPE);
+		mainboard->panic(Exceptions::ERR_SOCKET_NOT_HAVE_TYPE);
 }

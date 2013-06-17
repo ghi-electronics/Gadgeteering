@@ -5,25 +5,38 @@
 #define NULL 0
 #endif
 
-#define ERR_ONLY_ONE_MAINBOARD 0
-#define ERR_SPI_NOT_SUPPORTED 1
-#define ERR_PWM_NOT_SUPPORTED 2
-#define ERR_READ_DIGITAL_NOT_SUPPORTED 3
-#define ERR_WRITE_DIGITAL_NOT_SUPPORTED 4
-#define ERR_READ_ANALOG_NOT_SUPPORTED 5
-#define ERR_WRITE_ANALOG_NOT_SUPPORTED 6
-#define ERR_SET_IO_NOT_SUPPORTED 7
-#define ERR_SOCKET_NOT_HAVE_TYPE 8
-#define ERR_INVALID_SOCKET 9
-#define ERR_PIN_OUT_OF_RANGE 10
-#define ERR_PIN_RESERVED 11
-#define ERR_SERIAL_NOT_SUPPORTED 12
-#define ERR_MODULE_ERROR 13
-
 namespace GHI {
 	typedef char IOState;
 	typedef char ResistorMode;
 	typedef unsigned int CPUPin;
+
+	namespace Exceptions
+	{
+		struct Exception
+		{
+			const char ErrorCode;
+			const char *Message;
+		};
+
+		const unsigned char ERR_ONLY_ONE_MAINBOARD = 0;
+		const unsigned char ERR_SPI_NOT_SUPPORTED = 1;
+		const unsigned char ERR_PWM_NOT_SUPPORTED = 2;
+		const unsigned char ERR_READ_DIGITAL_NOT_SUPPORTED = 3;
+		const unsigned char ERR_WRITE_DIGITAL_NOT_SUPPORTED = 4;
+		const unsigned char ERR_READ_ANALOG_NOT_SUPPORTED = 5;
+		const unsigned char ERR_WRITE_ANALOG_NOT_SUPPORTED = 6;
+		const unsigned char ERR_SET_IO_NOT_SUPPORTED = 7;
+		const unsigned char ERR_SOCKET_NOT_HAVE_TYPE = 8;
+		const unsigned char ERR_INVALID_SOCKET = 9;
+		const unsigned char ERR_PIN_OUT_OF_RANGE = 10;
+		const unsigned char ERR_PIN_RESERVED = 11;
+		const unsigned char ERR_SERIAL_NOT_SUPPORTED = 12;
+		const unsigned char ERR_MODULE_ERROR = 13;
+		const unsigned char ERR_IO_MODE_NOT_SUPPORTED = 14;
+		const unsigned char ERR_PORT_OUT_OF_RANGE = 15;
+		const unsigned char ERR_NOT_IMPLEMENTED = 16;
+		const unsigned char ERR_OUT_OF_SYNC = 17;
+	}
 
 	//We didn't use enums because their members are hoisted into and pollute
 	//the parent scope, and Arduino doesn't have C++11 enum class yet.

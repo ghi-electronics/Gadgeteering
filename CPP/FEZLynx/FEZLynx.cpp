@@ -60,7 +60,7 @@ FEZLynx::FEZLynx()
 
 			if (ftStatus != FT_OK)
 			{
-				this->panic("Could not set device configuration");
+				this->panic(Exceptions::ERR_OUT_OF_SYNC);
 				return;
 			}
 
@@ -103,7 +103,7 @@ FEZLynx::FEZLynx()
 
 				if (bCommandEchod == false) 
 				{
-					this->panic("Could not synchronize the device");
+					this->panic(Exceptions::ERR_OUT_OF_SYNC);
 					return;
 				}
 			}
@@ -159,7 +159,7 @@ FEZLynx::FEZLynx()
 
 		}
 		else
-			this->panic("Could not list and/or open the device channel");
+			this->panic(Exceptions::ERR_OUT_OF_SYNC);
 	}
 
 	/////////////////////////////////////
@@ -314,7 +314,7 @@ FEZLynx::FEZLynx()
 
 }
 
-void FEZLynx::panic(const char* error)
+void FEZLynx::panic(unsigned char error)
 {
 	//while(1)
 	//{
@@ -352,7 +352,7 @@ void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resistor
 	else
 	{
 		if(state == GHI::IOStates::PWM)
-			mainboard->panic("PWM not supported on this pin");
+			mainboard->panic(Exceptions::ERR_PWM_NOT_SUPPORTED);
 
 		if(state == GHI::IOStates::DIGITAL_INPUT)
 		{
@@ -379,7 +379,7 @@ void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resistor
 			return;
 		}
 
-		mainboard->panic("Pin is not capable of IOState");
+		mainboard->panic(Exceptions::ERR_IO_MODE_NOT_SUPPORTED);
 	}
 }
 
@@ -400,7 +400,7 @@ int FEZLynx::GetChannel(GHI::CPUPin pinNumber)
 			return 3;
 	}
 
-    this->panic("Invalid Channel");
+	this->panic(Exceptions::ERR_PORT_OUT_OF_RANGE);
 
     return -1;
 }
@@ -422,7 +422,7 @@ unsigned char FEZLynx::GetChannelPin(GHI::CPUPin pinNumber)
 			return (pinNumber & (~Channel4Mask));
 	}
 
-    this->panic("Invalid Channel");
+	this->panic(Exceptions::ERR_PORT_OUT_OF_RANGE);
 
     return NULL;
 }
@@ -481,7 +481,7 @@ void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value) {
 double FEZLynx::readAnalog(GHI::CPUPin pinNumber) {
 	//return static_cast<double>(::analogRead(this->pins[pinNumber])) / 1024 * 3.3;
 
-	this->panic("Not implemented");
+	this->panic(Exceptions::ERR_NOT_IMPLEMENTED);
 
 	return 0;
 }
@@ -489,16 +489,16 @@ double FEZLynx::readAnalog(GHI::CPUPin pinNumber) {
 void FEZLynx::writeAnalog(GHI::CPUPin pinNumber, double voltage) {
 	//::analogWrite(this->pins[pinNumber], voltage * (1024 / 3.3));
 
-	this->panic("Not implemented");
+	this->panic(Exceptions::ERR_NOT_IMPLEMENTED);
 }
 
 void FEZLynx::setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency) {
 
 	//Only virtual sockets support PWM
 	if(!isVirtual(pinNumber))
-		this->panic("Not supported");
+		this->panic(Exceptions::ERR_PWM_NOT_SUPPORTED);
 
-	this->panic("Not implemented");
+	this->panic(Exceptions::ERR_NOT_IMPLEMENTED);
 }
 
 void FEZLynx::setPWM(GHI::Socket* socket, GHI::Socket::Pin pin, double dutyCycle, double frequency)
@@ -548,8 +548,9 @@ int main()
 	FEZLynx board;
 
 	std::cout << "loaded" << std::endl;
+	Socket* socket = mainboard->getSocket(9);
 
-	GHI::Interfaces::DigitalOutput out(mainboard->getSocket(9), 5, false);
+	GHI::Interfaces::DigitalOutput out(socket, 5, false);
 
 	while(1)
 	{

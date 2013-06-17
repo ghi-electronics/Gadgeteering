@@ -3,7 +3,7 @@
 using namespace GHI;
 using namespace GHI::Mainboards;
 
-FEZLynx::SPIBus::SPIBus(Socket* socket, FT_HANDLE Channel) : GHI::Interfaces::SPIBus(socket)
+FEZLynx::SPIBus::SPIBus(Socket* socket, FT_HANDLE Channel) : GHI::Interfaces::SPIBus(socket->pins[7], socket->pins[8], socket->pins[9])
 {
 	channel = Channel;
 }
@@ -28,7 +28,7 @@ char FEZLynx::SPIBus::writeReadByte(char toSend, GHI::Interfaces::SPIDevice::Con
 
 	if(dwNumBytesRead!=1)
 	{
-		mainboard->panic("SPI Write/Read Failed");
+		mainboard->panic(0x20);
 	}
 
 	return InputBuffer[0];

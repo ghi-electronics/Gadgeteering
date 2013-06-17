@@ -274,7 +274,7 @@ namespace GHI
                     static const int PD_7 = 0x00000080 | Channel4Mask;
 				};
 
-				virtual void panic(const char* error);
+				virtual void panic(unsigned char error);
 
 				virtual void setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency);
 				virtual bool readDigital(GHI::CPUPin pinNumber);
@@ -360,19 +360,32 @@ namespace GHI
 							double readAnalog(CPUPin pin);
 							void writeAnalog(CPUPin pin, double voltage);
 
+							//Reversion
+							bool readRegisters(unsigned char startAddress, unsigned char count, unsigned char* data);
+							unsigned char read(bool isLast);
+							bool writeRegisters(unsigned char startAddress, unsigned char count, unsigned char* data);
+							bool Write(unsigned char data);
+
 						protected:
 							bool start;
 	
-							void clearSCL();
+							//void clearSCL();
 							bool readSCL();
-							void clearSDA();
+							//void clearSDA();
 							bool readSDA();
+
+							void pullSDAHigh();
+							void pullSCLHigh();
+							void pullSCLLow();
+							void pullSDALow();
+
+							void waitForSCL();
 
 							bool writeBit(bool bit);
 							bool readBit();
 	
-							bool sendStartCondition();
-							bool sendStopCondition();
+							bool sendStartCondition(unsigned char startAddress);
+							void sendStopCondition();
 			
 
 							bool transmit(bool sendStart, bool sendStop, unsigned char data);
