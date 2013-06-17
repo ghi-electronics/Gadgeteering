@@ -1,4 +1,4 @@
-/*#include "SerialDevice.hpp"
+#include "SerialDevice.hpp"
 #include "Mainboard.hpp"
 
 using namespace GHI;
@@ -21,4 +21,4 @@ void SerialDevice::open() { };
 void SerialDevice::close() { };
 void SerialDevice::write(const unsigned char* buffer, unsigned int count) { mainboard->panic(ERR_SERIAL_NOT_SUPPORTED); };
 void SerialDevice::write(const char* buffer, unsigned int count) { mainboard->panic(ERR_SERIAL_NOT_SUPPORTED); };
-void SerialDevice::read(unsigned char* buffer, unsigned int count) { mainboard->panic(ERR_SERIAL_NOT_SUPPORTED); };*/
+void SerialDevice::read(unsigned char* buffer, unsigned int count) { mainboard->panic(ERR_SERIAL_NOT_SUPPORTED); };

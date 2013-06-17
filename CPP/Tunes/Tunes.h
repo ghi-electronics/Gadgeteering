@@ -5,11 +5,9 @@
 
 namespace GHI {
 	namespace Modules {
-		using namespace GHI::Interfaces;
-
 		class Tunes : public Module {
 			static const Socket::Pin PWM_PIN = 9;
-			PWMOutput* pwm;
+			Interfaces::PWMOutput* pwm;
 
 			public:
 				Tunes(unsigned char socketNumber);

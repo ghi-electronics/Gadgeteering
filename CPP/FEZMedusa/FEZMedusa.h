@@ -28,7 +28,7 @@ namespace GHI {
 					virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIDevice::Configuration* configuration);
 			};
 
-			/*class SerialDevice : public GHI::Interfaces::SerialDevice {
+			class SerialDevice : public GHI::Interfaces::SerialDevice {
 				SoftwareSerial* port;
 
 				public:
@@ -40,7 +40,7 @@ namespace GHI {
 					virtual void write(const unsigned char* buffer, unsigned int count);
 					virtual void write(const char* buffer, unsigned int count);
 					virtual void read(unsigned char* buffer, unsigned int count);
-			};*/
+			};
 
 			public:
 				FEZMedusa();
@@ -57,8 +57,8 @@ namespace GHI {
 		
 				virtual Interfaces::SPIBus* getNewSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
 				virtual Interfaces::SPIBus* getNewSPIBus(Socket* socket, Socket::Pin mosiPinNumber = Socket::Pins::Seven, Socket::Pin misoPinNumber = Socket::Pins::Eight, Socket::Pin sckPinNumber = Socket::Pins::Nine);
-				//virtual Interfaces::SerialDevice* getNewSerialDevice(CPUPin txPin, CPUPin rxPin, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
-				//virtual Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
+				virtual Interfaces::SerialDevice* getNewSerialDevice(CPUPin txPin, CPUPin rxPin, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
+				virtual Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
 		};
 	}
 }

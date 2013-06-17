@@ -6,10 +6,9 @@
 
 namespace GHI {
 	namespace Modules {
-		using namespace GHI::Interfaces;
 
 		class AccelG248 : public Module {
-			SoftwareI2C* i2c;
+			Interfaces::SoftwareI2C* i2c;
 
 			public:
 				AccelG248(unsigned char socketNumber);

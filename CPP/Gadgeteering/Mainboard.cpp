@@ -55,5 +55,5 @@ void Mainboard::setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode) 
 	
 GHI::Interfaces::SPIBus* Mainboard::getNewSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin) { mainboard->panic(ERR_SPI_NOT_SUPPORTED); return NULL; };
 GHI::Interfaces::SPIBus* Mainboard::getNewSPIBus(Socket* socket, Socket::Pin mosiPinNumber, Socket::Pin misoPinNumber, Socket::Pin sckPinNumber) { mainboard->panic(ERR_SPI_NOT_SUPPORTED); return NULL; };
-//GHI::Interfaces::SerialDevice* Mainboard::getNewSerialDevice(CPUPin txPin, CPUPin rxPin, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) { mainboard->panic(ERR_SERIAL_NOT_SUPPORTED); return NULL; };
-//GHI::Interfaces::SerialDevice* Mainboard::getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) { mainboard->panic(ERR_SERIAL_NOT_SUPPORTED); return NULL; };
+GHI::Interfaces::SerialDevice* Mainboard::getNewSerialDevice(CPUPin txPin, CPUPin rxPin, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) { mainboard->panic(ERR_SERIAL_NOT_SUPPORTED); return NULL; };
+GHI::Interfaces::SerialDevice* Mainboard::getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) { mainboard->panic(ERR_SERIAL_NOT_SUPPORTED); return NULL; };
