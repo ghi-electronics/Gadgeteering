@@ -3,8 +3,8 @@
 
 using namespace GHI;
 
-Socket::Socket(int number, Type type) : number(number), type(type) {
-	for (int i = 0; i < 10; i++)
+Socket::Socket(unsigned char number, Type type) : number(number), type(type) {
+	for (unsigned char i = 0; i < 10; i++)
 		this->pins[i] = Socket::Pins::Unconnected;
 }
 

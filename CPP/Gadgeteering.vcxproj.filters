@@ -45,18 +45,6 @@
     <ClInclude Include="Gadgeteering\ExtenderChip.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FEZLynx\Linux\ftd2xx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FEZLynx\Linux\WinTypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FEZLynx\Windows\FTD2XX.H">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FEZLynx\FEZLynx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Tunes\Tunes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -75,10 +63,55 @@
     <ClInclude Include="Gadgeteering\SPIBus.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Gadgeteering\List.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZLynx\SoftwareI2C_Lynx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="FEZMedusa\FEZMedusa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Gadgeteering\List.hpp">
+    <ClInclude Include="TemperatureHumidity\TemperatureHumidity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Load\Load.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LightSensor\LightSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Button\Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZLynx\include\linux\ftd2xx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZLynx\include\linux\WinTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZLynx\include\windows\FTD2XX.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZLynx\include\libMPSSE_i2c.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZLynx\include\libMPSSE_spi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZLynx\Linux\ftd2xx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZLynx\Linux\WinTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZLynx\Windows\FTD2XX.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZLynx\FEZLynx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AccelG248\AccelG248.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -104,12 +137,6 @@
     <ClCompile Include="Gadgeteering\ExtenderChip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FEZLynx\FEZLynx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZLynx\System.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Tunes\Tunes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -128,10 +155,10 @@
     <ClCompile Include="Gadgeteering\SPIBus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FEZLynx\SPIBus_Lynx.cpp">
+    <ClCompile Include="Gadgeteering\List.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FEZLynx\ExtendedSockets.cpp">
+    <ClCompile Include="FEZMedusa\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FEZMedusa\FEZMedusa.cpp">
@@ -143,10 +170,31 @@
     <ClCompile Include="FEZMedusa\SPIBus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FEZMedusa\System.cpp">
+    <ClCompile Include="TemperatureHumidity\TemperatureHumidity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Gadgeteering\List.cpp">
+    <ClCompile Include="Load\Load.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LightSensor\LightSensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Button\Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZLynx\ExtendedSockets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZLynx\FEZLynx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZLynx\SPIBus_Lynx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZLynx\System.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AccelG248\AccelG248.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

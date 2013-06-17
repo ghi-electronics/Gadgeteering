@@ -3,7 +3,7 @@
 
 #include "FEZMedusa.h"
 
-#define SYSTEM_CLOCK 12000 /*KHz*/
+#define SYSTEM_CLOCK 12000U /*KHz*/
 
 using namespace GHI;
 using namespace GHI::Mainboards;
@@ -28,8 +28,8 @@ void FEZMedusa::SPIBus::setup(GHI::Interfaces::SPIDevice::Configuration* configu
 	else if (configuration->clockIdleState && configuration->clockEdge)
 		this->spi->setDataMode(SPI_MODE3);
 
-	int divider = SYSTEM_CLOCK / configuration->clockRate;
-	int count = 1;
+	unsigned int divider = SYSTEM_CLOCK / configuration->clockRate;
+	unsigned char count = 1;
 	while ((divider >>= 1) > 0)
 		count++;
 	

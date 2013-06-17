@@ -4,11 +4,15 @@ using namespace GHI;
 using namespace GHI::Modules;
 using namespace GHI::Interfaces;
 
-Tunes::Tunes(int socketNumber) {
-	this->socket = mainboard->getSocket(socketNumber);
-	this->socket->ensureTypeIsSupported(Socket::Types::P);
+Tunes::Tunes(unsigned char socketNumber) {
+	Socket* socket = mainboard->getSocket(socketNumber);
+	socket->ensureTypeIsSupported(Socket::Types::P);
 
-	this->pwm = new PWMOutput(this->socket, this->PWM_PIN);
+	this->pwm = new PWMOutput(socket, this->PWM_PIN);
+}
+
+Tunes::~Tunes() {
+	delete this->pwm;
 }
 
 void Tunes::set(double frequency, double dutyCycle) {

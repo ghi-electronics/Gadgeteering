@@ -1,5 +1,6 @@
 #include "Interfaces.hpp"
 #include "Types.hpp"
+#include "System.hpp"
 
 namespace GHI
 {
@@ -26,6 +27,7 @@ namespace GHI
 				virtual char* read(char bytes);
 
 				virtual void write(const char* data, int offset, int count);
+				virtual void write(const char data);
 				virtual void open();
 				virtual void close();
 

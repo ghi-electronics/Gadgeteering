@@ -10,7 +10,7 @@
 
 using namespace GHI;
 
-void System::Sleep(unsigned int time)
+void System::Sleep(unsigned long time)
 {
 #ifdef _WIN32
 	::Sleep(time);

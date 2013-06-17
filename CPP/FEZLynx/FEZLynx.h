@@ -394,8 +394,8 @@ namespace GHI
 							unsigned char FEZLynx::ExtendedSockets::getPort(CPUPin pin);
 							unsigned char FEZLynx::ExtendedSockets::getPin(CPUPin pin);
 
-							GHI::Interfaces::DigitalInputOutput* SCL;
-							GHI::Interfaces::DigitalInputOutput* SDA;
+							GHI::Interfaces::DigitalIO* SCL;
+							GHI::Interfaces::DigitalIO* SDA;
 					};
 
 					friend class ExtendedSockets;

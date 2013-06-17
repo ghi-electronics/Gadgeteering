@@ -6,10 +6,10 @@
 namespace GHI {
 	class Socket {
 		public:
-			typedef int Type;
+			typedef unsigned long Type;
 			typedef unsigned char Pin;
 
-			const int number;
+			const unsigned char number;
 			const Type type;
 			CPUPin pins[10];
 
@@ -49,7 +49,7 @@ namespace GHI {
 					static const Type DL = 0x00080000;
 			};
 
-			Socket(int number, Type type);
+			Socket(unsigned char number, Type type);
 
 			void ensureTypeIsSupported(Type type);
 	};

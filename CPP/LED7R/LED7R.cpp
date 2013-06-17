@@ -5,16 +5,22 @@ using namespace GHI;
 using namespace GHI::Modules;
 using namespace GHI::Interfaces;
 
-LED7R::LED7R(int socketNumber) 
+LED7R::LED7R(unsigned char socketNumber) 
 {
 	this->socket = mainboard->getSocket(socketNumber);
 	this->socket->ensureTypeIsSupported(Socket::Types::Y);
 	
-	for (int i = 0; i < LED7R::LEDS; i++)
+	for (unsigned char i = 0; i < LED7R::LEDS; i++)
 		this->ports[i] = new DigitalOutput(this->socket, i + 3, false);
 }
 
-void LED7R::turnOnLED(int led, bool onlyLED) {
+LED7R::~LED7R() 
+{
+	for (unsigned char i = 0; i < LED7R::LEDS; i++)
+		delete this->ports[i];
+}
+
+void LED7R::turnOnLED(unsigned char led, bool onlyLED) {
 	if (led < 1 || led > LED7R::LEDS)
 		mainboard->panic(Exceptions::ERR_MODULE_ERROR);
 
@@ -24,7 +30,7 @@ void LED7R::turnOnLED(int led, bool onlyLED) {
 	this->ports[led - 1]->write(true);
 }
 
-void LED7R::turnOffLED(int led) {
+void LED7R::turnOffLED(unsigned char led) {
 	if (led < 1 || led > 7)
 		mainboard->panic(Exceptions::ERR_MODULE_ERROR);
 
@@ -32,20 +38,17 @@ void LED7R::turnOffLED(int led) {
 }
 
 void LED7R::turnAllOn() {
-	for (int i = 0; i < LED7R::LEDS; i++)
+	for (unsigned char i = 0; i < LED7R::LEDS; i++)
 		this->ports[i]->write(true);
 }
 
 void LED7R::turnAllOff() {
-	for (int i = 0; i < LED7R::LEDS; i++)
+	for (unsigned char i = 0; i < LED7R::LEDS; i++)
 		this->ports[i]->write(false);
 }
 
-void LED7R::animate(int switchTime, bool clockwise, bool turnOn, bool remainOn) {
+void LED7R::animate(unsigned int switchTime, bool clockwise, bool turnOn, bool remainOn) {
 	int length = 7;
-	int i;
-	int terminate;
-	int dir;
 
 	if (clockwise) {
 		for (int i = 1; i <= 7; i++) {

@@ -27,13 +27,12 @@ namespace GHI {
 		static const unsigned char PULSE_WIDTH_REGISTER = 0x2B;
 					  
 		static const unsigned char CLOCK_SOURCE = 0x3;
-		static const unsigned int CLOCK_FREQUENCY = 93750;
 	
 		Interfaces::SoftwareI2C* io60Chip;
 
 		unsigned char getPort(CPUPin pin);
 		unsigned char getMask(CPUPin pin);
-
+		
 		public:
 			ExtenderChip(CPUPin sdaPin, CPUPin sclPin, unsigned char address);
 			~ExtenderChip();
