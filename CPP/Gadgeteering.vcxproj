@@ -70,6 +70,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AccelG248\AccelG248.h" />
     <ClInclude Include="Button\Button.h" />
     <ClInclude Include="FEZLynx\FEZLynx.h" />
     <ClInclude Include="FEZLynx\include\libMPSSE_i2c.h" />
@@ -104,6 +105,7 @@
     <ClInclude Include="Tunes\Tunes.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AccelG248\AccelG248.cpp" />
     <ClCompile Include="Button\Button.cpp" />
     <ClCompile Include="FEZLynx\ExtendedSockets.cpp" />
     <ClCompile Include="FEZLynx\FEZLynx.cpp" />

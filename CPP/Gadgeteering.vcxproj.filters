@@ -111,6 +111,9 @@
     <ClInclude Include="FEZLynx\FEZLynx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AccelG248\AccelG248.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -189,6 +192,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FEZLynx\System.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AccelG248\AccelG248.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
