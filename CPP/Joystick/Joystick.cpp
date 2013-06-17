@@ -24,13 +24,14 @@ bool Joystick::isPressed() {
 }
 
 void Joystick::getXY(double* x, double* y) {
-
+	if (x) *x = this->getX();
+	if (y) *y = this->getY();
 }
 
 double Joystick::getX() {
-	return this->x->read / 3.3;
+	return this->x->readProportion();
 }
 
 double Joystick::getY() {
-	return this->y->read / 3.3;
+	return 1.0 - this->y->readProportion();
 }
