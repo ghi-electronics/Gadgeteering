@@ -90,6 +90,7 @@
     <ClInclude Include="Gadgeteering\SerialDevice.hpp" />
     <ClInclude Include="Gadgeteering\Socket.hpp" />
     <ClInclude Include="Gadgeteering\SoftwareI2C.hpp" />
+    <ClInclude Include="Gadgeteering\SoftwareSerial.hpp" />
     <ClInclude Include="Gadgeteering\SPIBus.hpp" />
     <ClInclude Include="Gadgeteering\SPIDevice.hpp" />
     <ClInclude Include="Gadgeteering\System.hpp" />
@@ -120,6 +121,7 @@
     <ClCompile Include="Gadgeteering\Mainboard.cpp" />
     <ClCompile Include="Gadgeteering\SerialDevice.cpp" />
     <ClCompile Include="Gadgeteering\Socket.cpp" />
+    <ClCompile Include="Gadgeteering\SoftwareSerial.cpp" />
     <ClCompile Include="Gadgeteering\SPIBus.cpp" />
     <ClCompile Include="Gadgeteering\SPIDevice.cpp" />
     <ClCompile Include="Gadgeteering\SoftwareI2C.cpp" />
