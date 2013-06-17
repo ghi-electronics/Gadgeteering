@@ -162,6 +162,10 @@ double FEZMedusa::readAnalog(CPUPin pinNumber) {
 	}
 }
 
+double FEZMedusa::readAnalogProportion(CPUPin pinNumber) {
+	return this->readAnalog(pinNumber) / 3.3;
+}
+
 void FEZMedusa::writeAnalog(CPUPin pinNumber, double voltage) {
 	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? ::analogWrite(pinNumber, voltage * (1024 / 3.3)) : mainboard->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED);
 }

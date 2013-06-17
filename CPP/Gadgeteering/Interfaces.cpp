@@ -116,6 +116,10 @@ double AnalogInput::read() {
 	return mainboard->readAnalog(this->cpuPin);
 }
 
+double AnalogInput::readProportion() {
+	return mainboard->readAnalogProportion(this->cpuPin);
+}
+
 PWMOutput::PWMOutput(Socket* socket, Socket::Pin pinNumber) {
 	if (!socket)
 		mainboard->panic(Exceptions::ERR_INVALID_SOCKET);
