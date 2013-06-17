@@ -10,10 +10,10 @@ namespace GHI
 			sock->ensureTypeIsSupported(Socket::Types::Y);
 
 			this->data = new Interfaces::DigitalOutput(sock->pins[7]);
-			this->clock = new Interfaces::DigitalOutput(sock->pins[7]);
-			this->latch = new Interfaces::DigitalOutput(sock->pins[7]);
-			this->enable = new Interfaces::DigitalOutput(sock->pins[7]);
-			this->clear = new Interfaces::DigitalOutput(sock->pins[7]);
+			this->clock = new Interfaces::DigitalOutput(sock->pins[9]);
+			this->latch = new Interfaces::DigitalOutput(sock->pins[5]);
+			this->enable = new Interfaces::DigitalOutput(sock->pins[3]);
+			this->clear = new Interfaces::DigitalOutput(sock->pins[4]);
 
 			disableAllRelays();
 
