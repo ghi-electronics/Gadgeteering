@@ -48,8 +48,9 @@ namespace GHI {
 			public:
 				AnalogInput(Socket* socket, Socket::Pin pinNumber);
 				AnalogInput(CPUPin pin);
-
+				
 				double read();
+				double readProportion();
 		};
 
 		class PWMOutput {

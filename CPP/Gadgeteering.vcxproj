@@ -97,6 +97,7 @@
     <ClInclude Include="Gadgeteering\Types.hpp" />
     <ClInclude Include="Gadgeteering\ExtenderChip.hpp" />
     <ClInclude Include="CharDisplay\CharDisplay.h" />
+    <ClInclude Include="Joystick\Joystick.h" />
     <ClInclude Include="LED7C\LED7C.h" />
     <ClInclude Include="LED7R\LED7R.h" />
     <ClInclude Include="LEDStrip\LEDStrip.h" />
@@ -127,6 +128,7 @@
     <ClCompile Include="Gadgeteering\SoftwareI2C.cpp" />
     <ClCompile Include="Gadgeteering\ExtenderChip.cpp" />
     <ClCompile Include="CharDisplay\CharDisplay.cpp" />
+    <ClCompile Include="Joystick\Joystick.cpp" />
     <ClCompile Include="LED7C\LED7C.cpp" />
     <ClCompile Include="LED7R\LED7R.cpp" />
     <ClCompile Include="LEDStrip\LEDStrip.cpp" />

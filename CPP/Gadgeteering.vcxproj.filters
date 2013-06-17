@@ -117,6 +117,9 @@
     <ClInclude Include="Gadgeteering\SoftwareSerial.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Joystick\Joystick.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -201,6 +204,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Gadgeteering\SoftwareSerial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Joystick\Joystick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

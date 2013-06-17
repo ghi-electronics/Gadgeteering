@@ -35,6 +35,7 @@ namespace GHI {
 			virtual bool readDigital(CPUPin pin);
 			virtual void writeDigital(CPUPin pin, bool value);
 			virtual double readAnalog(CPUPin pin);
+			virtual double readAnalogProportion(CPUPin pin);
 			virtual void writeAnalog(CPUPin pin, double voltage);
 			virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
 			

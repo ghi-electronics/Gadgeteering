@@ -22,17 +22,17 @@ namespace GHI {
 					public:
 						static const unsigned char EVEN = 0;
 						static const unsigned char ODD = 1;
-						static const unsigned char MARK = 1;
-						static const unsigned char SPACE = 1;
-						static const unsigned char NONE = 1;
+						static const unsigned char MARK = 2;
+						static const unsigned char SPACE = 3;
+						static const unsigned char NONE = 4;
 				};
 
 				class StopBits {
 					public:
 						static const unsigned char NONE = 0;
-						static const unsigned char ONE = 0;
-						static const unsigned char ONE_POINT_FIVE = 0;
-						static const unsigned char TWO = 0;
+						static const unsigned char ONE = 1;
+						static const unsigned char ONE_POINT_FIVE = 2;
+						static const unsigned char TWO = 3;
 				};
 
 				virtual ~SerialDevice();
