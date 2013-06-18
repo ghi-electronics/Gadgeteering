@@ -28,8 +28,10 @@ namespace GHI {
 			Socket* getSocket(unsigned char number);
 			void ReservePin(CPUPin pin);
 			void ReleasePin(CPUPin pin);
-
+			
 			virtual void panic(unsigned char error);
+			virtual void print(const char* toPrint);
+			virtual void print(int toPrint);
 
 			virtual void setPWM(CPUPin pin, double dutyCycle, double frequency);
 			virtual bool readDigital(CPUPin pin);

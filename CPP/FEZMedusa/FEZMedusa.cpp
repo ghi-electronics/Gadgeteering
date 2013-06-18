@@ -1,4 +1,3 @@
-//#include <SoftwareSerial.h>
 #include "Arduino.h"
 #include "FEZMedusa.h"
 #include "../Gadgeteering/Types.hpp"
@@ -119,9 +118,17 @@ FEZMedusa::~FEZMedusa() {
 }
 				
 void FEZMedusa::panic(unsigned char error) {
-	//Serial.begin(9600);
+	Serial.begin(9600);
 	while (true)
-		;//Serial.println((int)error);
+		Serial.println((int)error);
+}
+				
+void FEZMedusa::print(const char* toPrint) {
+	Serial.print(toPrint);
+}
+				
+void FEZMedusa::print(int toPrint) {
+	Serial.print(toPrint);
 }
 
 void FEZMedusa::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistorMode) {

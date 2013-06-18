@@ -20,6 +20,14 @@ void Mainboard::panic(unsigned char error) {
 		;
 }
 
+void Mainboard::print(const char* toPrint) {
+	mainboard->panic(Exceptions::ERR_NOT_IMPLEMENTED);
+}
+
+void Mainboard::print(int toPrint) {
+	mainboard->panic(Exceptions::ERR_NOT_IMPLEMENTED);
+}
+
 Socket* Mainboard::registerSocket(Socket* socket) {
 	this->sockets.add(socket);
 
