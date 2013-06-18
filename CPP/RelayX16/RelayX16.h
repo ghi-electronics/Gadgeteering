@@ -11,6 +11,7 @@ namespace GHI
 		{
 			protected:
 				unsigned short regData;
+
 				Interfaces::DigitalOutput *data;
 				Interfaces::DigitalOutput *clock;
 				Interfaces::DigitalOutput *latch;

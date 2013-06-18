@@ -12,7 +12,7 @@ namespace GHI
 			this->data = new Interfaces::DigitalOutput(sock->pins[7]);
 			this->clock = new Interfaces::DigitalOutput(sock->pins[9]);
 			this->latch = new Interfaces::DigitalOutput(sock->pins[5]);
-			this->enable = new Interfaces::DigitalOutput(sock->pins[3]);
+			this->enable = new Interfaces::DigitalOutput(sock->pins[3], true);
 			this->clear = new Interfaces::DigitalOutput(sock->pins[4]);
 
 			disableAllRelays();
@@ -24,14 +24,58 @@ namespace GHI
         {
             regData = 0x0000;
 
-			writeRegisterData();
+			unsigned short reg = regData;
+
+            for (int i = 0; i < 16; i++)
+            {
+                if ((reg & 0x1) == 1)
+                {
+                    data->write(false);
+                }
+                else
+                {
+                    data->write(true);
+                }
+
+                clock->write(true);
+				System::Sleep(10);
+                clock->write(false);
+
+                reg >>= 1;
+            }
+
+            latch->write(true);
+				System::Sleep(10);
+            latch->write(false);
         }
 
 		void RelayX16::enableAllRelays()
 		{
 			regData = 0xFFFF;
 
-			writeRegisterData();
+			unsigned short reg = regData;
+
+            for (int i = 0; i < 16; i++)
+            {
+                if ((reg & 0x1) == 1)
+                {
+                    data->write(false);
+                }
+                else
+                {
+                    data->write(true);
+                }
+
+                clock->write(true);
+				System::Sleep(10);
+                clock->write(false);
+
+                reg >>= 1;
+            }
+
+            latch->write(true);
+				System::Sleep(10);
+            latch->write(false);
 		}
 
         void RelayX16::enableOutput()
@@ -72,7 +116,6 @@ namespace GHI
                 {
                     data->write(true);
                 }
-
 
                 clock->write(true);
                 clock->write(false);

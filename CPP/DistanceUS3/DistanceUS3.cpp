@@ -12,7 +12,7 @@ namespace GHI
 			Echo = new Interfaces::DigitalInput(sock->pins[3]);
 			Trigger = new Interfaces::DigitalOutput(sock->pins[4]);
 
-			TicksPerMicrosecond = System::CyclesToMicroseconds(1);
+			TicksPerMicrosecond = 12;
 		}
 
 		DistanceUS3::~DistanceUS3()
@@ -78,7 +78,7 @@ namespace GHI
 
             time = (System::TimeElapsed() - start);
 
-            microseconds = (int)time / TicksPerMicrosecond;
+            microseconds = (int)time ;// TicksPerMicrosecond;
 
             distance = (microseconds / 58);
             distance += 2;

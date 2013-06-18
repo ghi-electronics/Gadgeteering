@@ -42,6 +42,14 @@ DigitalInput::DigitalInput(Socket* socket, Socket::Pin pinNumber, ResistorMode r
 	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_INPUT, resistorMode);
 }
 
+DigitalInput::DigitalInput(CPUPin pin, ResistorMode resistorMode)
+{
+	this->cpuPin = pin;
+	
+	mainboard->ReservePin(this->cpuPin);
+	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_INPUT, resistorMode);
+}
+
 bool DigitalInput::read() {
 	return mainboard->readDigital(this->cpuPin);
 }

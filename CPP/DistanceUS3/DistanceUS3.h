@@ -15,13 +15,13 @@ namespace GHI
 
 				int TicksPerMicrosecond;
 
-				const short AcceptableErrorRate = 10;
+				static const short AcceptableErrorRate = 10;
 
-				const short MIN_DISTANCE = 2;
-				const short MAX_DISTANCE = 400;
+				static const short MIN_DISTANCE = 2;
+				static const short MAX_DISTANCE = 400;
 
-				const short MaxFlag = -1;
-				const short MinFlag = -2;
+				static const short MaxFlag = -1;
+				static const short MinFlag = -2;
 
 				int GetDistanceHelper();
 
