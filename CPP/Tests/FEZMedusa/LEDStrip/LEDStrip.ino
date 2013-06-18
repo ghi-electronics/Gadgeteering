@@ -1,7 +1,6 @@
 #include <Gadgeteering.h>
 #include <FEZMedusa.h>
 #include <IO60P16.h>
-#include <IO60P16.h>
 #include <SPI.h>
 #include <LEDStrip.h>
 
