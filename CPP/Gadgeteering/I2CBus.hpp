@@ -11,12 +11,11 @@ namespace GHI
 	{
 		class I2CBus
 		{
-			protected:
-				CPUPin sda;
-				CPUPin scl;
-
 			public:
 				friend class I2CDevice;
+
+				const CPUPin sda;
+				const CPUPin scl;
 
 				I2CBus(CPUPin sdaPin, CPUPin sclPin);
 				virtual ~I2CBus();

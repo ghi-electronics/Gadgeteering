@@ -11,7 +11,7 @@ using namespace GHI::Modules;
 
 bool next = true;
 FEZMedusa board;
-Extender extender(7);
+Extender* extender;
 DigitalOutput* d1;
 DigitalOutput* d2;
 DigitalOutput* d3;
@@ -21,13 +21,15 @@ DigitalOutput* d6;
 DigitalOutput* d7;
 
 void setup() {
-  d1 = extender.SetupDigitalOutput(Socket::Pins::Three, !next);
-  d2 = extender.SetupDigitalOutput(Socket::Pins::Four, !next);
-  d3 = extender.SetupDigitalOutput(Socket::Pins::Five, !next);
-  d4 = extender.SetupDigitalOutput(Socket::Pins::Six, !next);
-  d5 = extender.SetupDigitalOutput(Socket::Pins::Seven, !next);
-  d6 = extender.SetupDigitalOutput(Socket::Pins::Eight, !next);
-  d7 = extender.SetupDigitalOutput(Socket::Pins::Nine, !next);
+  Serial.begin(9600);
+  extender = new Extender(5);
+  d1 = extender->SetupDigitalOutput(Socket::Pins::Three, !next);
+  d2 = extender->SetupDigitalOutput(Socket::Pins::Four, !next);
+  d3 = extender->SetupDigitalOutput(Socket::Pins::Five, !next);
+  d4 = extender->SetupDigitalOutput(Socket::Pins::Six, !next);
+  d5 = extender->SetupDigitalOutput(Socket::Pins::Seven, !next);
+  d6 = extender->SetupDigitalOutput(Socket::Pins::Eight, !next);
+  d7 = extender->SetupDigitalOutput(Socket::Pins::Nine, !next);
 }
 
 void loop() {  

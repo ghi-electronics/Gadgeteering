@@ -90,10 +90,10 @@ bool List::contains(void* data) {
 }
 
 void* List::start() {
+	this->currentIteration = this->head;
+
 	if (!this->head)
 		return NULL;
-
-	this->currentIteration = this->head;
 
 	return this->currentIteration->data;
 }

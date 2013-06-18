@@ -3,9 +3,8 @@
 using namespace GHI;
 using namespace GHI::Interfaces;
 
-I2CBus::I2CBus(CPUPin sdaPin, CPUPin sclPin) {	
-	this->sda = sdaPin;
-	this->scl = sclPin;
+I2CBus::I2CBus(CPUPin sdaPin, CPUPin sclPin) : sda(sda), scl(scl) {	
+
 }
 
 I2CBus::~I2CBus() {

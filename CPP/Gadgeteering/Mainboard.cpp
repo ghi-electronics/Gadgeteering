@@ -28,6 +28,10 @@ void Mainboard::print(int toPrint) {
 	mainboard->panic(Exceptions::ERR_NOT_IMPLEMENTED);
 }
 
+void Mainboard::print(double toPrint) {
+	mainboard->panic(Exceptions::ERR_NOT_IMPLEMENTED);
+}
+
 Socket* Mainboard::registerSocket(Socket* socket) {
 	this->sockets.add(socket);
 
