@@ -177,6 +177,10 @@ void FEZMedusa::writeAnalog(CPUPin pinNumber, double voltage) {
 	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? ::analogWrite(pinNumber, voltage * (1024 / 3.3)) : mainboard->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED);
 }
 
+void FEZMedusa::writeAnalogProportion(CPUPin pinNumber, double voltage) {
+	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? ::analogWrite(pinNumber, voltage * 1024) : mainboard->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED);
+}
+
 Interfaces::SPIBus* FEZMedusa::getNewSPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) {
 	return new FEZMedusa::SPIBus(mosi, miso, sck);
 }

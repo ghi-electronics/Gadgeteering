@@ -53,6 +53,17 @@ namespace GHI {
 				double readProportion();
 		};
 
+		class AnalogOutput {
+			CPUPin cpuPin;
+
+			public:
+				AnalogOutput(Socket* socket, Socket::Pin pinNumber);
+				AnalogOutput(CPUPin pin);
+				
+				void write(double value);
+				void writeProportion(double value);
+		};
+
 		class PWMOutput {
 			CPUPin cpuPin;
 

@@ -40,6 +40,7 @@ namespace GHI {
 			virtual double readAnalog(CPUPin pin);
 			virtual double readAnalogProportion(CPUPin pin);
 			virtual void writeAnalog(CPUPin pin, double voltage);
+			virtual void writeAnalogProportion(CPUPin pin, double voltage);
 			virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
 			
 			virtual GHI::Interfaces::SPIBus* getNewSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);

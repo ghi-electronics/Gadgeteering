@@ -8,6 +8,7 @@ namespace GHI {
 		using namespace GHI::Interfaces;
 
 		class Load : public Module {
+			public:
 				DigitalOutput* P1;
 				DigitalOutput* P2;
 				DigitalOutput* P3;
