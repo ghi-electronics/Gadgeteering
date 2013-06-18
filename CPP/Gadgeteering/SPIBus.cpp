@@ -3,10 +3,8 @@
 using namespace GHI;
 using namespace GHI::Interfaces;
 
-SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) {	
-	this->mosi = mosi;
-	this->miso = miso;
-	this->sck = sck;
+SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : mosi(mosi), miso(miso), sck(sck) {	
+
 }
 
 SPIBus::~SPIBus() {

@@ -8,14 +8,14 @@ using namespace GHI::Mainboards;
 
 #define I2C_DELAY() ;
 
-FEZMedusa::FEZMedusa::I2CBus::I2CBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
+FEZMedusa::I2CBus::I2CBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
 {
 	this->start = false;
 	this->readSCL();
 	this->readSDA();
 }
 
-FEZMedusa::FEZMedusa::I2CBus::~I2CBus() {
+FEZMedusa::I2CBus::~I2CBus() {
 
 }
 

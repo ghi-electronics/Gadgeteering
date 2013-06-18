@@ -11,8 +11,8 @@ using namespace GHI::Mainboards;
 using namespace GHI::Modules;
 
 FEZMedusa board;
-SoftwareI2C* softI2C;
-ExtenderChip* io60;
+I2CDevice* softI2C;
+IO60P16* io60;
 Socket* ledSocket;
 CPUPin ledPin;
 CPUPin ledPin2;
@@ -44,24 +44,22 @@ void loop() {
   //write(ExtenderChip::OUTPUT_PORT_0_REGISTER + port, next ? 0xFF : 0x00);
   
   //io60->writeDigital(ledPin, next);
-  //board.writeDigital(ledPin, next);
-  //dOut->write(next);
-  //dOut2->write(next);
-  /*dOut3->write(next);
+  
+  board.writeDigital(ledPin, next);
+  board.writeDigital(ledPin2, next);
+  
+  /*dOut->write(next);
+  dOut2->write(next);
+  dOut3->write(next);
   dOut4->write(next);
   dOut5->write(next);
   dOut6->write(next);
   dOut7->write(next);*/
   
   //if (next)
-  //  board.setIOMode(ledSocket, Socket::Pins::Three, IOStates::DIGITAL_OUTPUT, ResistorModes::FLOATING);
+  //  led->turnAllOn();
   //else
-  //  board.setIOMode(ledSocket, Socket::Pins::Three, IOStates::DIGITAL_INPUT, ResistorModes::FLOATING);
-    
-  if (next)
-    led->turnAllOn();
-  else
-   led->turnAllOff();
+  // led->turnAllOff();
   
   next = !next;
   delay(500);  
@@ -71,8 +69,8 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Start");
   ledSocket = board.getSocket(10);
-  ledPin = ledSocket->pins[3];
-  ledPin2 = ledSocket->pins[4];
+  ledPin = ledSocket->pins[5];
+  ledPin2 = ledSocket->pins[6];
   
   //softI2C = new SoftwareI2C(0x20, A4, A5);
     
@@ -82,7 +80,7 @@ void setup() {
   //softI2C->writeBytes(&reg, 1, false);
   //softI2C->readBytes(&val, 1);
   
-    /*
+  /*
   write(ExtenderChip::PORT_SELECT_REGISTER, port);
   
   val = read(ExtenderChip::ENABLE_PWM_REGISTER);
@@ -96,15 +94,19 @@ void setup() {
   
   //io60 = new ExtenderChip(A4, A5, 0x20);
   //io60->setIOMode(ledPin, IOStates::DIGITAL_OUTPUT, ResistorModes::FLOATING);  
-  //board.setIOMode(ledPin, IOStates::DIGITAL_OUTPUT, ResistorModes::FLOATING);
-  //dOut = new DigitalOutput(ledSocket, Socket::Pins::Three, true);
-  //dOut2 = new DigitalOutput(ledSocket, Socket::Pins::Four, true);
-  /*dOut3 = new DigitalOutput(ledSocket, Socket::Pins::Five, true);
+  
+  board.setIOMode(ledPin, IOStates::DIGITAL_OUTPUT, ResistorModes::FLOATING);
+  board.setIOMode(ledPin2, IOStates::DIGITAL_OUTPUT, ResistorModes::FLOATING);
+  
+  /*dOut = new DigitalOutput(ledSocket, Socket::Pins::Three, true);
+  dOut2 = new DigitalOutput(ledSocket, Socket::Pins::Four, true);
+  dOut3 = new DigitalOutput(ledSocket, Socket::Pins::Five, true);
   dOut4 = new DigitalOutput(ledSocket, Socket::Pins::Six, true);
   dOut5 = new DigitalOutput(ledSocket, Socket::Pins::Seven, true);
   dOut6 = new DigitalOutput(ledSocket, Socket::Pins::Eight, true);
   dOut7 = new DigitalOutput(ledSocket, Socket::Pins::Nine, true);*/
-  led = new LED7R(10);
+  
+  //led = new LED7R(10);
 }
 
 

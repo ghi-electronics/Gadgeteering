@@ -33,5 +33,6 @@ bool I2CDevice::writeRegister(unsigned char address, unsigned char value) {
 unsigned char I2CDevice::readRegister(unsigned char address) {
 	unsigned char value;
 	unsigned int a, b;
-	return this->writeRead(&address, 1, &value, 1, &a, &b);
+	this->writeRead(&address, 1, &value, 1, &a, &b);
+	return value;
 }

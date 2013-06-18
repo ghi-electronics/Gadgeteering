@@ -4,9 +4,7 @@
 using namespace GHI;
 using namespace GHI::Interfaces;
 
-SerialDevice::SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) {
-	this->tx = tx;
-	this->rx = rx;
+SerialDevice::SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) : tx(tx), rx(rx) {
 	this->baudRate = baudRate;
 	this->parity = parity;
 	this->stopBits = stopBits;

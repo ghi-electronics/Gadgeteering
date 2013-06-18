@@ -28,6 +28,10 @@ void Mainboard::print(int toPrint) {
 	mainboard->panic(Exceptions::ERR_NOT_IMPLEMENTED);
 }
 
+void Mainboard::print(double toPrint) {
+	mainboard->panic(Exceptions::ERR_NOT_IMPLEMENTED);
+}
+
 Socket* Mainboard::registerSocket(Socket* socket) {
 	this->sockets.add(socket);
 
@@ -60,6 +64,7 @@ void Mainboard::writeDigital(CPUPin pin, bool value) { mainboard->panic(Exceptio
 double Mainboard::readAnalog(CPUPin pin) { mainboard->panic(Exceptions::ERR_READ_ANALOG_NOT_SUPPORTED); return 0.0; };
 double Mainboard::readAnalogProportion(CPUPin pin) { mainboard->panic(Exceptions::ERR_READ_ANALOG_NOT_SUPPORTED); return 0.0; };
 void Mainboard::writeAnalog(CPUPin pin, double voltage) { mainboard->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED); };
+void Mainboard::writeAnalogProportion(CPUPin pin, double voltage) { mainboard->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED); };
 void Mainboard::setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode) { mainboard->panic(Exceptions::ERR_SET_IO_NOT_SUPPORTED); };
 	
 GHI::Interfaces::SPIBus* Mainboard::getNewSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin) { mainboard->panic(Exceptions::ERR_SPI_NOT_SUPPORTED); return NULL; };

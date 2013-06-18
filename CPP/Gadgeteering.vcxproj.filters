@@ -87,10 +87,7 @@
     <ClInclude Include="RelayX16\RelayX16.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DistanceUS3\DistanceUS3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GasSense\GasSense.h">
+    <ClInclude Include="Joystick\Joystick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LED7C\LED7C.h">
@@ -127,6 +124,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TemperatureHumidity\TemperatureHumidity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Load\Load.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Breakout\Breakout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Extender\Extender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -191,10 +197,7 @@
     <ClCompile Include="RelayX16\RelayX16.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DistanceUS3\DistanceUS3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GasSense\GasSense.cpp">
+    <ClCompile Include="Joystick\Joystick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LED7C\LED7C.cpp">
@@ -243,6 +246,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TemperatureHumidity\TemperatureHumidity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Load\Load.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Breakout\Breakout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Extender\Extender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

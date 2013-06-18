@@ -128,6 +128,29 @@ double AnalogInput::readProportion() {
 	return mainboard->readAnalogProportion(this->cpuPin);
 }
 
+AnalogOutput::AnalogOutput(Socket* socket, Socket::Pin pinNumber) {
+	if (!socket)
+		mainboard->panic(Exceptions::ERR_INVALID_SOCKET);
+	if (!socket || pinNumber < 3 || pinNumber > 9)
+		mainboard->panic(Exceptions::ERR_PIN_OUT_OF_RANGE);
+
+	this->cpuPin = socket->pins[pinNumber];
+	mainboard->ReservePin(this->cpuPin);
+}
+
+AnalogOutput::AnalogOutput(CPUPin pin) {
+	this->cpuPin = pin;
+	mainboard->ReservePin(this->cpuPin);
+}
+
+void AnalogOutput::write(double value) {
+	mainboard->writeAnalog(this->cpuPin, value);
+}
+
+void AnalogOutput::writeProportion(double value) {
+	mainboard->writeAnalogProportion(this->cpuPin, value);
+}
+
 PWMOutput::PWMOutput(Socket* socket, Socket::Pin pinNumber) {
 	if (!socket)
 		mainboard->panic(Exceptions::ERR_INVALID_SOCKET);

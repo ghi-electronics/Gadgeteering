@@ -18,7 +18,9 @@ namespace GHI {
 		protected:
 			List sockets;
 			List pins;
-			List SPIBusses;
+			List spiBusses;
+			List i2cBusses;
+			List serialDevices;
 
 			Mainboard();
 			virtual ~Mainboard();
@@ -33,6 +35,7 @@ namespace GHI {
 			virtual void panic(unsigned char error);
 			virtual void print(const char* toPrint);
 			virtual void print(int toPrint);
+			virtual void print(double toPrint);
 
 			virtual void setPWM(CPUPin pin, double dutyCycle, double frequency);
 			virtual bool readDigital(CPUPin pin);
@@ -40,6 +43,7 @@ namespace GHI {
 			virtual double readAnalog(CPUPin pin);
 			virtual double readAnalogProportion(CPUPin pin);
 			virtual void writeAnalog(CPUPin pin, double voltage);
+			virtual void writeAnalogProportion(CPUPin pin, double voltage);
 			virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
 			
 			virtual GHI::Interfaces::SPIBus* getNewSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);

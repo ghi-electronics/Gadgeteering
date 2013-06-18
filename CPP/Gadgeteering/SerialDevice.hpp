@@ -8,8 +8,6 @@ namespace GHI {
 	namespace Interfaces {
 		class SerialDevice {
 			protected:
-				CPUPin tx;
-				CPUPin rx;
 				unsigned int baudRate;
 				unsigned char parity;
 				unsigned char stopBits;
@@ -18,6 +16,9 @@ namespace GHI {
 				SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
 
 			public:
+				const CPUPin tx;
+				const CPUPin rx;
+
 				class Parity {
 					public:
 						static const unsigned char EVEN = 0;

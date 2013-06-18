@@ -25,7 +25,7 @@ unsigned char IO60P16::getMask(CPUPin pin) {
 
 void IO60P16::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistorMode) {
 	this->io60Chip->writeRegister(IO60P16::PORT_SELECT_REGISTER, this->getPort(pinNumber));
-
+	
 	unsigned char mask = this->getMask(pinNumber);
 	unsigned char val = this->io60Chip->readRegister(IO60P16::ENABLE_PWM_REGISTER);
 
@@ -87,6 +87,6 @@ void IO60P16::writeDigital(CPUPin pin, bool value) {
 		b |= this->getMask(pin);
 	else
 		b &= ~this->getMask(pin);
-
+	
 	this->io60Chip->writeRegister(IO60P16::OUTPUT_PORT_0_REGISTER + this->getPort(pin), b);
 }
