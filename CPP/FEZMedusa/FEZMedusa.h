@@ -3,7 +3,7 @@
 
 #include "../Gadgeteering/Mainboard.hpp"
 #include "../Gadgeteering/Socket.hpp"
-#include "../Gadgeteering/ExtenderChip.hpp"
+#include "../IO60P16/IO60P16.h"
 #include "../Gadgeteering/SPIDevice.hpp"
 #include "../Gadgeteering/I2CBus.hpp"
 
@@ -15,7 +15,7 @@ namespace GHI {
 		class FEZMedusa : public GHI::Mainboard {
 			static const unsigned char EXTENDER_MASK = 0x80;
 			
-			ExtenderChip* extenderChip;
+			Modules::IO60P16* extenderChip;
 	
 			class SPIBus : public GHI::Interfaces::SPIBus
 			{

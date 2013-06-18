@@ -7,7 +7,6 @@
 
 namespace GHI {
 	namespace Modules {
-
 		class Accelerometer : public Module {
 			public:
 				typedef unsigned char Range;

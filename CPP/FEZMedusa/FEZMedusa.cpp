@@ -1,7 +1,7 @@
 #include "Arduino.h"
 #include "FEZMedusa.h"
 #include "../Gadgeteering/Types.hpp"
-#include "../Gadgeteering/ExtenderChip.hpp"
+#include "../IO60P16/IO60P16.h"
 
 using namespace GHI;
 using namespace GHI::Interfaces;
@@ -11,8 +11,6 @@ Mainboard* GHI::mainboard = NULL;
 
 FEZMedusa::FEZMedusa() {
 	mainboard = this;
-
-	this->extenderChip = new ExtenderChip(A4, A5);
 	
 	Socket* socket = this->registerSocket(new Socket(1, Socket::Types::I | Socket::Types::S | Socket::Types::Y | Socket::Types::X));
 	socket->pins[3] = 7;
@@ -111,6 +109,8 @@ FEZMedusa::FEZMedusa() {
 	socket->pins[7] = 0x54 | FEZMedusa::EXTENDER_MASK;
 	socket->pins[8] = 0x55 | FEZMedusa::EXTENDER_MASK;
 	socket->pins[9] = 0x56 | FEZMedusa::EXTENDER_MASK;
+
+	this->extenderChip = new Modules::IO60P16(3);
 }
 
 FEZMedusa::~FEZMedusa() {

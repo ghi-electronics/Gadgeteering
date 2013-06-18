@@ -39,9 +39,6 @@
     <ClInclude Include="Gadgeteering\Socket.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Gadgeteering\ExtenderChip.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FEZLynx\Linux\ftd2xx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -126,6 +123,9 @@
     <ClInclude Include="TemperatureHumidity\TemperatureHumidity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IO60P16\IO60P16.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -141,9 +141,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Gadgeteering\Socket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Gadgeteering\ExtenderChip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FEZLynx\FEZLynx.cpp">
@@ -237,6 +234,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TemperatureHumidity\TemperatureHumidity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IO60P16\IO60P16.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

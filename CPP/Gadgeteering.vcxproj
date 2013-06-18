@@ -93,9 +93,9 @@
     <ClInclude Include="FEZLynx\Linux\ftd2xx.h" />
     <ClInclude Include="FEZLynx\Linux\WinTypes.h" />
     <ClInclude Include="FEZLynx\Windows\FTD2XX.H" />
-    <ClInclude Include="Gadgeteering\ExtenderChip.hpp" />
     <ClInclude Include="CharDisplay\CharDisplay.h" />
     <ClInclude Include="GasSense\GasSense.h" />
+    <ClInclude Include="IO60P16\IO60P16.h" />
     <ClInclude Include="Joystick\Joystick.h" />
     <ClInclude Include="LED7C\LED7C.h" />
     <ClInclude Include="LED7R\LED7R.h" />
@@ -131,9 +131,9 @@
     <ClCompile Include="Gadgeteering\SPIDevice.cpp" />
     <ClCompile Include="FEZLynx\System.cpp" />
     <ClCompile Include="FEZLynx\FEZLynx.cpp" />
-    <ClCompile Include="Gadgeteering\ExtenderChip.cpp" />
     <ClCompile Include="CharDisplay\CharDisplay.cpp" />
     <ClCompile Include="GasSense\GasSense.cpp" />
+    <ClCompile Include="IO60P16\IO60P16.cpp" />
     <ClCompile Include="Joystick\Joystick.cpp" />
     <ClCompile Include="LED7C\LED7C.cpp" />
     <ClCompile Include="LED7R\LED7R.cpp" />
