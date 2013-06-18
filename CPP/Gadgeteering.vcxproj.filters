@@ -87,7 +87,10 @@
     <ClInclude Include="RelayX16\RelayX16.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Joystick\Joystick.h">
+    <ClInclude Include="DistanceUS3\DistanceUS3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GasSense\GasSense.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LED7C\LED7C.h">
@@ -188,7 +191,10 @@
     <ClCompile Include="RelayX16\RelayX16.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Joystick\Joystick.cpp">
+    <ClCompile Include="DistanceUS3\DistanceUS3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GasSense\GasSense.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LED7C\LED7C.cpp">

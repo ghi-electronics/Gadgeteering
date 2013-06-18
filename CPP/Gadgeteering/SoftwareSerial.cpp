@@ -75,5 +75,22 @@ namespace GHI
 		{
 			this->receive();
 		}
+
+		void SoftwareSerial::open()
+		{
+		}
+
+		void SoftwareSerial::close()
+		{
+		}
+
+		void SoftwareSerial::receive()
+		{
+		}
+
+		bool SoftwareSerial::overflow()
+		{
+			return false;
+		}
 	}
 }

@@ -14,7 +14,7 @@ namespace GHI
 			this->output = new Interfaces::DigitalOutput(sock->pins[6]);
 		}
 
-		int Moisture::GetMoistureReading(int samples)
+		double Moisture::GetMoistureReading(int samples)
 		{
 			this->output->write(true);
 
@@ -22,7 +22,7 @@ namespace GHI
 
 			for(int i = 0; i < samples; i++)
 			{
-				reading += (this->input->read * 1600.00);
+				reading += (this->input->read() * 1600.00);
 			}
 
 			this->output->write(false);

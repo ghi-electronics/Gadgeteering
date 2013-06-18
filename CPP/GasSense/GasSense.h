@@ -15,8 +15,10 @@ namespace GHI
 
 			public:
 				GasSense(int socket);
+				~GasSense();
 
-				int GetGasReading(int samples = 1);
+				double GetGasReading(int samples = 1);
+				void SetHeatingElement(bool state = true);
 		};
 	}
 }
