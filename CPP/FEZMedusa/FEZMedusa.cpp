@@ -1,8 +1,7 @@
-//#include <SoftwareSerial.h>
 #include "Arduino.h"
 #include "FEZMedusa.h"
 #include "../Gadgeteering/Types.hpp"
-#include "../Gadgeteering/ExtenderChip.hpp"
+#include "../IO60P16/IO60P16.h"
 
 using namespace GHI;
 using namespace GHI::Interfaces;
@@ -12,8 +11,6 @@ Mainboard* GHI::mainboard = NULL;
 
 FEZMedusa::FEZMedusa() {
 	mainboard = this;
-
-	this->extenderChip = new ExtenderChip(A4, A5, 0x20);
 	
 	Socket* socket = this->registerSocket(new Socket(1, Socket::Types::I | Socket::Types::S | Socket::Types::Y | Socket::Types::X));
 	socket->pins[3] = 7;
@@ -112,6 +109,8 @@ FEZMedusa::FEZMedusa() {
 	socket->pins[7] = 0x54 | FEZMedusa::EXTENDER_MASK;
 	socket->pins[8] = 0x55 | FEZMedusa::EXTENDER_MASK;
 	socket->pins[9] = 0x56 | FEZMedusa::EXTENDER_MASK;
+
+	this->extenderChip = new Modules::IO60P16(3);
 }
 
 FEZMedusa::~FEZMedusa() {
@@ -119,9 +118,17 @@ FEZMedusa::~FEZMedusa() {
 }
 				
 void FEZMedusa::panic(unsigned char error) {
-	//Serial.begin(9600);
+	Serial.begin(9600);
 	while (true)
-		;//Serial.println((int)error);
+		Serial.println((int)error);
+}
+				
+void FEZMedusa::print(const char* toPrint) {
+	Serial.print(toPrint);
+}
+				
+void FEZMedusa::print(int toPrint) {
+	Serial.print(toPrint);
 }
 
 void FEZMedusa::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistorMode) {
@@ -184,4 +191,12 @@ Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(CPUPin txPin, CPUPin rxP
 
 Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) {
 	return new FEZMedusa::SerialDevice(socket->pins[txPinNumber], socket->pins[rxPinNumber], baudRate, parity, stopBits, dataBits);
+}
+
+Interfaces::I2CBus* FEZMedusa::getNewI2CBus(CPUPin sdaPin, CPUPin sclPin) {
+	return new FEZMedusa::I2CBus(sdaPin, sclPin);
+}
+
+Interfaces::I2CBus* FEZMedusa::getNewI2CBus(Socket* socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber) {
+	return new FEZMedusa::I2CBus(socket->pins[sdaPinNumber], socket->pins[sclPinNumber]);
 }

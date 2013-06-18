@@ -18,24 +18,25 @@ namespace GHI {
 			char *Message;
 		};
 
-		const unsigned char ERR_ONLY_ONE_MAINBOARD = 0;
-		const unsigned char ERR_SPI_NOT_SUPPORTED = 1;
-		const unsigned char ERR_PWM_NOT_SUPPORTED = 2;
-		const unsigned char ERR_READ_DIGITAL_NOT_SUPPORTED = 3;
-		const unsigned char ERR_WRITE_DIGITAL_NOT_SUPPORTED = 4;
-		const unsigned char ERR_READ_ANALOG_NOT_SUPPORTED = 5;
-		const unsigned char ERR_WRITE_ANALOG_NOT_SUPPORTED = 6;
-		const unsigned char ERR_SET_IO_NOT_SUPPORTED = 7;
-		const unsigned char ERR_SOCKET_NOT_HAVE_TYPE = 8;
-		const unsigned char ERR_INVALID_SOCKET = 9;
-		const unsigned char ERR_PIN_OUT_OF_RANGE = 10;
-		const unsigned char ERR_PIN_RESERVED = 11;
-		const unsigned char ERR_SERIAL_NOT_SUPPORTED = 12;
-		const unsigned char ERR_MODULE_ERROR = 13;
-		const unsigned char ERR_IO_MODE_NOT_SUPPORTED = 14;
-		const unsigned char ERR_PORT_OUT_OF_RANGE = 15;
-		const unsigned char ERR_NOT_IMPLEMENTED = 16;
-		const unsigned char ERR_OUT_OF_SYNC = 17;
+		static const unsigned char ERR_ONLY_ONE_MAINBOARD = 0;
+		static const unsigned char ERR_SPI_NOT_SUPPORTED = 1;
+		static const unsigned char ERR_PWM_NOT_SUPPORTED = 2;
+		static const unsigned char ERR_READ_DIGITAL_NOT_SUPPORTED = 3;
+		static const unsigned char ERR_WRITE_DIGITAL_NOT_SUPPORTED = 4;
+		static const unsigned char ERR_READ_ANALOG_NOT_SUPPORTED = 5;
+		static const unsigned char ERR_WRITE_ANALOG_NOT_SUPPORTED = 6;
+		static const unsigned char ERR_SET_IO_NOT_SUPPORTED = 7;
+		static const unsigned char ERR_SOCKET_NOT_HAVE_TYPE = 8;
+		static const unsigned char ERR_INVALID_SOCKET = 9;
+		static const unsigned char ERR_PIN_OUT_OF_RANGE = 10;
+		static const unsigned char ERR_PIN_RESERVED = 11;
+		static const unsigned char ERR_SERIAL_NOT_SUPPORTED = 12;
+		static const unsigned char ERR_MODULE_ERROR = 13;
+		static const unsigned char ERR_IO_MODE_NOT_SUPPORTED = 14;
+		static const unsigned char ERR_PORT_OUT_OF_RANGE = 15;
+		static const unsigned char ERR_NOT_IMPLEMENTED = 16;
+		static const unsigned char ERR_OUT_OF_SYNC = 17;
+		static const unsigned char ERR_I2C_NOT_SUPPORTED = 18;
 	}
 
 	//We didn't use enums because their members are hoisted into and pollute

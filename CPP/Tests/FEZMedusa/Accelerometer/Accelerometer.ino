@@ -1,7 +1,7 @@
 #include <Gadgeteering.h>
 #include <FEZMedusa.h>
 #include <IO60P16.h>
-#include <AccelG248.h>
+#include <Accelerometer.h>
 #include <SPI.h>
 #include <SoftwareSerial.h>
 
@@ -11,23 +11,21 @@ using namespace GHI::Mainboards;
 using namespace GHI::Modules;
 
 FEZMedusa board;
-AccelG248* accel;
+Accelerometer* accel;
 
 void setup() {  
   Serial.begin(9600);
-  accel = new AccelG248(1);
+  accel = new Accelerometer(1);
 }
 
 void loop() {    
-  int x, y, z;
-  
-  accel->getXYZ(&x, &y, &z);
+  Accelerometer::Acceleration acc = accel->RequestMeasurement();
 
-  Serial.print(x);
-  Serial.print(" ");  
-  Serial.print(y);
-  Serial.print(" ");  
-  Serial.println(z);
+  //Serial.print(acc.X);
+  //Serial.print(" ");  
+  //Serial.print(acc.Y);
+  //Serial.print(" ");  
+  //Serial.println(acc.Z);
   
   delay(100);
 }

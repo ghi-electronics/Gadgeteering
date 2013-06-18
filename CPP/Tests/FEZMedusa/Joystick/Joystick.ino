@@ -1,32 +1,32 @@
-#include <GHI.h>
+#include <Gadgeteering.h>
 #include <FEZMedusa.h>
+#include <IO60P16.h>
+#include <SPI.h>
 #include <CharDisplay.h>
+#include <Joystick.h>
+
+using namespace GHI;
+using namespace GHI::Interfaces;
+using namespace GHI::Modules;
+using namespace GHI::Mainboards;
 
 FEZMedusa board;
 CharDisplay* display;
+Joystick* joystick;
 
- AnalogInput* x;
- AnalogInput* y;
-  
 void setup() {
-  x = new AnalogInput(board.getSocket(3), Socket::Pins::Four);
-  y = new AnalogInput(board.getSocket(3), Socket::Pins::Five);
-  
   display = new CharDisplay(1);
-  display->print("Hello, World!");
-  delay(500);
+  joystick = new Joystick(3);
 }
 
 void loop() {
-  int xVal = (int)(x->read() / 3.3 * 10);
-  int yVal = (int)(y->read() / 3.3 * 10);
+  int xVal = (int)(joystick->getX() * 10.0);
+  int yVal = (int)(joystick->getY() * 10.0);
     
   display->clear();
   display->print((char)xVal + 48);
   display->print((char)yVal + 48);
+  display->print(joystick->isPressed() ? "P" : "N");
   
   delay(500);
 }
-
-
-

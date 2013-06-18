@@ -1,5 +1,6 @@
 #include <FEZMedusa.h>
 #include <Gadgeteering.h>
+#include <IO60P16.h>
 #include <SPI.h>
 #include <SoftwareSerial.h>
 
