@@ -16,6 +16,7 @@ FEZMedusa::SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : Interfaces::SP
 
 FEZMedusa::SPIBus::~SPIBus() {
 	this->spi->end();
+	delete this->spi;
 }
 
 void FEZMedusa::SPIBus::setup(GHI::Interfaces::SPIDevice::Configuration* configuration) {

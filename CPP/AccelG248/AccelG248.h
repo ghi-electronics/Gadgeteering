@@ -2,13 +2,13 @@
 #define _ACCELG248_H_
 
 #include "../Gadgeteering/Gadgeteering.h"
-#include "../Gadgeteering/SoftwareI2C.hpp"
+#include "../Gadgeteering/I2CDevice.hpp"
 
 namespace GHI {
 	namespace Modules {
 
 		class AccelG248 : public Module {
-			Interfaces::SoftwareI2C* i2c;
+			Interfaces::I2CDevice* i2c;
 
 			public:
 				AccelG248(unsigned char socketNumber);

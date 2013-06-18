@@ -1,53 +1,45 @@
-#include "SoftwareI2C.hpp"
+#include "../Gadgeteering/Gadgeteering.h"
+
+#include "FEZMedusa.h"
 
 using namespace GHI;
 using namespace GHI::Interfaces;
+using namespace GHI::Mainboards;
 
 #define I2C_DELAY() ;
 
-SoftwareI2C::SoftwareI2C(unsigned char address, CPUPin sda, CPUPin scl) {
-	this->address = address << 1;
-
-	this->scl = scl;
-	this->sda = sda;
-	
+FEZMedusa::FEZMedusa::I2CBus::I2CBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
+{
 	this->start = false;
 	this->readSCL();
 	this->readSDA();
 }
 
-SoftwareI2C::SoftwareI2C(unsigned char address, Socket* socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber) {
-	this->address = address << 1;
+FEZMedusa::FEZMedusa::I2CBus::~I2CBus() {
 
-	this->scl = socket->pins[sclPinNumber];
-	this->sda = socket->pins[sdaPinNumber];
-	
-	this->start = false;
-	this->readSCL();
-	this->readSDA();
 }
 
-void SoftwareI2C::clearSCL() {
+void FEZMedusa::I2CBus::clearSCL() {
 	mainboard->setIOMode(this->scl, IOStates::DIGITAL_OUTPUT);
 	mainboard->writeDigital(this->scl, false);
 }
 
-bool SoftwareI2C::readSCL() {
+bool FEZMedusa::I2CBus::readSCL() {
 	mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
 	return mainboard->readDigital(this->scl);
 }
 
-void SoftwareI2C::clearSDA() {
+void FEZMedusa::I2CBus::clearSDA() {
 	mainboard->setIOMode(this->sda, IOStates::DIGITAL_OUTPUT);
 	mainboard->writeDigital(this->sda, false);
 }
 
-bool SoftwareI2C::readSDA() {
+bool FEZMedusa::I2CBus::readSDA() {
 	mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
 	return mainboard->readDigital(this->sda);
 }
 
-bool SoftwareI2C::writeBit(bool bit) {
+bool FEZMedusa::I2CBus::writeBit(bool bit) {
     if (bit)
 		this->readSDA();
     else
@@ -68,7 +60,7 @@ bool SoftwareI2C::writeBit(bool bit) {
     return true;
 }
 
-bool SoftwareI2C::readBit() {
+bool FEZMedusa::I2CBus::readBit() {
     this->readSDA();
 	
     I2C_DELAY();
@@ -85,7 +77,7 @@ bool SoftwareI2C::readBit() {
     return bit;
 }
 
-bool SoftwareI2C::sendStartCondition() {
+bool FEZMedusa::I2CBus::sendStartCondition() {
 	if (this->start) {
 		this->readSDA();
 		I2C_DELAY();
@@ -108,7 +100,7 @@ bool SoftwareI2C::sendStartCondition() {
 	return true;
 }
 
-bool SoftwareI2C::sendStopCondition() {
+bool FEZMedusa::I2CBus::sendStopCondition() {
 	this->clearSDA();
 	I2C_DELAY();
 
@@ -125,7 +117,7 @@ bool SoftwareI2C::sendStopCondition() {
 	return true;
 }
 
-bool SoftwareI2C::transmit(bool sendStart, bool sendStop, unsigned char data) {
+bool FEZMedusa::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data) {
 	unsigned char bit;
 	bool nack;
 	
@@ -146,7 +138,7 @@ bool SoftwareI2C::transmit(bool sendStart, bool sendStop, unsigned char data) {
      return nack;
 }
 
-unsigned char SoftwareI2C::receive(bool sendAcknowledgeBit, bool sendStopCondition) {
+unsigned char FEZMedusa::I2CBus::receive(bool sendAcknowledgeBit, bool sendStopCondition) {
 	unsigned char d = 0;
 	unsigned char bit = 0;
 
@@ -165,45 +157,45 @@ unsigned char SoftwareI2C::receive(bool sendAcknowledgeBit, bool sendStopConditi
 	return d;
 }
 
-unsigned int SoftwareI2C::writeBytes(const unsigned char* data, unsigned int length, bool sendStop) {
-	if (!length) 
+unsigned int FEZMedusa::I2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop) {
+	if (!count) 
 		return 0;
 
 	unsigned int numWrite = 0;
 	unsigned int i = 0;
 	
-	if (!this->transmit(true, false, this->address))
-		for (i = 0; i < length - 1; i++)
-			if (!this->transmit(false, false, data[i]))
+	if (!this->transmit(true, false, address))
+		for (i = 0; i < count - 1; i++)
+			if (!this->transmit(false, false, buffer[i]))
 				numWrite++;
 	
-	if (!this->transmit(false, sendStop, data[i]))
+	if (!this->transmit(false, sendStop, buffer[i]))
 		numWrite++;
 	
 	return numWrite;
  }
 
-unsigned int SoftwareI2C::readBytes(unsigned char* data, unsigned int length) {	
-	if (!length) 
+unsigned int FEZMedusa::I2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop) {	
+	if (!count) 
 		return 0;
 
 	unsigned int numRead = 0;
 	unsigned int i = 0;
 
-	if (!this->transmit(true, false, this->address | 1)) {
-		for (i = 0; i < length - 1; i++) {
-			data[i] = this->receive(true, false);
+	if (!this->transmit(true, false, address | 1)) {
+		for (i = 0; i < count - 1; i++) {
+			buffer[i] = this->receive(true, false);
 			numRead++;
 		}
 	}
 
-    data[i] = this->receive(false, true);
+    buffer[i] = this->receive(false, sendStop);
 	numRead++;
 
     return numRead;
 }
 
-bool SoftwareI2C::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead) {
+bool FEZMedusa::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address) {
 	*numWritten = 0;
 	*numRead = 0;
 
@@ -212,7 +204,7 @@ bool SoftwareI2C::writeRead(const unsigned char* writeBuffer, unsigned int write
 	unsigned int read = 0;
 
     if (writeLength > 0) {
-		if (!this->transmit(true, false, this->address)) {
+		if (!this->transmit(true, false, address)) {
 			for (i = 0; i < writeLength - 1; i++) {
 				if (!this->transmit(false, false, writeBuffer[i])) {
 					(write)++;
@@ -227,7 +219,7 @@ bool SoftwareI2C::writeRead(const unsigned char* writeBuffer, unsigned int write
     }
 
     if (readLength > 0) {
-		if (!this->transmit(true, false, this->address | 1)) {
+		if (!this->transmit(true, false, address | 1)) {
 			for (i = 0; i < readLength - 1; i++) {
 				readBuffer[i] = this->receive(true, false);
 				read++;
@@ -240,18 +232,4 @@ bool SoftwareI2C::writeRead(const unsigned char* writeBuffer, unsigned int write
     }
 
 	return (write + read) == (writeLength + readLength);
-}
-
-bool SoftwareI2C::writeRegister(unsigned char registerAddress, unsigned char value) {
-	unsigned char data[2] = {registerAddress, value};
-	return this->writeBytes(data, 2) == 2;
-}
-
-unsigned char SoftwareI2C::readRegister(unsigned char registerAddress) {
-	unsigned char value = 0xFF;
-	unsigned int written, read;
-
-	this->writeRead(&registerAddress, 1, &value, 1, &written, &read);
-
-	return value;
 }

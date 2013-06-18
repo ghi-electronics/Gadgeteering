@@ -3,12 +3,9 @@
 
 #include "Types.hpp"
 #include "Socket.hpp"
+#include "I2CDevice.hpp"
 
 namespace GHI {
-	namespace Interfaces {
-		class SoftwareI2C;
-	}
-
 	class ExtenderChip {
 		static const unsigned char INPUT_PORT_0_REGISTER = 0x00;
 		static const unsigned char OUTPUT_PORT_0_REGISTER = 0x08;
@@ -28,13 +25,13 @@ namespace GHI {
 					  
 		static const unsigned char CLOCK_SOURCE = 0x3;
 	
-		Interfaces::SoftwareI2C* io60Chip;
+		Interfaces::I2CDevice* io60Chip;
 
 		unsigned char getPort(CPUPin pin);
 		unsigned char getMask(CPUPin pin);
 		
 		public:
-			ExtenderChip(CPUPin sdaPin, CPUPin sclPin, unsigned char address);
+			ExtenderChip(CPUPin sdaPin, CPUPin sclPin);
 			~ExtenderChip();
 			
 			void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode);

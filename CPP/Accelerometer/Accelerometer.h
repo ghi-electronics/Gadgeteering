@@ -2,7 +2,8 @@
 #define _ACCELG248_H_
 
 #include "../Gadgeteering/Gadgeteering.h"
-#include "../Gadgeteering/SoftwareI2C.hpp"
+#include "../Gadgeteering/I2CDevice.hpp"
+#include "../Gadgeteering/I2CBus.hpp"
 
 namespace GHI {
 	namespace Modules {
@@ -49,7 +50,7 @@ namespace GHI {
 				void Calibrate();
 
 			private:
-				Interfaces::SoftwareI2C* i2c;
+				Interfaces::I2CDevice* i2c;
 
 				struct CalibrationOffsets {
 					int X;

@@ -5,6 +5,7 @@
 #include "../Gadgeteering/Socket.hpp"
 #include "../Gadgeteering/ExtenderChip.hpp"
 #include "../Gadgeteering/SPIDevice.hpp"
+#include "../Gadgeteering/I2CBus.hpp"
 
 class SoftwareSerial;
 class SPIClass;
@@ -41,6 +42,33 @@ namespace GHI {
 					virtual void write(const char* buffer, unsigned int count);
 					virtual unsigned int read(unsigned char* buffer, unsigned int count);
 			};
+	
+			class I2CBus : public GHI::Interfaces::I2CBus
+			{
+				bool start;
+	
+				void clearSCL();
+				bool readSCL();
+				void clearSDA();
+				bool readSDA();
+
+				bool writeBit(bool bit);
+				bool readBit();
+	
+				bool sendStartCondition();
+				bool sendStopCondition();			
+
+				bool transmit(bool sendStart, bool sendStop, unsigned char data);
+				unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
+
+				public:
+					I2CBus(CPUPin sda, CPUPin scl);
+					virtual ~I2CBus();
+					
+					virtual unsigned int write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
+					virtual unsigned int read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
+					virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
+			};
 
 			public:
 				FEZMedusa();
@@ -62,6 +90,8 @@ namespace GHI {
 				virtual Interfaces::SPIBus* getNewSPIBus(Socket* socket, Socket::Pin mosiPinNumber = Socket::Pins::Seven, Socket::Pin misoPinNumber = Socket::Pins::Eight, Socket::Pin sckPinNumber = Socket::Pins::Nine);
 				virtual Interfaces::SerialDevice* getNewSerialDevice(CPUPin txPin, CPUPin rxPin, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
 				virtual Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
+				virtual Interfaces::I2CBus* getNewI2CBus(CPUPin sdaPin, CPUPin sclPin);
+				virtual Interfaces::I2CBus* getNewI2CBus(Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine);
 		};
 	}
 }

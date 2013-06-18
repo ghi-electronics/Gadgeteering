@@ -12,7 +12,7 @@ Mainboard* GHI::mainboard = NULL;
 FEZMedusa::FEZMedusa() {
 	mainboard = this;
 
-	this->extenderChip = new ExtenderChip(A4, A5, 0x20);
+	this->extenderChip = new ExtenderChip(A4, A5);
 	
 	Socket* socket = this->registerSocket(new Socket(1, Socket::Types::I | Socket::Types::S | Socket::Types::Y | Socket::Types::X));
 	socket->pins[3] = 7;
@@ -191,4 +191,12 @@ Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(CPUPin txPin, CPUPin rxP
 
 Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) {
 	return new FEZMedusa::SerialDevice(socket->pins[txPinNumber], socket->pins[rxPinNumber], baudRate, parity, stopBits, dataBits);
+}
+
+Interfaces::I2CBus* FEZMedusa::getNewI2CBus(CPUPin sdaPin, CPUPin sclPin) {
+	return new FEZMedusa::I2CBus(sdaPin, sclPin);
+}
+
+Interfaces::I2CBus* FEZMedusa::getNewI2CBus(Socket* socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber) {
+	return new FEZMedusa::I2CBus(socket->pins[sdaPinNumber], socket->pins[sclPinNumber]);
 }

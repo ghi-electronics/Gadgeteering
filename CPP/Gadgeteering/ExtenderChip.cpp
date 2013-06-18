@@ -1,11 +1,13 @@
 #include "ExtenderChip.hpp"
-#include "SoftwareI2C.hpp"
+#include "I2CBus.hpp"
+#include "Mainboard.hpp"
 
 using namespace GHI;
 using namespace GHI::Interfaces;
 
-ExtenderChip::ExtenderChip(CPUPin sdaPin, CPUPin sclPin, unsigned char address) {
-	this->io60Chip = new SoftwareI2C(address, sdaPin, sclPin);
+ExtenderChip::ExtenderChip(CPUPin sda, CPUPin scl) {
+	I2CBus* bus = mainboard->getNewI2CBus(sda, scl);
+	this->io60Chip = new I2CDevice(bus, 0x20);
 }
 
 ExtenderChip::~ExtenderChip() {
