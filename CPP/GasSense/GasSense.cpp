@@ -14,20 +14,26 @@ namespace GHI
 			this->output = new Interfaces::DigitalOutput(sock->pins[4]);
 		}
 
-		int GasSense::GetGasReading(int samples)
+		double GasSense::GetGasReading(int samples)
 		{
-			this->output->write(true);
-
-			int reading = 0;
+			double reading = 0;
 
 			for(int i = 0; i < samples; i++)
 			{
-				reading += (this->input->read);
+				reading += (double)(this->input->read());
 			}
 
-			this->output->write(false);
-
 			return (reading / samples);
+		}
+
+		void GasSense::SetHeatingElement(bool state)
+		{
+			this->output->write(state);
+		}
+
+		GasSense::~GasSense()
+		{
+			this->SetHeatingElement(false);
 		}
 	}
 }

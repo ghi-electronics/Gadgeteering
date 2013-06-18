@@ -16,7 +16,7 @@ namespace GHI
 			public:
 				Moisture(int socket);
 
-				int GetMoistureReading(int samples);
+				double GetMoistureReading(int samples);
 		};
 	}
 }
