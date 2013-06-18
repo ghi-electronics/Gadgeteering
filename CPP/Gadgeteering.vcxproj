@@ -100,7 +100,7 @@
     <ClInclude Include="LED7C\LED7C.h" />
     <ClInclude Include="LED7R\LED7R.h" />
     <ClInclude Include="LEDStrip\LEDStrip.h" />
-    <ClInclude Include="Load\Load.h" />
+    <ClInclude Include="LightSensor\LightSensor.h" />
     <ClInclude Include="Moisture\Moisture.h" />
     <ClInclude Include="RelayX16\RelayX16.h" />
     <ClInclude Include="RelayX1\RelayX1.h" />
@@ -138,7 +138,7 @@
     <ClCompile Include="LED7C\LED7C.cpp" />
     <ClCompile Include="LED7R\LED7R.cpp" />
     <ClCompile Include="LEDStrip\LEDStrip.cpp" />
-    <ClCompile Include="Load\Load.cpp" />
+    <ClCompile Include="LightSensor\LightSensor.cpp" />
     <ClCompile Include="Moisture\Moisture.cpp" />
     <ClCompile Include="RelayX16\RelayX16.cpp" />
     <ClCompile Include="RelayX1\RelayX1.cpp" />

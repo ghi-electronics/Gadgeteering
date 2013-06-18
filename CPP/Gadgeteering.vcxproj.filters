@@ -105,25 +105,25 @@
     <ClInclude Include="Gadgeteering\I2CDevice.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AccelG248\AccelG248.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DistanceUS3\DistanceUS3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Button\Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GasSense\GasSense.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Load\Load.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TemperatureHumidity\TemperatureHumidity.h">
+    <ClInclude Include="AccelG248\AccelG248.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IO60P16\IO60P16.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GasSense\GasSense.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LightSensor\LightSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TemperatureHumidity\TemperatureHumidity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -212,13 +212,10 @@
     <ClCompile Include="Gadgeteering\I2CBus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FEZMedusa\I2CBus.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Gadgeteering\I2CDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AccelG248\AccelG248.cpp">
+    <ClCompile Include="FEZMedusa\I2CBus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DistanceUS3\DistanceUS3.cpp">
@@ -227,16 +224,19 @@
     <ClCompile Include="Button\Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GasSense\GasSense.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Load\Load.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TemperatureHumidity\TemperatureHumidity.cpp">
+    <ClCompile Include="AccelG248\AccelG248.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IO60P16\IO60P16.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GasSense\GasSense.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LightSensor\LightSensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TemperatureHumidity\TemperatureHumidity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
