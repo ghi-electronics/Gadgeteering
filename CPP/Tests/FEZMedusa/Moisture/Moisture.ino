@@ -1,6 +1,7 @@
 #include <Gadgeteering.h>
 #include <FEZMedusa.h>
 #include <SPI.h>
+#include <IO60P16.h>
 #include <Moisture.h>
 
 using namespace GHI;

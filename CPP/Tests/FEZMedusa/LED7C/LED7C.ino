@@ -1,7 +1,7 @@
 #include <Gadgeteering.h>
 #include <FEZMedusa.h>
-#include <IO60P16.h>
 #include <SPI.h>
+#include <IO60P16.h>
 #include <LED7C.h>
 
 using namespace GHI;

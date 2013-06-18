@@ -7,7 +7,7 @@ using namespace GHI::Interfaces;
 AccelG248::AccelG248(unsigned char socketNumber) {
 	Socket* socket = mainboard->getSocket(socketNumber);
 	socket->ensureTypeIsSupported(Socket::Types::I);
-	I2CBus* bus = mainboard->getNewI2CBus(socket);
+	I2CBus* bus = mainboard->getI2CBus(socket);
 
 	this->i2c = new I2CDevice(bus, 0x1C);
 	this->i2c->writeRegister(0x2A, 1);

@@ -12,7 +12,7 @@ namespace GHI
 		class SPIBus
 		{
 			protected:
-				SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck);
+				SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
 
 				virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, SPIDevice::Configuration* configuration);
 

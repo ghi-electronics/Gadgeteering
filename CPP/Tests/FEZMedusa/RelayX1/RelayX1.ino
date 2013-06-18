@@ -1,6 +1,7 @@
 #include <Gadgeteering.h>
 #include <FEZMedusa.h>
 #include <SPI.h>
+#include <IO60P16.h>
 #include <RelayX1.h>
 
 using namespace GHI;

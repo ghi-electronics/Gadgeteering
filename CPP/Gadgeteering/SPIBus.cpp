@@ -3,7 +3,7 @@
 using namespace GHI;
 using namespace GHI::Interfaces;
 
-SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : mosi(mosi), miso(miso), sck(sck) {	
+SPIBus::SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin) : mosi(mosiPin), miso(misoPin), sck(sckPin) {	
 
 }
 

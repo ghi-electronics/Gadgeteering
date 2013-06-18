@@ -290,8 +290,8 @@ namespace GHI
 				virtual void writeAnalog(GHI::Socket* socket, GHI::Socket::Pin pin, double voltage);
 				virtual void setIOMode(GHI::Socket* socket, GHI::Socket::Pin pin, GHI::IOState state, GHI::ResistorMode resistorMode = GHI::ResistorModes::FLOATING);
 			
-				virtual GHI::Interfaces::SPIBus* getNewSPIBus(GHI::Socket* socket);
-				virtual GHI::Interfaces::SerialDevice* getNewSerialDevice(GHI::Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
+				virtual GHI::Interfaces::SPIBus* getSPIBus(GHI::Socket* socket);
+				virtual GHI::Interfaces::SerialDevice* getSerialDevice(GHI::Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
 
 				protected:
 					bool isVirtual(GHI::CPUPin pinNumber);

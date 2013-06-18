@@ -1,7 +1,7 @@
-#include <FEZMedusa.h>
 #include <Gadgeteering.h>
-#include <IO60P16.h>
+#include <FEZMedusa.h>
 #include <SPI.h>
+#include <IO60P16.h>
 #include <SoftwareSerial.h>
 
 using namespace GHI;

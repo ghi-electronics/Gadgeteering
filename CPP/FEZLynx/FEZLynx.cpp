@@ -533,12 +533,12 @@ void FEZLynx::setIOMode(GHI::Socket* socket, GHI::Socket::Pin pin, GHI::IOState 
 	this->setIOMode(socket->pins[pin], state, resistorMode);
 }
 
-GHI::Interfaces::SPIBus* FEZLynx::getNewSPIBus(GHI::Socket* socket)
+GHI::Interfaces::SPIBus* FEZLynx::getSPIBus(GHI::Socket* socket)
 {
 	return NULL;
 }
 
-GHI::Interfaces::SerialDevice* FEZLynx::getNewSerialDevice(GHI::Socket* socket, int baudRate, int parity, int stopBits, int dataBits)
+GHI::Interfaces::SerialDevice* FEZLynx::getSerialDevice(GHI::Socket* socket, int baudRate, int parity, int stopBits, int dataBits)
 {
 	return NULL;
 }

@@ -1,8 +1,7 @@
 #include <Gadgeteering.h>
 #include <FEZMedusa.h>
-#include <IO60P16.h>
 #include <SPI.h>
-#include <SoftwareSerial.h>
+#include <IO60P16.h>
 #include <CharDisplay.h>
 
 using namespace GHI;
