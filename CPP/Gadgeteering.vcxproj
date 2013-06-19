@@ -75,6 +75,7 @@
     <ClInclude Include="Barometer\Barometer.h" />
     <ClInclude Include="Breakout\Breakout.h" />
     <ClInclude Include="Button\Button.h" />
+    <ClInclude Include="ColorSense\ColorSense.h" />
     <ClInclude Include="DistanceUS3\DistanceUS3.h" />
     <ClInclude Include="Extender\Extender.h" />
     <ClInclude Include="FEZLynx\SoftwareI2C_Lynx.h" />
@@ -117,6 +118,7 @@
     <ClCompile Include="Barometer\Barometer.cpp" />
     <ClCompile Include="Breakout\Breakout.cpp" />
     <ClCompile Include="Button\Button.cpp" />
+    <ClCompile Include="ColorSense\ColorSense.cpp" />
     <ClCompile Include="DistanceUS3\DistanceUS3.cpp" />
     <ClCompile Include="Extender\Extender.cpp" />
     <ClCompile Include="FEZLynx\ExtendedSockets.cpp" />
