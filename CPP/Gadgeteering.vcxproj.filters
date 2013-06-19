@@ -141,6 +141,15 @@
     <ClInclude Include="ColorSense\ColorSense.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MaxO\MaxO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Potentiometer\Potentiometer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MotionSensor\MotionSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -267,6 +276,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ColorSense\ColorSense.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MaxO\MaxO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Potentiometer\Potentiometer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MotionSensor\MotionSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

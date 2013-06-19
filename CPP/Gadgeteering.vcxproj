@@ -106,7 +106,10 @@
     <ClInclude Include="LEDStrip\LEDStrip.h" />
     <ClInclude Include="LightSensor\LightSensor.h" />
     <ClInclude Include="Load\Load.h" />
+    <ClInclude Include="MaxO\MaxO.h" />
     <ClInclude Include="Moisture\Moisture.h" />
+    <ClInclude Include="MotionSensor\MotionSensor.h" />
+    <ClInclude Include="Potentiometer\Potentiometer.h" />
     <ClInclude Include="RelayX16\RelayX16.h" />
     <ClInclude Include="RelayX1\RelayX1.h" />
     <ClInclude Include="TemperatureHumidity\TemperatureHumidity.h" />
@@ -149,7 +152,10 @@
     <ClCompile Include="LEDStrip\LEDStrip.cpp" />
     <ClCompile Include="LightSensor\LightSensor.cpp" />
     <ClCompile Include="Load\Load.cpp" />
+    <ClCompile Include="MaxO\MaxO.cpp" />
     <ClCompile Include="Moisture\Moisture.cpp" />
+    <ClCompile Include="MotionSensor\MotionSensor.cpp" />
+    <ClCompile Include="Potentiometer\Potentiometer.cpp" />
     <ClCompile Include="RelayX16\RelayX16.cpp" />
     <ClCompile Include="RelayX1\RelayX1.cpp" />
     <ClCompile Include="TemperatureHumidity\TemperatureHumidity.cpp" />

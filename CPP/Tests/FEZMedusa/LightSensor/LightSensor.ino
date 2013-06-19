@@ -15,11 +15,15 @@ LightSensor sensor(3);
 LED7R led(1);
 
 void setup() {
-
+  //asdf/
+  
+  //qwurerty
+  
+  
 }
 
 void loop() {  
-  int reading = (int)(sensor.ReadLightSensorVoltage() / 3.3 * 7);
+  int reading = (int)(sensor.ReadLightSensorVoltage() * 1.4 / 3.3 * 7);
   int j = 1;
   for (; j <= reading && j <= 7; j++)
     led.turnOnLED(j);
