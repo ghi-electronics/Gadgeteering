@@ -135,6 +135,9 @@
     <ClInclude Include="Extender\Extender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Barometer\Barometer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -255,6 +258,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Extender\Extender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Barometer\Barometer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

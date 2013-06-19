@@ -72,6 +72,7 @@
   <ItemGroup>
     <ClInclude Include="Accelerometer\Accelerometer.h" />
     <ClInclude Include="AccelG248\AccelG248.h" />
+    <ClInclude Include="Barometer\Barometer.h" />
     <ClInclude Include="Breakout\Breakout.h" />
     <ClInclude Include="Button\Button.h" />
     <ClInclude Include="DistanceUS3\DistanceUS3.h" />
@@ -113,6 +114,7 @@
   <ItemGroup>
     <ClCompile Include="Accelerometer\Accelerometer.cpp" />
     <ClCompile Include="AccelG248\AccelG248.cpp" />
+    <ClCompile Include="Barometer\Barometer.cpp" />
     <ClCompile Include="Breakout\Breakout.cpp" />
     <ClCompile Include="Button\Button.cpp" />
     <ClCompile Include="DistanceUS3\DistanceUS3.cpp" />
