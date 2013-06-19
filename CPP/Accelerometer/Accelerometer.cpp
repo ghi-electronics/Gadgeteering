@@ -7,9 +7,8 @@ using namespace GHI::Interfaces;
 Accelerometer::Accelerometer(unsigned char socketNumber) {
 	Socket* socket = mainboard->getSocket(socketNumber);
 	socket->ensureTypeIsSupported(Socket::Types::I);
-	I2CBus* bus = mainboard->getI2CBus(socket);
 
-	this->i2c = new I2CDevice(bus, 0x1D);
+	this->i2c = new I2CDevice(socket->getI2CBus(), 0x1D);
 	this->OperatingMode = Modes::Measurement;
 	this->MeasurementRange = Ranges::TwoG;
 }

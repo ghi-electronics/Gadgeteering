@@ -9,7 +9,7 @@ ColorSense::ColorSense(unsigned char socketNumber) {
 	socket->ensureTypeIsSupported(Socket::Types::X);
 	
     this->LEDControl = new DigitalOutput(socket, Socket::Pins::Three, false);
-	this->softwareI2C = new I2CDevice(mainboard->getI2CBus(socket, Socket::Pins::Four, Socket::Pins::Five), ColorSense::COLOR_ADDRESS);
+	this->softwareI2C = new I2CDevice(socket->getI2CBus(Socket::Pins::Four, Socket::Pins::Five), ColorSense::COLOR_ADDRESS);
 
 	this->softwareI2C->writeRegister(0x80, 0x03);
 }

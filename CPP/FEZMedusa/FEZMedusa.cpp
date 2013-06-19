@@ -202,7 +202,7 @@ Interfaces::SPIBus* FEZMedusa::getSPIBus(Socket* socket, Socket::Pin mosiPinNumb
 	return this->getSPIBus(socket->pins[mosiPinNumber], socket->pins[misoPinNumber], socket->pins[sckPinNumber]);
 }
 
-Interfaces::SerialDevice* FEZMedusa::getSerialDevice(CPUPin txPin, CPUPin rxPin, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) {
+Interfaces::SerialDevice* FEZMedusa::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin) {
 	for (SerialDevice* current = (SerialDevice*)this->serialDevices.start(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.next())
 		if (current->tx == txPin && current->rx == rxPin)
 			return current;
@@ -212,7 +212,7 @@ Interfaces::SerialDevice* FEZMedusa::getSerialDevice(CPUPin txPin, CPUPin rxPin,
 	return bus;
 }
 
-Interfaces::SerialDevice* FEZMedusa::getSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) {
+Interfaces::SerialDevice* FEZMedusa::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber) {
 	return this->getSerialDevice(socket->pins[txPinNumber], socket->pins[rxPinNumber], baudRate, parity, stopBits, dataBits);
 }
 
