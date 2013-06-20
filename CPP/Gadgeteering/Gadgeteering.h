@@ -11,5 +11,6 @@
 #include "SPIBus.hpp"
 #include "System.hpp"
 #include "List.hpp"
+#include "Module.hpp"
 
 #endif

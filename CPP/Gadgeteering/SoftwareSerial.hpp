@@ -1,39 +1,38 @@
 #include "Interfaces.hpp"
 #include "Types.hpp"
 #include "System.hpp"
+#include "SerialDevice.hpp"
 
 namespace GHI
 {
 	namespace Interfaces
 	{
-		class SoftwareSerial
+		class SoftwareSerial : public SerialDevice
 		{
 			protected:
-				int baud;
 				int bitPeriod;
+				unsigned char buffer[64];
 
-				DigitalInput *rx;
-				DigitalOutput *tx;
+				DigitalInput* rxPort;
+				DigitalOutput* txPort;
 
-				virtual void receive();
+				virtual unsigned char receive();
 
-				char buffer[64];
+				void write(const char data);
 
 			public:
-				SoftwareSerial(CPUPin rxPin, CPUPin txPin, int baudrate);
+				SoftwareSerial(CPUPin txPin, CPUPin rxPin, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
 
 				virtual ~SoftwareSerial();
 
-				virtual char* read(char bytes);
+				unsigned char available();
+				bool overflow();
 
-				virtual void write(const char* data, int offset, int count);
-				virtual void write(const char data);
 				virtual void open();
 				virtual void close();
-
-				virtual char available();
-
-				virtual bool overflow();
+				virtual void write(const unsigned char* buffer, unsigned int count);
+				virtual void write(const char* buffer, unsigned int count);
+				virtual unsigned int read(unsigned char* buffer, unsigned int count);
 		};
 	}
 }
