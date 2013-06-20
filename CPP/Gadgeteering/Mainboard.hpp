@@ -9,10 +9,6 @@
 #include "List.hpp"
 
 namespace GHI {
-	class Module {
-		protected:
-			Module();
-	};
 	
 	class Mainboard {
 		protected:

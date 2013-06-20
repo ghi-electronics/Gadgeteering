@@ -2,10 +2,6 @@
 
 using namespace GHI;
 
-Module::Module() {
-
-}
-
 Mainboard::Mainboard() {
 	if (mainboard != NULL)
 		mainboard->panic(Exceptions::ERR_ONLY_ONE_MAINBOARD);
