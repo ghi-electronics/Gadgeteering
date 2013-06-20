@@ -114,13 +114,6 @@ FEZMedusa::FEZMedusa() {
 }
 
 FEZMedusa::~FEZMedusa() {
-	for (I2CBus* current = (I2CBus*)this->i2cBusses.start(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.next())
-		delete current;
-	for (SPIBus* current = (SPIBus*)this->spiBusses.start(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.next())
-		delete current;
-	for (SerialDevice* current = (SerialDevice*)this->serialDevices.start(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.next())
-		delete current;
-
 	delete this->extenderChip;
 }
 				
