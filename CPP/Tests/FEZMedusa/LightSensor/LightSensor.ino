@@ -1,8 +1,7 @@
 #include <Gadgeteering.h>
 #include <FEZMedusa.h>
-#include <IO60P16.h>
 #include <SPI.h>
-#include <SoftwareSerial.h>
+#include <IO60P16.h>
 #include <LightSensor.h>
 #include <LED7R.h>
 
@@ -16,11 +15,15 @@ LightSensor sensor(3);
 LED7R led(1);
 
 void setup() {
-
+  //asdf/
+  
+  //qwurerty
+  
+  
 }
 
 void loop() {  
-  int reading = (int)(sensor.ReadLightSensorVoltage() / 3.3 * 7);
+  int reading = (int)(sensor.ReadLightSensorVoltage() * 1.4 / 3.3 * 7);
   int j = 1;
   for (; j <= reading && j <= 7; j++)
     led.turnOnLED(j);

@@ -19,7 +19,7 @@ FEZMedusa::SPIBus::~SPIBus() {
 	delete this->spi;
 }
 
-void FEZMedusa::SPIBus::setup(GHI::Interfaces::SPIDevice::Configuration* configuration) {
+void FEZMedusa::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configuration) {
 	if (!configuration->clockIdleState && configuration->clockEdge)
 		this->spi->setDataMode(SPI_MODE0);
 	else if (!configuration->clockIdleState && !configuration->clockEdge)
@@ -46,7 +46,7 @@ void FEZMedusa::SPIBus::setup(GHI::Interfaces::SPIDevice::Configuration* configu
 	}
 }
 
-void FEZMedusa::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIDevice::Configuration* configuration)
+void FEZMedusa::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration)
 {
 	this->setup(configuration);
 

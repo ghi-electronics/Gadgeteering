@@ -12,13 +12,13 @@ namespace GHI
 		class I2CBus
 		{
 			public:
-				friend class I2CDevice;
-
 				const CPUPin sda;
 				const CPUPin scl;
 
 				I2CBus(CPUPin sdaPin, CPUPin sclPin);
 				virtual ~I2CBus();
+
+				I2CDevice* getI2CDevice(unsigned char address);
 					
 				virtual unsigned int write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop = true);
 				virtual unsigned int read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop = true);

@@ -4,6 +4,7 @@
 #include "Socket.hpp"
 #include "SPIDevice.hpp"
 #include "Interfaces.hpp"
+#include "Types.hpp"
 
 namespace GHI
 {
@@ -11,19 +12,17 @@ namespace GHI
 	{
 		class SPIBus
 		{
-			protected:
-				SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck);
-
-				virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, SPIDevice::Configuration* configuration);
-
 			public:
-				friend class SPIDevice;
-
 				const CPUPin mosi;
 				const CPUPin miso;
 				const CPUPin sck;
-				
+
+				SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
 				virtual ~SPIBus();
+
+				SPIDevice* getSPIDevice(CPUPin pin, SPIConfiguration* configuration);
+
+				virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, SPIConfiguration* configuration);
 		};
 	}
 }

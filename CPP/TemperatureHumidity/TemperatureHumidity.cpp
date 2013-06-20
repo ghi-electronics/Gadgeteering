@@ -44,8 +44,6 @@ void TemperatureHumidity::TakeMeasurements(double* temperature, double* humidity
 	
     *temperature = temperatureReading;
     *humidity = rhReading;
-
-	System::Sleep(3600);
 }
 
 void TemperatureHumidity::SHT_TransmissionStart() {

@@ -7,7 +7,6 @@
 #include "../Gadgeteering/SPIDevice.hpp"
 #include "../Gadgeteering/I2CBus.hpp"
 
-class SoftwareSerial;
 class SPIClass;
 
 namespace GHI {
@@ -20,18 +19,16 @@ namespace GHI {
 			class SPIBus : public GHI::Interfaces::SPIBus
 			{
 				SPIClass* spi;
-				void setup(GHI::Interfaces::SPIDevice::Configuration* configuration);
+				void setup(GHI::Interfaces::SPIConfiguration* configuration);
 
 				public:
 					SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck);
 					virtual ~SPIBus();
 					
-					virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIDevice::Configuration* configuration);
+					virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration);
 			};
 
 			class SerialDevice : public GHI::Interfaces::SerialDevice {
-				SoftwareSerial* port;
-
 				public:
 					SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
 					virtual ~SerialDevice();
@@ -88,12 +85,12 @@ namespace GHI {
 				virtual void writeAnalogProportion(CPUPin pin, double voltage);
 				virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
 		
-				virtual Interfaces::SPIBus* getNewSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
-				virtual Interfaces::SPIBus* getNewSPIBus(Socket* socket, Socket::Pin mosiPinNumber = Socket::Pins::Seven, Socket::Pin misoPinNumber = Socket::Pins::Eight, Socket::Pin sckPinNumber = Socket::Pins::Nine);
-				virtual Interfaces::SerialDevice* getNewSerialDevice(CPUPin txPin, CPUPin rxPin, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
-				virtual Interfaces::SerialDevice* getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
-				virtual Interfaces::I2CBus* getNewI2CBus(CPUPin sdaPin, CPUPin sclPin);
-				virtual Interfaces::I2CBus* getNewI2CBus(Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine);
+				virtual Interfaces::SPIBus* getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
+				virtual Interfaces::SPIBus* getSPIBus(Socket* socket, Socket::Pin mosiPinNumber = Socket::Pins::Seven, Socket::Pin misoPinNumber = Socket::Pins::Eight, Socket::Pin sckPinNumber = Socket::Pins::Nine);
+				virtual Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin);
+				virtual Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber);
+				virtual Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin);
+				virtual Interfaces::I2CBus* getI2CBus(Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine);
 		};
 	}
 }

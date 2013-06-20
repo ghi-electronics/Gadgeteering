@@ -5,7 +5,7 @@
 using namespace GHI;
 using namespace GHI::Interfaces;
 
-SPIDevice::Configuration::Configuration(bool chipSelectActiveState, unsigned int chipSelectSetupTime, unsigned int chipSelectHoldTime, bool clockIdleState, bool clockEdge, unsigned int clockRate) {
+SPIConfiguration::SPIConfiguration(bool chipSelectActiveState, unsigned int chipSelectSetupTime, unsigned int chipSelectHoldTime, bool clockIdleState, bool clockEdge, unsigned int clockRate) {
 	this->chipSelectActiveState = chipSelectActiveState;
 	this->chipSelectSetupTime = chipSelectSetupTime;
 	this->chipSelectHoldTime = chipSelectHoldTime;
@@ -14,14 +14,14 @@ SPIDevice::Configuration::Configuration(bool chipSelectActiveState, unsigned int
 	this->clockRate = clockRate;
 }
 
-SPIDevice::SPIDevice(SPIBus *spiBus, CPUPin chipSelectPin, GHI::Interfaces::SPIDevice::Configuration* configuration) {
+SPIDevice::SPIDevice(SPIBus *spiBus, CPUPin chipSelectPin, GHI::Interfaces::SPIConfiguration* configuration) {
 	this->chipSelect = new DigitalOutput(chipSelectPin, true);
 	this->configuration = configuration;
 
 	this->bus = spiBus;
 }
 
-SPIDevice::SPIDevice(SPIBus* spiBus, Socket* socket, Socket::Pin chipSelectPinNumber, GHI::Interfaces::SPIDevice::Configuration* configuration) {
+SPIDevice::SPIDevice(SPIBus* spiBus, Socket* socket, Socket::Pin chipSelectPinNumber, GHI::Interfaces::SPIConfiguration* configuration) {
 	socket->ensureTypeIsSupported(Socket::Types::S);
 
 	this->chipSelect = new DigitalOutput(socket, chipSelectPinNumber, true);

@@ -114,7 +114,12 @@ FEZMedusa::FEZMedusa() {
 }
 
 FEZMedusa::~FEZMedusa() {
+	for (I2CBus* current = (I2CBus*)this->i2cBusses.start(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.next())
+		delete current;
+	for (SPIBus* current = (SPIBus*)this->spiBusses.start(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.next())
+		delete current;
 
+	delete this->extenderChip;
 }
 				
 void FEZMedusa::panic(unsigned char error) {
@@ -188,7 +193,7 @@ void FEZMedusa::writeAnalogProportion(CPUPin pinNumber, double voltage) {
 	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? ::analogWrite(pinNumber, voltage * 1024) : mainboard->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED);
 }
 
-Interfaces::SPIBus* FEZMedusa::getNewSPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) {
+Interfaces::SPIBus* FEZMedusa::getSPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) {
 	for (SPIBus* current = (SPIBus*)this->spiBusses.start(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.next())
 		if (current->mosi == mosi && current->miso == miso && current->sck == sck)
 			return current;
@@ -198,11 +203,11 @@ Interfaces::SPIBus* FEZMedusa::getNewSPIBus(CPUPin mosi, CPUPin miso, CPUPin sck
 	return bus;
 }
 
-Interfaces::SPIBus* FEZMedusa::getNewSPIBus(Socket* socket, Socket::Pin mosiPinNumber, Socket::Pin misoPinNumber, Socket::Pin sckPinNumber) {
-	return this->getNewSPIBus(socket->pins[mosiPinNumber], socket->pins[misoPinNumber], socket->pins[sckPinNumber]);
+Interfaces::SPIBus* FEZMedusa::getSPIBus(Socket* socket, Socket::Pin mosiPinNumber, Socket::Pin misoPinNumber, Socket::Pin sckPinNumber) {
+	return this->getSPIBus(socket->pins[mosiPinNumber], socket->pins[misoPinNumber], socket->pins[sckPinNumber]);
 }
 
-Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(CPUPin txPin, CPUPin rxPin, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) {
+Interfaces::SerialDevice* FEZMedusa::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin) {
 	for (SerialDevice* current = (SerialDevice*)this->serialDevices.start(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.next())
 		if (current->tx == txPin && current->rx == rxPin)
 			return current;
@@ -213,11 +218,11 @@ Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(CPUPin txPin, CPUPin rxP
 	return bus;
 }
 
-Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) {
-	return this->getNewSerialDevice(socket->pins[txPinNumber], socket->pins[rxPinNumber], baudRate, parity, stopBits, dataBits);
+Interfaces::SerialDevice* FEZMedusa::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber) {
+	return this->getSerialDevice(socket->pins[txPinNumber], socket->pins[rxPinNumber], baudRate, parity, stopBits, dataBits);
 }
 
-Interfaces::I2CBus* FEZMedusa::getNewI2CBus(CPUPin sdaPin, CPUPin sclPin) {
+Interfaces::I2CBus* FEZMedusa::getI2CBus(CPUPin sdaPin, CPUPin sclPin) {
 	for (I2CBus* current = (I2CBus*)this->i2cBusses.start(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.next())
 		if (current->scl == sclPin && current->sda == sdaPin)
 			return current;
@@ -227,6 +232,6 @@ Interfaces::I2CBus* FEZMedusa::getNewI2CBus(CPUPin sdaPin, CPUPin sclPin) {
 	return bus;
 }
 
-Interfaces::I2CBus* FEZMedusa::getNewI2CBus(Socket* socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber) {
-	return this->getNewI2CBus(socket->pins[sdaPinNumber], socket->pins[sclPinNumber]);
+Interfaces::I2CBus* FEZMedusa::getI2CBus(Socket* socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber) {
+	return this->getI2CBus(socket->pins[sdaPinNumber], socket->pins[sclPinNumber]);
 }

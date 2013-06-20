@@ -1,7 +1,7 @@
 #include <Gadgeteering.h>
 #include <FEZMedusa.h>
-#include <IO60P16.h>
 #include <SPI.h>
+#include <IO60P16.h>
 #include <Extender.h>
 
 using namespace GHI;
@@ -22,7 +22,7 @@ DigitalOutput* d7;
 
 void setup() {
   Serial.begin(9600);
-  extender = new Extender(5);
+  extender = new Extender(6);
   d1 = extender->SetupDigitalOutput(Socket::Pins::Three, !next);
   d2 = extender->SetupDigitalOutput(Socket::Pins::Four, !next);
   d3 = extender->SetupDigitalOutput(Socket::Pins::Five, !next);

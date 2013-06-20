@@ -13,7 +13,7 @@ namespace GHI {
 				unsigned char stopBits;
 				unsigned char dataBits;
 
-				SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
+				SerialDevice(CPUPin txPin, CPUPin rxPin, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
 
 			public:
 				const CPUPin tx;

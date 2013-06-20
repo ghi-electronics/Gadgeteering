@@ -1,9 +1,8 @@
 #include <Gadgeteering.h>
 #include <FEZMedusa.h>
+#include <SPI.h>
 #include <IO60P16.h>
 #include <AccelG248.h>
-#include <SPI.h>
-#include <SoftwareSerial.h>
 
 using namespace GHI;
 using namespace GHI::Interfaces;

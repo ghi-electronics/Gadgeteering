@@ -3,7 +3,7 @@
 using namespace GHI;
 using namespace GHI::Interfaces;
 
-SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : mosi(mosi), miso(miso), sck(sck) {	
+SPIBus::SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin) : mosi(mosiPin), miso(misoPin), sck(sckPin) {	
 
 }
 
@@ -11,6 +11,11 @@ SPIBus::~SPIBus() {
 
 }
 
-void SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration) {
+SPIDevice* SPIBus::getSPIDevice(CPUPin pin, SPIConfiguration* configuration) {
+	return new SPIDevice(this, pin, configuration);
+}
+			
+
+void SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration) {
 	mainboard->panic(Exceptions::ERR_SPI_NOT_SUPPORTED);
 }
