@@ -1,7 +1,7 @@
 #include <Gadgeteering.h>
 #include <FEZMedusa.h>
 #include <SPI.h>
-#include <RelayX1.h>
+#include <DistanceUS3.h>
 
 using namespace GHI;
 using namespace GHI::Interfaces;
@@ -9,18 +9,16 @@ using namespace GHI::Mainboards;
 using namespace GHI::Modules;
 
 FEZMedusa board;
-RelayX1 *relay;
+DistanceUS3 *dist;
 
 void setup() {
-  relay = new RelayX1(3);
+  dist = new DistanceUS3(3);
   
   Serial.begin(9600);
 }
 
 void loop() {
-  relay->EnableRelay();  
-  System::Sleep(1000);
-  relay->DisableRelay();
+  Serial.println(dist->getDistanceInCentimeters());
   System::Sleep(1000);
 }
 

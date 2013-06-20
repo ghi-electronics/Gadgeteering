@@ -1,7 +1,7 @@
 #include <Gadgeteering.h>
 #include <FEZMedusa.h>
 #include <SPI.h>
-#include <RelayX1.h>
+#include <RelayX16.h>
 
 using namespace GHI;
 using namespace GHI::Interfaces;
@@ -9,18 +9,26 @@ using namespace GHI::Mainboards;
 using namespace GHI::Modules;
 
 FEZMedusa board;
-RelayX1 *relay;
+RelayX16 *relay;
 
 void setup() {
-  relay = new RelayX1(3);
+  relay = new RelayX16(1);
   
   Serial.begin(9600);
+  
+  Serial.println("Default off state");
+  System::Sleep(1000);
 }
 
 void loop() {
-  relay->EnableRelay();  
+  relay->enableAllRelays(); 
+  Serial.println("On");
+  
   System::Sleep(1000);
-  relay->DisableRelay();
+  
+  relay->disableAllRelays();
+  Serial.println("Off");
+  
   System::Sleep(1000);
 }
 
