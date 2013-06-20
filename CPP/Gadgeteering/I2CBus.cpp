@@ -8,11 +8,14 @@ I2CBus::I2CBus(CPUPin sdaPin, CPUPin sclPin) : sda(sdaPin), scl(sclPin) {
 }
 
 I2CBus::~I2CBus() {
-
+	for (I2CDevice* current = (I2CDevice*)this->i2cDevices.start(); !this->i2cDevices.ended(); current = (I2CDevice*)this->i2cDevices.next())
+		delete current;
 }
 
 I2CDevice* I2CBus::getI2CDevice(unsigned char address) {
-	return new I2CDevice(this, address);
+	I2CDevice* device = new I2CDevice(this, address);
+	this->i2cDevices.add(device);
+	return device;
 }
 					
 unsigned int I2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop) {
