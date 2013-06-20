@@ -1,96 +1,98 @@
 #include "SoftwareSerial.hpp"
 
-namespace GHI
+using namespace GHI;
+using namespace GHI::Interfaces;
+
+SoftwareSerial::SoftwareSerial(CPUPin txPin, CPUPin rxPin, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) : SerialDevice(rxPin, rxPin, baudRate, parity, stopBits, dataBits)
 {
-	namespace Interfaces
+	this->rxPort = new DigitalInput(txPin, ResistorModes::FLOATING);
+	this->txPort = new DigitalOutput(rxPin, false);
+
+	//Calculate baudrate
+	this->bitPeriod = 1000000 / this->baudRate;
+
+	//Null out buffer
+	for(int i = 0; i < 64; i++)
+		buffer[i] = 0x00;
+}
+
+unsigned int SoftwareSerial::read(unsigned char* buffer, unsigned int count)
+{
+	int bitDelay = this->bitPeriod - System::CyclesToMicroseconds(50);
+
+	while(rxPort->read()); //Wait for start bit
+
+	if(rxPort->read() == false) //Check to see if we got here due to line noise
 	{
-		SoftwareSerial::SoftwareSerial(CPUPin rxPin, CPUPin txPin, int baudrate)
+		for(int i = 0; i < count; i++)
 		{
-			this->baud = baudrate;
-			this->rx = new DigitalInput(rxPin, ResistorModes::FLOATING);
-			this->tx = new DigitalOutput(txPin, false);
+			System::SleepMicro(bitDelay / 2 - System::CyclesToMicroseconds(50));
 
-			//Calculate baudrate
-			this->bitPeriod = 1000000 / this->baud;
-
-			//Null out buffer
-			for(int i = 0; i < 64; i++)
-				buffer[i] = '\n';
-		}
-
-		char* SoftwareSerial::read(char bytes)
-		{
-			char* data = new char[bytes];
-			int bitDelay = this->bitPeriod - System::CyclesToMicroseconds(50);
-
-			while(rx->read()); //Wait for start bit
-
-			if(rx->read() == false) //Check to see if we got here due to line noise
+			for(int offset = 0; offset < 8; offset++)
 			{
-				for(int i = 0; i < bytes; i++)
-				{
-					System::SleepMicro(bitDelay / 2 - System::CyclesToMicroseconds(50));
-
-					for(int offset = 0; offset < 8; offset++)
-					{
-						System::SleepMicro(bitDelay);
-
-						data[i] |= (rx->read() ? 1 : 0) << offset;
-					}
-				}
-			}
-
-			System::SleepMicro(bitDelay);
-			return data;
-		}
-
-		void SoftwareSerial::write(const char* data, int offset, int count)
-		{
-			for(int i = offset; i < count; i++)
-				this->write(data[i]);
-		}
-
-		void SoftwareSerial::write(const char data)
-		{
-			int bitDelay = this->bitPeriod - System::CyclesToMicroseconds(50);
-
-			tx->write(false);
-			System::SleepMicro(bitDelay);
-
-			for(unsigned char mask = 0x01; mask; mask <<= 1)
-			{
-				if(mask & data)
-					tx->write(true);
-				else
-					tx->write(false);
-
 				System::SleepMicro(bitDelay);
+
+				buffer[i] |= (rxPort->read() ? 1 : 0) << offset;
 			}
-
-			tx->write(true);
-			System::SleepMicro(bitDelay);
-		}
-
-		char SoftwareSerial::available()
-		{
-			this->receive();
-		}
-
-		void SoftwareSerial::open()
-		{
-		}
-
-		void SoftwareSerial::close()
-		{
-		}
-
-		void SoftwareSerial::receive()
-		{
-		}
-
-		bool SoftwareSerial::overflow()
-		{
-			return false;
 		}
 	}
+
+	System::SleepMicro(bitDelay);
+	return count;
+}
+
+void SoftwareSerial::write(const unsigned char* buffer, unsigned int count)
+{
+	for(unsigned int i = 0; i < count; i++)
+		this->write(buffer[i]);
+}
+
+void SoftwareSerial::write(const char* buffer, unsigned int count)
+{
+	for(unsigned int i = 0; i < count; i++)
+		this->write(buffer[i]);
+}
+
+void SoftwareSerial::write(const char data)
+{
+	int bitDelay = this->bitPeriod - System::CyclesToMicroseconds(50);
+
+	txPort->write(false);
+	System::SleepMicro(bitDelay);
+
+	for(unsigned char mask = 0x01; mask; mask <<= 1)
+	{
+		if(mask & data)
+			txPort->write(true);
+		else
+			txPort->write(false);
+
+		System::SleepMicro(bitDelay);
+	}
+
+	txPort->write(true);
+	System::SleepMicro(bitDelay);
+}
+
+unsigned char SoftwareSerial::available()
+{
+	this->receive();
+}
+
+void SoftwareSerial::open()
+{
+}
+
+void SoftwareSerial::close()
+{
+}
+
+unsigned char SoftwareSerial::receive()
+{
+	return 0x00;
+}
+
+bool SoftwareSerial::overflow()
+{
+	return false;
 }
