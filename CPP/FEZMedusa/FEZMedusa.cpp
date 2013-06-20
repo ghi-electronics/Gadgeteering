@@ -114,7 +114,12 @@ FEZMedusa::FEZMedusa() {
 }
 
 FEZMedusa::~FEZMedusa() {
+	for (I2CBus* current = (I2CBus*)this->i2cBusses.start(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.next())
+		delete current;
+	for (SPIBus* current = (SPIBus*)this->spiBusses.start(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.next())
+		delete current;
 
+	delete this->extenderChip;
 }
 				
 void FEZMedusa::panic(unsigned char error) {

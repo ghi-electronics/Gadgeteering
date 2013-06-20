@@ -12,6 +12,8 @@ Mainboard::Mainboard() {
 }
 
 Mainboard::~Mainboard() {
+	for (Socket* current = (Socket*)this->sockets.start(); !this->sockets.ended(); current = (Socket*)this->sockets.next())
+		delete current;
 
 }
 
