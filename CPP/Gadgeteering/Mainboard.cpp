@@ -1,4 +1,5 @@
 #include "Mainboard.hpp"
+#include "Module.hpp"
 
 using namespace GHI;
 
@@ -71,3 +72,14 @@ GHI::Interfaces::SerialDevice* Mainboard::getSerialDevice(unsigned int baudRate,
 GHI::Interfaces::SerialDevice* Mainboard::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber) { mainboard->panic(Exceptions::ERR_SERIAL_NOT_SUPPORTED); return NULL; };
 GHI::Interfaces::I2CBus* Mainboard::getI2CBus(CPUPin sdaPin, CPUPin sclPin) { mainboard->panic(Exceptions::ERR_I2C_NOT_SUPPORTED); return NULL; };
 GHI::Interfaces::I2CBus* Mainboard::getI2CBus(Socket* socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber) { mainboard->panic(Exceptions::ERR_I2C_NOT_SUPPORTED); return NULL; };
+
+void Mainboard::registerModule(Module *mod)
+{
+	modules.add(mod);
+}
+
+void Mainboard::processModules()
+{
+	for (Module* current = (Module*)this->modules.start(); !this->modules.ended(); current = (Module*)this->modules.next())
+		current->process();
+}

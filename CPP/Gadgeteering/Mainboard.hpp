@@ -9,7 +9,8 @@
 #include "List.hpp"
 
 namespace GHI {
-	
+	class Module;
+
 	class Mainboard {
 		protected:
 			List sockets;
@@ -17,6 +18,7 @@ namespace GHI {
 			List spiBusses;
 			List i2cBusses;
 			List serialDevices;
+			List modules;
 
 			Mainboard();
 			virtual ~Mainboard();
@@ -48,6 +50,9 @@ namespace GHI {
 			virtual GHI::Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber);
 			virtual GHI::Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin);
 			virtual GHI::Interfaces::I2CBus* getI2CBus(Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine);
+
+			virtual void registerModule(Module *mod);
+			virtual void processModules();
 	};
 
 	extern GHI::Mainboard* mainboard;

@@ -3,6 +3,7 @@
 #include "../Gadgeteering/SerialDevice.hpp"
 #include "../Gadgeteering/System.hpp"
 #include "../Gadgeteering/Types.hpp"
+#include "../Gadgeteering/Module.hpp"
 
 namespace GHI
 {
@@ -11,8 +12,14 @@ namespace GHI
 		class WiFiRN171 : protected Module
 		{
 			private:
+				bool DeviceReady;
 
 			public:
+				WiFiRN171(int socket, int baud = 9600);
+
+				void CreateAccessPoint(const char *SSID);
+				void EnableStaticIP(const char *IP, const char *Gateway, const char *Netmask);
+				void EnableDHCP();
 		};
 	}
 }
