@@ -6,6 +6,8 @@ namespace GHI
 
 		protected:
 			Module();
+			Module(Module *mod);
+
 			virtual void process();
 
 			friend class Mainboard;

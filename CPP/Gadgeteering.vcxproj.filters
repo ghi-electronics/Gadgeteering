@@ -135,19 +135,10 @@
     <ClInclude Include="Extender\Extender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Barometer\Barometer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorSense\ColorSense.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MaxO\MaxO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Potentiometer\Potentiometer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MotionSensor\MotionSensor.h">
+    <ClInclude Include="WiFiRN171\WiFiRN171.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Gadgeteering\Module.hpp">
@@ -275,19 +266,7 @@
     <ClCompile Include="Extender\Extender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Barometer\Barometer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ColorSense\ColorSense.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MaxO\MaxO.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Potentiometer\Potentiometer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MotionSensor\MotionSensor.cpp">
+    <ClCompile Include="WiFiRN171\WiFiRN171.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Gadgeteering\Module.cpp">

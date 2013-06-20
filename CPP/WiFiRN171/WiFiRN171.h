@@ -13,6 +13,11 @@ namespace GHI
 		{
 			private:
 				bool DeviceReady;
+				Interfaces::SerialDevice *serial;
+
+				void CommandModeStart();
+				void CommandModeExit();
+				void CommandModeWrite(const char* command);
 
 			public:
 				WiFiRN171(int socket, int baud = 9600);
