@@ -4,6 +4,7 @@
 #include "Socket.hpp"
 #include "I2CDevice.hpp"
 #include "Interfaces.hpp"
+#include "List.hpp"
 
 namespace GHI
 {
@@ -11,6 +12,8 @@ namespace GHI
 	{
 		class I2CBus
 		{
+			List i2cDevices;
+
 			public:
 				const CPUPin sda;
 				const CPUPin scl;

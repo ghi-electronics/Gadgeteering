@@ -5,6 +5,7 @@
 #include "SPIDevice.hpp"
 #include "Interfaces.hpp"
 #include "Types.hpp"
+#include "List.hpp"
 
 namespace GHI
 {
@@ -12,6 +13,8 @@ namespace GHI
 	{
 		class SPIBus
 		{
+			List spiDevices;
+
 			public:
 				const CPUPin mosi;
 				const CPUPin miso;
