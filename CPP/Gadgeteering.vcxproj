@@ -86,6 +86,7 @@
     <ClInclude Include="Gadgeteering\Interfaces.hpp" />
     <ClInclude Include="Gadgeteering\List.hpp" />
     <ClInclude Include="Gadgeteering\Mainboard.hpp" />
+    <ClInclude Include="Gadgeteering\Module.hpp" />
     <ClInclude Include="Gadgeteering\SerialDevice.hpp" />
     <ClInclude Include="Gadgeteering\Socket.hpp" />
     <ClInclude Include="Gadgeteering\SoftwareSerial.hpp" />
@@ -136,6 +137,7 @@
     <ClCompile Include="Gadgeteering\Interfaces.cpp" />
     <ClCompile Include="Gadgeteering\List.cpp" />
     <ClCompile Include="Gadgeteering\Mainboard.cpp" />
+    <ClCompile Include="Gadgeteering\Module.cpp" />
     <ClCompile Include="Gadgeteering\SerialDevice.cpp" />
     <ClCompile Include="Gadgeteering\Socket.cpp" />
     <ClCompile Include="Gadgeteering\SoftwareSerial.cpp" />
