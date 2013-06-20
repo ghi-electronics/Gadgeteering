@@ -7,7 +7,6 @@
 #include "../Gadgeteering/SPIDevice.hpp"
 #include "../Gadgeteering/I2CBus.hpp"
 
-class SoftwareSerial;
 class SPIClass;
 
 namespace GHI {
@@ -20,18 +19,16 @@ namespace GHI {
 			class SPIBus : public GHI::Interfaces::SPIBus
 			{
 				SPIClass* spi;
-				void setup(GHI::Interfaces::SPIDevice::Configuration* configuration);
+				void setup(GHI::Interfaces::SPIConfiguration* configuration);
 
 				public:
 					SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck);
 					virtual ~SPIBus();
 					
-					virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIDevice::Configuration* configuration);
+					virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration);
 			};
 
 			class SerialDevice : public GHI::Interfaces::SerialDevice {
-				SoftwareSerial* port;
-
 				public:
 					SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
 					virtual ~SerialDevice();

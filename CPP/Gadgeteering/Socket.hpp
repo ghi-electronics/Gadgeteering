@@ -7,10 +7,16 @@ namespace GHI {
 	namespace Interfaces {
 		class I2CBus;
 		class SPIBus;
+		class I2CDevice;
+		class SPIDevice;
 		class SerialDevice;
+		class SPIConfiguration;
 	}
 
 	class Socket {
+		Interfaces::I2CBus* i2cBus;
+		Interfaces::SPIBus* spiBus;
+
 		public:
 			typedef unsigned long Type;
 			typedef unsigned char Pin;
@@ -59,9 +65,12 @@ namespace GHI {
 
 			void ensureTypeIsSupported(Type type);
 			
-			Interfaces::I2CBus* getI2CBus(Pin sda = Pins::Eight, Pin scl = Pins::Nine);
-			Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Pin tx = Pins::Four, Pin rx = Pins::Five);
-			Interfaces::SPIBus* getSPIBus(Pin mosi = Pins::Seven, Pin miso = Pins::Eight, Pin sck = Pins::Nine);
+			Interfaces::I2CBus* getI2CBus();
+			Interfaces::SPIBus* getSPIBus();
+			
+			Interfaces::I2CDevice* getI2CDevice(unsigned char address);
+			Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
+			Interfaces::SPIDevice* getSPIDevice(Interfaces::SPIConfiguration* configuration, Pin chipSelectPinNumber);
 	};
 }
 

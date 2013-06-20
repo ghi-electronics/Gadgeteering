@@ -10,6 +10,10 @@ I2CBus::I2CBus(CPUPin sdaPin, CPUPin sclPin) : sda(sdaPin), scl(sclPin) {
 I2CBus::~I2CBus() {
 
 }
+
+I2CDevice* I2CBus::getI2CDevice(unsigned char address) {
+	return new I2CDevice(this, address);
+}
 					
 unsigned int I2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop) {
 	mainboard->panic(Exceptions::ERR_I2C_NOT_SUPPORTED);

@@ -10,7 +10,7 @@ Barometer::Barometer(unsigned char socketNumber) {
 	
     this->XCLR = new DigitalOutput(socket, Socket::Pins::Three, false);
 	ReadFactoryCalibrationData(socket);
-	this->i2c = new I2CDevice(socket->getI2CBus(), Barometer::ADC_ADDRESS);
+	this->i2c = socket->getI2CDevice(Barometer::ADC_ADDRESS);
 }
 
 Barometer::~Barometer() {
@@ -20,7 +20,7 @@ Barometer::~Barometer() {
 
 
 void Barometer::ReadFactoryCalibrationData(Socket* socket) {
-	I2CDevice eeprom_i2c(socket->getI2CBus(), Barometer::EEPROM_ADDR);
+	I2CDevice eeprom_i2c = *socket->getI2CDevice(Barometer::EEPROM_ADDR);
 
     XCLR->write(false);
 

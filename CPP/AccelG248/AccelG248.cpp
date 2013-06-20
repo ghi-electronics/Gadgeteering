@@ -8,7 +8,7 @@ AccelG248::AccelG248(unsigned char socketNumber) {
 	Socket* socket = mainboard->getSocket(socketNumber);
 	socket->ensureTypeIsSupported(Socket::Types::I);
 
-	this->i2c = new I2CDevice(socket->getI2CBus(), 0x1C);
+	this->i2c = socket->getI2CDevice(0x1C);
 	this->i2c->writeRegister(0x2A, 1);
 }
 

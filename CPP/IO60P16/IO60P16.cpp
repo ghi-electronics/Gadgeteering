@@ -7,7 +7,7 @@ using namespace GHI::Interfaces;
 IO60P16::IO60P16(unsigned char socketNumber) {
 	Socket* socket = mainboard->getSocket(socketNumber);
 	socket->ensureTypeIsSupported(Socket::Types::X);
-	this->io60Chip = new I2CDevice(socket->getI2CBus(), 0x20);
+	this->io60Chip = socket->getI2CDevice(0x20);
 }
 
 IO60P16::~IO60P16() {
