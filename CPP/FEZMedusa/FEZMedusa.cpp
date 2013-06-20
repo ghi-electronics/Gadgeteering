@@ -209,6 +209,7 @@ Interfaces::SerialDevice* FEZMedusa::getNewSerialDevice(CPUPin txPin, CPUPin rxP
 
 	SerialDevice* bus = new FEZMedusa::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits);
 	this->serialDevices.add(bus);
+
 	return bus;
 }
 

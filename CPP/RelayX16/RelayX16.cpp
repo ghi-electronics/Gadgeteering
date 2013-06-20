@@ -9,12 +9,13 @@ namespace GHI
 			Socket *sock = mainboard->getSocket(socket);
 			sock->ensureTypeIsSupported(Socket::Types::Y);
 
-			this->data = new Interfaces::DigitalOutput(sock->pins[7]);
+			this->data = new Interfaces::DigitalOutput(sock->pins[7],true);
 			this->clock = new Interfaces::DigitalOutput(sock->pins[9]);
 			this->latch = new Interfaces::DigitalOutput(sock->pins[5]);
 			this->enable = new Interfaces::DigitalOutput(sock->pins[3], true);
 			this->clear = new Interfaces::DigitalOutput(sock->pins[4]);
 
+			disableAllRelays();
 			disableAllRelays();
 
 			enableOutput();
@@ -24,58 +25,14 @@ namespace GHI
         {
             regData = 0x0000;
 
-			unsigned short reg = regData;
-
-            for (int i = 0; i < 16; i++)
-            {
-                if ((reg & 0x1) == 1)
-                {
-                    data->write(false);
-                }
-                else
-                {
-                    data->write(true);
-                }
-
-                clock->write(true);
-				System::Sleep(10);
-                clock->write(false);
-
-                reg >>= 1;
-            }
-
-            latch->write(true);
-				System::Sleep(10);
-            latch->write(false);
+			writeRegisterData();
         }
 
 		void RelayX16::enableAllRelays()
 		{
 			regData = 0xFFFF;
 
-			unsigned short reg = regData;
-
-            for (int i = 0; i < 16; i++)
-            {
-                if ((reg & 0x1) == 1)
-                {
-                    data->write(false);
-                }
-                else
-                {
-                    data->write(true);
-                }
-
-                clock->write(true);
-				System::Sleep(10);
-                clock->write(false);
-
-                reg >>= 1;
-            }
-
-            latch->write(true);
-				System::Sleep(10);
-            latch->write(false);
+			writeRegisterData();
 		}
 
         void RelayX16::enableOutput()
@@ -106,6 +63,11 @@ namespace GHI
 		{
 			unsigned short reg = regData;
 
+			/*data->write(true);
+			clock->write(false);
+			System::SleepMicro(5);
+			data->write(false);*/
+
             for (int i = 0; i < 16; i++)
             {
                 if ((reg & 0x1) == 1)
@@ -118,9 +80,11 @@ namespace GHI
                 }
 
                 clock->write(true);
+				System::SleepMicro(3);
                 clock->write(false);
 
                 reg >>= 1;
+				System::SleepMicro(57);
             }
 
             latch->write(true);
