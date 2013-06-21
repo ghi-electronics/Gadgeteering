@@ -1,3 +1,6 @@
+#ifndef _MODULE_
+#define _MODULE_
+
 #include "Mainboard.hpp"
 
 namespace GHI
@@ -13,3 +16,4 @@ namespace GHI
 			friend class Mainboard;
 	};
 }
+#endif

@@ -5,6 +5,9 @@
 #include "../Gadgeteering/Types.hpp"
 #include "../Gadgeteering/Module.hpp"
 
+#include <stdio.h>
+#include <string.h>
+
 namespace GHI
 {
 	namespace Modules

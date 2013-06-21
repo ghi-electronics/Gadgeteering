@@ -1,4 +1,5 @@
 #include "WiFiRN171.h"
+using namespace std;
 
 namespace GHI
 {
@@ -18,10 +19,30 @@ namespace GHI
 
 		void WiFiRN171::CreateAccessPoint(const char *SSID)
 		{
+			char *command = "set wlan ssid ";
+			strcat(command,SSID);
+
 			this->CommandModeStart();
-			this->CommandModeWrite("set wlan ssid " + SSID);
+			this->CommandModeWrite(command);
 			this->CommandModeWrite("set ip dhcp 4");
 			this->CommandModeExit();
+		}
+
+		void WiFiRN171::CommandModeStart()
+		{
+			serial->write("$$$", 3);
+
+			unsigned long timeout = System::TimeElapsed() + 250;
+
+			while(timeout > System::TimeElapsed())
+			{
+
+			}
+		}
+
+		void WiFiRN171::CommandModeExit()
+		{
+
 		}
 	}
 }

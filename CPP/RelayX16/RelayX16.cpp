@@ -4,7 +4,7 @@ namespace GHI
 {
 	namespace Modules
 	{
-		RelayX16::RelayX16(int socket) : Module()
+		RelayX16::RelayX16(int socket) : Module(this)
 		{
 			Socket *sock = mainboard->getSocket(socket);
 			sock->ensureTypeIsSupported(Socket::Types::Y);
@@ -13,7 +13,7 @@ namespace GHI
 			this->clock = new Interfaces::DigitalOutput(sock->pins[9]);
 			this->latch = new Interfaces::DigitalOutput(sock->pins[5]);
 			this->enable = new Interfaces::DigitalOutput(sock->pins[3], true);
-			this->clear = new Interfaces::DigitalOutput(sock->pins[4]);
+			this->clear = new Interfaces::DigitalOutput(sock->pins[4], true);
 
 			disableAllRelays();
 			disableAllRelays();

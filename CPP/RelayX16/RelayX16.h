@@ -2,6 +2,7 @@
 #include "../Gadgeteering/Mainboard.hpp"
 #include "../Gadgeteering/System.hpp"
 #include "../Gadgeteering/Types.hpp"
+#include "../Gadgeteering/Module.hpp"
 
 namespace GHI
 {
