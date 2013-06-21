@@ -63,11 +63,6 @@ namespace GHI
 		{
 			unsigned short reg = regData;
 
-			/*data->write(true);
-			clock->write(false);
-			System::SleepMicro(5);
-			data->write(false);*/
-
             for (int i = 0; i < 16; i++)
             {
                 if ((reg & 0x1) == 1)
