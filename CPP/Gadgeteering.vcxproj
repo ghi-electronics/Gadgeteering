@@ -151,6 +151,7 @@
     <ClCompile Include="LEDStrip\LEDStrip.cpp" />
     <ClCompile Include="LightSensor\LightSensor.cpp" />
     <ClCompile Include="Load\Load.cpp" />
+    <ClCompile Include="MaxO\MaxO.cpp" />
     <ClCompile Include="Moisture\Moisture.cpp" />
     <ClCompile Include="RelayX16\RelayX16.cpp" />
     <ClCompile Include="RelayX1\RelayX1.cpp" />

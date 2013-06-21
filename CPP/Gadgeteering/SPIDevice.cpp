@@ -32,6 +32,7 @@ SPIDevice::SPIDevice(SPIBus* spiBus, Socket* socket, Socket::Pin chipSelectPinNu
 
 SPIDevice::~SPIDevice() {
 	delete this->chipSelect;
+	delete this->configuration;
 }
 
 unsigned char SPIDevice::writeReadByte(unsigned char toSend, bool deselectChip) 

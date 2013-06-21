@@ -26,7 +26,7 @@ void setup() {
   display->fillRect(10, 0, 5, 5, DisplayN18::rgbToShort(0, 0, 255));
   */
   
-  
+  /*
   unsigned char x = 0;
   for (unsigned char r = 0; x < 32; r += 8, x++)
     display->fillRect(x, 0, 1, 160, DisplayN18::rgbToShort(r, 0, 0));
@@ -34,7 +34,17 @@ void setup() {
     display->fillRect(x, 0, 1, 160, DisplayN18::rgbToShort(0, g, 0));
   for (unsigned char b = 0; x < 128; b += 8, x++)
     display->fillRect(x, 0, 1, 160, DisplayN18::rgbToShort(0, 0, b));
+  */
   
+  
+  display->fillCircle(25, 25, 10, DisplayN18::rgbToShort(255, 0, 0));
+  display->fillCircle(25, 50, 10, DisplayN18::rgbToShort(0, 255, 0));
+  display->fillCircle(25, 75, 10, DisplayN18::rgbToShort(0, 0, 255));
+  
+  
+  /*
+  display->drawLine(0, 0, 25, 5, DisplayN18::rgbToShort(255, 255, 255));
+  */
 }
 
 void loop() {

@@ -16,7 +16,6 @@ namespace GHI {
 			DigitalOutput* resetPin;
 			DigitalOutput* backlightPin;
 			DigitalOutput* rsPin;
-			SPIConfiguration* config;
 			SPIDevice* spi;
 			
 			void writeCommand(unsigned char command);
@@ -32,10 +31,18 @@ namespace GHI {
 				~DisplayN18();
 				
 				static unsigned short rgbToShort(unsigned char r, unsigned char g, unsigned char b);
+				
 				void clearScreen(unsigned short color = 0x0000);
-				void fillRect(unsigned char x, unsigned char y, unsigned char width, unsigned char height, unsigned short color);
-				void setPixel(unsigned char x, unsigned char y, unsigned short color);
-				void drawRaw(const unsigned char* data, unsigned char x, unsigned char y, unsigned char width, unsigned char height);
+				void drawRaw(const unsigned char* data, int x, int y, int width, int height);
+				void setPixel(int x, int y, unsigned short color);
+				
+				void fillRect(int x, int y, int width, int height, unsigned short color);
+				void drawRect(int x, int y, int width, int height, unsigned short color);
+				
+				void fillCircle(int x, int y, int radius, unsigned short color);
+				void drawCircle(int x, int y, int radius, unsigned short color);
+				
+				void drawLine(int x0, int y0, int x1, int y1, unsigned short color);
 		};
 	}
 }

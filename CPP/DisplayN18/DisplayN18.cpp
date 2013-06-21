@@ -8,11 +8,10 @@ DisplayN18::DisplayN18(unsigned char socketNumber) {
 	Socket* socket = mainboard->getSocket(socketNumber);
 	socket->ensureTypeIsSupported(Socket::Types::X);
 
-	  this->config = new SPIConfiguration(false, 0, 0, false, true, 4000);
 	  this->resetPin = new DigitalOutput(socket, Socket::Pins::Three, false);
 	  this->backlightPin = new DigitalOutput(socket, Socket::Pins::Four, true);
 	  this->rsPin = new DigitalOutput(socket, Socket::Pins::Five, false);
-	  this->spi = socket->getSPIDevice(config, Socket::Pins::Six);
+	  this->spi = socket->getSPIDevice(new SPIConfiguration(false, 0, 0, false, true, 4000), Socket::Pins::Six);
   
 	  this->initialize();
 }
@@ -21,7 +20,6 @@ DisplayN18::~DisplayN18() {
 	delete this->resetPin;
 	delete this->backlightPin;
 	delete this->rsPin;
-	delete this->config;
 }
 
 void DisplayN18::writeCommand(unsigned char command) {
@@ -159,7 +157,30 @@ void DisplayN18::clearScreen(unsigned short color) {
 	this->fillRect(0, 0, DisplayN18::WIDTH, DisplayN18::HEIGHT, color);
 }
 
-void DisplayN18::fillRect(unsigned char x, unsigned char y, unsigned char width, unsigned char height, unsigned short color) {
+void DisplayN18::drawRaw(const unsigned char* data, int x, int y, int width, int height) {
+	if (x > DisplayN18::WIDTH || y > DisplayN18::HEIGHT) 
+		return;
+	
+	if (x < 0)
+		x = 0;
+	if (y < 0)
+		y = 0;
+    
+	if (x + width > DisplayN18::WIDTH)
+		width = DisplayN18::WIDTH - x;
+	if (y + height > DisplayN18::HEIGHT)
+		height = DisplayN18::HEIGHT - y;
+    
+	this->setClippingArea(x, y, width - 1, height - 1);
+	this->writeCommand(0x2C);
+	this->writeData(data, width * height * 2);
+}
+
+void DisplayN18::setPixel(int x, int y, unsigned short color) {
+	this->drawRaw(reinterpret_cast<unsigned char*>(&color), x, y, 1, 1);
+}
+
+void DisplayN18::fillRect(int x, int y, int width, int height, unsigned short color) {
 	unsigned short data[DisplayN18::STEP_X * DisplayN18::STEP_Y];
 	for (int i = 0; i < DisplayN18::STEP_X * DisplayN18::STEP_Y; i++)
 		data[i] = color;
@@ -175,20 +196,133 @@ void DisplayN18::fillRect(unsigned char x, unsigned char y, unsigned char width,
 	}
 }
 
-void DisplayN18::setPixel(unsigned char x, unsigned char y, unsigned short color) {
-	this->drawRaw(reinterpret_cast<unsigned char*>(&color), x, y, 1, 1);
+void DisplayN18::drawRect(int x, int y, int width, int height, unsigned short color) {
+	for (unsigned char i = x; i < x + width; i++) {
+        this->setPixel(i, y, color);
+        this->setPixel(i, y + height - 1, color);
+    }
+
+    for (unsigned char i = y; i < y + height; i++) {
+        this->setPixel(x, i, color);
+        this->setPixel(x + width - 1, i, color);
+    }
+}
+				
+void DisplayN18::fillCircle(int x, int y, int radius, unsigned short color) {
+    int f = 1 - radius;
+    int ddF_x = 1;
+    int ddF_y = -2 * radius;
+    int x1 = 0;
+    int y1 = radius;
+
+    for (int i = y - radius; i <= y + radius; i++)
+        this->setPixel(x, i, color);
+
+    while (x1 < y1) {
+        if (f >= 0) {
+            y1--;
+            ddF_y += 2;
+            f += ddF_y;
+        }
+
+        x1++;
+        ddF_x += 2;
+        f += ddF_x;
+
+        for (int i = y - y1; i <= y + y1; i++) {
+            this->setPixel(x + x1, i, color);
+            this->setPixel(x - x1, i, color);
+        }
+
+        for (int i = y - x1; i <= y + x1; i++) {
+            this->setPixel(x + y1, i, color);
+            this->setPixel(x - y1, i, color);
+        }
+    }
 }
 
-void DisplayN18::drawRaw(const unsigned char* data, unsigned char x, unsigned char y, unsigned char width, unsigned char height) {
-	if (x > DisplayN18::WIDTH || y > DisplayN18::HEIGHT) 
-		return;
-    
-	if (x + width > DisplayN18::WIDTH)
-		width = DisplayN18::WIDTH - x;
-	if (y + height > DisplayN18::HEIGHT)
-		height = DisplayN18::HEIGHT - y;
-    
-	this->setClippingArea(x, y, width - 1, height - 1);
-	this->writeCommand(0x2C);
-	this->writeData(data, width * height * 2);
+void DisplayN18::drawCircle(int x, int y, int radius, unsigned short color) {
+    int f = 1 - radius;
+    int ddF_x = 1;
+    int ddF_y = -2 * radius;
+    int x1 = 0;
+    int y1 = radius;
+
+    this->setPixel(x, y + radius, color);
+    this->setPixel(x, y - radius, color);
+    this->setPixel(x + radius, y, color);
+    this->setPixel(x - radius, y, color);
+
+    while (x1 < y1) {
+        if (f >= 0) {
+            y1--;
+            ddF_y += 2;
+            f += ddF_y;
+        }
+
+        x1++;
+        ddF_x += 2;
+        f += ddF_x;
+
+        this->setPixel(x + x1, y + y1, color);
+        this->setPixel(x - x1, y + y1, color);
+        this->setPixel(x + x1, y - y1, color);
+        this->setPixel(x - x1, y - y1, color);
+
+        this->setPixel(x + y1, y + x1, color);
+        this->setPixel(x - y1, y + x1, color);
+        this->setPixel(x + y1, y - x1, color);
+        this->setPixel(x - y1, y - x1, color);
+    }
 }
+				
+void DisplayN18::drawLine(int x0, int y0, int x1, int y1, unsigned short color) {
+	int t;
+	bool steep = ((y1 - y0) < 0 ? -(y1 - y0) : (y1 - y0)) > ((x1 - x0) < 0 ? -(x1 - x0) : (x1 - x0));
+
+	if (steep) {
+		t = x0;
+		x0 = y0;
+		y0 = t;
+		t = x1;
+		x1 = y1;
+		y1 = t;
+	}
+
+	if (x0 > x1) {
+		t = x0;
+		x0 = x1;
+		x1 = t;
+
+		t = y0;
+		y0 = y1;
+		y1 = t;
+	}
+
+	int dx, dy;
+	dx = x1 - x0;
+	dy = (y1 - y0) < 0 ? -(y1 - y0) : (y1 - y0);
+
+	int err = (dx / 2);
+	int ystep;
+
+	if (y0 < y1)
+		ystep = 1;
+	else
+		ystep = -1;
+
+	for (; x0 < x1; x0++) {
+		if (steep)
+			this->setPixel(y0, x0, color);
+		else
+			this->setPixel(x0, y0, color);
+
+		err -= dy;
+
+		if (err < 0) {
+			y0 += (char)ystep;
+			err += dx;
+		}
+	}
+}
+		
