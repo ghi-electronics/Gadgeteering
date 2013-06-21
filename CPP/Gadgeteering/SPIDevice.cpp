@@ -14,7 +14,7 @@ SPIConfiguration::SPIConfiguration(bool chipSelectActiveState, unsigned int chip
 	this->clockRate = clockRate;
 }
 
-SPIDevice::SPIDevice(SPIBus *spiBus, CPUPin chipSelectPin, GHI::Interfaces::SPIConfiguration* configuration) {
+SPIDevice::SPIDevice(SPIBus* spiBus, CPUPin chipSelectPin, GHI::Interfaces::SPIConfiguration* configuration) {
 	this->chipSelect = new DigitalOutput(chipSelectPin, true);
 	this->configuration = configuration;
 
@@ -31,8 +31,8 @@ SPIDevice::SPIDevice(SPIBus* spiBus, Socket* socket, Socket::Pin chipSelectPinNu
 }
 
 SPIDevice::~SPIDevice() {
-	delete this->configuration;
 	delete this->chipSelect;
+	delete this->configuration;
 }
 
 unsigned char SPIDevice::writeReadByte(unsigned char toSend, bool deselectChip) 

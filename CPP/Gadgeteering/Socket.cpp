@@ -22,14 +22,14 @@ void Socket::ensureTypeIsSupported(Type type) {
 
 I2CBus* Socket::getI2CBus() {
 	if (!this->i2cBus)
-		this->i2cBus = mainboard->getI2CBus(this, Pins::Eight, Pins::Nine);
+		this->i2cBus = mainboard->getI2CBus(this);
 
 	return this->i2cBus;
 }
 
 SPIBus* Socket::getSPIBus() {
 	if (!this->spiBus)
-		this->spiBus = mainboard->getSPIBus(this, Pins::Eight, Pins::Nine);
+		this->spiBus = mainboard->getSPIBus(this);
 
 	return this->spiBus;
 }
@@ -39,9 +39,9 @@ I2CDevice* Socket::getI2CDevice(unsigned char address) {
 }
 
 SerialDevice* Socket::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits){
-	return mainboard->getSerialDevice(baudRate, parity, stopBits, dataBits, this, Pins::Four, Pins::Five);
+	return mainboard->getSerialDevice(baudRate, parity, stopBits, dataBits, this);
 }
 
 SPIDevice* Socket::getSPIDevice(SPIConfiguration* configuration, Pin chipSelectPinNumber){
-	return this->getSPIBus()->getSPIDevice(chipSelectPinNumber, configuration);
+	return this->getSPIBus()->getSPIDevice(this->pins[chipSelectPinNumber], configuration);
 }

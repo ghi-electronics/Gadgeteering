@@ -9,7 +9,7 @@ MaxO::MaxO(unsigned char socketNumber) {
 	Socket socket = *mainboard->getSocket(socketNumber);
 	socket.ensureTypeIsSupported(Socket::Types::S);
 
-	this->spi = new SPIDevice(socket.getSPIBus(), socket.pins[5], new SPIDevice::Configuration(false, 0, 0, false, true, 1000));
+	this->spi = new SPIDevice(socket.getSPIBus(), socket.pins[5], new SPIConfiguration(false, 0, 0, false, true, 1000));
 	this->Enable = new DigitalOutput(socket.pins[3], false);
 	this->CLR = new DigitalOutput(socket.pins[4], true);
 
