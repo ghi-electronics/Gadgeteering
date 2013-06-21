@@ -124,17 +124,14 @@ void FEZMedusa::panic(unsigned char error) {
 }
 				
 void FEZMedusa::print(const char* toPrint) {
-	Serial.begin(9600);
 	Serial.print(toPrint);
 }
 				
 void FEZMedusa::print(int toPrint) {
-	Serial.begin(9600);
 	Serial.print(toPrint);
 }
 				
 void FEZMedusa::print(double toPrint) {
-	Serial.begin(9600);
 	Serial.print(toPrint);
 }
 
