@@ -81,6 +81,7 @@
     <ClInclude Include="FEZLynx\SoftwareI2C_Lynx.h" />
     <ClInclude Include="FEZMedusa\FEZMedusa.h" />
     <ClInclude Include="FLASH\FLASH.h" />
+    <ClInclude Include="FMRadio\FMRadio.h" />
     <ClInclude Include="Gadgeteering\Gadgeteering.h" />
     <ClInclude Include="Gadgeteering\I2CBus.hpp" />
     <ClInclude Include="Gadgeteering\I2CDevice.hpp" />
@@ -133,6 +134,7 @@
     <ClCompile Include="FEZMedusa\SPIBus.cpp" />
     <ClCompile Include="FEZMedusa\System.cpp" />
     <ClCompile Include="FLASH\FLASH.cpp" />
+    <ClCompile Include="FMRadio\FMRadio.cpp" />
     <ClCompile Include="Gadgeteering\I2CBus.cpp" />
     <ClCompile Include="Gadgeteering\I2CDevice.cpp" />
     <ClCompile Include="Gadgeteering\Interfaces.cpp" />
