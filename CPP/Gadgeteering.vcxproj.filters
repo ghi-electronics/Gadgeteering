@@ -147,6 +147,12 @@
     <ClInclude Include="FEZMedusa\FEZMedusa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FLASH\FLASH.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonS6\ButtonS6.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -279,6 +285,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FEZMedusa\System.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FLASH\FLASH.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonS6\ButtonS6.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

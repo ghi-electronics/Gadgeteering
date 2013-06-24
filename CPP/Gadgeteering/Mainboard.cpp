@@ -23,7 +23,7 @@ Mainboard::~Mainboard() {
 
 }
 
-void Mainboard::panic(unsigned char error) {
+void Mainboard::panic(unsigned char error, unsigned char specificError) {
 	while (true)
 		;
 }

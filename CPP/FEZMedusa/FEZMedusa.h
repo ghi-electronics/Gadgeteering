@@ -71,7 +71,7 @@ namespace GHI {
 				FEZMedusa();
 				virtual ~FEZMedusa();
 				
-				virtual void panic(unsigned char error);
+				virtual void panic(unsigned char error, unsigned char specificError);
 				virtual void print(const char* toPrint);
 				virtual void print(int toPrint);
 				virtual void print(double toPrint);

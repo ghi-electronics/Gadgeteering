@@ -117,10 +117,13 @@ FEZMedusa::~FEZMedusa() {
 	delete this->extenderChip;
 }
 				
-void FEZMedusa::panic(unsigned char error) {
+void FEZMedusa::panic(unsigned char error, unsigned char specificError) {
 	Serial.begin(9600);
-	while (true)
-		Serial.println((int)error);
+	while (true) {
+		Serial.print((int)error);
+		Serial.print("-");
+		Serial.println((int)specificError);
+	}
 }
 				
 void FEZMedusa::print(const char* toPrint) {

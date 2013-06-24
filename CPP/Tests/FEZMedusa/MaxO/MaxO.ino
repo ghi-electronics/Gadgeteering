@@ -16,12 +16,11 @@ MaxO maxO(1);
 void setup() {
   maxO.SetNumBoards(1);
   maxO.EnableOutputs();
-  maxO.WritePin(1, 0, false);
 }
 
 void loop() {  
   for (int i = 0; i < 32; i++)
-    ;//maxO.WritePin(1, i, next);
+    maxO.WritePin(1, i, next);
   
   next = !next;  
   delay(100);
