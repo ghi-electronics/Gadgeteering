@@ -14,15 +14,16 @@ FEZMedusa board;
 MaxO maxO(1);
 
 void setup() {
-	maxO.SetNumBoards(1);
-	maxO.EnableOutputs();
-	maxO.WritePin(1, 1, true);
+  maxO.SetNumBoards(1);
+  maxO.EnableOutputs();
+  maxO.WritePin(1, 0, false);
 }
 
 void loop() {  
-	maxO.WritePin(1, 1, next);
+  for (int i = 0; i < 32; i++)
+    ;//maxO.WritePin(1, i, next);
   
   next = !next;  
-  delay(500);
+  delay(100);
 }
 
