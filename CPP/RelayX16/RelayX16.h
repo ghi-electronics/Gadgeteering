@@ -1,3 +1,6 @@
+#ifndef _RELAYX16_H_
+#define _RELAYX16_H_
+
 #include "../Gadgeteering/Interfaces.hpp"
 #include "../Gadgeteering/Mainboard.hpp"
 #include "../Gadgeteering/System.hpp"
@@ -57,3 +60,5 @@ namespace GHI
 		};
 	}
 }
+
+#endif
