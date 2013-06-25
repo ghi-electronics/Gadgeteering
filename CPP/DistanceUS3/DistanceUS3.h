@@ -1,7 +1,11 @@
+#ifndef _DISTANCEUS3_H_
+#define _DISTANCEUS3_H_
+
 #include "../Gadgeteering/Interfaces.hpp"
 #include "../Gadgeteering/Mainboard.hpp"
 #include "../Gadgeteering/System.hpp"
 #include "../Gadgeteering/Types.hpp"
+#include "../Gadgeteering/Module.hpp"
 
 namespace GHI
 {
@@ -33,3 +37,5 @@ namespace GHI
 		};
 	}
 }
+
+#endif
