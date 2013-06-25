@@ -67,15 +67,15 @@ DigitalIO::DigitalIO(Socket* socket, Socket::Pin pinNumber) {
 	this->cpuPin = socket->pins[pinNumber];
 	mainboard->ReservePin(this->cpuPin);
 
-	this->resistorMode == ResistorModes::FLOATING;
+	this->resistorMode = static_cast<ResistorMode>(0xFF);
 	this->ioState = static_cast<IOState>(0xFF);
 }
 
 DigitalIO::DigitalIO(CPUPin pin) {
 	this->cpuPin = pin;
 	mainboard->ReservePin(this->cpuPin);
-
-	this->resistorMode == ResistorModes::FLOATING;
+	
+	this->resistorMode = static_cast<ResistorMode>(0xFF);
 	this->ioState = static_cast<IOState>(0xFF);
 }
 

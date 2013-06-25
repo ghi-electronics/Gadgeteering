@@ -156,6 +156,9 @@
     <ClInclude Include="FMRadio\FMRadio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Gadgeteering\DaisyLink.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -297,6 +300,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FMRadio\FMRadio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gadgeteering\DaisyLink.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

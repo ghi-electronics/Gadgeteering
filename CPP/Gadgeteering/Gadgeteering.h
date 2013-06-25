@@ -12,5 +12,6 @@
 #include "System.hpp"
 #include "List.hpp"
 #include "Module.hpp"
+#include "DaisyLink.hpp"
 
 #endif

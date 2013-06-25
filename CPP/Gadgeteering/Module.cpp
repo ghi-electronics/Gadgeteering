@@ -1,17 +1,21 @@
 #include "Module.hpp"
 
-namespace GHI
+using namespace GHI;
+
+Module::Module()
 {
-	Module::Module()
-	{
-	}
+}
 
-	Module::Module(Module *mod)
-	{
-		mainboard->registerModule(mod);
-	}
+Module::Module(Module *mod)
+{
+	mainboard->registerModule(mod);
+}
 
-	void Module::process()
-	{
-	}
+Module::~Module()
+{
+		
+}
+
+void Module::process()
+{
 }
