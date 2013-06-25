@@ -10,6 +10,7 @@ namespace GHI
 		protected:
 			Module();
 			Module(Module *mod);
+			virtual ~Module();
 
 			virtual void process();
 

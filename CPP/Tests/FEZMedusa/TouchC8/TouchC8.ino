@@ -12,7 +12,7 @@ using namespace GHI::Modules;
 FEZMedusa board;
 Socket* socket;
 DigitalOutput* reset;
-SoftwareI2C* i2c;
+I2CDevice* i2c;
 LED7R led1(5);
 LED7R led2(6);
 
@@ -32,7 +32,7 @@ void setup() {
   
   led1.turnAllOn();
   
-  i2c = new SoftwareI2C(0x2B, socket->pins[8], socket->pins[9]);
+  i2c = socket->getI2CDevice(0x2B);// new SoftwareI2C(0x2B, socket->pins[8], socket->pins[9]);
   delay(1000);
   
   led2.turnAllOn();
@@ -70,7 +70,7 @@ void writeSPM(unsigned char address, unsigned char* values)
   i2c->writeRegister(0x0D, 0x10);
   i2c->writeRegister(0x0E, address);
 
-  i2c->writeBytes(values, 9);
+  i2c->write(values, 9);
   
   i2c->writeRegister(0x0D, 0x00);
 }
