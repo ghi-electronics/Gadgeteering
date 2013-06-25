@@ -30,7 +30,7 @@ namespace GHI {
 			void ReservePin(CPUPin pin);
 			void ReleasePin(CPUPin pin);
 			
-			virtual void panic(unsigned char error);
+			virtual void panic(unsigned char error, unsigned char specificError = 0);
 			virtual void print(const char* toPrint);
 			virtual void print(int toPrint);
 			virtual void print(double toPrint);

@@ -96,9 +96,6 @@
     <ClInclude Include="Accelerometer\Accelerometer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FEZMedusa\FEZMedusa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Gadgeteering\I2CBus.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -145,6 +142,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DisplayN18\DisplayN18.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZMedusa\FEZMedusa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FLASH\FLASH.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonS6\ButtonS6.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FMRadio\FMRadio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -218,25 +227,10 @@
     <ClCompile Include="Accelerometer\Accelerometer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FEZMedusa\FEZMedusa.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZMedusa\SerialDevice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZMedusa\SPIBus.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZMedusa\System.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Gadgeteering\I2CBus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Gadgeteering\I2CDevice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZMedusa\I2CBus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DistanceUS3\DistanceUS3.cpp">
@@ -279,6 +273,30 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MaxO\MaxO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\FEZMedusa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\I2CBus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\SerialDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\SPIBus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\System.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FLASH\FLASH.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonS6\ButtonS6.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FMRadio\FMRadio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
