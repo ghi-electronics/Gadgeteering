@@ -1,5 +1,5 @@
-#ifndef _LED7R_H_
-#define _LED7R_H_
+#ifndef _LED7C_H_
+#define _LED7C_H_
 
 #include "../Gadgeteering/Gadgeteering.h"
 
