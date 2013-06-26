@@ -80,6 +80,7 @@
     <ClInclude Include="Extender\Extender.h" />
     <ClInclude Include="FEZLynx\SoftwareI2C_Lynx.h" />
     <ClInclude Include="FEZMedusa\FEZMedusa.h" />
+    <ClInclude Include="FEZTive\FEZtive.h" />
     <ClInclude Include="FLASH\FLASH.h" />
     <ClInclude Include="FMRadio\FMRadio.h" />
     <ClInclude Include="Gadgeteering\DaisyLink.hpp" />
@@ -112,6 +113,7 @@
     <ClInclude Include="Load\Load.h" />
     <ClInclude Include="MaxO\MaxO.h" />
     <ClInclude Include="Moisture\Moisture.h" />
+    <ClInclude Include="MultiColorLED\MultiColorLED.h" />
     <ClInclude Include="RelayX16\RelayX16.h" />
     <ClInclude Include="RelayX1\RelayX1.h" />
     <ClInclude Include="TemperatureHumidity\TemperatureHumidity.h" />
@@ -134,6 +136,7 @@
     <ClCompile Include="FEZMedusa\SerialDevice.cpp" />
     <ClCompile Include="FEZMedusa\SPIBus.cpp" />
     <ClCompile Include="FEZMedusa\System.cpp" />
+    <ClCompile Include="FEZTive\FEZtive.cpp" />
     <ClCompile Include="FLASH\FLASH.cpp" />
     <ClCompile Include="FMRadio\FMRadio.cpp" />
     <ClCompile Include="Gadgeteering\DaisyLink.cpp" />
@@ -151,6 +154,7 @@
     <ClCompile Include="FEZLynx\System.cpp" />
     <ClCompile Include="FEZLynx\FEZLynx.cpp" />
     <ClCompile Include="CharDisplay\CharDisplay.cpp" />
+    <ClCompile Include="Gadgeteering\Types.cpp" />
     <ClCompile Include="GasSense\GasSense.cpp" />
     <ClCompile Include="IO60P16\IO60P16.cpp" />
     <ClCompile Include="Joystick\Joystick.cpp" />
@@ -161,6 +165,7 @@
     <ClCompile Include="Load\Load.cpp" />
     <ClCompile Include="MaxO\MaxO.cpp" />
     <ClCompile Include="Moisture\Moisture.cpp" />
+    <ClCompile Include="MultiColorLED\MultiColorLED.cpp" />
     <ClCompile Include="RelayX16\RelayX16.cpp" />
     <ClCompile Include="RelayX1\RelayX1.cpp" />
     <ClCompile Include="TemperatureHumidity\TemperatureHumidity.cpp" />

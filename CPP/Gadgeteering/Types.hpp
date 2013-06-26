@@ -57,6 +57,25 @@ namespace GHI {
 			static const ResistorMode PULL_DOWN = 1;
 			static const ResistorMode FLOATING = 2;
 	};
+
+	struct Color
+	{
+		unsigned char red;
+		unsigned char green;
+		unsigned char blue;
+
+		Color();
+		Color(unsigned char r, unsigned char g, unsigned char b);
+		void Set(unsigned char r, unsigned char g, unsigned char b);
+		void Set(Color color);
+		
+		static const Color RED;
+		static const Color GREEN;
+		static const Color BLUE;
+		static const Color WHITE;
+		static const Color BLACK;
+	};
+
 }
 
 #endif
