@@ -177,6 +177,9 @@
     <ClInclude Include="TouchL12\TouchL12.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="KeypadKP16\KeypadKP16.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -342,6 +345,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TouchL12\TouchL12.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KeypadKP16\KeypadKP16.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
