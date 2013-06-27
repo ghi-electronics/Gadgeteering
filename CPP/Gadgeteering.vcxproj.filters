@@ -165,6 +165,9 @@
     <ClInclude Include="FEZTive\FEZtive.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MotorDriverL298\MotorDriverL298.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -318,6 +321,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Gadgeteering\Types.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MotorDriverL298\MotorDriverL298.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

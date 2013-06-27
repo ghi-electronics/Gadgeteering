@@ -15,6 +15,7 @@ MultiColorLED* led2;
 MultiColorLED* led3;
 
 void setup() {
+  Serial.begin(9600);
   led1 = new MultiColorLED(1);
   led2 = new MultiColorLED(1);
   led3 = new MultiColorLED(1);
@@ -23,6 +24,7 @@ void setup() {
 }
 
 void loop() {
+  Serial.println("Tick");
   led1->TurnGreen();
   led2->TurnGreen();
   led3->TurnGreen();
