@@ -108,6 +108,7 @@
     <ClInclude Include="Joystick\Joystick.h" />
     <ClInclude Include="LED7C\LED7C.h" />
     <ClInclude Include="LED7R\LED7R.h" />
+    <ClInclude Include="LEDMatrix\LEDMatrix.h" />
     <ClInclude Include="LEDStrip\LEDStrip.h" />
     <ClInclude Include="LightSensor\LightSensor.h" />
     <ClInclude Include="Load\Load.h" />
@@ -161,6 +162,7 @@
     <ClCompile Include="Joystick\Joystick.cpp" />
     <ClCompile Include="LED7C\LED7C.cpp" />
     <ClCompile Include="LED7R\LED7R.cpp" />
+    <ClCompile Include="LEDMatrix\LEDMatrix.cpp" />
     <ClCompile Include="LEDStrip\LEDStrip.cpp" />
     <ClCompile Include="LightSensor\LightSensor.cpp" />
     <ClCompile Include="Load\Load.cpp" />

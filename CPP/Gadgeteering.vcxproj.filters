@@ -168,6 +168,9 @@
     <ClInclude Include="MotorDriverL298\MotorDriverL298.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LEDMatrix\LEDMatrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -324,6 +327,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MotorDriverL298\MotorDriverL298.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LEDMatrix\LEDMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
