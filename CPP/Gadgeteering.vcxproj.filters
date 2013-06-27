@@ -171,6 +171,12 @@
     <ClInclude Include="LEDMatrix\LEDMatrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TouchC8\TouchC8.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TouchL12\TouchL12.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -330,6 +336,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LEDMatrix\LEDMatrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TouchC8\TouchC8.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TouchL12\TouchL12.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
