@@ -143,11 +143,9 @@ void FEZMedusa::print(double toPrint) {
 
 void FEZMedusa::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistorMode) {
 	if (!(pinNumber & FEZMedusa::EXTENDER_MASK)) {
-		if (state == IOStates::PWM)
-			mainboard->panic(Exceptions::ERR_PWM_NOT_SUPPORTED);
-		else if (state == IOStates::DIGITAL_INPUT)
+		if (state == IOStates::DIGITAL_INPUT)
 			::pinMode(pinNumber, resistorMode == ResistorModes::PULL_UP ? INPUT_PULLUP : INPUT);
-		else
+		else if (state == IOStates::DIGITAL_OUTPUT || state == IOStates::PWM)
 			::pinMode(pinNumber, OUTPUT);
 	}
 	else {
@@ -156,7 +154,7 @@ void FEZMedusa::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistor
 }
 
 void FEZMedusa::setPWM(CPUPin pinNumber, double dutyCycle, double frequency) {
-	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? mainboard->panic(Exceptions::ERR_PWM_NOT_SUPPORTED) : this->extenderChip->setPWM(pinNumber & ~FEZMedusa::EXTENDER_MASK, dutyCycle, frequency);
+	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? analogWrite(pinNumber, static_cast<int>(dutyCycle * 255.0)) : this->extenderChip->setPWM(pinNumber & ~FEZMedusa::EXTENDER_MASK, dutyCycle, frequency);
 }
 
 bool FEZMedusa::readDigital(CPUPin pinNumber) {
