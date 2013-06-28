@@ -118,8 +118,10 @@
     <ClInclude Include="Moisture\Moisture.h" />
     <ClInclude Include="MotorDriverL298\MotorDriverL298.h" />
     <ClInclude Include="MultiColorLED\MultiColorLED.h" />
+    <ClInclude Include="PulseCount\PulseCount.h" />
     <ClInclude Include="RelayX16\RelayX16.h" />
     <ClInclude Include="RelayX1\RelayX1.h" />
+    <ClInclude Include="RotaryH1\RotaryH1.h" />
     <ClInclude Include="TemperatureHumidity\TemperatureHumidity.h" />
     <ClInclude Include="Thermocouple\Thermocouple.h" />
     <ClInclude Include="TouchC8\TouchC8.h" />
@@ -177,8 +179,10 @@
     <ClCompile Include="Moisture\Moisture.cpp" />
     <ClCompile Include="MotorDriverL298\MotorDriverL298.cpp" />
     <ClCompile Include="MultiColorLED\MultiColorLED.cpp" />
+    <ClCompile Include="PulseCount\PulseCount.cpp" />
     <ClCompile Include="RelayX16\RelayX16.cpp" />
     <ClCompile Include="RelayX1\RelayX1.cpp" />
+    <ClCompile Include="RotaryH1\RotaryH1.cpp" />
     <ClCompile Include="TemperatureHumidity\TemperatureHumidity.cpp" />
     <ClCompile Include="Thermocouple\Thermocouple.cpp" />
     <ClCompile Include="TouchC8\TouchC8.cpp" />
