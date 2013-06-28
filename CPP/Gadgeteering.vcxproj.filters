@@ -180,6 +180,12 @@
     <ClInclude Include="KeypadKP16\KeypadKP16.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CurrentACS712\CurrentACS712.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Thermocouple\Thermocouple.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -348,6 +354,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="KeypadKP16\KeypadKP16.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CurrentACS712\CurrentACS712.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Thermocouple\Thermocouple.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

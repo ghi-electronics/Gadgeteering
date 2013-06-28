@@ -75,6 +75,7 @@
     <ClInclude Include="Breakout\Breakout.h" />
     <ClInclude Include="ButtonS6\ButtonS6.h" />
     <ClInclude Include="Button\Button.h" />
+    <ClInclude Include="CurrentACS712\CurrentACS712.h" />
     <ClInclude Include="DisplayN18\DisplayN18.h" />
     <ClInclude Include="DistanceUS3\DistanceUS3.h" />
     <ClInclude Include="Extender\Extender.h" />
@@ -120,6 +121,7 @@
     <ClInclude Include="RelayX16\RelayX16.h" />
     <ClInclude Include="RelayX1\RelayX1.h" />
     <ClInclude Include="TemperatureHumidity\TemperatureHumidity.h" />
+    <ClInclude Include="Thermocouple\Thermocouple.h" />
     <ClInclude Include="TouchC8\TouchC8.h" />
     <ClInclude Include="TouchL12\TouchL12.h" />
     <ClInclude Include="Tunes\Tunes.h" />
@@ -131,6 +133,7 @@
     <ClCompile Include="Breakout\Breakout.cpp" />
     <ClCompile Include="ButtonS6\ButtonS6.cpp" />
     <ClCompile Include="Button\Button.cpp" />
+    <ClCompile Include="CurrentACS712\CurrentACS712.cpp" />
     <ClCompile Include="DisplayN18\DisplayN18.cpp" />
     <ClCompile Include="DistanceUS3\DistanceUS3.cpp" />
     <ClCompile Include="Extender\Extender.cpp" />
@@ -177,6 +180,7 @@
     <ClCompile Include="RelayX16\RelayX16.cpp" />
     <ClCompile Include="RelayX1\RelayX1.cpp" />
     <ClCompile Include="TemperatureHumidity\TemperatureHumidity.cpp" />
+    <ClCompile Include="Thermocouple\Thermocouple.cpp" />
     <ClCompile Include="TouchC8\TouchC8.cpp" />
     <ClCompile Include="TouchL12\TouchL12.cpp" />
     <ClCompile Include="Tunes\Tunes.cpp" />
