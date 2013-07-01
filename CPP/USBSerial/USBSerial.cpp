@@ -42,10 +42,10 @@ namespace GHI
 				serial->open();
 		}
 
-		void USBSerial::Send(char *data)
+		void USBSerial::Send(char *data, int length)
 		{
 			if(this->b_IsOpen)
-				serial->write(data, strlen(data));
+				serial->write(data, length);
 		}
 
 		char *USBSerial::Read(int length)

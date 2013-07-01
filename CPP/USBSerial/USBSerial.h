@@ -28,7 +28,7 @@ namespace GHI
 				void Open();
 				void Close();
 
-				void Send(char *data);
+				void Send(char *data, int length);
 				char *Read(int length);
 		};
 	}

@@ -23,12 +23,15 @@ void FEZMedusa::SerialDevice::close() {
 }
 
 void FEZMedusa::SerialDevice::write(const unsigned char* buffer, unsigned int count) {
-	Serial.write(buffer, count);
+	//Serial.write(buffer, count);
+	Serial.println((const char*)buffer);
 	Serial.flush();
 }
 
 void FEZMedusa::SerialDevice::write(const char* buffer, unsigned int count) {
-	Serial.write(reinterpret_cast<const unsigned char*>(buffer), count);
+	//Serial.write(reinterpret_cast<const unsigned char*>(buffer), count);
+	
+	Serial.println((const char*)buffer);
 	Serial.flush();
 }
 

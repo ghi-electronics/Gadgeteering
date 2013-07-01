@@ -112,6 +112,7 @@
     <ClInclude Include="Load\Load.h" />
     <ClInclude Include="MaxO\MaxO.h" />
     <ClInclude Include="Moisture\Moisture.h" />
+    <ClInclude Include="MotorL298\MotorL298.h" />
     <ClInclude Include="RelayX16\RelayX16.h" />
     <ClInclude Include="RelayX1\RelayX1.h" />
     <ClInclude Include="TemperatureHumidity\TemperatureHumidity.h" />
@@ -161,6 +162,7 @@
     <ClCompile Include="Load\Load.cpp" />
     <ClCompile Include="MaxO\MaxO.cpp" />
     <ClCompile Include="Moisture\Moisture.cpp" />
+    <ClCompile Include="MotorL298\MotorL298.cpp" />
     <ClCompile Include="RelayX16\RelayX16.cpp" />
     <ClCompile Include="RelayX1\RelayX1.cpp" />
     <ClCompile Include="TemperatureHumidity\TemperatureHumidity.cpp" />
