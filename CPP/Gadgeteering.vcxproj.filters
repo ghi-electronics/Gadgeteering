@@ -159,7 +159,37 @@
     <ClInclude Include="Gadgeteering\DaisyLink.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MotorL298\MotorL298.h">
+    <ClInclude Include="MultiColorLED\MultiColorLED.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZTive\FEZtive.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MotorDriverL298\MotorDriverL298.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LEDMatrix\LEDMatrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TouchC8\TouchC8.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TouchL12\TouchL12.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KeypadKP16\KeypadKP16.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CurrentACS712\CurrentACS712.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Thermocouple\Thermocouple.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RotaryH1\RotaryH1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PulseCount\PulseCount.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -308,7 +338,40 @@
     <ClCompile Include="Gadgeteering\DaisyLink.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MotorL298\MotorL298.cpp">
+    <ClCompile Include="MultiColorLED\MultiColorLED.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZTive\FEZtive.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gadgeteering\Types.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MotorDriverL298\MotorDriverL298.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LEDMatrix\LEDMatrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TouchC8\TouchC8.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TouchL12\TouchL12.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KeypadKP16\KeypadKP16.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CurrentACS712\CurrentACS712.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Thermocouple\Thermocouple.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RotaryH1\RotaryH1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PulseCount\PulseCount.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

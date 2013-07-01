@@ -14,8 +14,7 @@ DaisyLinkBus::DaisyLinkBus(Socket* socket, DaisyLinkModule* module)
 	this->socket = socket;
 	this->reservedCount = 0;
 	this->nodeCount = 0;
-
-	this->daisyLinkResetPort = new DigitalIO(socket, DaisyLinkBus::DAISYLINK_PIN);
+	this->daisyLinkResetPort = NULL;
 }
 
 DaisyLinkBus::~DaisyLinkBus()
@@ -46,19 +45,18 @@ void DaisyLinkBus::Initialize()
 
     // Reset all modules in the chain and place the first module into Setup mode
     SendResetPulse();
-
     // For all modules in the chain
     while (!lastFound)
     {
-        if (DaisyLinkModule::VERSION_IMPLEMENTED != this->ReadRegister(DaisyLinkBus::DEFAULT_I2C_ADDRESS, (unsigned char)Registers::DAISYLINK_VERSION))
+        if (DaisyLinkModule::VERSION_IMPLEMENTED != this->ReadRegister((unsigned char)Registers::DAISYLINK_VERSION, DaisyLinkBus::DEFAULT_I2C_ADDRESS))
         {
             lastFound = true;       // If the correct version can't be read back from a device, there are no more devices in the chain
         }
-
+		
         if (modulesFound != 0)      // If a device is left in Standby mode
         {
             unsigned char data[2] = { (unsigned char)Registers::CONFIG, (unsigned char)(lastFound ? 1 : 0) };
-            this->i2c->write(data, 2, (unsigned char)(totalNodeCount + modulesFound));     // Enable/disable I2C pull-ups depending on whether last in chain (place module in Active mode)
+            this->i2c->write(data, 2, (unsigned char)((totalNodeCount + modulesFound) << 1));     // Enable/disable I2C pull-ups depending on whether last in chain (place module in Active mode)
         }
 
         if (!lastFound)
@@ -67,10 +65,10 @@ void DaisyLinkBus::Initialize()
             modulesFound++;         // Increase the total number of modules found connected to this socket
 
             unsigned char data[2] = { (unsigned char)Registers::ADDRESS, (unsigned char)(totalNodeCount + modulesFound) };
-            this->i2c->write(data, 2, DaisyLinkBus::DEFAULT_I2C_ADDRESS);     // Set the I2C ID of the next module in the chain (place module in Standby mode)
+            this->i2c->write(data, 2, DaisyLinkBus::DEFAULT_I2C_ADDRESS << 1);     // Set the I2C ID of the next module in the chain (place module in Standby mode)
         }
     }
-
+	
     this->startAddress = (unsigned char)(totalNodeCount + 1);
     this->nodeCount = modulesFound;
     this->reservedCount = 0;
@@ -100,9 +98,9 @@ void DaisyLinkBus::GetModuleParameters(unsigned int position, unsigned char* man
 		mainboard->panic(Exceptions::ERR_MODULE_ERROR, 3); //Attempt to access invalid module
 
     address = (unsigned char)(this->startAddress + position);
-    *type = this->ReadRegister(address, (unsigned char)Registers::MODULE_TYPE);
-    *version = this->ReadRegister(address, (unsigned char)(Registers::MODULE_VERSION));
-    *manufacturer = this->ReadRegister(address, (unsigned char)(Registers::MANUFACTURER));
+    *type = this->ReadRegister((unsigned char)Registers::MODULE_TYPE, address);
+    *version = this->ReadRegister((unsigned char)(Registers::MODULE_VERSION), address);
+    *manufacturer = this->ReadRegister((unsigned char)(Registers::MANUFACTURER), address);
 }
 
 unsigned char DaisyLinkBus::GetDaisyLinkVersion(unsigned int position)
@@ -113,14 +111,14 @@ unsigned char DaisyLinkBus::GetDaisyLinkVersion(unsigned int position)
 		mainboard->panic(Exceptions::ERR_MODULE_ERROR, 4); //Attempt to access invalid module
 
     address = (unsigned char)(this->startAddress + position);
-    return this->ReadRegister(address, (unsigned char)Registers::DAISYLINK_VERSION);
+    return this->ReadRegister((unsigned char)Registers::DAISYLINK_VERSION, address);
 }
 
-unsigned char DaisyLinkBus::ReadRegister(unsigned char address, unsigned char moduleAddress)
+unsigned char DaisyLinkBus::ReadRegister(unsigned char registerAddress, unsigned char moduleAddress)
 {
 	unsigned char result;
 	unsigned int a, b;
-	this->i2c->writeRead(&address, 1, &result, 1, &a, &b, moduleAddress);
+	this->i2c->writeRead(&registerAddress, 1, &result, 1, &a, &b, moduleAddress << 1);
 	return result;
 }
 
@@ -189,7 +187,7 @@ DaisyLinkModule::DaisyLinkModule(unsigned char socketNumber, unsigned char manuf
     if (ModuleVersion < minModuleVersionSupported || ModuleVersion > maxModuleVersionSupported)
 		mainboard->panic(Exceptions::ERR_MODULE_ERROR, 6); //Problem initializaing DaisyLink due to invalid firmware
 
-    ModuleAddress = this->daisyLink->ReserveNextDaisyLinkNodeAddress(this);
+    ModuleAddress = this->daisyLink->ReserveNextDaisyLinkNodeAddress(this) << 1;
 }
 
 DaisyLinkModule::~DaisyLinkModule()

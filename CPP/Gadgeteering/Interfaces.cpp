@@ -26,6 +26,10 @@ DigitalOutput::DigitalOutput(CPUPin pin, bool initialState) {
 	this->write(initialState);
 }
 
+DigitalOutput::~DigitalOutput() {
+	mainboard->ReleasePin(this->cpuPin);
+}
+
 void DigitalOutput::write(bool value) {
 	mainboard->writeDigital(this->cpuPin, value);
 }
@@ -48,6 +52,10 @@ DigitalInput::DigitalInput(CPUPin pin, ResistorMode resistorMode)
 	
 	mainboard->ReservePin(this->cpuPin);
 	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_INPUT, resistorMode);
+}
+
+DigitalInput::~DigitalInput() {
+	mainboard->ReleasePin(this->cpuPin);
 }
 
 bool DigitalInput::read() {
@@ -77,6 +85,10 @@ DigitalIO::DigitalIO(CPUPin pin) {
 	
 	this->resistorMode = static_cast<ResistorMode>(0xFF);
 	this->ioState = static_cast<IOState>(0xFF);
+}
+
+DigitalIO::~DigitalIO() {
+	mainboard->ReleasePin(this->cpuPin);
 }
 
 void DigitalIO::write(bool value) {
@@ -120,6 +132,10 @@ AnalogInput::AnalogInput(CPUPin pin) {
 	mainboard->ReservePin(this->cpuPin);
 }
 
+AnalogInput::~AnalogInput() {
+	mainboard->ReleasePin(this->cpuPin);
+}
+
 double AnalogInput::read() {
 	return mainboard->readAnalog(this->cpuPin);
 }
@@ -141,6 +157,10 @@ AnalogOutput::AnalogOutput(Socket* socket, Socket::Pin pinNumber) {
 AnalogOutput::AnalogOutput(CPUPin pin) {
 	this->cpuPin = pin;
 	mainboard->ReservePin(this->cpuPin);
+}
+
+AnalogOutput::~AnalogOutput() {
+	mainboard->ReleasePin(this->cpuPin);
 }
 
 void AnalogOutput::write(double value) {
@@ -179,6 +199,10 @@ void PWMOutput::set(double frequency, double dutyCycle) {
 	this->frequency = frequency;
 
 	mainboard->setPWM(this->cpuPin, this->frequency, this->dutyCycle);
+}
+
+PWMOutput::~PWMOutput() {
+	mainboard->ReleasePin(this->cpuPin);
 }
 
 void PWMOutput::setFrequency(double frequency) {

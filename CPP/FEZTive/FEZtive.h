@@ -16,9 +16,6 @@ namespace GHI
 	{
 		class FEZtive : protected Module
 		{
-			public:
-				class Color; //Forward declaration for class object
-
 			private:
 				Interfaces::SPIDevice *spi;
 				Interfaces::SPIConfiguration *spi_config;
@@ -27,6 +24,8 @@ namespace GHI
 				Color *LEDs;
 				char *_zeros;
 				int ledLength;
+
+				void GetColorForRender(Color color, unsigned char* r, unsigned char* g, unsigned char* b);
 
 			public:
 				FEZtive(int socket);
@@ -67,45 +66,6 @@ namespace GHI
 				/// Redraws all of the colors. Only to be used after a change was made to the Color array.
 				/// </summary>
 				void Redraw();
-
-				//Helper classes
-				class Color
-				{
-					private:
-						char red;
-						char green;
-						char blue;
-
-					/// <summary>
-					/// Constructor
-					/// </summary>
-					/// <param name="r">Red value. Must be between 0-127.</param>
-					/// <param name="g">Green value. Must be between 0-127.</param>
-					/// <param name="b">Blue value. Must be between 0-127.</param>
-					public: 
-						Color();
-						Color(char r, char g, char b);
-
-					/// <summary>
-					/// Sets the color to the passed in RGB color values
-					/// </summary>
-					/// <param name="r">Red value. Must be between 0-127.</param>
-					/// <param name="g">Green value. Must be between 0-127.</param>
-					/// <param name="b">Blue value. Must be between 0-127.</param>
-					void Set(char r, char g, char b);
-
-					/// <summary>
-					/// Sets the color to the passed in Color structure
-					/// </summary>
-					/// <param name="color">Color structure to be used. Color values must be between 0-127.</param>
-					void Set(Color color);
-
-					/// <summary>
-					/// Returns a char[] containing the current colors for rendering. Do not use to change the colors.
-					/// </summary>
-					/// <returns>A char[] containing the current color </returns>
-					char *GetForRender();
-				};
 		};
 	}
 }

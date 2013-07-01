@@ -39,7 +39,7 @@ namespace GHI
 			void SendResetPulse();
 			void GetModuleParameters(unsigned int position, unsigned char* manufacturer, unsigned char* type, unsigned char* version);
 			unsigned char GetDaisyLinkVersion(unsigned int position);
-			unsigned char ReadRegister(unsigned char address, unsigned char moduleAddress = DaisyLinkBus::DEFAULT_I2C_ADDRESS);
+			unsigned char ReadRegister(unsigned char registerAddress, unsigned char moduleAddress = DaisyLinkBus::DEFAULT_I2C_ADDRESS);
 
 		public:
 			typedef unsigned char Register;

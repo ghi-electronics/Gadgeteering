@@ -11,15 +11,26 @@ using namespace GHI::Mainboards;
 using namespace GHI::Modules;
 
 FEZMedusa board;
-Tunes tunes(9);
-int next = 500;
+Tunes tunes(2);
+int next = 0.5;
 bool dir = true;
 
 void setup() {  
-  
+  TCCR2B = 0;
 }
 
 void loop() {    
+  tunes.set(495, next);
+  
+  next += dir ? 0.05 : -0.05;
+  
+  if (next >= 1 || next <= 0)
+    dir = !dir;
+    
+  delay(10);
+}
+
+void loop1() {    
   tunes.set(next, 0.5);
   
   next += dir ? 10 : -10;
