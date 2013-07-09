@@ -117,6 +117,7 @@
     <ClInclude Include="MaxO\MaxO.h" />
     <ClInclude Include="Moisture\Moisture.h" />
     <ClInclude Include="MotorDriverL298\MotorDriverL298.h" />
+    <ClInclude Include="MotorL298\MotorL298.h" />
     <ClInclude Include="MultiColorLED\MultiColorLED.h" />
     <ClInclude Include="PulseCount\PulseCount.h" />
     <ClInclude Include="RelayX16\RelayX16.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="MaxO\MaxO.cpp" />
     <ClCompile Include="Moisture\Moisture.cpp" />
     <ClCompile Include="MotorDriverL298\MotorDriverL298.cpp" />
+    <ClCompile Include="MotorL298\MotorL298.cpp" />
     <ClCompile Include="MultiColorLED\MultiColorLED.cpp" />
     <ClCompile Include="PulseCount\PulseCount.cpp" />
     <ClCompile Include="RelayX16\RelayX16.cpp" />

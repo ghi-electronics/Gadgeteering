@@ -9,6 +9,8 @@ namespace GHI
 		void SleepMicro(unsigned long time);
 		unsigned long TimeElapsed();
 		unsigned long CyclesToMicroseconds(unsigned long val);
+		int RandomNumber(int low = 0, int high = 65535);
+		void RandomNumberSeed(int seed);
 	}
 }
 

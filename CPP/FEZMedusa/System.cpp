@@ -20,3 +20,13 @@ unsigned long GHI::System::CyclesToMicroseconds(unsigned long val)
 {
 	return clockCyclesToMicroseconds(val);
 }
+
+void GHI::System::RandomNumberSeed(int seed)
+{
+	randomSeed(seed);
+}
+
+int GHI::System::RandomNumber(int low, int max)
+{
+	return randNumber(low,max);
+} 
