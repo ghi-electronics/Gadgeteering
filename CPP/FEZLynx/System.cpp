@@ -6,6 +6,8 @@
 
 
 #include <iostream>
+#include <stdlib.h>
+
 #include "../Gadgeteering/System.hpp"
 
 using namespace GHI;
@@ -39,19 +41,7 @@ void System::Sleep(unsigned long time)
 long int EpochWhenStarted = 0;
 #endif
 
-unsigned int System::TimeElapsed()
-{
-#ifdef _WIN32
-	return GetTickCount();
-#else
-	timespec t;
-    clock_gettime(CLOCK_MONOTONIC, &t);
-
-    return ((t.tv_sec * 1000) + (t.tv_nsec / 1000000));
-#endif
-}
-
-unsigned long System::TimeElapsed64()
+unsigned long System::TimeElapsed()
 {
 #ifdef _WIN32
 	return GetTickCount64();
@@ -61,4 +51,14 @@ unsigned long System::TimeElapsed64()
 
     return ((t.tv_sec * 1000) + (t.tv_nsec / 1000000));
 #endif
+}
+
+int RandomNumber(int low = 0, int high = 65535)
+{
+	return (std::rand() % high) + low;
+}
+
+void RandomNumberSeed(int seed)
+{
+	std::srand(seed);
 }

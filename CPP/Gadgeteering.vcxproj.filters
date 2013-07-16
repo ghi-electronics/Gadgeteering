@@ -192,6 +192,12 @@
     <ClInclude Include="PulseCount\PulseCount.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MotorL298\MotorL298.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Demos\TicTacToe\TicTacToe.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -372,6 +378,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PulseCount\PulseCount.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MotorL298\MotorL298.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Demos\TicTacToe\TicTacToe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZLynx\SerialDevice_Lynx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -76,6 +76,7 @@
     <ClInclude Include="ButtonS6\ButtonS6.h" />
     <ClInclude Include="Button\Button.h" />
     <ClInclude Include="CurrentACS712\CurrentACS712.h" />
+    <ClInclude Include="Demos\TicTacToe\TicTacToe.hpp" />
     <ClInclude Include="DisplayN18\DisplayN18.h" />
     <ClInclude Include="DistanceUS3\DistanceUS3.h" />
     <ClInclude Include="Extender\Extender.h" />
@@ -137,10 +138,12 @@
     <ClCompile Include="ButtonS6\ButtonS6.cpp" />
     <ClCompile Include="Button\Button.cpp" />
     <ClCompile Include="CurrentACS712\CurrentACS712.cpp" />
+    <ClCompile Include="Demos\TicTacToe\TicTacToe.cpp" />
     <ClCompile Include="DisplayN18\DisplayN18.cpp" />
     <ClCompile Include="DistanceUS3\DistanceUS3.cpp" />
     <ClCompile Include="Extender\Extender.cpp" />
     <ClCompile Include="FEZLynx\ExtendedSockets.cpp" />
+    <ClCompile Include="FEZLynx\SerialDevice_Lynx.cpp" />
     <ClCompile Include="FEZLynx\SPIBus_Lynx.cpp" />
     <ClCompile Include="FEZMedusa\FEZMedusa.cpp" />
     <ClCompile Include="FEZMedusa\I2CBus.cpp" />

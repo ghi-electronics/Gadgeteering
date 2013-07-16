@@ -28,5 +28,5 @@ void GHI::System::RandomNumberSeed(int seed)
 
 int GHI::System::RandomNumber(int low, int max)
 {
-	return randNumber(low,max);
+	return random(low,max);
 } 

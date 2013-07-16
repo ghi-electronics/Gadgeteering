@@ -17,6 +17,7 @@
 #include "../Gadgeteering/Mainboard.hpp"
 #include "../Gadgeteering/Socket.hpp"
 #include "../Gadgeteering/SPIBus.hpp"
+#include "../Gadgeteering/SerialDevice.hpp"
 
 struct FEZLynxChannel
 {
@@ -108,19 +109,32 @@ namespace GHI
 					virtual ~SPIBus();
 
 					//Clocks in one char and clocks out one char at the same time. If deselectChip is true, the CS line is set to logic low after the transmission, otherwise it remains logic high.
-					virtual char writeReadByte(char toSend, GHI::Interfaces::SPIDevice::Configuration* configuration);
+					virtual char writeReadByte(char toSend, GHI::Interfaces::SPIConfiguration* configuration);
 
 					//Clocks count bytes in and out at the same time to and from the receive and send buffer respectively.
-					virtual void writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
+					virtual void writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration);
 
 					//Clocks sendCount bytes from sendBuffer out while ignoring the received bytes and then clocks receiveCount bytes into the receiveBuffer while clocking 0's out.
-					virtual void writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, GHI::Interfaces::SPIDevice::Configuration* configuration);
+					virtual void writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, GHI::Interfaces::SPIConfiguration* configuration);
 
 					//Clocks count bytes out from the buffer while ignoring the bytes clocked in.
-					virtual void write(char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
+					virtual void write(char* buffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration);
 
 					//Clocks count bytes in while clocking 0's out.
-					virtual void read(char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration);
+					virtual void read(char* buffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration);
+				};
+
+				class SerialDevice : public GHI::Interfaces::SerialDevice 
+				{
+					public:
+						SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
+						virtual ~SerialDevice();
+		
+						virtual void open();
+						virtual void close();
+						virtual void write(const unsigned char* buffer, unsigned int count);
+						virtual void write(const char* buffer, unsigned int count);
+						virtual unsigned int read(unsigned char* buffer, unsigned int count);
 				};
 
 				class Pins
