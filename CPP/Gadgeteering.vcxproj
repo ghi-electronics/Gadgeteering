@@ -72,10 +72,14 @@
   <ItemGroup>
     <ClInclude Include="Accelerometer\Accelerometer.h" />
     <ClInclude Include="AccelG248\AccelG248.h" />
+    <ClInclude Include="Barometer\Barometer.h" />
     <ClInclude Include="Breakout\Breakout.h" />
     <ClInclude Include="ButtonS6\ButtonS6.h" />
     <ClInclude Include="Button\Button.h" />
+    <ClInclude Include="ColorSense\ColorSense.h" />
+    <ClInclude Include="Compass\Compass.h" />
     <ClInclude Include="CurrentACS712\CurrentACS712.h" />
+    <ClInclude Include="Demos\TicTacToe\TicTacToe.hpp" />
     <ClInclude Include="DisplayN18\DisplayN18.h" />
     <ClInclude Include="DistanceUS3\DistanceUS3.h" />
     <ClInclude Include="Extender\Extender.h" />
@@ -105,6 +109,7 @@
     <ClInclude Include="FEZLynx\Windows\FTD2XX.H" />
     <ClInclude Include="CharDisplay\CharDisplay.h" />
     <ClInclude Include="GasSense\GasSense.h" />
+    <ClInclude Include="Gyroscope\Gyroscope.hpp" />
     <ClInclude Include="IO60P16\IO60P16.h" />
     <ClInclude Include="Joystick\Joystick.h" />
     <ClInclude Include="KeypadKP16\KeypadKP16.h" />
@@ -116,27 +121,34 @@
     <ClInclude Include="Load\Load.h" />
     <ClInclude Include="MaxO\MaxO.h" />
     <ClInclude Include="Moisture\Moisture.h" />
+    <ClInclude Include="MotionSensor\MotionSensor.h" />
     <ClInclude Include="MotorDriverL298\MotorDriverL298.h" />
-    <ClInclude Include="MotorL298\MotorL298.h" />
     <ClInclude Include="MultiColorLED\MultiColorLED.h" />
+    <ClInclude Include="Potentiometer\Potentiometer.h" />
     <ClInclude Include="PulseCount\PulseCount.h" />
     <ClInclude Include="RelayX16\RelayX16.h" />
     <ClInclude Include="RelayX1\RelayX1.h" />
     <ClInclude Include="RotaryH1\RotaryH1.h" />
+    <ClInclude Include="RS232\RS232.h" />
     <ClInclude Include="TemperatureHumidity\TemperatureHumidity.h" />
     <ClInclude Include="Thermocouple\Thermocouple.h" />
     <ClInclude Include="TouchC8\TouchC8.h" />
     <ClInclude Include="TouchL12\TouchL12.h" />
     <ClInclude Include="Tunes\Tunes.h" />
+    <ClInclude Include="USBSerial\USBSerial.h" />
     <ClInclude Include="WiFiRN171\WiFiRN171.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Accelerometer\Accelerometer.cpp" />
     <ClCompile Include="AccelG248\AccelG248.cpp" />
+    <ClCompile Include="Barometer\Barometer.cpp" />
     <ClCompile Include="Breakout\Breakout.cpp" />
     <ClCompile Include="ButtonS6\ButtonS6.cpp" />
     <ClCompile Include="Button\Button.cpp" />
+    <ClCompile Include="ColorSense\ColorSense.cpp" />
+    <ClCompile Include="Compass\Compass.cpp" />
     <ClCompile Include="CurrentACS712\CurrentACS712.cpp" />
+    <ClCompile Include="Demos\TicTacToe\TicTacToe.cpp" />
     <ClCompile Include="DisplayN18\DisplayN18.cpp" />
     <ClCompile Include="DistanceUS3\DistanceUS3.cpp" />
     <ClCompile Include="Extender\Extender.cpp" />
@@ -167,6 +179,7 @@
     <ClCompile Include="CharDisplay\CharDisplay.cpp" />
     <ClCompile Include="Gadgeteering\Types.cpp" />
     <ClCompile Include="GasSense\GasSense.cpp" />
+    <ClCompile Include="Gyroscope\Gyroscope.cpp" />
     <ClCompile Include="IO60P16\IO60P16.cpp" />
     <ClCompile Include="Joystick\Joystick.cpp" />
     <ClCompile Include="KeypadKP16\KeypadKP16.cpp" />
@@ -178,18 +191,21 @@
     <ClCompile Include="Load\Load.cpp" />
     <ClCompile Include="MaxO\MaxO.cpp" />
     <ClCompile Include="Moisture\Moisture.cpp" />
+    <ClCompile Include="MotionSensor\MotionSensor.cpp" />
     <ClCompile Include="MotorDriverL298\MotorDriverL298.cpp" />
-    <ClCompile Include="MotorL298\MotorL298.cpp" />
     <ClCompile Include="MultiColorLED\MultiColorLED.cpp" />
+    <ClCompile Include="Potentiometer\Potentiometer.cpp" />
     <ClCompile Include="PulseCount\PulseCount.cpp" />
     <ClCompile Include="RelayX16\RelayX16.cpp" />
     <ClCompile Include="RelayX1\RelayX1.cpp" />
     <ClCompile Include="RotaryH1\RotaryH1.cpp" />
+    <ClCompile Include="RS232\RS232.cpp" />
     <ClCompile Include="TemperatureHumidity\TemperatureHumidity.cpp" />
     <ClCompile Include="Thermocouple\Thermocouple.cpp" />
     <ClCompile Include="TouchC8\TouchC8.cpp" />
     <ClCompile Include="TouchL12\TouchL12.cpp" />
     <ClCompile Include="Tunes\Tunes.cpp" />
+    <ClCompile Include="USBSerial\USBSerial.cpp" />
     <ClCompile Include="WiFiRN171\WiFiRN171.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
