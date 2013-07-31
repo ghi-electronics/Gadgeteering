@@ -173,6 +173,25 @@ void FEZMedusa::setPWM(CPUPin pinNumber, double dutyCycle, double frequency) {
 	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? analogWrite(pinNumber, static_cast<int>(dutyCycle * 255.0)) : this->extenderChip->setPWM(pinNumber & ~FEZMedusa::EXTENDER_MASK, dutyCycle, frequency);
 }
 
+void FEZMedusa::setPWM(CPUPin pinNumber, double frequency, double dutyCycle, double duration)
+{
+	if (frequency <= 0 || dutyCycle < 0 || dutyCycle > 1)
+		return;
+  
+	double periodUS = 1000000 / frequency;
+	unsigned long sleepHigh = (unsigned long)(periodUS * dutyCycle);
+	unsigned long sleepLow = (unsigned long)(periodUS * (1 - dutyCycle));
+	unsigned long endTime = System::TimeElapsed() + (unsigned long)(duration * 1000);
+	
+	::pinMode(pinNumber, OUTPUT);
+	do {
+		::digitalWrite(pinNumber, HIGH);
+		::delayMicroseconds(sleepHigh * 1.59);
+		::digitalWrite(pinNumber, LOW);
+		::delayMicroseconds(sleepLow * 1.59);
+	} while (endTime > System::TimeElapsed());
+}
+
 bool FEZMedusa::readDigital(CPUPin pinNumber) {
 	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? ::digitalRead(pinNumber) == HIGH : this->extenderChip->readDigital(pinNumber & ~FEZMedusa::EXTENDER_MASK);
 }

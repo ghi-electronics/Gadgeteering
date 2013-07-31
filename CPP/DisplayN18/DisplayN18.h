@@ -24,10 +24,8 @@ namespace GHI {
 		using namespace GHI::Interfaces;
 
 		class DisplayN18 : public Module {
-			static const unsigned char STEP_X = 16;
-			static const unsigned char STEP_Y = 20;
-			static const unsigned int WIDTH = 128;
-			static const unsigned int HEIGHT = 160;
+			static const unsigned char STEP_X = 4;
+			static const unsigned char STEP_Y = 5;
 
 			DigitalOutput* resetPin;
 			DigitalOutput* backlightPin;
@@ -46,10 +44,17 @@ namespace GHI {
 				DisplayN18(unsigned char socketNumber);
 				~DisplayN18();
 				
+				static const unsigned int WIDTH = 128;
+				static const unsigned int HEIGHT = 160;
+				static const unsigned char CHAR_WIDTH = 5;
+				static const unsigned char CHAR_HEIGHT = 8;
+				static const unsigned char CHAR_SPACING = 1;
+
 				static unsigned short rgbToShort(unsigned char r, unsigned char g, unsigned char b);
 				
-				void clearScreen(unsigned short color = 0x0000);
+				void clear(unsigned short color = 0x0000);
 				void drawRaw(const unsigned char* data, int x, int y, int width, int height);
+				void drawRaw(const unsigned short* data, int x, int y, int width, int height);
 				void setPixel(int x, int y, unsigned short color);
 				
 				void fillRect(int x, int y, int width, int height, unsigned short color);
@@ -59,6 +64,9 @@ namespace GHI {
 				void drawCircle(int x, int y, int radius, unsigned short color);
 				
 				void drawLine(int x0, int y0, int x1, int y1, unsigned short color);
+				
+				void drawCharacter(int x, int y, const char character, unsigned short foreColor, unsigned short backColor, unsigned char fontSize = 1);
+				void drawString(int x, int y, const char* str, unsigned short foreColor, unsigned short backColor, unsigned char fontSize = 1);
 		};
 	}
 }

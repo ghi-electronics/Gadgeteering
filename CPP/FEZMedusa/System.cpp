@@ -24,7 +24,7 @@ void GHI::System::Sleep(unsigned long time)
 
 void GHI::System::SleepMicro(unsigned long time)
 {
-	delayMicroseconds(time);
+	delayMicroseconds(time * 1.59);
 }
 
 unsigned long GHI::System::TimeElapsed()
@@ -44,5 +44,5 @@ void GHI::System::RandomNumberSeed(int seed)
 
 int GHI::System::RandomNumber(int low, int max)
 {
-	return randNumber(low,max);
+	return random(low,max);
 } 

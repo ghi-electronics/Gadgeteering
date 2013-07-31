@@ -91,7 +91,8 @@ namespace GHI {
 				virtual void print(const char* toPrint);
 				virtual void print(int toPrint);
 				virtual void print(double toPrint);
-
+				
+				void setPWM(CPUPin pinNumber, double frequency, double dutyCycle, double duration); //Works only on socket 2.
 				virtual void setPWM(CPUPin pin, double dutyCycle, double frequency);
 				virtual bool readDigital(CPUPin pin);
 				virtual void writeDigital(CPUPin pin, bool value);
