@@ -166,7 +166,7 @@ void ALFAT::sendWriteHeader(unsigned int length) {
 		this->spi->writeAndRead(frame, read, 3, false);
 
 		if (read[1] == 0x00 || read[2] == 0x00) {
-			System::SleepMicro(500);
+			System::SleepMicro(50);
 			continue;
 		}
 		else {
@@ -199,7 +199,7 @@ void ALFAT::readFromDevice(unsigned char* buffer, unsigned int count) {
 		available = readResult[1] | (readResult[2] << 8);
 
 		if (available == 0) {
-			System::SleepMicro(500);
+			System::SleepMicro(50);
 			continue;
 		}
 		else if (available > count) {
@@ -218,7 +218,6 @@ void ALFAT::readFromDevice(unsigned char* buffer, unsigned int count) {
 
 		count -= available;
 		buffer += available;
-
 	} while (count > 0);
 }
 
@@ -234,7 +233,7 @@ void ALFAT::freeHandle(char handle) {
 }
 
 ALFAT::ResponseCode ALFAT::readResponseCode() {
-	System::SleepMicro(500);
+	System::SleepMicro(50);
 
 	unsigned char result[4];
 	this->readFromDevice(result, 4);

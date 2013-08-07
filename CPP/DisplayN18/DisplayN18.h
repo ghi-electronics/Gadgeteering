@@ -53,8 +53,8 @@ namespace GHI {
 				static unsigned short rgbToShort(unsigned char r, unsigned char g, unsigned char b);
 				
 				void clear(unsigned short color = 0x0000);
-				void drawRaw(const unsigned char* data, int x, int y, int width, int height);
-				void drawRaw(const unsigned short* data, int x, int y, int width, int height);
+				void draw(const unsigned char* data, int x, int y, int width, int height);
+				void draw(const unsigned short* data, int x, int y, int width, int height);
 				void setPixel(int x, int y, unsigned short color);
 				
 				void fillRect(int x, int y, int width, int height, unsigned short color);
@@ -67,6 +67,10 @@ namespace GHI {
 				
 				void drawCharacter(int x, int y, const char character, unsigned short foreColor, unsigned short backColor, unsigned char fontSize = 1);
 				void drawString(int x, int y, const char* str, unsigned short foreColor, unsigned short backColor, unsigned char fontSize = 1);
+
+				void setupDraw(int x, int y, int width, int height);
+				void sendDrawData(const unsigned char* data, unsigned int length, bool deselectChip = false);
+				void sendDrawData(const unsigned short* data, unsigned int length, bool deselectChip = false);
 		};
 	}
 }

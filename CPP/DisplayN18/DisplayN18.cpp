@@ -135,6 +135,33 @@ void DisplayN18::initialize() {
 	this->clear();
 }
 
+void DisplayN18::setupDraw(int x, int y, int width, int height) {
+	if (x > DisplayN18::WIDTH || y > DisplayN18::HEIGHT) 
+		return;
+	
+	if (x < 0)
+		x = 0;
+	if (y < 0)
+		y = 0;
+    
+	if (x + width > DisplayN18::WIDTH)
+		width = DisplayN18::WIDTH - x;
+	if (y + height > DisplayN18::HEIGHT)
+		height = DisplayN18::HEIGHT - y;
+    
+	this->setClippingArea(x, y, width - 1, height - 1);
+	this->writeCommand(0x2C);
+	this->rsPin->write(true);
+}
+
+void DisplayN18::sendDrawData(const unsigned char* data, unsigned int length, bool deselectChip) {
+	this->spi->write(data, length, deselectChip);
+}
+
+void DisplayN18::sendDrawData(const unsigned short* data, unsigned int length, bool deselectChip) {
+	this->sendDrawData(reinterpret_cast<const unsigned char*>(data), length, deselectChip);
+}
+
 void DisplayN18::setClippingArea(unsigned char x, unsigned char y, unsigned char width, unsigned char height) {
 	unsigned char data[4] = { 0x00, 0x00, 0x00, 0x00 };
 
@@ -173,11 +200,11 @@ void DisplayN18::clear(unsigned short color) {
 	this->fillRect(0, 0, DisplayN18::WIDTH, DisplayN18::HEIGHT, color);
 }
 
-void DisplayN18::drawRaw(const unsigned short* data, int x, int y, int width, int height) {
-	this->drawRaw(reinterpret_cast<const unsigned char*>(data), x, y, width, height);
+void DisplayN18::draw(const unsigned short* data, int x, int y, int width, int height) {
+	this->draw(reinterpret_cast<const unsigned char*>(data), x, y, width, height);
 }
 
-void DisplayN18::drawRaw(const unsigned char* data, int x, int y, int width, int height) {
+void DisplayN18::draw(const unsigned char* data, int x, int y, int width, int height) {
 	if (x > DisplayN18::WIDTH || y > DisplayN18::HEIGHT) 
 		return;
 	
@@ -197,7 +224,7 @@ void DisplayN18::drawRaw(const unsigned char* data, int x, int y, int width, int
 }
 
 void DisplayN18::setPixel(int x, int y, unsigned short color) {
-	this->drawRaw(reinterpret_cast<unsigned char*>(&color), x, y, 1, 1);
+	this->draw(reinterpret_cast<unsigned char*>(&color), x, y, 1, 1);
 }
 
 void DisplayN18::fillRect(int x, int y, int width, int height, unsigned short color) {
@@ -505,7 +532,7 @@ void DisplayN18::drawCharacter(int x, int y, const char character, unsigned shor
 		}
 
 		for (int k = 0; k < fontSize; k++)
-			this->drawRaw(horizontal, x + i * fontSize + k, y, 1, DisplayN18::CHAR_HEIGHT * fontSize);
+			this->draw(horizontal, x + i * fontSize + k, y, 1, DisplayN18::CHAR_HEIGHT * fontSize);
 	}
 
 	for (int i = 0; i < DisplayN18::CHAR_HEIGHT; i++)
@@ -513,7 +540,7 @@ void DisplayN18::drawCharacter(int x, int y, const char character, unsigned shor
 			horizontal[i * fontSize + k] = backColor;
 	
 	for (int k = 0; k < fontSize; k++)
-		this->drawRaw(horizontal, x + DisplayN18::CHAR_WIDTH * fontSize + k, y, 1, DisplayN18::CHAR_HEIGHT * fontSize);
+		this->draw(horizontal, x + DisplayN18::CHAR_WIDTH * fontSize + k, y, 1, DisplayN18::CHAR_HEIGHT * fontSize);
 
 	delete[] horizontal;
 }

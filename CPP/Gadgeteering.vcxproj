@@ -86,6 +86,7 @@
     <ClInclude Include="Extender\Extender.h" />
     <ClInclude Include="FEZLynx\SoftwareI2C_Lynx.h" />
     <ClInclude Include="FEZMedusaMini\FEZMedusaMini.h" />
+    <ClInclude Include="FEZMedusa\FEZMedusa.h" />
     <ClInclude Include="FEZTive\FEZtive.h" />
     <ClInclude Include="FLASH\FLASH.h" />
     <ClInclude Include="FMRadio\FMRadio.h" />
@@ -161,6 +162,11 @@
     <ClCompile Include="FEZMedusaMini\SerialDevice.cpp" />
     <ClCompile Include="FEZMedusaMini\SPIBus.cpp" />
     <ClCompile Include="FEZMedusaMini\System.cpp" />
+    <ClCompile Include="FEZMedusa\FEZMedusa.cpp" />
+    <ClCompile Include="FEZMedusa\I2CBus.cpp" />
+    <ClCompile Include="FEZMedusa\SerialDevice.cpp" />
+    <ClCompile Include="FEZMedusa\SPIBus.cpp" />
+    <ClCompile Include="FEZMedusa\System.cpp" />
     <ClCompile Include="FEZTive\FEZtive.cpp" />
     <ClCompile Include="FLASH\FLASH.cpp" />
     <ClCompile Include="FMRadio\FMRadio.cpp" />
