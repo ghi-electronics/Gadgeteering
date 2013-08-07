@@ -22,14 +22,14 @@ using namespace GHI::Interfaces;
 
 DisplayN18::DisplayN18(unsigned char socketNumber) {
 	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::X);
+	socket->ensureTypeIsSupported(Socket::Types::S);
 
-	  this->resetPin = new DigitalOutput(socket, Socket::Pins::Three, false);
-	  this->backlightPin = new DigitalOutput(socket, Socket::Pins::Four, true);
-	  this->rsPin = new DigitalOutput(socket, Socket::Pins::Five, false);
-	  this->spi = socket->getSPIDevice(new SPIConfiguration(false, 0, 0, false, true, 4000), Socket::Pins::Six);
+	this->resetPin = new DigitalOutput(socket, Socket::Pins::Three, false);
+	this->backlightPin = new DigitalOutput(socket, Socket::Pins::Four, true);
+	this->rsPin = new DigitalOutput(socket, Socket::Pins::Five, false);
+	this->spi = socket->getSPIDevice(new SPIConfiguration(false, 0, 0, false, true, 4000), Socket::Pins::Six);
   
-	  this->initialize();
+	this->initialize();
 }
 
 DisplayN18::~DisplayN18() {
@@ -383,6 +383,7 @@ void DisplayN18::drawLine(int x0, int y0, int x1, int y1, unsigned short color) 
 		}
 	}
 }
+
 
 #ifndef LYNX
 #include <avr/pgmspace.h>

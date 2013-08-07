@@ -22,6 +22,7 @@ using namespace GHI;
 List::List() {
 	this->head = NULL;
 	this->tail = NULL;
+	this->count = 0;
 }
 
 List::~List() {
@@ -38,6 +39,8 @@ List::~List() {
 }
 
 void List::add(void* data) {
+	count++;
+
 	if (this->head == NULL) {
 		this->head = new ListNode;
 		this->head->next = NULL;
@@ -65,7 +68,7 @@ void List::remove(void* data) {
 		delete this->head;
 		this->head = newHead;
 		this->head->prev = NULL;
-
+		count--;
 		return;
 	}
 
@@ -74,7 +77,7 @@ void List::remove(void* data) {
 		delete this->tail;
 		this->tail = newTail;
 		this->tail->next = NULL;
-
+		count--;
 		return;
 	}
 
@@ -84,6 +87,7 @@ void List::remove(void* data) {
 			current->prev->next = current->next;
 			current->next->prev = current->prev;
 			delete current;
+			count--;
 			return;
 		}
 			
@@ -122,4 +126,27 @@ void* List::next() {
 
 bool List::ended() {
 	return this->currentIteration == NULL;
+}
+
+void List::push(void* data) {
+	this->add(data);
+}
+
+void* List::pop() {
+	if (this->count == 0)
+		return NULL;
+
+	void* data = this->head->data;
+
+	ListNode* newHead = this->head->next;
+	delete this->head;
+	this->head = newHead;
+	this->head->prev = NULL;
+	count--;
+
+	return data;
+}
+
+unsigned int List::getSize() const {
+	return this->count;
 }

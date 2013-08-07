@@ -24,18 +24,18 @@ limitations under the License.
 using namespace GHI;
 using namespace GHI::Mainboards;
 
-FEZMedusa::SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : Interfaces::SPIBus(mosi, miso, sck)
+FEZMedusaMini::SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : Interfaces::SPIBus(mosi, miso, sck)
 {
 	this->spi = new SPIClass();
 	this->spi->begin();
 }
 
-FEZMedusa::SPIBus::~SPIBus() {
+FEZMedusaMini::SPIBus::~SPIBus() {
 	this->spi->end();
 	delete this->spi;
 }
 
-void FEZMedusa::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configuration) {
+void FEZMedusaMini::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configuration) {
 	if (!configuration->clockIdleState && configuration->clockEdge)
 		this->spi->setDataMode(SPI_MODE0);
 	else if (!configuration->clockIdleState && !configuration->clockEdge)
@@ -62,7 +62,7 @@ void FEZMedusa::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configuration) 
 	}
 }
 
-void FEZMedusa::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration)
+void FEZMedusaMini::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration)
 {
 	this->setup(configuration);
 

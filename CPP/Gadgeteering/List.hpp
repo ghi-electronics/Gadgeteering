@@ -31,6 +31,8 @@ namespace GHI
 		ListNode* tail;
 		ListNode* currentIteration;
 
+		unsigned int count;
+
 		public:
 			List();
 			~List();
@@ -40,6 +42,9 @@ namespace GHI
 			void* start();
 			void* next();
 			bool ended();
+			void push(void* data);
+			void* pop();
+			unsigned int getSize() const;
 	};
 }
 

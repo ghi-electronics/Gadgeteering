@@ -27,11 +27,7 @@ class SPIClass;
 
 namespace GHI {
 	namespace Mainboards {
-		class FEZMedusa : public GHI::Mainboard {
-			static const unsigned char EXTENDER_MASK = 0x80;
-			
-			Modules::IO60P16* extenderChip;
-	
+		class FEZMedusaMini : public GHI::Mainboard {
 			class SPIBus : public GHI::Interfaces::SPIBus
 			{
 				SPIClass* spi;
@@ -84,8 +80,8 @@ namespace GHI {
 			};
 
 			public:
-				FEZMedusa();
-				virtual ~FEZMedusa();
+				FEZMedusaMini();
+				virtual ~FEZMedusaMini();
 				
 				virtual void panic(unsigned char error, unsigned char specificError);
 				virtual void print(const char* toPrint);
@@ -99,7 +95,7 @@ namespace GHI {
 				virtual double readAnalog(CPUPin pin);
 				virtual double readAnalogProportion(CPUPin pin);
 				virtual void writeAnalog(CPUPin pin, double voltage);
-				virtual void writeAnalogProportion(CPUPin pin, double voltage);
+				virtual void writeAnalogProportion(CPUPin pin, double proportion);
 				virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
 		
 				virtual Interfaces::SPIBus* getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
@@ -108,6 +104,23 @@ namespace GHI {
 				virtual Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber);
 				virtual Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin);
 				virtual Interfaces::I2CBus* getI2CBus(Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine);
+		};
+
+		class FEZMedusa : public FEZMedusaMini {
+			static const unsigned char EXTENDER_MASK = 0x80;
+			
+			Modules::IO60P16* extenderChip;
+
+			public:
+				FEZMedusa();
+				virtual ~FEZMedusa();
+
+				virtual void setPWM(CPUPin pin, double dutyCycle, double frequency);
+				virtual bool readDigital(CPUPin pin);
+				virtual void writeDigital(CPUPin pin, bool value);
+				virtual double readAnalog(CPUPin pin);
+				virtual void writeAnalog(CPUPin pin, double voltage);
+				virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
 		};
 	}
 }

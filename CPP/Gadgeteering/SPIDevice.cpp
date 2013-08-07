@@ -31,7 +31,7 @@ SPIConfiguration::SPIConfiguration(bool chipSelectActiveState, unsigned int chip
 }
 
 SPIDevice::SPIDevice(SPIBus* spiBus, CPUPin chipSelectPin, GHI::Interfaces::SPIConfiguration* configuration) {
-	this->chipSelect = new DigitalOutput(chipSelectPin, true);
+	this->chipSelect = new DigitalOutput(chipSelectPin, !configuration->chipSelectActiveState);
 	this->configuration = configuration;
 
 	this->bus = spiBus;
