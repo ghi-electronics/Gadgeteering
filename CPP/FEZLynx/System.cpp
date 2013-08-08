@@ -28,6 +28,11 @@ limitations under the License.
 
 using namespace GHI;
 
+unsigned long System::CyclesToMicroseconds(unsigned long cycles)
+{
+	return 0;
+}
+
 void System::Sleep(unsigned long time)
 {
 #ifdef _WIN32

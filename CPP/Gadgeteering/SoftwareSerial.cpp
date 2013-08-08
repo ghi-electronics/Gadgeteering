@@ -32,6 +32,10 @@ SoftwareSerial::SoftwareSerial(CPUPin txPin, CPUPin rxPin, unsigned int baudRate
 		buffer[i] = 0x00;
 }
 
+SoftwareSerial::~SoftwareSerial()
+{
+}
+
 unsigned int SoftwareSerial::read(unsigned char* buffer, unsigned int count)
 {
 	int bitDelay = this->bitPeriod - System::CyclesToMicroseconds(50);

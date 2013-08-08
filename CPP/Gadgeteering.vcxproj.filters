@@ -144,9 +144,6 @@
     <ClInclude Include="DisplayN18\DisplayN18.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FEZMedusaMini\FEZMedusaMini.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FLASH\FLASH.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -411,6 +408,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ALFAT\ALFAT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZLynx\FEZLynx_I2CBus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZLynx\FEZLynx_SerialDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

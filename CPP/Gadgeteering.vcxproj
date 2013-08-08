@@ -155,6 +155,8 @@
     <ClCompile Include="DistanceUS3\DistanceUS3.cpp" />
     <ClCompile Include="Extender\Extender.cpp" />
     <ClCompile Include="FEZLynx\ExtendedSockets.cpp" />
+    <ClCompile Include="FEZLynx\FEZLynx_I2CBus.cpp" />
+    <ClCompile Include="FEZLynx\FEZLynx_SerialDevice.cpp" />
     <ClCompile Include="FEZLynx\SPIBus_Lynx.cpp" />
     <ClCompile Include="FEZTive\FEZtive.cpp" />
     <ClCompile Include="FLASH\FLASH.cpp" />

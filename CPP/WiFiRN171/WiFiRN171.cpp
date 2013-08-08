@@ -61,5 +61,9 @@ namespace GHI
 		{
 
 		}
+
+		void WiFiRN171::CommandModeWrite(const char *command)
+		{
+		}
 	}
 }
