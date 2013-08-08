@@ -329,17 +329,12 @@ FEZLynx::FEZLynx()
 
     //Extender = new FEZLynx::ExtendedSockets(Channels[1].device, 0x40,mainboard->getSocket(3));
 
-    Extender = new Modules::IO60P16(3);
+    //Extender = new Modules::IO60P16(3);
 }
 
 void FEZLynx::panic(unsigned char error)
 {
 	throw error;
-}
-
-void FEZLynx::panic(unsigned char error, unsigned char specificError)
-{
-	std::cout << error << " " << specificError << endl;
 }
 
 bool FEZLynx::isVirtual(GHI::CPUPin pinNumber)
@@ -367,7 +362,7 @@ void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resistor
 	{
         int channel = GetChannel(pinNumber);
         int pin = GetChannelPin(pinNumber);
-        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 2)); //((8 * (channel - 3) + pin));
+        CPUPin extendedPin = (((channel - 3) << 4) | (pin - 1)); //((8 * (channel - 3) + pin));
 
         Extender->setIOMode(extendedPin, state, resistorMode);
 	}
@@ -460,11 +455,11 @@ unsigned char FEZLynx::GetChannelPin(GHI::CPUPin pinNumber)
 }
 
 bool FEZLynx::readDigital(GHI::CPUPin pinNumber) {
-	if(isVirtual(pinNumber))
+	if((pinNumber & ExtenderMask) == ExtenderMask)
     {
         int channel = GetChannel(pinNumber);
         int pin = GetChannelPin(pinNumber);
-        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 2)); //((8 * (channel - 3) + pin));
+        CPUPin extendedPin = (((channel - 3) << 4) | (pin - 1)); //((8 * (channel - 3) + pin));
 
         return Extender->readDigital(extendedPin);
 	}
@@ -493,11 +488,11 @@ bool FEZLynx::readDigital(GHI::CPUPin pinNumber) {
 }
 
 void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value) {
-	if(isVirtual(pinNumber))
+	if((pinNumber & ExtenderMask) == ExtenderMask)
 	{
         int channel = GetChannel(pinNumber);
         int pin = GetChannelPin(pinNumber);
-        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 2)); //((8 * (channel - 3) + pin));
+        CPUPin extendedPin = (((channel - 3) << 4) | (pin - 1)); //((8 * (channel - 3) + pin));
 
         Extender->writeDigital(extendedPin, value);
 	}
@@ -540,7 +535,7 @@ void FEZLynx::setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency) 
 
     int channel = GetChannel(pinNumber);
     int pin = GetChannelPin(pinNumber);
-    CPUPin extendedPin = (((channel - 4) << 4) | (pin - 2)); //((8 * (channel - 3) + pin));
+    CPUPin extendedPin = (((channel - 3) << 4) | (pin - 1)); //((8 * (channel - 3) + pin));
 
     Extender->setPWM(extendedPin,frequency,dutyCycle);
 }
@@ -611,7 +606,6 @@ Interfaces::I2CBus *FEZLynx::getI2CBus(CPUPin sdaPin, CPUPin sclPin)
             return current;
 
     I2CBus* bus = new FEZLynx::I2CBus(sdaPin, sclPin);
-	bus->SetChannel(this->Channels[1].device);
     this->i2cBusses.add(bus);
 
     return bus;
@@ -620,71 +614,4 @@ Interfaces::I2CBus *FEZLynx::getI2CBus(CPUPin sdaPin, CPUPin sclPin)
 Interfaces::I2CBus *FEZLynx::getI2CBus(Socket *socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber)
 {
     return this->getI2CBus(socket->pins[sdaPinNumber], socket->pins[sclPinNumber]);
-}
-
-int main()
-{
-    FEZLynx board;
-
-    Socket* socket = mainboard->getSocket(5);
-
-    Interfaces::DigitalInput joyUp(socket, Socket::Pins::Three, ResistorModes::PULL_UP);
-    Interfaces::DigitalInput joyDown(socket, Socket::Pins::Four, ResistorModes::PULL_UP);
-    Interfaces::DigitalInput joyLeft(socket, Socket::Pins::Five, ResistorModes::PULL_UP);
-    Interfaces::DigitalInput joyRight(socket, Socket::Pins::Six, ResistorModes::PULL_UP);
-
-    socket = mainboard->getSocket(4);
-
-    Interfaces::DigitalInput greenButton(socket, Socket::Pins::Three, ResistorModes::PULL_UP);
-    Interfaces::DigitalInput blueButton(socket, Socket::Pins::Five, ResistorModes::PULL_UP);
-    Interfaces::DigitalInput yellowButton(socket, Socket::Pins::Six, ResistorModes::PULL_UP);
-    Interfaces::DigitalInput redButton(socket, Socket::Pins::Four, ResistorModes::PULL_UP);
-
-    socket = mainboard->getSocket(9);
-    Interfaces::DigitalOutput out(socket, Socket::Pins::Five, false);
-
-    cout << "loaded" << endl;
-
-    while(true)
-    {
-        out.write(false);
-        System::Sleep(50);
-        out.write(true);
-
-//        if(!joyUp.read())
-//            cout << "Joy Up Pressed" << endl;
-
-//        if(!joyDown.read())
-//            cout << "Joy Down Pressed" << endl;
-
-//        if(!joyLeft.read())
-//            cout << "Joy Left Pressed" << endl;
-
-//        if(!joyRight.read())
-//            cout << "Joy Right Pressed" << endl;
-
-//        if(!greenButton.read())
-//        {
-//            cout << "Green Button Pressed" << endl;
-//            //statusIndicator.setColor(LED7C::Colors::GREEN);
-//        }
-
-//        if(!blueButton.read())
-//        {
-//            cout << "Blue Button Pressed" << endl;
-//            //statusIndicator.setColor(LED7C::Colors::BLUE);
-//        }
-
-//        if(!yellowButton.read())
-//        {
-//            cout << "Yellow Button Pressed" << endl;
-//            //statusIndicator.setColor(LED7C::Colors::YELLOW);
-//        }
-
-//        if(!redButton.read())
-//        {
-//            cout << "Red Button Pressed" << endl;
-//            //statusIndicator.setColor(LED7C::Colors::WHITE);
-//        }
-    }
 }

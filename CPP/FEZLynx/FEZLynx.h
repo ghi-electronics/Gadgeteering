@@ -23,7 +23,8 @@ limitations under the License.
 
 #ifdef _WIN32
 #include <Windows.h>
-#include "windows\FTD2XX.H"
+#include "include\windows\FTD2XX.H"
+
 #else
 #include "Linux/WinTypes.h"
 #include "Linux/ftd2xx.h"
@@ -305,7 +306,6 @@ namespace GHI
                 };
 
                 virtual void panic(unsigned char error);
-				virtual void panic(unsigned char error, unsigned char specificError);
 
                 virtual void setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency);
                 virtual bool readDigital(GHI::CPUPin pinNumber);

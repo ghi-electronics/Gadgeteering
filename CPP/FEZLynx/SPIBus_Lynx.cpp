@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 #include "FEZLynx.h"
+#include "../Gadgeteering/System.hpp"
+#include "../Gadgeteering/Types.hpp"
 
 using namespace GHI;
 using namespace GHI::Mainboards;
@@ -28,40 +30,95 @@ FEZLynx::SPIBus::~SPIBus()
 {
 }
 
-char FEZLynx::SPIBus::writeReadByte(char toSend, GHI::Interfaces::SPIConfiguration* configuration) {
-	dwNumBytesToSend = 0; //Clear output buffer
-	OutputBuffer[dwNumBytesToSend++] = 0x10;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
-	OutputBuffer[dwNumBytesToSend++] = 0;
-	OutputBuffer[dwNumBytesToSend++] = 0; //Data length of 0x0000 means 1 byte data to clock out
-	OutputBuffer[dwNumBytesToSend++] = (toSend); //Add data to be send
-	ftStatus = FT_Write(channel, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); //Send off the commands
+char FEZLynx::SPIBus::writeReadByte(char toSend, GHI::Interfaces::SPIConfiguration *configuration)
+{
+    char activeState = 0x10;
 
-	dwNumBytesToSend = 0; //Clear output buffer
-	OutputBuffer[dwNumBytesToSend++] = 0x81 ; //Clock data byte out on +ve Clock Edge LSB first
-	InputBuffer[0] = 0;
+    if(configuration->chipSelectActiveState && configuration->clockEdge)
+        activeState = 0x10;
 
-	FT_Read(channel, InputBuffer, 1, &dwNumBytesRead); //Read out the data from FT2232H receive buffer
+    dwNumBytesToSend = 0; //Clear output buffer
+    OutputBuffer[dwNumBytesToSend++] = 0x10;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
+    OutputBuffer[dwNumBytesToSend++] = 0;
+    OutputBuffer[dwNumBytesToSend++] = 0; //Data length of 0x0000 means 1 byte data to clock out
+    OutputBuffer[dwNumBytesToSend++] = toSend;
 
-	if(dwNumBytesRead!=1)
-	{
-		mainboard->panic(0x20);
-	}
+    ftStatus = FT_Write(channel, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); //Send off the commands
+
+    DWORD dwBytesInQueue = 0;
+    int timeout = 0;
+    ftStatus = FT_OK;
+
+    //wait for queue to fill to desired amount, or timeout
+    while((dwBytesInQueue < 1) && (timeout < 500))
+    {
+        ftStatus |= FT_GetQueueStatus(channel, &dwBytesInQueue);
+        System::Sleep(1);
+        timeout++;
+    }
+
+    if((timeout >= 499) || (ftStatus != FT_OK))
+        mainboard->panic(0x25);
+
+    dwNumBytesRead = 0;
+    ftStatus = FT_Read(channel, InputBuffer, 1, &dwNumBytesRead);
+
+    if((dwNumBytesRead != 1) || (ftStatus != FT_OK))
+        mainboard->panic(0x25);
 
 	return InputBuffer[0];
 }
 
-void FEZLynx::SPIBus::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration) {
-
+void FEZLynx::SPIBus::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration)
+{
+    for(unsigned int i = 0; i < count; i++)
+        receiveBuffer[i] = writeReadByte(sendBuffer[i], configuration);
 }
 
-void FEZLynx::SPIBus::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, GHI::Interfaces::SPIConfiguration* configuration) {
-
+void FEZLynx::SPIBus::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, GHI::Interfaces::SPIConfiguration* configuration)
+{
+    write(sendBuffer, sendCount, configuration);
+    read(receiveBuffer,receiveCount, configuration);
 }
 
-void FEZLynx::SPIBus::write(char* buffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration) {
+void FEZLynx::SPIBus::write(char* buffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration)
+{
+    char activeState = 0x10;
 
+    if(configuration->chipSelectActiveState && configuration->clockEdge)
+        activeState = 0x10;
+
+    dwNumBytesToSend = 0; //Clear output buffer
+    OutputBuffer[dwNumBytesToSend++] = 0x10;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
+    OutputBuffer[dwNumBytesToSend++] = 0;
+    OutputBuffer[dwNumBytesToSend++] = count - 1; //Data length of 0x0000 means 1 byte data to clock out
+
+    for(int i = 0; i < count; i++)
+        OutputBuffer[dwNumBytesToSend++] = (char)buffer[i];
+
+    ftStatus = FT_Write(channel, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); //Send off the commands
 }
 
-void FEZLynx::SPIBus::read(char* buffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration) {
+void FEZLynx::SPIBus::read(char* buffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration)
+{
+    DWORD dwBytesInQueue = 0;
+    int timeout = 0;
+    ftStatus = FT_OK;
 
+    //wait for queue to fill to desired amount, or timeout
+    while((dwBytesInQueue < count) && (timeout < 500))
+    {
+        ftStatus |= FT_GetQueueStatus(channel, &dwBytesInQueue);
+        System::Sleep(1);
+        timeout++;
+    }
+
+    if((timeout >= 499) || (ftStatus != FT_OK))
+        mainboard->panic(0x25);
+
+    dwNumBytesRead = 0;
+    ftStatus = FT_Read(channel, buffer, count, &dwNumBytesRead);
+
+    if((dwNumBytesRead != count) || (ftStatus != FT_OK))
+        mainboard->panic(0x25);
 }
