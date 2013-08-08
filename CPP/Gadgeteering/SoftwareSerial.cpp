@@ -77,6 +77,8 @@ void SoftwareSerial::write(const char data)
 unsigned char SoftwareSerial::available()
 {
 	this->receive();
+
+	return false;
 }
 
 void SoftwareSerial::open()

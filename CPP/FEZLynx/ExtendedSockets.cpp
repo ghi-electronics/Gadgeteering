@@ -489,7 +489,7 @@ bool FEZLynx::ExtendedSockets::readSDA()
 void FEZLynx::ExtendedSockets::waitForSCL() {
 	pullSCLHigh();
 
-	unsigned long endTime = GHI::System::TimeElapsed64() + 2000;
+	unsigned long endTime = GHI::System::TimeElapsed() + 2000;
 	while(!readSCL());// && micros() < endTime)	;
 }
 

@@ -37,6 +37,31 @@ void System::Sleep(unsigned long time)
 #endif
 }
 
+void System::SleepMicro(unsigned long time)
+{
+#ifdef _WIN32
+	::Sleep(time);
+#endif
+
+#ifdef linux
+    timespec t_Sleep;
+    timespec t_Remaining;
+
+    int seconds = 0;
+
+    while(time > 1000)
+    {
+        seconds++;
+        time -= 1000;
+    }
+
+    t_Sleep.tv_nsec = (time * 1000);
+    t_Sleep.tv_sec = seconds;
+
+    nanosleep(&t_Sleep,&t_Remaining);
+#endif
+}
+
 #ifdef linux
 long int EpochWhenStarted = 0;
 #endif

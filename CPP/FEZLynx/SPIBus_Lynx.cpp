@@ -12,7 +12,7 @@ FEZLynx::SPIBus::~SPIBus()
 {
 }
 
-char FEZLynx::SPIBus::writeReadByte(char toSend, GHI::Interfaces::SPIDevice::Configuration* configuration) {
+char FEZLynx::SPIBus::writeReadByte(char toSend, GHI::Interfaces::SPIConfiguration* configuration) {
 	dwNumBytesToSend = 0; //Clear output buffer
 	OutputBuffer[dwNumBytesToSend++] = 0x10;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
 	OutputBuffer[dwNumBytesToSend++] = 0;
@@ -34,18 +34,18 @@ char FEZLynx::SPIBus::writeReadByte(char toSend, GHI::Interfaces::SPIDevice::Con
 	return InputBuffer[0];
 }
 
-void FEZLynx::SPIBus::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration) {
+void FEZLynx::SPIBus::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration) {
 
 }
 
-void FEZLynx::SPIBus::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, GHI::Interfaces::SPIDevice::Configuration* configuration) {
+void FEZLynx::SPIBus::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, GHI::Interfaces::SPIConfiguration* configuration) {
 
 }
 
-void FEZLynx::SPIBus::write(char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration) {
+void FEZLynx::SPIBus::write(char* buffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration) {
 
 }
 
-void FEZLynx::SPIBus::read(char* buffer, unsigned int count, GHI::Interfaces::SPIDevice::Configuration* configuration) {
+void FEZLynx::SPIBus::read(char* buffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration) {
 
 }

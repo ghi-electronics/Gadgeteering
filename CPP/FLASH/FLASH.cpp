@@ -237,6 +237,8 @@ bool FLASH::ReadData(unsigned long address, unsigned char* data, unsigned int le
     spi->writeThenRead(writeData, data, 4, length, true);
 
     statusLED->write(false);
+
+	return true;
 }
 
 bool FLASH::ReadData_FastMode(unsigned long address, unsigned char* data, unsigned int length) {

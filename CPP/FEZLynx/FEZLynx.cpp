@@ -1,10 +1,29 @@
-﻿// FEZLynx.cpp : Defines the entry point for the console application.
+﻿/*
+Copyright 2013 GHI Electronics LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+// FEZLynx.cpp : Defines the entry point for the console application.
 //
 
 #include "FEZLynx.h"
 #include "../Gadgeteering/System.hpp"
 #include "../LED7R/LED7R.h"
+
 #include <iostream>
+
+using namespace std;
 
 using namespace GHI;
 using namespace GHI::Mainboards;
@@ -35,7 +54,7 @@ FEZLynx::FEZLynx()
 	{
 		ftStatus = FT_ListDevices((PVOID)i,& SerialNumBuf, FT_LIST_BY_INDEX|FT_OPEN_BY_SERIAL_NUMBER);
 
-		if(ftStatus == FT_OK && (ftStatus = FT_Open(i,&Channels[i].device)) == FT_OK)
+        if(ftStatus == FT_OK && (ftStatus = FT_Open(i,&Channels[i].device)) == FT_OK)
 		{
 			Channels[i].direction = 0x00;
 			Channels[i].data = 0x00;
@@ -83,7 +102,7 @@ FEZLynx::FEZLynx()
 				ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the BAD commands
 				dwNumBytesToSend = 0; //Clear output buffer
 
-				do{
+                do{
 					ftStatus = FT_GetQueueStatus(Channels[i].device, &dwNumInputBuffer); // Get the number of bytes in the device input buffer
 				}while ((dwNumInputBuffer == 0) && (ftStatus == FT_OK)); //or Timeout
 			
@@ -109,8 +128,6 @@ FEZLynx::FEZLynx()
 			}
 
 			dwNumBytesToSend = 0;
-
-
 
 			if(i == 1)
 			{
@@ -310,26 +327,27 @@ FEZLynx::FEZLynx()
 	// Extender Chip Setup     //
 	/////////////////////////////
 
-	Extender = new FEZLynx::ExtendedSockets(Channels[1].device, 0x40,mainboard->getSocket(3));
+    //Extender = new FEZLynx::ExtendedSockets(Channels[1].device, 0x40,mainboard->getSocket(3));
 
+    Extender = new Modules::IO60P16(3);
 }
 
 void FEZLynx::panic(unsigned char error)
 {
-	//while(1)
-	//{
-	//	std::cout << error << std::endl;
-
-	//	System::Sleep(100);
-	//}
-
 	throw error;
+}
+
+void FEZLynx::panic(unsigned char error, unsigned char specificError)
+{
+	std::cout << error << " " << specificError << endl;
 }
 
 bool FEZLynx::isVirtual(GHI::CPUPin pinNumber)
 {
-	if(((int)pinNumber & (int)ExtenderMask) == ExtenderMask)
-		return true;
+    int channel = GetChannel(pinNumber);
+
+    if(channel > 3)
+        return true;
 
 	return false;
 }
@@ -347,7 +365,11 @@ void FEZLynx::SetFTDIPins(int channel)
 void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode) {
 	if(isVirtual(pinNumber))
 	{
-		Extender->setIOMode(pinNumber, state, resistorMode);
+        int channel = GetChannel(pinNumber);
+        int pin = GetChannelPin(pinNumber);
+        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 2)); //((8 * (channel - 3) + pin));
+
+        Extender->setIOMode(extendedPin, state, resistorMode);
 	}
 	else
 	{
@@ -358,9 +380,9 @@ void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resistor
 		{
 			int channel = this->GetChannel(pinNumber);
 
-			unsigned char pin = this->GetChannelPin(pinNumber);
+            CPUPin pin = this->GetChannelPin(pinNumber);
 
-			Channels[channel].direction &= ~pin;
+            Channels[channel].direction &= ~(1 << (pin - 1));
 
 			SetFTDIPins(channel);
 
@@ -370,9 +392,9 @@ void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resistor
 		{
 			int channel = this->GetChannel(pinNumber);
 
-			unsigned char pin = this->GetChannelPin(pinNumber);
+            CPUPin pin = this->GetChannelPin(pinNumber);
 
-			Channels[channel].direction |= pin;
+            Channels[channel].direction |= (1 << (pin - 1));
 
 			SetFTDIPins(channel);
 
@@ -385,52 +407,66 @@ void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resistor
 
 int FEZLynx::GetChannel(GHI::CPUPin pinNumber)
 {
-	if(!isVirtual(pinNumber))
-	{
-		if((pinNumber & Channel1Mask) == Channel1Mask)
-			return 0;
+//	if(!isVirtual(pinNumber))
+//	{
+//		if((pinNumber & Channel1Mask) == Channel1Mask)
+//			return 0;
 
-		if((pinNumber & Channel2Mask) == Channel2Mask)
-			return 1;
+//		if((pinNumber & Channel2Mask) == Channel2Mask)
+//			return 1;
 
-		if((pinNumber & Channel3Mask) == Channel3Mask)
-			return 2;
+//		if((pinNumber & Channel3Mask) == Channel3Mask)
+//			return 2;
 
-		if((pinNumber & Channel4Mask) == Channel4Mask)
-			return 3;
-	}
+//		if((pinNumber & Channel4Mask) == Channel4Mask)
+//			return 3;
+//	}
 
-	this->panic(Exceptions::ERR_PORT_OUT_OF_RANGE);
+    int channel = 0;
 
-    return -1;
+    while(pinNumber > 8)
+    {
+        pinNumber -= 8;
+        channel++;
+    }
+
+    if(channel > 8)
+        this->panic(Exceptions::ERR_PORT_OUT_OF_RANGE);
+
+    return channel;
 }
 
 unsigned char FEZLynx::GetChannelPin(GHI::CPUPin pinNumber)
 {
-	if(!isVirtual(pinNumber))
-	{
-		if((pinNumber & Channel1Mask) == Channel1Mask)
-			return (pinNumber & (~Channel1Mask));
+//	if(!isVirtual(pinNumber))
+//	{
+//		if((pinNumber & Channel1Mask) == Channel1Mask)
+//			return (pinNumber & (~Channel1Mask));
 
-		if((pinNumber & Channel2Mask) == Channel2Mask)
-			return (pinNumber & (~Channel2Mask));
+//		if((pinNumber & Channel2Mask) == Channel2Mask)
+//			return (pinNumber & (~Channel2Mask));
 
-		if((pinNumber & Channel3Mask) == Channel3Mask)
-			return (pinNumber & (~Channel3Mask));
+//		if((pinNumber & Channel3Mask) == Channel3Mask)
+//			return (pinNumber & (~Channel3Mask));
 
-		if((pinNumber & Channel4Mask) == Channel4Mask)
-			return (pinNumber & (~Channel4Mask));
-	}
+//		if((pinNumber & Channel4Mask) == Channel4Mask)
+//			return (pinNumber & (~Channel4Mask));
+//	}
 
-	this->panic(Exceptions::ERR_PORT_OUT_OF_RANGE);
+    while(pinNumber > 8)
+        pinNumber -= 8;
 
-    return NULL;
+    return pinNumber;
 }
 
 bool FEZLynx::readDigital(GHI::CPUPin pinNumber) {
-	if((pinNumber & ExtenderMask) == ExtenderMask)
-	{
-		return Extender->readDigital(pinNumber);
+	if(isVirtual(pinNumber))
+    {
+        int channel = GetChannel(pinNumber);
+        int pin = GetChannelPin(pinNumber);
+        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 2)); //((8 * (channel - 3) + pin));
+
+        return Extender->readDigital(extendedPin);
 	}
 	else
 	{
@@ -438,7 +474,7 @@ bool FEZLynx::readDigital(GHI::CPUPin pinNumber) {
 		BYTE buffer[3];
 
 		int channel = this->GetChannel(pinNumber);
-		unsigned char pin = this->GetChannelPin(pinNumber);
+        CPUPin pin = this->GetChannelPin(pinNumber);
 
 		dwNumBytesToSend = 0;
 		buffer[0] = 0x81;
@@ -450,16 +486,20 @@ bool FEZLynx::readDigital(GHI::CPUPin pinNumber) {
 		status = FT_GetQueueStatus(Channels[channel].device, &sent);        
 		status = FT_Read(Channels[channel].device, buffer, 1, &sent);   
 
-		return (buffer[0] & pin) == pin ? true : false;
+        return (buffer[0] & (1 << (pin - 1))) == (1 << (pin - 1)) ? true : false;
 	}
 
 	return false;
 }
 
 void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value) {
-	if((pinNumber & ExtenderMask) == ExtenderMask)
+	if(isVirtual(pinNumber))
 	{
-		Extender->writeDigital(pinNumber,value);
+        int channel = GetChannel(pinNumber);
+        int pin = GetChannelPin(pinNumber);
+        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 2)); //((8 * (channel - 3) + pin));
+
+        Extender->writeDigital(extendedPin, value);
 	}
 	else
 	{
@@ -470,9 +510,9 @@ void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value) {
 		unsigned char pin = this->GetChannelPin(pinNumber);
 
 		if(value)
-			Channels[channel].data |= pin;
+            Channels[channel].data |= (1 << (pin - 1));
 		else
-			Channels[channel].data &= (~pin);
+            Channels[channel].data &= ~(1 << (pin - 1));
 
 		this->SetFTDIPins(channel);
 	}
@@ -498,14 +538,16 @@ void FEZLynx::setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency) 
 	if(!isVirtual(pinNumber))
 		this->panic(Exceptions::ERR_PWM_NOT_SUPPORTED);
 
-	this->panic(Exceptions::ERR_NOT_IMPLEMENTED);
+    int channel = GetChannel(pinNumber);
+    int pin = GetChannelPin(pinNumber);
+    CPUPin extendedPin = (((channel - 4) << 4) | (pin - 2)); //((8 * (channel - 3) + pin));
+
+    Extender->setPWM(extendedPin,frequency,dutyCycle);
 }
 
 void FEZLynx::setPWM(GHI::Socket* socket, GHI::Socket::Pin pin, double dutyCycle, double frequency)
 {
-	Socket::Pin _pin = socket->pins[pin];
-
-	this->setPWM(_pin, dutyCycle, frequency);
+    this->setPWM(socket->pins[pin], dutyCycle, frequency);
 }
 
 bool FEZLynx::readDigital(GHI::Socket* socket, GHI::Socket::Pin pin)
@@ -535,34 +577,114 @@ void FEZLynx::setIOMode(GHI::Socket* socket, GHI::Socket::Pin pin, GHI::IOState 
 
 GHI::Interfaces::SPIBus* FEZLynx::getSPIBus(GHI::Socket* socket)
 {
-	return NULL;
+//    for (SPIBus* current = (SPIBus*)this->spiBusses.start(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.next())
+//        if (current->mosi == mosi && current->miso == miso && current->sck == sck)
+//            return current;
+
+//    SPIBus* bus = new FEZMedusa::SPIBus(mosi, miso, sck);
+//    this->spiBusses.add(bus);
+
+//    return bus;
+
+    return NULL;
 }
 
 GHI::Interfaces::SerialDevice* FEZLynx::getSerialDevice(GHI::Socket* socket, int baudRate, int parity, int stopBits, int dataBits)
 {
-	return NULL;
+    CPUPin txPin = socket->pins[4];
+    CPUPin rxPin = socket->pins[5];
+
+    for (SerialDevice* current = (SerialDevice*)this->serialDevices.start(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.next())
+        if (current->tx == txPin && current->rx == rxPin)
+            return current;
+
+    SerialDevice* bus = new FEZLynx::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits);
+    this->serialDevices.add(bus);
+
+    return bus;
+}
+
+Interfaces::I2CBus *FEZLynx::getI2CBus(CPUPin sdaPin, CPUPin sclPin)
+{
+    for (I2CBus* current = (I2CBus*)this->i2cBusses.start(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.next())
+        if (current->scl == sclPin && current->sda == sdaPin)
+            return current;
+
+    I2CBus* bus = new FEZLynx::I2CBus(sdaPin, sclPin);
+	bus->SetChannel(this->Channels[1].device);
+    this->i2cBusses.add(bus);
+
+    return bus;
+}
+
+Interfaces::I2CBus *FEZLynx::getI2CBus(Socket *socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber)
+{
+    return this->getI2CBus(socket->pins[sdaPinNumber], socket->pins[sclPinNumber]);
 }
 
 int main()
 {
-	FEZLynx board;
+    FEZLynx board;
 
-	std::cout << "loaded" << std::endl;
-	Socket* socket = mainboard->getSocket(9);
+    Socket* socket = mainboard->getSocket(5);
 
-	GHI::Interfaces::DigitalOutput out(socket, 5, false);
+    Interfaces::DigitalInput joyUp(socket, Socket::Pins::Three, ResistorModes::PULL_UP);
+    Interfaces::DigitalInput joyDown(socket, Socket::Pins::Four, ResistorModes::PULL_UP);
+    Interfaces::DigitalInput joyLeft(socket, Socket::Pins::Five, ResistorModes::PULL_UP);
+    Interfaces::DigitalInput joyRight(socket, Socket::Pins::Six, ResistorModes::PULL_UP);
 
-	while(1)
-	{
-		out.write(true);
-		GHI::System::Sleep(100);
-		out.write(false);
-		GHI::System::Sleep(100);
-	}
+    socket = mainboard->getSocket(4);
+
+    Interfaces::DigitalInput greenButton(socket, Socket::Pins::Three, ResistorModes::PULL_UP);
+    Interfaces::DigitalInput blueButton(socket, Socket::Pins::Five, ResistorModes::PULL_UP);
+    Interfaces::DigitalInput yellowButton(socket, Socket::Pins::Six, ResistorModes::PULL_UP);
+    Interfaces::DigitalInput redButton(socket, Socket::Pins::Four, ResistorModes::PULL_UP);
+
+    socket = mainboard->getSocket(9);
+    Interfaces::DigitalOutput out(socket, Socket::Pins::Five, false);
+
+    cout << "loaded" << endl;
+
+    while(true)
+    {
+        out.write(false);
+        System::Sleep(50);
+        out.write(true);
+
+//        if(!joyUp.read())
+//            cout << "Joy Up Pressed" << endl;
+
+//        if(!joyDown.read())
+//            cout << "Joy Down Pressed" << endl;
+
+//        if(!joyLeft.read())
+//            cout << "Joy Left Pressed" << endl;
+
+//        if(!joyRight.read())
+//            cout << "Joy Right Pressed" << endl;
+
+//        if(!greenButton.read())
+//        {
+//            cout << "Green Button Pressed" << endl;
+//            //statusIndicator.setColor(LED7C::Colors::GREEN);
+//        }
+
+//        if(!blueButton.read())
+//        {
+//            cout << "Blue Button Pressed" << endl;
+//            //statusIndicator.setColor(LED7C::Colors::BLUE);
+//        }
+
+//        if(!yellowButton.read())
+//        {
+//            cout << "Yellow Button Pressed" << endl;
+//            //statusIndicator.setColor(LED7C::Colors::YELLOW);
+//        }
+
+//        if(!redButton.read())
+//        {
+//            cout << "Red Button Pressed" << endl;
+//            //statusIndicator.setColor(LED7C::Colors::WHITE);
+//        }
+    }
 }
-
-//////////////////////////////////////////////////////////////////////
-/// Forward Declaration of user-space functions
-//////////////////////////////////////////////////////////////////////
-//bool setup();
-//void loop();

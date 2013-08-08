@@ -44,6 +44,7 @@ void IO60P16::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistorMo
 			this->io60Chip->writeRegister(IO60P16::PIN_DIRECTION_REGISTER, val | mask);
 
 			unsigned char resistorRegister = IO60P16::PIN_HIGH_IMPEDENCE;
+
 			if (resistorMode == ResistorModes::PULL_DOWN)
 				resistorRegister = IO60P16::PIN_PULL_DOWN;
 			else if (resistorMode == ResistorModes::PULL_UP)
@@ -80,7 +81,10 @@ bool IO60P16::readDigital(CPUPin pin) {
 }
 
 void IO60P16::writeDigital(CPUPin pin, bool value) {
-	unsigned char b = this->io60Chip->readRegister(IO60P16::OUTPUT_PORT_0_REGISTER + this->getPort(pin));
+	unsigned char port = this->getPort(pin);
+	unsigned char mask = (1 << (pin & 0x0F));
+
+	unsigned char b = this->io60Chip->readRegister(IO60P16::OUTPUT_PORT_0_REGISTER + port);
 
 	if (value)
 		b |= this->getMask(pin);

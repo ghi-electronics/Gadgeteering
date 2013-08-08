@@ -38,6 +38,8 @@ void MultiColorLED::GetAll(unsigned char socketNumber, MultiColorLED** leds, uns
 bool MultiColorLED::SwapGreenBlue()
 {
 	this->GreenBlueSwapped = true;
+
+	return this->GreenBlueSwapped;
 }
 
 void MultiColorLED::TurnBlue()

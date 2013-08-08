@@ -49,6 +49,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -81,7 +82,6 @@
     <ClInclude Include="DistanceUS3\DistanceUS3.h" />
     <ClInclude Include="Extender\Extender.h" />
     <ClInclude Include="FEZLynx\SoftwareI2C_Lynx.h" />
-    <ClInclude Include="FEZMedusa\FEZMedusa.h" />
     <ClInclude Include="FEZTive\FEZtive.h" />
     <ClInclude Include="FLASH\FLASH.h" />
     <ClInclude Include="FMRadio\FMRadio.h" />
@@ -95,7 +95,6 @@
     <ClInclude Include="Gadgeteering\Module.hpp" />
     <ClInclude Include="Gadgeteering\SerialDevice.hpp" />
     <ClInclude Include="Gadgeteering\Socket.hpp" />
-    <ClInclude Include="Gadgeteering\SoftwareSerial.hpp" />
     <ClInclude Include="Gadgeteering\SPIBus.hpp" />
     <ClInclude Include="Gadgeteering\SPIDevice.hpp" />
     <ClInclude Include="Gadgeteering\System.hpp" />
@@ -129,7 +128,6 @@
     <ClInclude Include="TouchC8\TouchC8.h" />
     <ClInclude Include="TouchL12\TouchL12.h" />
     <ClInclude Include="Tunes\Tunes.h" />
-    <ClInclude Include="WiFiRN171\WiFiRN171.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Accelerometer\Accelerometer.cpp" />
@@ -138,18 +136,13 @@
     <ClCompile Include="ButtonS6\ButtonS6.cpp" />
     <ClCompile Include="Button\Button.cpp" />
     <ClCompile Include="CurrentACS712\CurrentACS712.cpp" />
-    <ClCompile Include="Demos\TicTacToe\TicTacToe.cpp" />
     <ClCompile Include="DisplayN18\DisplayN18.cpp" />
     <ClCompile Include="DistanceUS3\DistanceUS3.cpp" />
     <ClCompile Include="Extender\Extender.cpp" />
     <ClCompile Include="FEZLynx\ExtendedSockets.cpp" />
+    <ClCompile Include="FEZLynx\FEZLynx_I2CBus.cpp" />
     <ClCompile Include="FEZLynx\SerialDevice_Lynx.cpp" />
     <ClCompile Include="FEZLynx\SPIBus_Lynx.cpp" />
-    <ClCompile Include="FEZMedusa\FEZMedusa.cpp" />
-    <ClCompile Include="FEZMedusa\I2CBus.cpp" />
-    <ClCompile Include="FEZMedusa\SerialDevice.cpp" />
-    <ClCompile Include="FEZMedusa\SPIBus.cpp" />
-    <ClCompile Include="FEZMedusa\System.cpp" />
     <ClCompile Include="FEZTive\FEZtive.cpp" />
     <ClCompile Include="FLASH\FLASH.cpp" />
     <ClCompile Include="FMRadio\FMRadio.cpp" />
@@ -162,7 +155,6 @@
     <ClCompile Include="Gadgeteering\Module.cpp" />
     <ClCompile Include="Gadgeteering\SerialDevice.cpp" />
     <ClCompile Include="Gadgeteering\Socket.cpp" />
-    <ClCompile Include="Gadgeteering\SoftwareSerial.cpp" />
     <ClCompile Include="Gadgeteering\SPIBus.cpp" />
     <ClCompile Include="Gadgeteering\SPIDevice.cpp" />
     <ClCompile Include="FEZLynx\System.cpp" />
@@ -193,7 +185,6 @@
     <ClCompile Include="TouchC8\TouchC8.cpp" />
     <ClCompile Include="TouchL12\TouchL12.cpp" />
     <ClCompile Include="Tunes\Tunes.cpp" />
-    <ClCompile Include="WiFiRN171\WiFiRN171.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
