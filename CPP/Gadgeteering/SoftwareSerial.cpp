@@ -44,7 +44,7 @@ unsigned int SoftwareSerial::read(unsigned char* buffer, unsigned int count)
 
 	if(rxPort->read() == false) //Check to see if we got here due to line noise
 	{
-		for(int i = 0; i < count; i++)
+		for(unsigned int i = 0; i < count; i++)
 		{
 			System::SleepMicro(bitDelay / 2 - System::CyclesToMicroseconds(50));
 
