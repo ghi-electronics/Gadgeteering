@@ -286,11 +286,11 @@ ALFAT::File::~File() {
 }
 
 ALFAT::ResponseCode ALFAT::File::rename(const char* newName) {
-
+	return ResponseCodes::SUCCESS;
 }
 
 ALFAT::ResponseCode ALFAT::File::remove() {
-
+	return ResponseCodes::SUCCESS;
 }
 
 ALFAT::ResponseCode ALFAT::File::close() {
@@ -310,7 +310,7 @@ ALFAT::ResponseCode ALFAT::File::flush() {
 }
 
 ALFAT::ResponseCode ALFAT::File::seek(unsigned int position) {
-
+	return ResponseCodes::SUCCESS;
 }
 
 ALFAT::ResponseCode ALFAT::File::write(const unsigned char* buffer, unsigned int count, unsigned int* actualWritten) {

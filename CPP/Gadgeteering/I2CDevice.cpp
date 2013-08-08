@@ -43,7 +43,7 @@ bool I2CDevice::writeRead(const unsigned char* writeBuffer, unsigned int writeLe
 				
 bool I2CDevice::writeRegister(unsigned char address, unsigned char value) {
 	unsigned char data[2] = {address, value};
-	return this->write(data, 2, true);
+	return this->write(data, 2, true) == 2;
 }
 
 unsigned char I2CDevice::readRegister(unsigned char address) {

@@ -87,13 +87,13 @@ void IO60P16::setPWM(CPUPin pin, double frequency, double dutyCycle) {
 	unsigned char period = (unsigned char)(93750 / frequency);
 
 	this->io60Chip->writeRegister(IO60P16::PERIOD_REGISTER, period);
-	this->io60Chip->writeRegister(IO60P16::PULSE_WIDTH_REGISTER, period * dutyCycle);
+	this->io60Chip->writeRegister(IO60P16::PULSE_WIDTH_REGISTER, static_cast<unsigned char>(period * dutyCycle));
 }
 
 bool IO60P16::readDigital(CPUPin pin) {
 	unsigned char b = this->io60Chip->readRegister(IO60P16::INPUT_PORT_0_REGISTER + this->getPort(pin));
 
-	return b & this->getMask(pin);
+	return (b & this->getMask(pin)) != 0;
 }
 
 void IO60P16::writeDigital(CPUPin pin, bool value) {

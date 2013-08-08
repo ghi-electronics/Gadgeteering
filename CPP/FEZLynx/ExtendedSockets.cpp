@@ -527,7 +527,7 @@ void FEZLynx::ExtendedSockets::sendStopCondition() {
 bool FEZLynx::ExtendedSockets::Write(unsigned char data) {
     //FT_STATUS ftStatus = FT_OK;
     dwNumBytesToSend=0;
-    OutputBuffer[dwNumBytesToSend++] = 0x31;//MSB_FALLING_EDGE_CLOCK_BYTE_OUT; //Clock data byte out on �ve Clock Edge MSB first
+    OutputBuffer[dwNumBytesToSend++] = 0x31;//MSB_FALLING_EDGE_CLOCK_BYTE_OUT; //Clock data byte out on ?ve Clock Edge MSB first
     OutputBuffer[dwNumBytesToSend++] = '\x00';
     OutputBuffer[dwNumBytesToSend++] = '\x00'; //Data length of 0x0000 means 1 byte data to clock out
     OutputBuffer[dwNumBytesToSend++] = data; //Add data to be send

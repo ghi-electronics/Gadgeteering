@@ -73,6 +73,8 @@ namespace GHI
 
 				return (char*)str;
 			}
+
+			return NULL;
 		}
 	}
 }

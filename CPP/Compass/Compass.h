@@ -40,20 +40,20 @@ namespace GHI
 				unsigned char *_writeBuffer16;
 				unsigned char *readBuffer48;
 
-				const double sq2p1 = 2.414213562373095048802e0F;
-				const double sq2m1 = .414213562373095048802e0F;
-				const double pio4 = .785398163397448309615e0F;
-				const double pio2 = 1.570796326794896619231e0F;
-				const double atan_p4 = .161536412982230228262e2F;
-				const double atan_p3 = .26842548195503973794141e3F;
-				const double atan_p2 = .11530293515404850115428136e4F;
-				const double atan_p1 = .178040631643319697105464587e4F;
-				const double atan_p0 = .89678597403663861959987488e3F;
-				const double atan_q4 = .5895697050844462222791e2F;
-				const double atan_q3 = .536265374031215315104235e3F;
-				const double atan_q2 = .16667838148816337184521798e4F;
-				const double atan_q1 = .207933497444540981287275926e4F;
-				const double atan_q0 = .89678597403663861962481162e3F;
+				static const double sq2p1;
+				static const double sq2m1;
+				static const double pio4;
+				static const double pio2;
+				static const double atan_p4;
+				static const double atan_p3;
+				static const double atan_p2;
+				static const double atan_p1;
+				static const double atan_p0;
+				static const double atan_q4;
+				static const double atan_q3;
+				static const double atan_q2;
+				static const double atan_q1;
+				static const double atan_q0;
 
 				class Registers
 				{

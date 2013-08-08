@@ -216,9 +216,6 @@
     <ClInclude Include="USBSerial\USBSerial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Demos\TicTacToe\TicTacToe.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ALFAT\ALFAT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -341,21 +338,6 @@
     <ClCompile Include="MaxO\MaxO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FEZMedusaMini\FEZMedusaMini.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZMedusaMini\I2CBus.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZMedusaMini\SerialDevice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZMedusaMini\SPIBus.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZMedusaMini\System.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FLASH\FLASH.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -428,16 +410,7 @@
     <ClCompile Include="USBSerial\USBSerial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Demos\TicTacToe\TicTacToe.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ALFAT\ALFAT.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZLynx\FEZLynx_I2CBus.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZLynx\FEZLynx_SerialDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

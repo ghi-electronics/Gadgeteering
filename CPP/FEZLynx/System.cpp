@@ -22,6 +22,8 @@ limitations under the License.
 
 
 #include <iostream>
+#include <stdlib.h>
+
 #include "../Gadgeteering/System.hpp"
 
 using namespace GHI;
@@ -30,9 +32,7 @@ void System::Sleep(unsigned long time)
 {
 #ifdef _WIN32
 	::Sleep(time);
-#endif
-
-#ifdef linux
+#else
     timespec t_Sleep;
     timespec t_Remaining;
 
@@ -51,15 +51,10 @@ void System::Sleep(unsigned long time)
 #endif
 }
 
-long unsigned int System::CyclesToMicroseconds(unsigned long val)
-{
-	return 0;
-}
-
 void System::SleepMicro(unsigned long time)
 {
 #ifdef _WIN32
-    ::Sleep(time);
+	::Sleep(time);
 #endif
 
 #ifdef linux
@@ -85,14 +80,24 @@ void System::SleepMicro(unsigned long time)
 long int EpochWhenStarted = 0;
 #endif
 
-unsigned long GHI::System::TimeElapsed()
+unsigned long System::TimeElapsed()
 {
 #ifdef _WIN32
-	return GetTickCount();
+	return (unsigned long)GetTickCount64();
 #else
 	timespec t;
     clock_gettime(CLOCK_MONOTONIC, &t);
 
     return ((t.tv_sec * 1000) + (t.tv_nsec / 1000000));
 #endif
+}
+
+int RandomNumber(int low = 0, int high = 65535)
+{
+	return (std::rand() % high) + low;
+}
+
+void RandomNumberSeed(int seed)
+{
+	std::srand(seed);
 }

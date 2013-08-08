@@ -79,7 +79,7 @@ void MaxO::Clear()
     CLR->write(true);
     Enable->write(false);
 
-    for (int i = 0; i < this->length; i++)
+    for (unsigned int i = 0; i < this->length; i++)
         data[i] = 0x0;
 }
 
@@ -100,7 +100,7 @@ void MaxO::WriteArray(unsigned char* arr, unsigned int arrLength)
         unsigned char* reversedArr = new unsigned char[arrLength];
 		memcpy(reversedArr, arr, arrLength);
 
-        for (int i = 0; i < arrLength; i++)
+        for (unsigned int i = 0; i < arrLength; i++)
         {
             reversedArr[i] = arr[this->length - i - 1];//(byte)(~reversedArr[i]);
         }
@@ -123,7 +123,7 @@ void MaxO::WritePin(int _board, int _pin, bool _value)
     int length = ((_board) * 4);// +_pin;
     int position = ((_board - 1) * 4) + _pin;
 
-    if (length > this->length)
+    if (length > (int)this->length)
         mainboard->panic(Exceptions::ERR_MODULE_ERROR);
 
     // make a "dummy" to turn our pin on or off
