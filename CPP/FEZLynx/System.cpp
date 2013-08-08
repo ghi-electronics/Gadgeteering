@@ -83,7 +83,7 @@ long int EpochWhenStarted = 0;
 unsigned long System::TimeElapsed()
 {
 #ifdef _WIN32
-	return GetTickCount64();
+	return (unsigned long)GetTickCount64();
 #else
 	timespec t;
     clock_gettime(CLOCK_MONOTONIC, &t);

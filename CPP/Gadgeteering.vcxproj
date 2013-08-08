@@ -49,6 +49,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;LYNX;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -62,6 +63,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;LYNX;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -81,13 +83,10 @@
     <ClInclude Include="ColorSense\ColorSense.h" />
     <ClInclude Include="Compass\Compass.h" />
     <ClInclude Include="CurrentACS712\CurrentACS712.h" />
-    <ClInclude Include="Demos\TicTacToe\TicTacToe.hpp" />
     <ClInclude Include="DisplayN18\DisplayN18.h" />
     <ClInclude Include="DistanceUS3\DistanceUS3.h" />
     <ClInclude Include="Extender\Extender.h" />
     <ClInclude Include="FEZLynx\SoftwareI2C_Lynx.h" />
-    <ClInclude Include="FEZMedusaMini\FEZMedusaMini.h" />
-    <ClInclude Include="FEZMedusa\FEZMedusa.h" />
     <ClInclude Include="FEZTive\FEZtive.h" />
     <ClInclude Include="FLASH\FLASH.h" />
     <ClInclude Include="FMRadio\FMRadio.h" />
@@ -152,22 +151,11 @@
     <ClCompile Include="ColorSense\ColorSense.cpp" />
     <ClCompile Include="Compass\Compass.cpp" />
     <ClCompile Include="CurrentACS712\CurrentACS712.cpp" />
-    <ClCompile Include="Demos\TicTacToe\TicTacToe.cpp" />
     <ClCompile Include="DisplayN18\DisplayN18.cpp" />
     <ClCompile Include="DistanceUS3\DistanceUS3.cpp" />
     <ClCompile Include="Extender\Extender.cpp" />
     <ClCompile Include="FEZLynx\ExtendedSockets.cpp" />
     <ClCompile Include="FEZLynx\SPIBus_Lynx.cpp" />
-    <ClCompile Include="FEZMedusaMini\FEZMedusaMini.cpp" />
-    <ClCompile Include="FEZMedusaMini\I2CBus.cpp" />
-    <ClCompile Include="FEZMedusaMini\SerialDevice.cpp" />
-    <ClCompile Include="FEZMedusaMini\SPIBus.cpp" />
-    <ClCompile Include="FEZMedusaMini\System.cpp" />
-    <ClCompile Include="FEZMedusa\FEZMedusa.cpp" />
-    <ClCompile Include="FEZMedusa\I2CBus.cpp" />
-    <ClCompile Include="FEZMedusa\SerialDevice.cpp" />
-    <ClCompile Include="FEZMedusa\SPIBus.cpp" />
-    <ClCompile Include="FEZMedusa\System.cpp" />
     <ClCompile Include="FEZTive\FEZtive.cpp" />
     <ClCompile Include="FLASH\FLASH.cpp" />
     <ClCompile Include="FMRadio\FMRadio.cpp" />

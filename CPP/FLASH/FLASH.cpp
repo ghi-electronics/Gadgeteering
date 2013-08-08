@@ -102,7 +102,7 @@ bool FLASH::EraseBlock(unsigned int block, unsigned int number) {
     }
          
     int address = block * FLASH::BLOCK_SIZE;
-    int i = 0;
+    unsigned int i = 0;
 
     statusLED->write(true);
 
@@ -137,7 +137,7 @@ bool FLASH::EraseSector(unsigned int sector, unsigned int number) {
     }
 
     int address = sector * FLASH::SECTOR_SIZE;
-    int i = 0;
+    unsigned int i = 0;
 
     statusLED->write(true);
 
@@ -253,6 +253,8 @@ bool FLASH::ReadData(unsigned long address, unsigned char* data, unsigned int le
     spi->writeThenRead(writeData, data, 4, length, true);
 
     statusLED->write(false);
+
+	return true;
 }
 
 bool FLASH::ReadData_FastMode(unsigned long address, unsigned char* data, unsigned int length) {
@@ -277,4 +279,6 @@ bool FLASH::ReadData_FastMode(unsigned long address, unsigned char* data, unsign
     spi->writeThenRead(writeData, data, 4, length, true);
 
     statusLED->write(false);
+
+	return true;
 }

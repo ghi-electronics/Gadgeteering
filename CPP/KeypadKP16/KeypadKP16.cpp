@@ -58,4 +58,6 @@ bool KeypadKP16::IsKeyPressed(Key key)
 	else if (key == Keys::Four || key == Keys::Five || key == Keys::Six || key == Keys::B) return !this->R2->read();
 	else if (key == Keys::Seven || key == Keys::Eight || key == Keys::Nine || key == Keys::C) return !this->R3->read();
 	else if (key == Keys::Star || key == Keys::Zero || key == Keys::Pound || key == Keys::D) return !this->R4->read();
+
+	return false;
 }

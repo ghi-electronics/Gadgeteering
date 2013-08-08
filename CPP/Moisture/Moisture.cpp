@@ -34,12 +34,10 @@ namespace GHI
 		{
 			this->output->write(true);
 
-			int reading = 0;
+			double reading = 0;
 
 			for(int i = 0; i < samples; i++)
-			{
 				reading += (this->input->read() * 1600.00);
-			}
 
 			this->output->write(false);
 
