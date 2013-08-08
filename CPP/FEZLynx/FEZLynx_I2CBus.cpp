@@ -149,11 +149,24 @@ bool FEZLynx::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data
     if (sendStart)
         this->sendStartCondition();
 
-    for (bit = 0; bit < 8; bit++) {
-        this->writeBit((data & 0x80) != 0);
+    char activeState = 0x10;
+    char *OutputBuffer = new char[4];
 
-        data <<= 1;
-    }
+//    if(configuration->chipSelectActiveState && configuration->clockEdge)
+//        activeState = 0x10;
+
+    DWORD dwNumBytesToSend = 0; //Clear output buffer
+    DWORD dwNumBytesSent = 0;
+
+    OutputBuffer[dwNumBytesToSend++] = 0x31;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
+    OutputBuffer[dwNumBytesToSend++] = 0;
+    OutputBuffer[dwNumBytesToSend++] = 0; //Data length of 0x0000 means 1 byte data to clock out
+    OutputBuffer[dwNumBytesToSend++] = data;
+
+	FT_STATUS ftStatus = FT_Write(channel, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); //Send off the commands
+
+    if(ftStatus != FT_OK)
+        mainboard->panic(0x35);
 
     nack = this->readBit();
 
@@ -168,12 +181,28 @@ unsigned char FEZLynx::I2CBus::receive(bool sendAcknowledgeBit, bool sendStopCon
     unsigned char d = 0;
     unsigned char bit = 0;
 
-    for (bit = 0; bit < 8; bit++) {
-        d <<= 1;
+    DWORD dwBytesInQueue = 0;
+    int timeout = 0;
+    FT_STATUS ftStatus = FT_OK;
 
-        if (this->readBit())
-            d |= 1;
+    //wait for queue to fill to desired amount, or timeout
+    while((dwBytesInQueue < 1) && (timeout < 500))
+    {
+        ftStatus |= FT_GetQueueStatus(channel, &dwBytesInQueue);
+        System::Sleep(1);
+        timeout++;
     }
+
+    if((timeout >= 499) || (ftStatus != FT_OK))
+        mainboard->panic(0x35);
+
+    DWORD dwNumBytesRead = 0;
+	unsigned char *buffer = new unsigned char[1];
+
+    ftStatus = FT_Read(channel, buffer, 1, &dwNumBytesRead);
+
+    if((ftStatus != FT_OK))
+        mainboard->panic(0x35);
 
     this->writeBit(!sendAcknowledgeBit);
 
@@ -185,69 +214,93 @@ unsigned char FEZLynx::I2CBus::receive(bool sendAcknowledgeBit, bool sendStopCon
 
 unsigned int FEZLynx::I2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
 {
-    char activeState = 0x10;
-    char *OutputBuffer = new char[count +3];
+    if (!count) 
+		return 0;
 
-//    if(configuration->chipSelectActiveState && configuration->clockEdge)
-//        activeState = 0x10;
-
-    DWORD dwNumBytesToSend = 0; //Clear output buffer
-    DWORD dwNumBytesSent = 0;
-
-    OutputBuffer[dwNumBytesToSend++] = 0x31;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
-    OutputBuffer[dwNumBytesToSend++] = 0;
-    OutputBuffer[dwNumBytesToSend++] = count - 1; //Data length of 0x0000 means 1 byte data to clock out
-
-    for(int i = 0; i < count; i++)
-        OutputBuffer[dwNumBytesToSend++] = (char)buffer[i];
-
-    FT_STATUS ftStatus = FT_Write(channel, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); //Send off the commands
-
-    if(ftStatus != FT_OK)
-        mainboard->panic(0x35);
-
-    return dwNumBytesSent;
+	unsigned int numWrite = 0;
+	unsigned int i = 0;
+	
+	if (!this->transmit(true, false, address))
+		for (i = 0; i < count - 1; i++)
+			if (!this->transmit(false, false, buffer[i]))
+				numWrite++;
+	
+	if (!this->transmit(false, sendStop, buffer[i]))
+		numWrite++;
+	
+	return numWrite;
  }
 
 unsigned int FEZLynx::I2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
 {
-    DWORD dwBytesInQueue = 0;
-    int timeout = 0;
-    FT_STATUS ftStatus = FT_OK;
+    if (!count) 
+		return 0;
 
-    //wait for queue to fill to desired amount, or timeout
-    while((dwBytesInQueue < count) && (timeout < 500))
-    {
-        ftStatus |= FT_GetQueueStatus(channel, &dwBytesInQueue);
-        System::Sleep(1);
-        timeout++;
-    }
+	unsigned int numRead = 0;
+	unsigned int i = 0;
 
-    if((timeout >= 499) || (ftStatus != FT_OK))
-        mainboard->panic(0x35);
+	if (!this->transmit(true, false, address | 1)) {
+		for (i = 0; i < count - 1; i++) {
+			buffer[i] = this->receive(true, false);
+			numRead++;
+		}
+	}
 
-    DWORD dwNumBytesRead = 0;
-    ftStatus = FT_Read(channel, buffer, count, &dwNumBytesRead);
+    buffer[i] = this->receive(false, sendStop);
+	numRead++;
 
-    if((ftStatus != FT_OK))
-        mainboard->panic(0x35);
-
-    return dwNumBytesRead;
+    return numRead;
 }
 
 bool FEZLynx::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address)
 {
     *numWritten = 0;
-    *numRead = 0;
+	*numRead = 0;
 
-    unsigned int i = 0;
-    unsigned int write = 0;
-    unsigned int read = 0;
+	unsigned int i = 0;
+	unsigned int write = 0;
+	unsigned int read = 0;
 
-    write = *numWritten = this->write(writeBuffer, writeLength, address, false);
-    read = *numRead = this->read(readBuffer, readLength, address, true);
+	DWORD dwNumBytesRead = 0;
+	DWORD dwNumInputBuffer = 0;
+	unsigned char InputBuffer[1024];
 
-    return (write + read) == (writeLength + readLength);
+	//Purge USB receive buffer first by reading out all old data from FT2232H receive buffer
+	FT_STATUS ftStatus = FT_GetQueueStatus(channel, &dwNumInputBuffer); // Get the number of bytes in the FT2232H receive buffer
+	if ((ftStatus == FT_OK) && (dwNumInputBuffer > 0))
+	{
+		FT_Read(channel, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from FT2232H receive buffer
+	}
+
+    if (writeLength > 0) {
+		if (!this->transmit(true, false, address)) {
+			for (i = 0; i < writeLength - 1; i++) {
+				if (!this->transmit(false, false, writeBuffer[i])) {
+					(write)++;
+				}
+			}
+		}
+
+		if (!this->transmit(false, (readLength == 0), writeBuffer[i]))
+			write++; 
+
+		*numWritten = write;
+    }
+
+    if (readLength > 0) {
+		if (!this->transmit(true, false, address | 1)) {
+			for (i = 0; i < readLength - 1; i++) {
+				readBuffer[i] = this->receive(true, false);
+				read++;
+			}
+		}
+
+		readBuffer[i] = this->receive(false, true);
+		read++;
+		*numRead = read;
+    }
+
+	return (write + read) == (writeLength + readLength);
 }
 
 void FEZLynx::I2CBus::SetChannel(FT_HANDLE i2cChannel)

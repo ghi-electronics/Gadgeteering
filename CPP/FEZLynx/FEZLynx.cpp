@@ -367,7 +367,7 @@ void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resistor
 	{
         int channel = GetChannel(pinNumber);
         int pin = GetChannelPin(pinNumber);
-        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 2)); //((8 * (channel - 3) + pin));
+        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 1)); //((8 * (channel - 3) + pin));
 
         Extender->setIOMode(extendedPin, state, resistorMode);
 	}
@@ -464,7 +464,7 @@ bool FEZLynx::readDigital(GHI::CPUPin pinNumber) {
     {
         int channel = GetChannel(pinNumber);
         int pin = GetChannelPin(pinNumber);
-        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 2)); //((8 * (channel - 3) + pin));
+        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 1)); //((8 * (channel - 3) + pin));
 
         return Extender->readDigital(extendedPin);
 	}
@@ -497,7 +497,7 @@ void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value) {
 	{
         int channel = GetChannel(pinNumber);
         int pin = GetChannelPin(pinNumber);
-        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 2)); //((8 * (channel - 3) + pin));
+        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 1)); //((8 * (channel - 3) + pin));
 
         Extender->writeDigital(extendedPin, value);
 	}
@@ -540,7 +540,7 @@ void FEZLynx::setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency) 
 
     int channel = GetChannel(pinNumber);
     int pin = GetChannelPin(pinNumber);
-    CPUPin extendedPin = (((channel - 4) << 4) | (pin - 2)); //((8 * (channel - 3) + pin));
+    CPUPin extendedPin = (((channel - 4) << 4) | (pin - 1)); //((8 * (channel - 3) + pin));
 
     Extender->setPWM(extendedPin,frequency,dutyCycle);
 }
