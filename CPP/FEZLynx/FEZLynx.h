@@ -17,7 +17,9 @@ limitations under the License.
 #ifndef _FEZLYNX_H_
 #define _FEZLYNX_H_
 
+#ifndef LYNX
 #define LYNX
+#endif
 
 //#include "stdafx.h"
 
@@ -40,7 +42,7 @@ struct FEZLynxChannel
     FT_STATUS status;
     FT_HANDLE device;
     char data;
-    char direction;
+    unsigned char direction;
 };
 
 namespace GHI
@@ -65,7 +67,7 @@ namespace GHI
 
                 FT_STATUS ftStatus; //Status defined in D2XX to indicate operation result
                 FT_HANDLE ftHandle; //Handle of FT2232H device port
-                char OutputBuffer[1024]; //Buffer to hold MPSSE commands and data to be sent to FT2232H
+                unsigned char OutputBuffer[1024]; //Buffer to hold MPSSE commands and data to be sent to FT2232H
                 unsigned char InputBuffer[1024]; //Buffer to hold Data bytes to be read from FT2232H
 
                 DWORD dwNumBytesToSend; //Index of output buffer

@@ -37,7 +37,7 @@ namespace GHI
             OutputBuffer[dwNumBytesToSend++] = 0;
             OutputBuffer[dwNumBytesToSend++] = count - 1; //Data length of 0x0000 means 1 byte data to clock out
 
-            for(int i = 0; i < count; i++)
+            for(unsigned int i = 0; i < count; i++)
                 OutputBuffer[dwNumBytesToSend++] = buffer[i];
 
             ftStatus = FT_Write(channel, OutputBuffer, dwNumBytesToSend + (count - 1), &dwNumBytesSent); //Send off the commands
@@ -57,7 +57,7 @@ namespace GHI
             OutputBuffer[dwNumBytesToSend++] = 0;
             OutputBuffer[dwNumBytesToSend++] = count - 1; //Data length of 0x0000 means 1 byte data to clock out
 
-            for(int i = 0; i < count; i++)
+            for(unsigned int i = 0; i < count; i++)
                 OutputBuffer[dwNumBytesToSend++] = buffer[i];
 
             if(ftStatus != FT_OK)

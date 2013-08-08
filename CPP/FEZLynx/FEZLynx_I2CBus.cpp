@@ -198,7 +198,7 @@ unsigned int FEZLynx::I2CBus::write(const unsigned char* buffer, unsigned int co
     OutputBuffer[dwNumBytesToSend++] = 0;
     OutputBuffer[dwNumBytesToSend++] = count - 1; //Data length of 0x0000 means 1 byte data to clock out
 
-    for(int i = 0; i < count; i++)
+    for(unsigned int i = 0; i < count; i++)
         OutputBuffer[dwNumBytesToSend++] = (char)buffer[i];
 
     FT_STATUS ftStatus = FT_Write(channel, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); //Send off the commands

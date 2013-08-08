@@ -731,13 +731,13 @@ void FEZLynx::ExtendedSockets::setPWM(CPUPin pin, double frequency, double dutyC
     char period = (char)(93750 / frequency);
 
     this->writeRegister(FEZLynx::ExtendedSockets::PERIOD_REGISTER, period);
-    this->writeRegister(FEZLynx::ExtendedSockets::PULSE_WIDTH_REGISTER, period * dutyCycle);
+    this->writeRegister(FEZLynx::ExtendedSockets::PULSE_WIDTH_REGISTER, static_cast<unsigned char>(period * dutyCycle));
 }
 
 bool FEZLynx::ExtendedSockets::readDigital(CPUPin pin) {
     char b = this->readRegister(FEZLynx::ExtendedSockets::INPUT_PORT_0_REGISTER + this->getPort(pin));
 
-    return b & this->getPin(pin);
+    return (b & this->getPin(pin)) != 0;
 }
 
 void FEZLynx::ExtendedSockets::writeDigital(CPUPin pin, bool value) {

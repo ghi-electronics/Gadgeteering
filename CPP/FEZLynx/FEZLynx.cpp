@@ -504,7 +504,6 @@ void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value) {
 	else
 	{
 		DWORD sent = 0;
-		BYTE buffer[3];
 
 		int channel = this->GetChannel(pinNumber);
 		unsigned char pin = this->GetChannelPin(pinNumber);
