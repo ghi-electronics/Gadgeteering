@@ -222,9 +222,6 @@
     <ClInclude Include="ALFAT\ALFAT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FEZMedusa\FEZMedusa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gadgeteering\Interfaces.cpp">
@@ -437,19 +434,10 @@
     <ClCompile Include="ALFAT\ALFAT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FEZMedusa\FEZMedusa.cpp">
+    <ClCompile Include="FEZLynx\FEZLynx_I2CBus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FEZMedusa\I2CBus.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZMedusa\SerialDevice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZMedusa\SPIBus.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZMedusa\System.cpp">
+    <ClCompile Include="FEZLynx\FEZLynx_SerialDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

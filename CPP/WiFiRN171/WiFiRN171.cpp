@@ -37,7 +37,7 @@ namespace GHI
 		void WiFiRN171::CreateAccessPoint(const char *SSID)
 		{
 			char *command = "set wlan ssid ";
-			strcat(command,SSID);
+			//strcat(command,SSID);
 
 			this->CommandModeStart();
 			this->CommandModeWrite(command);
