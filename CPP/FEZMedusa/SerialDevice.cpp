@@ -39,18 +39,20 @@ void FEZMedusaMini::SerialDevice::close() {
 }
 
 void FEZMedusaMini::SerialDevice::write(const unsigned char* buffer, unsigned int count) {
-	//Serial.write(buffer, count);
-	Serial.println((const char*)buffer);
+	Serial.write(buffer, count);
 	Serial.flush();
 }
 
 void FEZMedusaMini::SerialDevice::write(const char* buffer, unsigned int count) {
-	//Serial.write(reinterpret_cast<const unsigned char*>(buffer), count);
-	
-	Serial.println((const char*)buffer);
+	Serial.write(reinterpret_cast<const unsigned char*>(buffer), count);
 	Serial.flush();
 }
 
 unsigned int FEZMedusaMini::SerialDevice::read(unsigned char* buffer, unsigned int count) {
 	return Serial.readBytes(reinterpret_cast<char*>(buffer), count);
+}
+
+
+unsigned int FEZMedusaMini::SerialDevice::available() {
+	return Serial.available();
 }

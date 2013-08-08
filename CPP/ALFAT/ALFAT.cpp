@@ -32,8 +32,8 @@ ALFAT::ALFAT(unsigned char socketNumber) {
 	this->handles = NULL;
 	this->generateHandles();
 	
-	this->busyPin = new DigitalInput(this->socket, Socket::Pins::Three);
-	this->resetPin = new DigitalOutput(this->socket, Socket::Pins::Four, false);
+	this->busyPin = new DigitalInput(this->socket, Socket::Pins::Four);
+	this->resetPin = new DigitalOutput(this->socket, Socket::Pins::Three, false);
 
 	this->reset();
 

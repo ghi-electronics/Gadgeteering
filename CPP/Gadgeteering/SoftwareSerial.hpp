@@ -41,9 +41,8 @@ namespace GHI
 
 				virtual ~SoftwareSerial();
 
-				unsigned char available();
 				bool overflow();
-
+				virtual unsigned int available();
 				virtual void open();
 				virtual void close();
 				virtual void write(const unsigned char* buffer, unsigned int count);

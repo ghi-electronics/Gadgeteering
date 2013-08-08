@@ -90,7 +90,7 @@ void SoftwareSerial::write(const char data)
 	System::SleepMicro(bitDelay);
 }
 
-unsigned char SoftwareSerial::available()
+unsigned int SoftwareSerial::available()
 {
 	this->receive();
 }

@@ -50,6 +50,7 @@ namespace GHI {
 					virtual void write(const unsigned char* buffer, unsigned int count);
 					virtual void write(const char* buffer, unsigned int count);
 					virtual unsigned int read(unsigned char* buffer, unsigned int count);
+					virtual unsigned int available();
 			};
 	
 			class I2CBus : public GHI::Interfaces::I2CBus
