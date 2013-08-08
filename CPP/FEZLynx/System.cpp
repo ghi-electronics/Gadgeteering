@@ -53,7 +53,7 @@ void System::Sleep(unsigned long time)
 
 long unsigned int System::CyclesToMicroseconds(unsigned long val)
 {
-
+	return 0;
 }
 
 void System::SleepMicro(unsigned long time)

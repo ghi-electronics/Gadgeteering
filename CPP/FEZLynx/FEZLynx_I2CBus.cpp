@@ -186,7 +186,7 @@ unsigned char FEZLynx::I2CBus::receive(bool sendAcknowledgeBit, bool sendStopCon
 unsigned int FEZLynx::I2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
 {
     char activeState = 0x10;
-    char OutputBuffer[count + 3];
+    char *OutputBuffer = new char[count +3];
 
 //    if(configuration->chipSelectActiveState && configuration->clockEdge)
 //        activeState = 0x10;
@@ -194,7 +194,7 @@ unsigned int FEZLynx::I2CBus::write(const unsigned char* buffer, unsigned int co
     DWORD dwNumBytesToSend = 0; //Clear output buffer
     DWORD dwNumBytesSent = 0;
 
-    OutputBuffer[dwNumBytesToSend++] = 0x11;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
+    OutputBuffer[dwNumBytesToSend++] = 0x31;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
     OutputBuffer[dwNumBytesToSend++] = 0;
     OutputBuffer[dwNumBytesToSend++] = count - 1; //Data length of 0x0000 means 1 byte data to clock out
 

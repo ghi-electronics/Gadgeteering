@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _FEZLYNX_H_
 #define _FEZLYNX_H_
 
-#define FEZ_LYNX 1
+#define LYNX
 
 //#include "stdafx.h"
 
@@ -306,6 +306,7 @@ namespace GHI
                 };
 
                 virtual void panic(unsigned char error);
+				virtual void panic(unsigned char error, unsigned char specificError);
 
                 virtual void setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency);
                 virtual bool readDigital(GHI::CPUPin pinNumber);
