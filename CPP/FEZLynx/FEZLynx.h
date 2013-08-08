@@ -23,8 +23,7 @@ limitations under the License.
 
 #ifdef _WIN32
 #include <Windows.h>
-#include "include\windows\FTD2XX.H"
-
+#include "windows\FTD2XX.H"
 #else
 #include "Linux/WinTypes.h"
 #include "Linux/ftd2xx.h"

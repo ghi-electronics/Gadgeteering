@@ -30,9 +30,7 @@ void System::Sleep(unsigned long time)
 {
 #ifdef _WIN32
 	::Sleep(time);
-#endif
-
-#ifdef linux
+#else
     timespec t_Sleep;
     timespec t_Remaining;
 
