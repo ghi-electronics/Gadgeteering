@@ -1,3 +1,19 @@
+/*
+Copyright 2013 GHI Electronics LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 #include "../Gadgeteering/Gadgeteering.h"
 #include <SPI.h>
 
@@ -8,18 +24,18 @@
 using namespace GHI;
 using namespace GHI::Mainboards;
 
-FEZMedusa::SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : Interfaces::SPIBus(mosi, miso, sck)
+FEZMedusaMini::SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : Interfaces::SPIBus(mosi, miso, sck)
 {
 	this->spi = new SPIClass();
 	this->spi->begin();
 }
 
-FEZMedusa::SPIBus::~SPIBus() {
+FEZMedusaMini::SPIBus::~SPIBus() {
 	this->spi->end();
 	delete this->spi;
 }
 
-void FEZMedusa::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configuration) {
+void FEZMedusaMini::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configuration) {
 	if (!configuration->clockIdleState && configuration->clockEdge)
 		this->spi->setDataMode(SPI_MODE0);
 	else if (!configuration->clockIdleState && !configuration->clockEdge)
@@ -46,7 +62,7 @@ void FEZMedusa::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configuration) 
 	}
 }
 
-void FEZMedusa::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration)
+void FEZMedusaMini::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration)
 {
 	this->setup(configuration);
 

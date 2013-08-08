@@ -39,21 +39,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir);$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(ProjectDir)\FEZLynx\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir);$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(ProjectDir)\FEZLynx\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;C:\Users\GHI WIN8-1\Desktop\GIT\gadgeteering\CPP\FEZLynx\lib\windows\i386\libMPSSE.lib;C:\Users\GHI WIN8-1\Desktop\GIT\gadgeteering\CPP\FEZLynx\lib\windows\i386\FTD2XX.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;$(ProjectDir)\FEZLynx\lib\windows\i386\libMPSSE.lib;$(ProjectDir)\FEZLynx\lib\windows\i386\FTD2XX.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -68,20 +67,27 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;$(ProjectDir)\FEZLynx\lib\windows\i386\libMPSSE.lib;$(ProjectDir)\FEZLynx\lib\windows\i386\FTD2XX.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Accelerometer\Accelerometer.h" />
     <ClInclude Include="AccelG248\AccelG248.h" />
+    <ClInclude Include="ALFAT\ALFAT.h" />
+    <ClInclude Include="Barometer\Barometer.h" />
     <ClInclude Include="Breakout\Breakout.h" />
     <ClInclude Include="ButtonS6\ButtonS6.h" />
     <ClInclude Include="Button\Button.h" />
+    <ClInclude Include="ColorSense\ColorSense.h" />
+    <ClInclude Include="Compass\Compass.h" />
     <ClInclude Include="CurrentACS712\CurrentACS712.h" />
     <ClInclude Include="Demos\TicTacToe\TicTacToe.hpp" />
     <ClInclude Include="DisplayN18\DisplayN18.h" />
     <ClInclude Include="DistanceUS3\DistanceUS3.h" />
     <ClInclude Include="Extender\Extender.h" />
     <ClInclude Include="FEZLynx\SoftwareI2C_Lynx.h" />
+    <ClInclude Include="FEZMedusaMini\FEZMedusaMini.h" />
+    <ClInclude Include="FEZMedusa\FEZMedusa.h" />
     <ClInclude Include="FEZTive\FEZtive.h" />
     <ClInclude Include="FLASH\FLASH.h" />
     <ClInclude Include="FMRadio\FMRadio.h" />
@@ -95,6 +101,7 @@
     <ClInclude Include="Gadgeteering\Module.hpp" />
     <ClInclude Include="Gadgeteering\SerialDevice.hpp" />
     <ClInclude Include="Gadgeteering\Socket.hpp" />
+    <ClInclude Include="Gadgeteering\SoftwareSerial.hpp" />
     <ClInclude Include="Gadgeteering\SPIBus.hpp" />
     <ClInclude Include="Gadgeteering\SPIDevice.hpp" />
     <ClInclude Include="Gadgeteering\System.hpp" />
@@ -105,6 +112,7 @@
     <ClInclude Include="FEZLynx\Windows\FTD2XX.H" />
     <ClInclude Include="CharDisplay\CharDisplay.h" />
     <ClInclude Include="GasSense\GasSense.h" />
+    <ClInclude Include="Gyroscope\Gyroscope.hpp" />
     <ClInclude Include="IO60P16\IO60P16.h" />
     <ClInclude Include="Joystick\Joystick.h" />
     <ClInclude Include="KeypadKP16\KeypadKP16.h" />
@@ -116,33 +124,50 @@
     <ClInclude Include="Load\Load.h" />
     <ClInclude Include="MaxO\MaxO.h" />
     <ClInclude Include="Moisture\Moisture.h" />
+    <ClInclude Include="MotionSensor\MotionSensor.h" />
     <ClInclude Include="MotorDriverL298\MotorDriverL298.h" />
-    <ClInclude Include="MotorL298\MotorL298.h" />
     <ClInclude Include="MultiColorLED\MultiColorLED.h" />
+    <ClInclude Include="Potentiometer\Potentiometer.h" />
     <ClInclude Include="PulseCount\PulseCount.h" />
     <ClInclude Include="RelayX16\RelayX16.h" />
     <ClInclude Include="RelayX1\RelayX1.h" />
     <ClInclude Include="RotaryH1\RotaryH1.h" />
+    <ClInclude Include="RS232\RS232.h" />
     <ClInclude Include="TemperatureHumidity\TemperatureHumidity.h" />
     <ClInclude Include="Thermocouple\Thermocouple.h" />
     <ClInclude Include="TouchC8\TouchC8.h" />
     <ClInclude Include="TouchL12\TouchL12.h" />
     <ClInclude Include="Tunes\Tunes.h" />
+    <ClInclude Include="USBSerial\USBSerial.h" />
+    <ClInclude Include="WiFiRN171\WiFiRN171.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Accelerometer\Accelerometer.cpp" />
     <ClCompile Include="AccelG248\AccelG248.cpp" />
+    <ClCompile Include="ALFAT\ALFAT.cpp" />
+    <ClCompile Include="Barometer\Barometer.cpp" />
     <ClCompile Include="Breakout\Breakout.cpp" />
     <ClCompile Include="ButtonS6\ButtonS6.cpp" />
     <ClCompile Include="Button\Button.cpp" />
+    <ClCompile Include="ColorSense\ColorSense.cpp" />
+    <ClCompile Include="Compass\Compass.cpp" />
     <ClCompile Include="CurrentACS712\CurrentACS712.cpp" />
+    <ClCompile Include="Demos\TicTacToe\TicTacToe.cpp" />
     <ClCompile Include="DisplayN18\DisplayN18.cpp" />
     <ClCompile Include="DistanceUS3\DistanceUS3.cpp" />
     <ClCompile Include="Extender\Extender.cpp" />
     <ClCompile Include="FEZLynx\ExtendedSockets.cpp" />
-    <ClCompile Include="FEZLynx\FEZLynx_I2CBus.cpp" />
-    <ClCompile Include="FEZLynx\SerialDevice_Lynx.cpp" />
     <ClCompile Include="FEZLynx\SPIBus_Lynx.cpp" />
+    <ClCompile Include="FEZMedusaMini\FEZMedusaMini.cpp" />
+    <ClCompile Include="FEZMedusaMini\I2CBus.cpp" />
+    <ClCompile Include="FEZMedusaMini\SerialDevice.cpp" />
+    <ClCompile Include="FEZMedusaMini\SPIBus.cpp" />
+    <ClCompile Include="FEZMedusaMini\System.cpp" />
+    <ClCompile Include="FEZMedusa\FEZMedusa.cpp" />
+    <ClCompile Include="FEZMedusa\I2CBus.cpp" />
+    <ClCompile Include="FEZMedusa\SerialDevice.cpp" />
+    <ClCompile Include="FEZMedusa\SPIBus.cpp" />
+    <ClCompile Include="FEZMedusa\System.cpp" />
     <ClCompile Include="FEZTive\FEZtive.cpp" />
     <ClCompile Include="FLASH\FLASH.cpp" />
     <ClCompile Include="FMRadio\FMRadio.cpp" />
@@ -155,6 +180,7 @@
     <ClCompile Include="Gadgeteering\Module.cpp" />
     <ClCompile Include="Gadgeteering\SerialDevice.cpp" />
     <ClCompile Include="Gadgeteering\Socket.cpp" />
+    <ClCompile Include="Gadgeteering\SoftwareSerial.cpp" />
     <ClCompile Include="Gadgeteering\SPIBus.cpp" />
     <ClCompile Include="Gadgeteering\SPIDevice.cpp" />
     <ClCompile Include="FEZLynx\System.cpp" />
@@ -162,6 +188,7 @@
     <ClCompile Include="CharDisplay\CharDisplay.cpp" />
     <ClCompile Include="Gadgeteering\Types.cpp" />
     <ClCompile Include="GasSense\GasSense.cpp" />
+    <ClCompile Include="Gyroscope\Gyroscope.cpp" />
     <ClCompile Include="IO60P16\IO60P16.cpp" />
     <ClCompile Include="Joystick\Joystick.cpp" />
     <ClCompile Include="KeypadKP16\KeypadKP16.cpp" />
@@ -173,18 +200,22 @@
     <ClCompile Include="Load\Load.cpp" />
     <ClCompile Include="MaxO\MaxO.cpp" />
     <ClCompile Include="Moisture\Moisture.cpp" />
+    <ClCompile Include="MotionSensor\MotionSensor.cpp" />
     <ClCompile Include="MotorDriverL298\MotorDriverL298.cpp" />
-    <ClCompile Include="MotorL298\MotorL298.cpp" />
     <ClCompile Include="MultiColorLED\MultiColorLED.cpp" />
+    <ClCompile Include="Potentiometer\Potentiometer.cpp" />
     <ClCompile Include="PulseCount\PulseCount.cpp" />
     <ClCompile Include="RelayX16\RelayX16.cpp" />
     <ClCompile Include="RelayX1\RelayX1.cpp" />
     <ClCompile Include="RotaryH1\RotaryH1.cpp" />
+    <ClCompile Include="RS232\RS232.cpp" />
     <ClCompile Include="TemperatureHumidity\TemperatureHumidity.cpp" />
     <ClCompile Include="Thermocouple\Thermocouple.cpp" />
     <ClCompile Include="TouchC8\TouchC8.cpp" />
     <ClCompile Include="TouchL12\TouchL12.cpp" />
     <ClCompile Include="Tunes\Tunes.cpp" />
+    <ClCompile Include="USBSerial\USBSerial.cpp" />
+    <ClCompile Include="WiFiRN171\WiFiRN171.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

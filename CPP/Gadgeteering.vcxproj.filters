@@ -75,6 +75,9 @@
     <ClInclude Include="FEZLynx\SoftwareI2C_Lynx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Gadgeteering\SoftwareSerial.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Moisture\Moisture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -132,10 +135,16 @@
     <ClInclude Include="MaxO\MaxO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WiFiRN171\WiFiRN171.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Gadgeteering\Module.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DisplayN18\DisplayN18.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZMedusaMini\FEZMedusaMini.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FLASH\FLASH.h">
@@ -183,10 +192,37 @@
     <ClInclude Include="PulseCount\PulseCount.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MotorL298\MotorL298.h">
+    <ClInclude Include="Barometer\Barometer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorSense\ColorSense.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compass\Compass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Gyroscope\Gyroscope.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MotionSensor\MotionSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Potentiometer\Potentiometer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RS232\RS232.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="USBSerial\USBSerial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Demos\TicTacToe\TicTacToe.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ALFAT\ALFAT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEZMedusa\FEZMedusa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -237,6 +273,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Gadgeteering\List.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gadgeteering\SoftwareSerial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Moisture\Moisture.cpp">
@@ -293,6 +332,9 @@
     <ClCompile Include="Extender\Extender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WiFiRN171\WiFiRN171.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Gadgeteering\Module.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -300,6 +342,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MaxO\MaxO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusaMini\FEZMedusaMini.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusaMini\I2CBus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusaMini\SerialDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusaMini\SPIBus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusaMini\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FLASH\FLASH.cpp">
@@ -350,13 +407,49 @@
     <ClCompile Include="PulseCount\PulseCount.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MotorL298\MotorL298.cpp">
+    <ClCompile Include="Barometer\Barometer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FEZLynx\SerialDevice_Lynx.cpp">
+    <ClCompile Include="ColorSense\ColorSense.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FEZLynx\FEZLynx_I2CBus.cpp">
+    <ClCompile Include="Compass\Compass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gyroscope\Gyroscope.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MotionSensor\MotionSensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Potentiometer\Potentiometer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RS232\RS232.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="USBSerial\USBSerial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Demos\TicTacToe\TicTacToe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ALFAT\ALFAT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\FEZMedusa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\I2CBus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\SerialDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\SPIBus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZMedusa\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

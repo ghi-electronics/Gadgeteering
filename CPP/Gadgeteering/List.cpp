@@ -1,3 +1,19 @@
+/*
+Copyright 2013 GHI Electronics LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 #include "List.hpp"
 #include "Types.hpp"
 
@@ -6,6 +22,7 @@ using namespace GHI;
 List::List() {
 	this->head = NULL;
 	this->tail = NULL;
+	this->count = 0;
 }
 
 List::~List() {
@@ -22,6 +39,8 @@ List::~List() {
 }
 
 void List::add(void* data) {
+	count++;
+
 	if (this->head == NULL) {
 		this->head = new ListNode;
 		this->head->next = NULL;
@@ -49,7 +68,7 @@ void List::remove(void* data) {
 		delete this->head;
 		this->head = newHead;
 		this->head->prev = NULL;
-
+		count--;
 		return;
 	}
 
@@ -58,7 +77,7 @@ void List::remove(void* data) {
 		delete this->tail;
 		this->tail = newTail;
 		this->tail->next = NULL;
-
+		count--;
 		return;
 	}
 
@@ -68,6 +87,7 @@ void List::remove(void* data) {
 			current->prev->next = current->next;
 			current->next->prev = current->prev;
 			delete current;
+			count--;
 			return;
 		}
 			
@@ -106,4 +126,27 @@ void* List::next() {
 
 bool List::ended() {
 	return this->currentIteration == NULL;
+}
+
+void List::push(void* data) {
+	this->add(data);
+}
+
+void* List::pop() {
+	if (this->count == 0)
+		return NULL;
+
+	void* data = this->head->data;
+
+	ListNode* newHead = this->head->next;
+	delete this->head;
+	this->head = newHead;
+	this->head->prev = NULL;
+	count--;
+
+	return data;
+}
+
+unsigned int List::getSize() const {
+	return this->count;
 }

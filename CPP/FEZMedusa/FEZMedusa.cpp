@@ -1,3 +1,19 @@
+/*
+Copyright 2013 GHI Electronics LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 #include "Arduino.h"
 #include "FEZMedusa.h"
 #include "../Gadgeteering/Types.hpp"
@@ -9,36 +25,10 @@ using namespace GHI::Mainboards;
 
 Mainboard* GHI::mainboard = NULL;
 
-FEZMedusa::FEZMedusa() {
+FEZMedusa::FEZMedusa() : FEZMedusaMini() {
 	mainboard = this;
-	
-	Socket* socket = this->registerSocket(new Socket(1, Socket::Types::I | Socket::Types::S | Socket::Types::Y | Socket::Types::X));
-	socket->pins[3] = 7;
-	socket->pins[4] = 8;
-	socket->pins[5] = 9;
-	socket->pins[6] = 10;
-	socket->pins[7] = 11;
-	socket->pins[8] = 12;
-	socket->pins[9] = 13;
 
-	socket = this->registerSocket(new Socket(2, Socket::Types::I | Socket::Types::P | Socket::Types::U | Socket::Types::Y | Socket::Types::X));
-	socket->pins[3] = 2;
-	socket->pins[4] = 1;
-	socket->pins[5] = 0;
-	socket->pins[6] = 4;
-	socket->pins[7] = 3;
-	socket->pins[8] = 5;
-	socket->pins[9] = 6;
-
-	socket = this->registerSocket(new Socket(3, Socket::Types::A | Socket::Types::I | Socket::Types::X));
-	socket->pins[3] = A0; //A0 = 14
-	socket->pins[4] = A1; //A1 = 15
-	socket->pins[5] = A2; //A2 = 16
-	socket->pins[6] = A3; //A3 = 17
-	socket->pins[8] = A4; //A4 = 18
-	socket->pins[9] = A5; //A5 = 19
-
-	socket = this->registerSocket(new Socket(5, Socket::Types::Y | Socket::Types::X | Socket::Types::P));
+	Socket* socket = this->registerSocket(new Socket(5, Socket::Types::Y | Socket::Types::X | Socket::Types::P));
 	socket->pins[3] = 0x00 | FEZMedusa::EXTENDER_MASK;
 	socket->pins[4] = 0x01 | FEZMedusa::EXTENDER_MASK;
 	socket->pins[5] = 0x02 | FEZMedusa::EXTENDER_MASK;
@@ -116,59 +106,30 @@ FEZMedusa::FEZMedusa() {
 FEZMedusa::~FEZMedusa() {
 	delete this->extenderChip;
 }
-				
-void FEZMedusa::panic(unsigned char error, unsigned char specificError) {
-	Serial.begin(9600);
-	while (true) {
-		Serial.print((int)error);
-		Serial.print("-");
-		Serial.println((int)specificError);
-	}
-}
-				
-void FEZMedusa::print(const char* toPrint) {
-	Serial.begin(9600);
-	Serial.print(toPrint);
-}
-				
-void FEZMedusa::print(int toPrint) {
-	Serial.begin(9600);
-	Serial.print(toPrint);
-}
-				
-void FEZMedusa::print(double toPrint) {
-	Serial.begin(9600);
-	Serial.print(toPrint);
-}
 
 void FEZMedusa::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistorMode) {
-	if (!(pinNumber & FEZMedusa::EXTENDER_MASK)) {
-		if (state == IOStates::DIGITAL_INPUT)
-			::pinMode(pinNumber, resistorMode == ResistorModes::PULL_UP ? INPUT_PULLUP : INPUT);
-		else if (state == IOStates::DIGITAL_OUTPUT || state == IOStates::PWM)
-			::pinMode(pinNumber, OUTPUT);
-	}
-	else {
+	if (!(pinNumber & FEZMedusa::EXTENDER_MASK))
+		FEZMedusaMini::setIOMode(pinNumber, state, resistorMode);
+	else
 		this->extenderChip->setIOMode(pinNumber & ~FEZMedusa::EXTENDER_MASK, state, resistorMode);
-	}
 }
 
 void FEZMedusa::setPWM(CPUPin pinNumber, double dutyCycle, double frequency) {
-	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? analogWrite(pinNumber, static_cast<int>(dutyCycle * 255.0)) : this->extenderChip->setPWM(pinNumber & ~FEZMedusa::EXTENDER_MASK, dutyCycle, frequency);
+	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? FEZMedusaMini::setPWM(pinNumber, dutyCycle, frequency) : this->extenderChip->setPWM(pinNumber & ~FEZMedusa::EXTENDER_MASK, dutyCycle, frequency);
 }
 
 bool FEZMedusa::readDigital(CPUPin pinNumber) {
-	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? ::digitalRead(pinNumber) == HIGH : this->extenderChip->readDigital(pinNumber & ~FEZMedusa::EXTENDER_MASK);
+	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? FEZMedusaMini::readDigital(pinNumber) : this->extenderChip->readDigital(pinNumber & ~FEZMedusa::EXTENDER_MASK);
 }
 
 void FEZMedusa::writeDigital(CPUPin pinNumber, bool value) {
-	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? ::digitalWrite(pinNumber, value ? HIGH : LOW) : this->extenderChip->writeDigital(pinNumber & ~FEZMedusa::EXTENDER_MASK, value);
+	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? FEZMedusaMini::writeDigital(pinNumber, value) : this->extenderChip->writeDigital(pinNumber & ~FEZMedusa::EXTENDER_MASK, value);
 }
 
 double FEZMedusa::readAnalog(CPUPin pinNumber) {
 	if (!(pinNumber & FEZMedusa::EXTENDER_MASK)) 
 	{
-		return static_cast<double>(::analogRead(pinNumber)) / 1024 * 3.3;
+		return FEZMedusaMini::readAnalog(pinNumber);
 	}
 	else
 	{
@@ -177,57 +138,161 @@ double FEZMedusa::readAnalog(CPUPin pinNumber) {
 	}
 }
 
-double FEZMedusa::readAnalogProportion(CPUPin pinNumber) {
+void FEZMedusa::writeAnalog(CPUPin pinNumber, double voltage) {
+	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? FEZMedusaMini::writeAnalog(pinNumber, voltage) : mainboard->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED);
+}
+
+FEZMedusaMini::FEZMedusaMini() {
+	mainboard = this;
+	
+	Socket* socket = this->registerSocket(new Socket(1, Socket::Types::I | Socket::Types::S | Socket::Types::Y | Socket::Types::X));
+	socket->pins[3] = 7;
+	socket->pins[4] = 8;
+	socket->pins[5] = 9;
+	socket->pins[6] = 10;
+	socket->pins[7] = 11;
+	socket->pins[8] = 12;
+	socket->pins[9] = 13;
+
+	socket = this->registerSocket(new Socket(2, Socket::Types::I | Socket::Types::P | Socket::Types::U | Socket::Types::Y | Socket::Types::X));
+	socket->pins[3] = 2;
+	socket->pins[4] = 1;
+	socket->pins[5] = 0;
+	socket->pins[6] = 4;
+	socket->pins[7] = 3;
+	socket->pins[8] = 5;
+	socket->pins[9] = 6;
+
+	socket = this->registerSocket(new Socket(3, Socket::Types::A | Socket::Types::I | Socket::Types::X));
+	socket->pins[3] = A0; //A0 = 14
+	socket->pins[4] = A1; //A1 = 15
+	socket->pins[5] = A2; //A2 = 16
+	socket->pins[6] = A3; //A3 = 17
+	socket->pins[8] = A4; //A4 = 18
+	socket->pins[9] = A5; //A5 = 19
+}
+
+FEZMedusaMini::~FEZMedusaMini() {
+
+}
+				
+void FEZMedusaMini::panic(unsigned char error, unsigned char specificError) {
+	Serial.begin(9600);
+	while (true) {
+		Serial.print((int)error);
+		Serial.print("-");
+		Serial.println((int)specificError);
+	}
+}
+				
+void FEZMedusaMini::print(const char* toPrint) {
+	Serial.begin(9600);
+	Serial.print(toPrint);
+}
+				
+void FEZMedusaMini::print(int toPrint) {
+	Serial.begin(9600);
+	Serial.print(toPrint);
+}
+				
+void FEZMedusaMini::print(double toPrint) {
+	Serial.begin(9600);
+	Serial.print(toPrint);
+}
+
+void FEZMedusaMini::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistorMode) {
+	if (state == IOStates::DIGITAL_INPUT)
+		::pinMode(pinNumber, resistorMode == ResistorModes::PULL_UP ? INPUT_PULLUP : INPUT);
+	else if (state == IOStates::DIGITAL_OUTPUT || state == IOStates::PWM)
+		::pinMode(pinNumber, OUTPUT);
+}
+
+void FEZMedusaMini::setPWM(CPUPin pinNumber, double dutyCycle, double frequency) {
+	::analogWrite(pinNumber, static_cast<int>(dutyCycle * 255.0));
+}
+
+void FEZMedusaMini::setPWM(CPUPin pinNumber, double frequency, double dutyCycle, double duration)
+{
+	if (frequency <= 0 || dutyCycle < 0 || dutyCycle > 1)
+		return;
+  
+	double periodUS = 1000000 / frequency;
+	unsigned long sleepHigh = (unsigned long)(periodUS * dutyCycle);
+	unsigned long sleepLow = (unsigned long)(periodUS * (1 - dutyCycle));
+	unsigned long endTime = System::TimeElapsed() + (unsigned long)(duration * 1000);
+	
+	::pinMode(pinNumber, OUTPUT);
+	do {
+		::digitalWrite(pinNumber, HIGH);
+		::delayMicroseconds(sleepHigh * 1.59);
+		::digitalWrite(pinNumber, LOW);
+		::delayMicroseconds(sleepLow * 1.59);
+	} while (endTime > System::TimeElapsed());
+}
+
+bool FEZMedusaMini::readDigital(CPUPin pinNumber) {
+	return ::digitalRead(pinNumber) == HIGH;
+}
+
+void FEZMedusaMini::writeDigital(CPUPin pinNumber, bool value) {
+	::digitalWrite(pinNumber, value ? HIGH : LOW);
+}
+
+double FEZMedusaMini::readAnalog(CPUPin pinNumber) {
+	return static_cast<double>(::analogRead(pinNumber)) / 1024 * 3.3;
+}
+
+double FEZMedusaMini::readAnalogProportion(CPUPin pinNumber) {
 	return this->readAnalog(pinNumber) / 3.3;
 }
 
-void FEZMedusa::writeAnalog(CPUPin pinNumber, double voltage) {
-	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? ::analogWrite(pinNumber, voltage * (1024 / 3.3)) : mainboard->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED);
+void FEZMedusaMini::writeAnalog(CPUPin pinNumber, double voltage) {
+	::analogWrite(pinNumber, voltage * (1024 / 3.3));
 }
 
-void FEZMedusa::writeAnalogProportion(CPUPin pinNumber, double voltage) {
-	!(pinNumber & FEZMedusa::EXTENDER_MASK) ? ::analogWrite(pinNumber, voltage * 1024) : mainboard->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED);
+void FEZMedusaMini::writeAnalogProportion(CPUPin pinNumber, double proportion) {
+	this->writeAnalog(pinNumber, proportion * 3.3);
 }
 
-Interfaces::SPIBus* FEZMedusa::getSPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) {
+Interfaces::SPIBus* FEZMedusaMini::getSPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) {
 	for (SPIBus* current = (SPIBus*)this->spiBusses.start(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.next())
 		if (current->mosi == mosi && current->miso == miso && current->sck == sck)
 			return current;
 
-	SPIBus* bus = new FEZMedusa::SPIBus(mosi, miso, sck);
+	SPIBus* bus = new FEZMedusaMini::SPIBus(mosi, miso, sck);
 	this->spiBusses.add(bus);
 	return bus;
 }
 
-Interfaces::SPIBus* FEZMedusa::getSPIBus(Socket* socket, Socket::Pin mosiPinNumber, Socket::Pin misoPinNumber, Socket::Pin sckPinNumber) {
+Interfaces::SPIBus* FEZMedusaMini::getSPIBus(Socket* socket, Socket::Pin mosiPinNumber, Socket::Pin misoPinNumber, Socket::Pin sckPinNumber) {
 	return this->getSPIBus(socket->pins[mosiPinNumber], socket->pins[misoPinNumber], socket->pins[sckPinNumber]);
 }
 
-Interfaces::SerialDevice* FEZMedusa::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin) {
+Interfaces::SerialDevice* FEZMedusaMini::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin) {
 	for (SerialDevice* current = (SerialDevice*)this->serialDevices.start(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.next())
 		if (current->tx == txPin && current->rx == rxPin)
 			return current;
 
-	SerialDevice* bus = new FEZMedusa::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits);
+	SerialDevice* bus = new FEZMedusaMini::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits);
 	this->serialDevices.add(bus);
 
 	return bus;
 }
 
-Interfaces::SerialDevice* FEZMedusa::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber) {
+Interfaces::SerialDevice* FEZMedusaMini::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber) {
 	return this->getSerialDevice(socket->pins[txPinNumber], socket->pins[rxPinNumber], baudRate, parity, stopBits, dataBits);
 }
 
-Interfaces::I2CBus* FEZMedusa::getI2CBus(CPUPin sdaPin, CPUPin sclPin) {
+Interfaces::I2CBus* FEZMedusaMini::getI2CBus(CPUPin sdaPin, CPUPin sclPin) {
 	for (I2CBus* current = (I2CBus*)this->i2cBusses.start(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.next())
 		if (current->scl == sclPin && current->sda == sdaPin)
 			return current;
 		
-	I2CBus* bus = new FEZMedusa::I2CBus(sdaPin, sclPin);
+	I2CBus* bus = new FEZMedusaMini::I2CBus(sdaPin, sclPin);
 	this->i2cBusses.add(bus);
 	return bus;
 }
 
-Interfaces::I2CBus* FEZMedusa::getI2CBus(Socket* socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber) {
+Interfaces::I2CBus* FEZMedusaMini::getI2CBus(Socket* socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber) {
 	return this->getI2CBus(socket->pins[sdaPinNumber], socket->pins[sclPinNumber]);
 }
