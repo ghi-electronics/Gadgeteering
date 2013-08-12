@@ -158,7 +158,7 @@ bool FEZLynx::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data
     DWORD dwNumBytesToSend = 0; //Clear output buffer
     DWORD dwNumBytesSent = 0;
 
-    OutputBuffer[dwNumBytesToSend++] = 0x31;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
+    OutputBuffer[dwNumBytesToSend++] = 0x11;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
     OutputBuffer[dwNumBytesToSend++] = 0;
     OutputBuffer[dwNumBytesToSend++] = 0; //Data length of 0x0000 means 1 byte data to clock out
     OutputBuffer[dwNumBytesToSend++] = data;
@@ -169,6 +169,8 @@ bool FEZLynx::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data
         mainboard->panic(0x35);
 
     nack = this->readBit();
+
+	this->clearSDA();
 
     if (sendStop)
         this->sendStopCondition();
