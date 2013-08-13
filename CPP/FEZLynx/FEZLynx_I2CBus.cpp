@@ -163,14 +163,14 @@ bool FEZLynx::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data
     OutputBuffer[dwNumBytesToSend++] = 0; //Data length of 0x0000 means 1 byte data to clock out
     OutputBuffer[dwNumBytesToSend++] = data;
 
+	this->clearSDA();
+
 	FT_STATUS ftStatus = FT_Write(channel, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); //Send off the commands
 
     if(ftStatus != FT_OK)
         mainboard->panic(0x35);
 
     nack = this->readBit();
-
-	this->clearSDA();
 
     if (sendStop)
         this->sendStopCondition();
