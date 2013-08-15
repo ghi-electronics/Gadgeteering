@@ -105,11 +105,12 @@ namespace GHI
                         virtual void write(const unsigned char* buffer, unsigned int count);
                         virtual void write(const char* buffer, unsigned int count);
                         virtual unsigned int read(unsigned char* buffer, unsigned int count);
+						virtual unsigned int available();
 
                         void SetChannel(FT_HANDLE serialChannel);
                 };
 
-                class SPIBus : protected GHI::Interfaces::SPIBus
+                class SPIBus : public GHI::Interfaces::SPIBus
                 {
                     static const int MSB_FALLING_EDGE_CLOCK_BYTE_IN = 0x24;
                     static const int MSB_FALLING_EDGE_CLOCK_BYTE_OUT = 0x11;
@@ -117,9 +118,12 @@ namespace GHI
 
                     static const DWORD dwClockDivisor = 0x0055; //Value of clock divisor, SCL Frequency = 60/((1+0x0095)*2) (MHz) = 200khz
 
+					Interfaces::DigitalOutput *SCK;
+					Interfaces::DigitalInput *MISO;
+
                     FT_STATUS ftStatus; //Status defined in D2XX to indicate operation result
                     FT_HANDLE ftHandle; //Handle of FT2232H device port
-                    char OutputBuffer[1024]; //Buffer to hold MPSSE commands and data to be sent to FT2232H
+                    unsigned char OutputBuffer[1024]; //Buffer to hold MPSSE commands and data to be sent to FT2232H
                     char InputBuffer[1024]; //Buffer to hold Data bytes to be read from FT2232H
 
                     DWORD dwNumBytesToSend; //Index of output buffer
@@ -137,11 +141,14 @@ namespace GHI
                     };
 
                     SPIBus(Socket* socket, FT_HANDLE Channel);
+                    SPIBus(CPUPin MISO, CPUPin MOSI, CPUPin SCK, FT_HANDLE Channel);
 
                     virtual ~SPIBus();
 
                     //Clocks in one char and clocks out one char at the same time. If deselectChip is true, the CS line is set to logic low after the transmission, otherwise it remains logic high.
                     virtual char writeReadByte(char toSend, Interfaces::SPIConfiguration *configuration);
+
+					void writeByte(const unsigned char buffer, GHI::Interfaces::SPIConfiguration* configuration);
 
                     //Clocks count bytes in and out at the same time to and from the receive and send buffer respectively.
                     virtual void writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration *configuration);
@@ -149,11 +156,13 @@ namespace GHI
                     //Clocks sendCount bytes from sendBuffer out while ignoring the received bytes and then clocks receiveCount bytes into the receiveBuffer while clocking 0's out.
                     virtual void writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, Interfaces::SPIConfiguration *configuration);
 
+					virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration);
+
                     //Clocks count bytes out from the buffer while ignoring the bytes clocked in.
-                    virtual void write(char* buffer, unsigned int count, Interfaces::SPIConfiguration *configuration);
+                    virtual void write(const unsigned char* buffer, unsigned int count, Interfaces::SPIConfiguration *configuration);
 
                     //Clocks count bytes in while clocking 0's out.
-                    virtual void read(char* buffer, unsigned int count, Interfaces::SPIConfiguration *configuration);
+                    virtual void read(unsigned char* buffer, unsigned int count, Interfaces::SPIConfiguration *configuration);
                 };
 
                 class Pins
@@ -317,6 +326,9 @@ namespace GHI
                 virtual void writeAnalog(GHI::CPUPin pinNumber, double voltage);
                 virtual void setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode = GHI::ResistorModes::FLOATING);
 
+				unsigned char GetChannelMask(unsigned int channel);
+				unsigned char GetChannelDirection(unsigned int channel);
+
                 virtual void setPWM(GHI::Socket* socket, GHI::Socket::Pin pin, double dutyCycle, double frequency);
                 virtual bool readDigital(GHI::Socket* socket, GHI::Socket::Pin pin);
                 virtual void writeDigital(GHI::Socket* socket, GHI::Socket::Pin pin, bool value);
@@ -325,6 +337,8 @@ namespace GHI
                 virtual void setIOMode(GHI::Socket* socket, GHI::Socket::Pin pin, GHI::IOState state, GHI::ResistorMode resistorMode = GHI::ResistorModes::FLOATING);
 
                 virtual GHI::Interfaces::SPIBus* getSPIBus(GHI::Socket* socket);
+				virtual GHI::Interfaces::SPIBus* getSPIBus(CPUPin miso, CPUPin mosi, CPUPin sck);
+				virtual GHI::Interfaces::SPIBus* getSPIBus(Socket* socket, Socket::Pin mosiPinNumber, Socket::Pin misoPinNumber, Socket::Pin sckPinNumber);
                 virtual GHI::Interfaces::SerialDevice* getSerialDevice(GHI::Socket* socket, int baudRate, int parity, int stopBits, int dataBits);
                 virtual Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin);
                 virtual Interfaces::I2CBus* getI2CBus(Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine);

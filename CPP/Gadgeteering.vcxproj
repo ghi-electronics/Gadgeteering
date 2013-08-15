@@ -151,6 +151,7 @@
     <ClCompile Include="ColorSense\ColorSense.cpp" />
     <ClCompile Include="Compass\Compass.cpp" />
     <ClCompile Include="CurrentACS712\CurrentACS712.cpp" />
+    <ClCompile Include="Demos\Lynx\Lynx Demo 1\main.cpp" />
     <ClCompile Include="DisplayN18\DisplayN18.cpp" />
     <ClCompile Include="DistanceUS3\DistanceUS3.cpp" />
     <ClCompile Include="Extender\Extender.cpp" />

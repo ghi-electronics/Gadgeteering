@@ -94,5 +94,19 @@ namespace GHI
         {
             channel = serialChannel;
         }
+
+		unsigned int FEZLynx::SerialDevice::available()
+		{
+            DWORD dwBytesInQueue = 0;
+            int timeout = 0;
+            FT_STATUS ftStatus = FT_OK;
+
+            ftStatus |= FT_GetQueueStatus(channel, &dwBytesInQueue);
+
+			if(ftStatus != FT_OK)
+                mainboard->panic(0x25);
+
+			return dwBytesInQueue;
+		}
     }
 }

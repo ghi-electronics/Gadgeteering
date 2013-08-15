@@ -23,7 +23,15 @@ using namespace GHI::Interfaces;
 IO60P16::IO60P16(unsigned char socketNumber) {
 	Socket* socket = mainboard->getSocket(socketNumber);
 	socket->ensureTypeIsSupported(Socket::Types::X);
+
 	this->io60Chip = socket->getI2CDevice(0x20);
+	this->RegisterIO = new unsigned char[8];
+
+	for(int i = 0; i < 8; i++)
+	{
+		this->RegisterIO[i] = 0x00;
+		this->io60Chip->writeRegister(IO60P16::OUTPUT_PORT_0_REGISTER + i, RegisterIO[i]);
+	}
 }
 
 IO60P16::~IO60P16() {
@@ -100,12 +108,12 @@ void IO60P16::writeDigital(CPUPin pin, bool value) {
 	unsigned char port = this->getPort(pin);
 	unsigned char mask = (1 << (pin & 0x0F));
 
-	unsigned char b = this->io60Chip->readRegister(IO60P16::OUTPUT_PORT_0_REGISTER + port);
+	//unsigned char b = this->io60Chip->readRegister(IO60P16::OUTPUT_PORT_0_REGISTER + port);
 
 	if (value)
-		b |= this->getMask(pin);
+		RegisterIO[port] |= this->getMask(pin);
 	else
-		b &= ~this->getMask(pin);
+		RegisterIO[port] &= ~this->getMask(pin);
 	
-	this->io60Chip->writeRegister(IO60P16::OUTPUT_PORT_0_REGISTER + this->getPort(pin), b);
+	this->io60Chip->writeRegister(IO60P16::OUTPUT_PORT_0_REGISTER + this->getPort(pin), RegisterIO[port]);
 }

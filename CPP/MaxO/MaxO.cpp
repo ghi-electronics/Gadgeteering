@@ -16,6 +16,7 @@ limitations under the License.
 
 #include "MaxO.h"
 #include <string.h>
+#include <stdlib.h>
 
 using namespace GHI;
 using namespace GHI::Modules;
@@ -96,8 +97,8 @@ void MaxO::WriteArray(unsigned char* arr, unsigned int arrLength)
     }
 
     Enable->write(true);
-    {
-        unsigned char* reversedArr = new unsigned char[arrLength];
+
+	unsigned char* reversedArr = new unsigned char[arrLength];
 		memcpy(reversedArr, arr, arrLength);
 
         for (unsigned int i = 0; i < arrLength; i++)
@@ -108,7 +109,7 @@ void MaxO::WriteArray(unsigned char* arr, unsigned int arrLength)
         spi->write(reversedArr, arrLength, true);
 		memcpy(data, arr, arrLength);
 		delete [] reversedArr;
-    }
+
     Enable->write(false);
 }
 

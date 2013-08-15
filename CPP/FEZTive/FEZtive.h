@@ -40,6 +40,7 @@ namespace GHI
 				Color *LEDs;
 				char *_zeros;
 				int ledLength;
+				int _zeroLength;
 
 				void GetColorForRender(Color color, unsigned char* r, unsigned char* g, unsigned char* b);
 

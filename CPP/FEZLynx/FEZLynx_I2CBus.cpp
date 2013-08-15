@@ -201,7 +201,7 @@ unsigned char FEZLynx::I2CBus::receive(bool sendAcknowledgeBit, bool sendStopCon
     DWORD dwNumBytesRead = 0;
 	unsigned char *buffer = new unsigned char[1];
 
-    ftStatus = FT_Read(channel, buffer, 1, &dwNumBytesRead);
+    //ftStatus = FT_Read(channel, buffer, 1, &dwNumBytesRead);
 
     if((ftStatus != FT_OK))
         mainboard->panic(0x35);

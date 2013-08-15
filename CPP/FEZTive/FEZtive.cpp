@@ -30,6 +30,7 @@ void FEZtive::Initialize(int numLEDS, unsigned int spiClockRateKHZ)
 	this->spi_config = new Interfaces::SPIConfiguration(true, 0, 0, false, true, spiClockRateKHZ);
 	this->spi = new Interfaces::SPIDevice(mainboard->getSPIBus(this->sock),0,this->spi_config);
 
+	ledLength = numLEDS;
     LEDs = new Color[numLEDS];
 
 	for (int i = 0; i < numLEDS; i++)
@@ -37,32 +38,35 @@ void FEZtive::Initialize(int numLEDS, unsigned int spiClockRateKHZ)
         LEDs[i] = Color(0, 0, 0);
     }
 
-    _zeros = new char[3 * ((numLEDS + 63) / 64)];
+	_zeroLength = 3 * ((numLEDS + 63) / 64);
+	_zeros = new char[_zeroLength];
+
+	for(int i = 0; i < strlen(_zeros); i++)
+	{
+		_zeros[0] = 0;
+	}
 }
 
 void FEZtive::SetAll(Color color)
 {
 	unsigned char colorarr[3];
 
+	for(int i = 0; i < 3; i++)
+		colorarr[i] = 0;
+
 	//Clear();
 
 	spi->write((unsigned char*)_zeros, strlen(_zeros));
 
-	for (int i = 0; i < ledLength; i += 4)
+	for (int i = 0; i < ledLength; i += 2)
 	{
 		LEDs[i] = color;
 		LEDs[i + 1] = color;
-		LEDs[i + 2] = color;
-		LEDs[i + 3] = color;
-                
+
 		this->GetColorForRender(LEDs[i], colorarr, colorarr + 1, colorarr + 2);
-		spi->write(colorarr, 1);
+		spi->write(colorarr, 3);
 		this->GetColorForRender(LEDs[i + 1], colorarr, colorarr + 1, colorarr + 2);
-		spi->write(colorarr, 1);
-		this->GetColorForRender(LEDs[i + 2], colorarr, colorarr + 1, colorarr + 2);
-		spi->write(colorarr, 1);
-		this->GetColorForRender(LEDs[i + 3], colorarr, colorarr + 1, colorarr + 2);
-		spi->write(colorarr, 1);
+		spi->write(colorarr, 3);
 	}
 
 	spi->write((unsigned char*)_zeros, strlen(_zeros), true);
@@ -74,20 +78,14 @@ void FEZtive::SetAll(Color *colorArr)
 
 	spi->write((unsigned char*)_zeros, strlen(_zeros));
 
-	for (int i = 0; i < ledLength; i += 4)
+	for (int i = 0; i < ledLength; i += 2)
 	{
 		SetLED(colorArr[i], i);
 		SetLED(colorArr[i + 1], i + 1);
-		SetLED(colorArr[i + 2], i + 2);
-		SetLED(colorArr[i + 3], i + 3); 
                 
 		this->GetColorForRender(LEDs[i], color, color + 1, color + 2);
 		spi->write(color, 1);
 		this->GetColorForRender(LEDs[i + 1], color, color + 1, color + 2);
-		spi->write(color, 1);
-		this->GetColorForRender(LEDs[i + 2], color, color + 1, color + 2);
-		spi->write(color, 1);
-		this->GetColorForRender(LEDs[i + 3], color, color + 1, color + 2);
 		spi->write(color, 1);
 	}
 
@@ -117,15 +115,11 @@ void FEZtive::Redraw()
 
 	spi->write((unsigned char*)_zeros, strlen(_zeros));
 
-	for (int i = 0; i < ledLength; i += 4)
+	for (int i = 0; i < ledLength; i += 2)
 	{
 		this->GetColorForRender(LEDs[i], color, color + 1, color + 2);
 		spi->write(color, 1);
 		this->GetColorForRender(LEDs[i + 1], color, color + 1, color + 2);
-		spi->write(color, 1);
-		this->GetColorForRender(LEDs[i + 2], color, color + 1, color + 2);
-		spi->write(color, 1);
-		this->GetColorForRender(LEDs[i + 3], color, color + 1, color + 2);
 		spi->write(color, 1);
 	}
 

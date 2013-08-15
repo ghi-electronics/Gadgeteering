@@ -22,6 +22,8 @@ limitations under the License.
 namespace GHI {
 	namespace Modules {
 		class IO60P16 : public Module {
+			unsigned char *RegisterIO;
+
 			static const unsigned char INPUT_PORT_0_REGISTER = 0x00;
 			static const unsigned char OUTPUT_PORT_0_REGISTER = 0x08;
 			static const unsigned char PORT_SELECT_REGISTER = 0x18;

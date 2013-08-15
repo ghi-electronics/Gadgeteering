@@ -39,7 +39,7 @@ List::~List() {
 }
 
 void List::add(void* data) {
-	count++;
+	this->count++;
 
 	if (this->head == NULL) {
 		this->head = new ListNode;
