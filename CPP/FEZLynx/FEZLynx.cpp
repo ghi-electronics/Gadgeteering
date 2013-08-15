@@ -149,7 +149,7 @@ FEZLynx::FEZLynx()
 				OutputBuffer[dwNumBytesToSend++] = '\x97'; //Ensure turn off adaptive clocking
 
 				//Comment back in for I2C
-				//OutputBuffer[dwNumBytesToSend++] = '\x8D'; //Enable 3 phase data clock, used by I2C to allow data on both clock edges
+				OutputBuffer[dwNumBytesToSend++] = '\x8D'; //Enable 3 phase data clock, used by I2C to allow data on both clock edges
 
 
 				ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the commands

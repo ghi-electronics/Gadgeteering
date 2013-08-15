@@ -43,7 +43,7 @@ void FEZtive::Initialize(int numLEDS, unsigned int spiClockRateKHZ)
 
 	for(int i = 0; i < strlen(_zeros); i++)
 	{
-		_zeros[0] = 0;
+		_zeros[i] = 0x00;
 	}
 }
 
@@ -56,20 +56,20 @@ void FEZtive::SetAll(Color color)
 
 	//Clear();
 
-	spi->write((unsigned char*)_zeros, strlen(_zeros));
+	spi->write((unsigned char*)_zeros,1);
 
 	for (int i = 0; i < ledLength; i += 2)
 	{
 		LEDs[i] = color;
 		LEDs[i + 1] = color;
 
-		this->GetColorForRender(LEDs[i], colorarr, colorarr + 1, colorarr + 2);
+		this->GetColorForRender(LEDs[i], colorarr + 2, colorarr + 1, colorarr);
 		spi->write(colorarr, 3);
-		this->GetColorForRender(LEDs[i + 1], colorarr, colorarr + 1, colorarr + 2);
+		this->GetColorForRender(LEDs[i + 1], colorarr + 2, colorarr + 1, colorarr);
 		spi->write(colorarr, 3);
 	}
 
-	spi->write((unsigned char*)_zeros, strlen(_zeros), true);
+	spi->write((unsigned char*)_zeros, 1, true);
 }
 
 void FEZtive::SetAll(Color *colorArr)
