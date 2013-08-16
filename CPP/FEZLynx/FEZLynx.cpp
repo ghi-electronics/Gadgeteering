@@ -56,28 +56,56 @@ FEZLynx::FEZLynx()
 
         if(ftStatus == FT_OK && (ftStatus = FT_Open(i,&Channels[i].device)) == FT_OK)
 		{
-			Channels[i].direction = 0x00;
-			Channels[i].data = 0x00;
+			if(i == 1 || i == 0)
+			{
+				Channels[i].direction = 0xFB;
+				Channels[i].data = 0x00;
+			}
+			else
+			{
+				Channels[i].direction = 0x00;
+				Channels[i].data = 0x00;
+			}
 
 			ftStatus |= FT_ResetDevice(Channels[i].device); //Reset USB device
-
-			//Purge USB receive buffer first by reading out all old data from FT2232H receive buffer
-			ftStatus |= FT_GetQueueStatus(Channels[i].device, &dwNumInputBuffer); // Get the number of bytes in the FT2232H receive buffer
-			if ((ftStatus == FT_OK) && (dwNumInputBuffer > 0))
-				FT_Read(Channels[i].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from FT2232H receive buffer
 
 			//Set device configuration
 			ftStatus |= FT_SetUSBParameters(Channels[i].device, 65536, 65535); //Set USB request transfer size
 			ftStatus |= FT_SetChars(Channels[i].device, false, 0, false, 0); //Disable event and error characters
-			ftStatus |= FT_SetTimeouts(Channels[i].device, 0, 5000); //Sets the read and write timeouts in milliseconds for the FT2232H
+			ftStatus |= FT_SetTimeouts(Channels[i].device, 2000, 2000); //Sets the read and write timeouts in milliseconds for the FT2232H
 			ftStatus |= FT_SetLatencyTimer(Channels[i].device, 1); //Set the latency timer
 			ftStatus |= FT_SetBitMode(Channels[i].device, 0x0, 0x00); //Reset controller
 
 			//Only channel A and B support MPSSE mode
 			if(i == 0 || i == 1)
-				ftStatus |= FT_SetBitMode(Channels[i].device, 0x0, 0x02); //Enable MPSSE mode
-			else
-				ftStatus |= FT_SetBitMode(Channels[i].device, 0x00, 0x01); //Enable Async BitBang Mode
+			{
+				ftStatus |= FT_SetBitMode(Channels[i].device, Channels[i].direction, 0x02); //Enable MPSSE mode
+
+				dwNumInputBuffer = 0;
+
+				do
+				{
+					//Purge USB receive buffer first by reading out all old data from FT2232H receive buffer
+					ftStatus |= FT_GetQueueStatus(Channels[i].device, &dwNumInputBuffer); // Get the number of bytes in the FT2232H receive buffer
+				
+					if(dwNumInputBuffer == 0)
+						break;
+
+					if (dwNumInputBuffer <= 1024)
+						FT_Read(Channels[i].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from FT2232H receive buffer
+					else
+						FT_Read(Channels[i].device, &InputBuffer, 1024, &dwNumBytesRead);
+
+				} while(dwNumInputBuffer > 0);
+			}
+			else if(i == 2)
+			{
+				ftStatus |= FT_SetBitMode(Channels[i].device, Channels[i].direction, 0x01); //Enable Async BitBang Mode
+				ftStatus |= FT_SetBaudRate(Channels[i].device, 9600);
+				ftStatus |= FT_SetFlowControl(Channels[i].device, FT_FLOW_NONE, 0x00, 0x00);
+
+				ftStatus = FT_Purge(Channels[i].device, FT_PURGE_RX | FT_PURGE_TX);
+			}
 
 			if (ftStatus != FT_OK)
 			{
@@ -167,14 +195,14 @@ FEZLynx::FEZLynx()
 				ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the commands
 				dwNumBytesToSend = 0; //Clear output buffer
 				System::Sleep(30); //Delay for a while
-			}
 			
-			OutputBuffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output 
-			OutputBuffer[dwNumBytesToSend++] = Channels[i].data; //Set SDA, SCL high, WP disabled by SK, DO at bit „1‟, GPIOL0 at bit „0‟
-			OutputBuffer[dwNumBytesToSend++] = Channels[i].direction; //Set SK,DO,GPIOL0 pins as output with bit ‟, other pins as input with bit „‟
+				OutputBuffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output 
+				OutputBuffer[dwNumBytesToSend++] = Channels[i].data; //Set SDA, SCL high, WP disabled by SK, DO at bit „1‟, GPIOL0 at bit „0‟
+				OutputBuffer[dwNumBytesToSend++] = Channels[i].direction; //Set SK,DO,GPIOL0 pins as output with bit ‟, other pins as input with bit „‟
 	
-			ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the commands
-			dwNumBytesToSend = 0;
+				ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the commands
+				dwNumBytesToSend = 0;
+			}
 
 		}
 		else
@@ -461,16 +489,21 @@ bool FEZLynx::readDigital(GHI::CPUPin pinNumber) {
 		int channel = this->GetChannel(pinNumber);
         CPUPin pin = this->GetChannelPin(pinNumber);
 
-		dwNumBytesToSend = 0;
-		buffer[0] = 0x81;
-		FT_STATUS status = FT_Write(Channels[channel].device, buffer, 1, &sent); 
-		dwNumBytesToSend = 0;
+		FT_STATUS status = 0;
 
-		while((dwBytesInQueue < 1) && (timeout < 500))
+		if(channel == 0 || channel == 1)
 		{
-			ftStatus |= FT_GetQueueStatus(Channels[channel].device, &dwBytesInQueue);
-			System::Sleep(1);
-			timeout++;
+			dwNumBytesToSend = 0;
+			buffer[0] = 0x81;
+			status = FT_Write(Channels[channel].device, buffer, 1, &sent); 
+			dwNumBytesToSend = 0;
+
+			while((dwBytesInQueue < 1) && (timeout < 500))
+			{
+				ftStatus |= FT_GetQueueStatus(Channels[channel].device, &dwBytesInQueue);
+				System::Sleep(1);
+				timeout++;
+			}
 		}
 
 		status = FT_Read(Channels[channel].device, buffer, 1, &sent);   

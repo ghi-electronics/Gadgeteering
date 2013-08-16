@@ -97,12 +97,12 @@ unsigned long System::TimeElapsed()
 #endif
 }
 
-int RandomNumber(int low = 0, int high = 65535)
+int System::RandomNumber(int low, int high)
 {
 	return (std::rand() % high) + low;
 }
 
-void RandomNumberSeed(int seed)
+void System::RandomNumberSeed(int seed)
 {
 	std::srand(seed);
 }
