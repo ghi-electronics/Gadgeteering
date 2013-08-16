@@ -76,6 +76,8 @@ FEZLynx::FEZLynx()
 			//Only channel A and B support MPSSE mode
 			if(i == 0 || i == 1)
 				ftStatus |= FT_SetBitMode(Channels[i].device, 0x0, 0x02); //Enable MPSSE mode
+			else
+				ftStatus |= FT_SetBitMode(Channels[i].device, 0x00, 0x01); //Enable Async BitBang Mode
 
 			if (ftStatus != FT_OK)
 			{
@@ -131,16 +133,8 @@ FEZLynx::FEZLynx()
 
 			if(i == 1 || i == 0)
 			{
-				if(i == 1)
-				{
-					Channels[i].direction = 0xFB;
-					Channels[i].data = 0x00;
-				}
-				else
-				{
-					Channels[i].direction = 0xFB;
-					Channels[i].data = 0x00;
-				}
+				Channels[i].direction = 0xFB;
+				Channels[i].data = 0x00;
 
 				////////////////////////////////////////////////////////////////////
 				//Configure the MPSSE settings for I2C communication with 24LC256
@@ -507,9 +501,9 @@ void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value) {
 		int timeout = 0;
 		BYTE buffer[3];
 
-		buffer[0] = 0x81;
-		FT_STATUS status = FT_Write(Channels[channel].device, buffer, 1, &sent); 
-		dwNumBytesToSend = 0;
+		//buffer[0] = 0x81;
+		//FT_STATUS status = FT_Write(Channels[channel].device, buffer, 1, &sent); 
+		//dwNumBytesToSend = 0;
 
 		/*while((dwBytesInQueue < 1) && (timeout < 500))
 		{
