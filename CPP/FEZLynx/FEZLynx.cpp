@@ -98,13 +98,25 @@ FEZLynx::FEZLynx()
 
 				} while(dwNumInputBuffer > 0);
 			}
-			else if(i == 2)
+			else
 			{
 				ftStatus |= FT_SetBitMode(Channels[i].device, Channels[i].direction, 0x01); //Enable Async BitBang Mode
 				ftStatus |= FT_SetBaudRate(Channels[i].device, 9600);
-				ftStatus |= FT_SetFlowControl(Channels[i].device, FT_FLOW_NONE, 0x00, 0x00);
 
-				ftStatus = FT_Purge(Channels[i].device, FT_PURGE_RX | FT_PURGE_TX);
+				do
+				{
+					//Purge USB receive buffer first by reading out all old data from FT2232H receive buffer
+					ftStatus |= FT_GetQueueStatus(Channels[i].device, &dwNumInputBuffer); // Get the number of bytes in the FT2232H receive buffer
+				
+					if(dwNumInputBuffer == 0)
+						break;
+
+					if (dwNumInputBuffer <= 1024)
+						FT_Read(Channels[i].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from FT2232H receive buffer
+					else
+						FT_Read(Channels[i].device, &InputBuffer, 1024, &dwNumBytesRead);
+
+				} while(dwNumInputBuffer > 0);
 			}
 
 			if (ftStatus != FT_OK)
@@ -173,7 +185,6 @@ FEZLynx::FEZLynx()
 				//Comment back in for I2C
 				OutputBuffer[dwNumBytesToSend++] = '\x8D'; //Enable 3 phase data clock, used by I2C to allow data on both clock edges
 
-
 				ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the commands
 				dwNumBytesToSend = 0; //Clear output buffer
 			}
@@ -212,7 +223,6 @@ FEZLynx::FEZLynx()
 	/////////////////////////////////////
 	// Socket Setup Code               //
 	/////////////////////////////////////
-	//VirtualSocket::initExtenderChip(Pins::PB_1, Pins::PB_0, 0x20);
 
 	Socket* socket = this->registerSocket(new Socket(1, Socket::Types::I | Socket::Types::A));
 	socket->pins[3] = Pins::PD_4;
@@ -357,8 +367,6 @@ FEZLynx::FEZLynx()
 	// Extender Chip Setup     //
 	/////////////////////////////
 
-    //Extender = new FEZLynx::ExtendedSockets(Channels[1].device, 0x40,mainboard->getSocket(3));
-
     Extender = new Modules::IO60P16(3);
 }
 
@@ -395,23 +403,57 @@ bool FEZLynx::isVirtual(GHI::CPUPin pinNumber)
 
 void FEZLynx::SetFTDIPins(int channel)
 {
-	dwNumBytesToSend=0;
-	//make an inout. thjis si floating
-	OutputBuffer[dwNumBytesToSend++] = 0x80; //Command to set directions of lower 8 pins and force value on bits set as output
-	OutputBuffer[dwNumBytesToSend++] = Channels[channel].data;
-	OutputBuffer[dwNumBytesToSend++] = Channels[channel].direction;
-	ftStatus = FT_Write(Channels[channel].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); //Send off the commands
+	switch(channel)
+	{
+		//Send MPSSE commands to channels 0 & 1
+		case 0:
+		case 1:
+			dwNumBytesToSend = 0;
+
+			OutputBuffer[dwNumBytesToSend++] = 0x80; //Command to set directions of lower 8 pins and force value on bits set as output
+			OutputBuffer[dwNumBytesToSend++] = Channels[channel].data;
+			OutputBuffer[dwNumBytesToSend++] = Channels[channel].direction;
+
+			ftStatus = FT_Write(Channels[channel].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); //Send off the commands
+
+			if(ftStatus != FT_OK)
+				this->panic(0x00);
+
+			ChannelDirectionChanged[channel] = false;
+
+			break;
+
+		//Send BitBang commands to channels 2 & 3
+		case 2:
+		case 3:
+			ftStatus = FT_OK;
+
+			if(ChannelDirectionChanged[channel])
+			{
+				ftStatus |= FT_SetBitMode(Channels[channel].device, Channels[channel].direction, 0x01); //Resync BitBang direction
+				ChannelDirectionChanged[channel] = false;
+			}
+
+			ftStatus |= FT_Write(Channels[channel].device, &Channels[channel].data, 1, &dwNumBytesSent); //Set channel pin state
+
+			if(ftStatus != FT_OK)
+				this->panic(0x00);
+
+			break;
+	}
 }
 
 void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode) {
+
 	if(isVirtual(pinNumber))
 	{
         int channel = GetChannel(pinNumber);
         int pin = GetChannelPin(pinNumber);
-        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 1)); //((8 * (channel - 3) + pin));
+        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 1));
 
         Extender->setIOMode(extendedPin, state, resistorMode);
 	}
+
 	else
 	{
 		if(state == GHI::IOStates::PWM)
@@ -420,22 +462,23 @@ void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resistor
 		if(state == GHI::IOStates::DIGITAL_INPUT)
 		{
 			int channel = this->GetChannel(pinNumber);
-
             CPUPin pin = this->GetChannelPin(pinNumber);
 
             Channels[channel].direction &= ~(1 << (pin - 1));
+			ChannelDirectionChanged[channel] = true;
 
 			SetFTDIPins(channel);
 
 			return;
 		}
+
 		else if(state == GHI::IOStates::DIGITAL_OUTPUT)
 		{
 			int channel = this->GetChannel(pinNumber);
-
             CPUPin pin = this->GetChannelPin(pinNumber);
 
             Channels[channel].direction |= (1 << (pin - 1));
+			ChannelDirectionChanged[channel] = true;
 
 			SetFTDIPins(channel);
 
@@ -475,7 +518,7 @@ bool FEZLynx::readDigital(GHI::CPUPin pinNumber) {
     {
         int channel = GetChannel(pinNumber);
         int pin = GetChannelPin(pinNumber);
-        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 1)); //((8 * (channel - 3) + pin));
+        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 1));
 
         return Extender->readDigital(extendedPin);
 	}
@@ -527,30 +570,6 @@ void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value) {
 	{
 		int channel = this->GetChannel(pinNumber);
 		unsigned char pin = this->GetChannelPin(pinNumber);
-
-		DWORD dwBytesInQueue = 0;
-		DWORD sent = 0;
-
-		int timeout = 0;
-		BYTE buffer[3];
-
-		//buffer[0] = 0x81;
-		//FT_STATUS status = FT_Write(Channels[channel].device, buffer, 1, &sent); 
-		//dwNumBytesToSend = 0;
-
-		/*while((dwBytesInQueue < 1) && (timeout < 500))
-		{
-			ftStatus |= FT_GetQueueStatus(Channels[channel].device, &dwBytesInQueue);
-			System::Sleep(1);
-			timeout++;
-		}
-
-		buffer[0] = 0x80;
-
-		if(FT_Read(Channels[channel].device, buffer, 1, &sent) != FT_OK)
-			mainboard->panic(0x65);
-
-		Channels[channel].data = buffer[0];*/
 
 		if(value)
             Channels[channel].data |= (1 << (pin - 1));

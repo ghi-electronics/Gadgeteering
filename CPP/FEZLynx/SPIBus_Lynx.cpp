@@ -36,6 +36,7 @@ FEZLynx::SPIBus::SPIBus(CPUPin MISO, CPUPin MOSI, CPUPin SCK, FT_HANDLE Channel)
 
 FEZLynx::SPIBus::~SPIBus()
 {
+
 }
 
 char FEZLynx::SPIBus::writeReadByte(char toSend, GHI::Interfaces::SPIConfiguration *configuration)
@@ -83,8 +84,10 @@ char FEZLynx::SPIBus::writeReadByte(char toSend, GHI::Interfaces::SPIConfigurati
 
 void FEZLynx::SPIBus::writeAndRead(char* sendBuffer, char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration)
 {
-    for(unsigned int i = 0; i < count; i++)
-        receiveBuffer[i] = writeReadByte(sendBuffer[i], configuration);
+    /*for(unsigned int i = 0; i < count; i++)
+        receiveBuffer[i] = writeReadByte(sendBuffer[i], configuration);*/
+
+	write((const unsigned char*)sendBuffer,count,configuration);
 }
 
 void FEZLynx::SPIBus::writeThenRead(char* sendBuffer, char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, GHI::Interfaces::SPIConfiguration* configuration)
@@ -99,8 +102,10 @@ void FEZLynx::SPIBus::writeThenRead(char* sendBuffer, char* receiveBuffer, unsig
 
 void FEZLynx::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration) 
 {
-	for(int i = 0; i < count; i++)
-		this->writeByte(sendBuffer[i], configuration);
+	/*for(int i = 0; i < count; i++)
+		this->writeByte(sendBuffer[i], configuration);*/
+
+	write((const unsigned char*)sendBuffer,count,configuration);
 }
 
 void FEZLynx::SPIBus::write(const unsigned char* buffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration)
@@ -119,12 +124,18 @@ void FEZLynx::SPIBus::write(const unsigned char* buffer, unsigned int count, GHI
 
     char activeState = 0x10;
 
+	//We must force the clock to be the oposite of the clock edge
+	////before writing each byte
     if(!configuration->clockEdge)
+	{
         activeState = 0x10;
+		mask |= 0x01;
+	}
 	else
+	{
 		activeState = 0x11;
-
-	mask |= 1;
+		mask &= (~0x01);
+	}
 
     dwNumBytesToSend = 0; //Clear output buffer
 	
@@ -161,7 +172,6 @@ void FEZLynx::SPIBus::writeByte(const unsigned char buffer, GHI::Interfaces::SPI
         activeState = 0x10;
 	else
 		activeState = 0x11;
-
 
     dwNumBytesToSend = 0; //Clear output buffer
 

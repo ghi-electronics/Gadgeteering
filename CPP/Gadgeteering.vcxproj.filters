@@ -419,5 +419,8 @@
     <ClCompile Include="Demos\Lynx\Lynx Demo 1\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Demos\Lynx\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

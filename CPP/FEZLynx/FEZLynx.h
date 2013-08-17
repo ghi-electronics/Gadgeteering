@@ -91,6 +91,8 @@ namespace GHI
 
                 FEZLynxChannel Channels[4];
 
+				bool ChannelDirectionChanged[4];
+
             public:
                 FEZLynx();
 
