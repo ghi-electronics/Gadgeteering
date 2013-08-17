@@ -61,13 +61,23 @@ FEZLynx::FEZLynx()
 				Channels[i].direction = 0xFB;
 				Channels[i].data = 0x00;
 			}
-			else
-			{
-				Channels[i].direction = 0x00;
-				Channels[i].data = 0x00;
-			}
 
 			ftStatus |= FT_ResetDevice(Channels[i].device); //Reset USB device
+
+			//Purge USB receive buffer first by reading out all old data from FT2232H receive buffer
+			do
+			{
+				ftStatus |= FT_GetQueueStatus(Channels[i].device, &dwNumInputBuffer); // Get the number of bytes in the FT2232H receive buffer
+				
+				if(dwNumInputBuffer == 0)
+					break;
+
+				if (dwNumInputBuffer <= 1024)
+					FT_Read(Channels[i].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from FT2232H receive buffer
+				else
+					FT_Read(Channels[i].device, &InputBuffer, 1024, &dwNumBytesRead);
+
+			} while(dwNumInputBuffer > 0);
 
 			//Set device configuration
 			ftStatus |= FT_SetUSBParameters(Channels[i].device, 65536, 65535); //Set USB request transfer size
@@ -82,41 +92,21 @@ FEZLynx::FEZLynx()
 				ftStatus |= FT_SetBitMode(Channels[i].device, Channels[i].direction, 0x02); //Enable MPSSE mode
 
 				dwNumInputBuffer = 0;
-
-				do
-				{
-					//Purge USB receive buffer first by reading out all old data from FT2232H receive buffer
-					ftStatus |= FT_GetQueueStatus(Channels[i].device, &dwNumInputBuffer); // Get the number of bytes in the FT2232H receive buffer
-				
-					if(dwNumInputBuffer == 0)
-						break;
-
-					if (dwNumInputBuffer <= 1024)
-						FT_Read(Channels[i].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from FT2232H receive buffer
-					else
-						FT_Read(Channels[i].device, &InputBuffer, 1024, &dwNumBytesRead);
-
-				} while(dwNumInputBuffer > 0);
+				ftStatus |= FT_SetBaudRate(Channels[i].device, 57600);
 			}
 			else
 			{
+				if(i == 2)
+					Channels[i].direction = 0x01;
+				else
+					Channels[i].direction = 0x00;
+
+				Channels[i].data = 0x00;
+
 				ftStatus |= FT_SetBitMode(Channels[i].device, Channels[i].direction, 0x01); //Enable Async BitBang Mode
-				ftStatus |= FT_SetBaudRate(Channels[i].device, 9600);
+				ftStatus |= FT_SetBaudRate(Channels[i].device, 57600);
 
-				do
-				{
-					//Purge USB receive buffer first by reading out all old data from FT2232H receive buffer
-					ftStatus |= FT_GetQueueStatus(Channels[i].device, &dwNumInputBuffer); // Get the number of bytes in the FT2232H receive buffer
-				
-					if(dwNumInputBuffer == 0)
-						break;
-
-					if (dwNumInputBuffer <= 1024)
-						FT_Read(Channels[i].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from FT2232H receive buffer
-					else
-						FT_Read(Channels[i].device, &InputBuffer, 1024, &dwNumBytesRead);
-
-				} while(dwNumInputBuffer > 0);
+				ftStatus = FT_Write(Channels[i].device, &Channels[i].data, 1, &dwNumBytesSent);
 			}
 
 			if (ftStatus != FT_OK)
@@ -167,18 +157,14 @@ FEZLynx::FEZLynx()
 					this->panic(Exceptions::ERR_OUT_OF_SYNC);
 					return;
 				}
-			}
 
-			dwNumBytesToSend = 0;
-
-			if(i == 1 || i == 0)
-			{
 				Channels[i].direction = 0xFB;
 				Channels[i].data = 0x00;
 
 				////////////////////////////////////////////////////////////////////
 				//Configure the MPSSE settings for I2C communication with 24LC256
 				//////////////////////////////////////////////////////////////////
+				dwNumBytesToSend = 0;
 				OutputBuffer[dwNumBytesToSend++] = '\x8A'; //Ensure disable clock divide by 5 for 60Mhz master clock
 				OutputBuffer[dwNumBytesToSend++] = '\x97'; //Ensure turn off adaptive clocking
 
@@ -187,20 +173,18 @@ FEZLynx::FEZLynx()
 
 				ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the commands
 				dwNumBytesToSend = 0; //Clear output buffer
-			}
 
-			if( i == 1 || i == 0)
-			{
-				dwNumBytesToSend = 0; //Clear output buffer
 				// The SK clock frequency can be worked out by below algorithm with divide by 5 set as off
 				// SK frequency = 60MHz /((1 + [(1 +0xValueH*256) OR 0xValueL])*2)
 				OutputBuffer[dwNumBytesToSend++] = '\x86'; //Command to set clock divisor
 				OutputBuffer[dwNumBytesToSend++] = dwClockDivisor & '\xFF'; //Set 0xValueL of clock divisor
 				OutputBuffer[dwNumBytesToSend++] = (dwClockDivisor >> 8) & '\xFF'; //Set 0xValueH of clock divisor
+
 				ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the commands
 				dwNumBytesToSend = 0; //Clear output buffer
 
 				System::Sleep(20); //Delay for a while
+
 				//Turn off loop back in case
 				OutputBuffer[dwNumBytesToSend++] = '\x85'; //Command to turn off loop back of TDI/TDO connection
 				ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the commands
@@ -534,10 +518,25 @@ bool FEZLynx::readDigital(GHI::CPUPin pinNumber) {
 
 		FT_STATUS status = 0;
 
+		do
+		{
+			ftStatus |= FT_GetQueueStatus(Channels[channel].device, &dwNumInputBuffer); // Get the number of bytes in the FT2232H receive buffer
+				
+			if(dwNumInputBuffer == 0)
+				break;
+
+			if (dwNumInputBuffer <= 1024)
+				FT_Read(Channels[channel].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from FT2232H receive buffer
+			else
+				FT_Read(Channels[channel].device, &InputBuffer, 1024, &dwNumBytesRead);
+
+		} while(dwNumInputBuffer > 0);
+
 		if(channel == 0 || channel == 1)
 		{
 			dwNumBytesToSend = 0;
 			buffer[0] = 0x81;
+
 			status = FT_Write(Channels[channel].device, buffer, 1, &sent); 
 			dwNumBytesToSend = 0;
 
@@ -562,7 +561,7 @@ void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value) {
 	{
         int channel = GetChannel(pinNumber);
         int pin = GetChannelPin(pinNumber);
-        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 1)); //((8 * (channel - 3) + pin));
+        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 1));
 
         Extender->writeDigital(extendedPin, value);
 	}
@@ -602,7 +601,7 @@ void FEZLynx::setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency) 
 
     int channel = GetChannel(pinNumber);
     int pin = GetChannelPin(pinNumber);
-    CPUPin extendedPin = (((channel - 4) << 4) | (pin - 1)); //((8 * (channel - 3) + pin));
+    CPUPin extendedPin = (((channel - 4) << 4) | (pin - 1));
 
     Extender->setPWM(extendedPin,frequency,dutyCycle);
 }

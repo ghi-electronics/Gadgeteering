@@ -180,6 +180,8 @@ bool FEZLynx::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data
 
 unsigned char FEZLynx::I2CBus::receive(bool sendAcknowledgeBit, bool sendStopCondition)
 {
+	return 0;
+
     unsigned char d = 0;
     unsigned char bit = 0;
 
