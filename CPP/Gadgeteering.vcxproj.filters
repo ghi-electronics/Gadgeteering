@@ -236,9 +236,6 @@
     <ClCompile Include="FEZLynx\FEZLynx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FEZLynx\System.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Tunes\Tunes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -255,12 +252,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Gadgeteering\SPIBus.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZLynx\SPIBus_Lynx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FEZLynx\ExtendedSockets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Gadgeteering\List.cpp">
@@ -419,7 +410,13 @@
     <ClCompile Include="Demos\Lynx\Lynx Demo 1\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Demos\Lynx\main.cpp">
+    <ClCompile Include="Demos\Lynx\Lynx Demo 1\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZLynx\FEZLynx_SPIBus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEZLynx\FEZLynx_System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
