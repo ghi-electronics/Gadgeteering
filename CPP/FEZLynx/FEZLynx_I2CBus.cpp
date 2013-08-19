@@ -150,7 +150,7 @@ bool FEZLynx::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data
         this->sendStartCondition();
 
     char activeState = 0x10;
-    char *OutputBuffer = new char[4];
+    char *OutputBuffer = new char[7];
 
 //    if(configuration->chipSelectActiveState && configuration->clockEdge)
 //        activeState = 0x10;
@@ -158,12 +158,26 @@ bool FEZLynx::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data
     DWORD dwNumBytesToSend = 0; //Clear output buffer
     DWORD dwNumBytesSent = 0;
 
+	//Get instance of FEZ Lynx
+	FEZLynx *board = (FEZLynx *)mainboard;
+
+	unsigned char mask = board->GetChannelMask(1);
+	unsigned char direction = board->GetChannelDirection(1);
+
+	//Set SDA output low before write
+	mask&= (~0x02);
+	direction  |= 0x02;
+
+	OutputBuffer[dwNumBytesToSend++] = 0x80;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
+    OutputBuffer[dwNumBytesToSend++] = mask;
+    OutputBuffer[dwNumBytesToSend++] = direction; //Data length of 0x0000 means 1 byte data to clock out
+
     OutputBuffer[dwNumBytesToSend++] = 0x11;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
     OutputBuffer[dwNumBytesToSend++] = 0;
     OutputBuffer[dwNumBytesToSend++] = 0; //Data length of 0x0000 means 1 byte data to clock out
     OutputBuffer[dwNumBytesToSend++] = data;
 
-	this->clearSDA();
+	//this->clearSDA();
 
 	FT_STATUS ftStatus = FT_Write(channel, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); //Send off the commands
 
@@ -237,6 +251,8 @@ unsigned int FEZLynx::I2CBus::write(const unsigned char* buffer, unsigned int co
 
 unsigned int FEZLynx::I2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
 {
+	return count;
+
     if (!count) 
 		return 0;
 
@@ -254,6 +270,11 @@ unsigned int FEZLynx::I2CBus::read(unsigned char* buffer, unsigned int count, un
 	numRead++;
 
     return numRead;
+}
+
+bool FEZLynx::I2CBus::writeRead2(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address)
+{
+	return false;
 }
 
 bool FEZLynx::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address)
@@ -291,7 +312,7 @@ bool FEZLynx::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int w
 		*numWritten = write;
     }
 
-    if (readLength > 0) {
+    if (false/*readLength > 0*/) {
 		if (!this->transmit(true, false, address | 1)) {
 			for (i = 0; i < readLength - 1; i++) {
 				readBuffer[i] = this->receive(true, false);
@@ -303,6 +324,8 @@ bool FEZLynx::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int w
 		read++;
 		*numRead = read;
     }
+
+	*numRead = read = readLength;
 
 	return (write + read) == (writeLength + readLength);
 }

@@ -56,7 +56,7 @@ void FEZtive::SetAll(Color color)
 
 	//Clear();
 
-	spi->write((unsigned char*)_zeros,1);
+	spi->write((unsigned char*)_zeros, _zeroLength);
 
 	for (int i = 0; i < ledLength; i += 2)
 	{
@@ -69,7 +69,7 @@ void FEZtive::SetAll(Color color)
 		spi->write(colorarr, 3);
 	}
 
-	spi->write((unsigned char*)_zeros, 1, true);
+	spi->write((unsigned char*)_zeros, _zeroLength, true);
 }
 
 void FEZtive::SetAll(Color *colorArr)
@@ -83,20 +83,21 @@ void FEZtive::SetAll(Color *colorArr)
 		SetLED(colorArr[i], i);
 		SetLED(colorArr[i + 1], i + 1);
                 
-		this->GetColorForRender(LEDs[i], color, color + 1, color + 2);
+		this->GetColorForRender(LEDs[i], color + 2, color + 1, color);
 		spi->write(color, 1);
-		this->GetColorForRender(LEDs[i + 1], color, color + 1, color + 2);
+		this->GetColorForRender(LEDs[i + 1], color + 2, color + 1, color);
 		spi->write(color, 1);
 	}
 
 	spi->write((unsigned char*)_zeros, strlen(_zeros), true);
 }
 
-void FEZtive::SetLED(Color color, int numLED)
+void FEZtive::SetLED(Color color, int numLED, bool redraw)
 {
 	LEDs[numLED] = color;
 
-	Redraw();
+	if(redraw)
+		Redraw();
 }
 
 Color *FEZtive::GetCurrentColors()
@@ -113,17 +114,17 @@ void FEZtive::Redraw()
 {
 	unsigned char color[3];
 
-	spi->write((unsigned char*)_zeros, strlen(_zeros));
+	spi->write((unsigned char*)_zeros, 1);
 
 	for (int i = 0; i < ledLength; i += 2)
 	{
-		this->GetColorForRender(LEDs[i], color, color + 1, color + 2);
-		spi->write(color, 1);
-		this->GetColorForRender(LEDs[i + 1], color, color + 1, color + 2);
-		spi->write(color, 1);
+		this->GetColorForRender(LEDs[i], color + 2, color + 1, color);
+		spi->write(color, 3);
+		this->GetColorForRender(LEDs[i + 1], color + 2, color + 1, color);
+		spi->write(color, 3);
 	}
 
-	spi->write((unsigned char*)_zeros, strlen(_zeros), true);
+	spi->write((unsigned char*)_zeros, 1, true);
 }
 
 void FEZtive::GetColorForRender(Color color, unsigned char* g, unsigned char* r, unsigned char* b)
@@ -131,4 +132,18 @@ void FEZtive::GetColorForRender(Color color, unsigned char* g, unsigned char* r,
 	*g = (0x80 | color.green);
 	*r = (0x80 | color.red);
 	*b = (0x80 | color.blue);
+}
+
+Color FEZtive::GenerateRandomColor()
+{
+	Color randomColor;
+	System::RandomNumberSeed(ledLength ? ledLength : 1337);
+
+	unsigned char r = (System::RandomNumber(0, 127) / System::RandomNumber(1,4));
+	unsigned char g = (System::RandomNumber(0, 127) / System::RandomNumber(1,4));
+	unsigned char b = (System::RandomNumber(0, 127) / System::RandomNumber(1,4));
+
+	randomColor.Set(r, g, b);
+
+	return randomColor;
 }

@@ -23,6 +23,7 @@ limitations under the License.
 #include "../Gadgeteering/Types.hpp"
 #include "../Gadgeteering/Module.hpp"
 #include "../Gadgeteering/SPIDevice.hpp"
+#include "../Gadgeteering/System.hpp"
 
 #include <string.h>
 
@@ -66,7 +67,7 @@ namespace GHI
 				/// </summary>
 				/// <param name="color">Color to set the LED to. Color values must be between 0-127.</param>
 				/// <param name="numLED">The LED to set the color of</param>
-				void SetLED(Color color, int numLED);
+				void SetLED(Color color, int numLED, bool redraw = true);
 
 				/// <summary>
 				/// Returns an array of the current colors displayed by this module
@@ -83,6 +84,11 @@ namespace GHI
 				/// Redraws all of the colors. Only to be used after a change was made to the Color array.
 				/// </summary>
 				void Redraw();
+
+				/// <summary>
+				/// Returns a randomly generated color
+				/// </summary>
+				Color GenerateRandomColor();
 		};
 	}
 }

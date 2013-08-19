@@ -382,7 +382,8 @@ namespace GHI
 
                             virtual unsigned int write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
                             virtual unsigned int read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
-                            virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
+							virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
+                            virtual bool writeRead2(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
 
                             void SetChannel(FT_HANDLE i2cChannel);
                     };

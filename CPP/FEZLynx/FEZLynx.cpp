@@ -275,7 +275,7 @@ FEZLynx::FEZLynx()
     // Virtual Sockets
     ///////////////////////////////
 
-    socket = this->registerSocket(new Socket(8, Socket::Types::Y | Socket::Types::P));
+    socket = this->registerSocket(new Socket(8, Socket::Types::Y | Socket::Types::P | Socket::Types::X));
     socket->pins[3] = Pins::P2_0;
     socket->pins[4] = Pins::P2_1;
     socket->pins[5] = Pins::P2_2;
@@ -284,7 +284,7 @@ FEZLynx::FEZLynx()
     socket->pins[8] = Pins::P7_5;
     socket->pins[9] = Pins::P7_6;
 
-    socket = this->registerSocket(new Socket(9, Socket::Types::Y | Socket::Types::P));
+    socket = this->registerSocket(new Socket(9, Socket::Types::Y | Socket::Types::P | Socket::Types::X));
     socket->pins[3] = Pins::P1_4;
     socket->pins[4] = Pins::P1_5;
     socket->pins[5] = Pins::P1_6;
@@ -293,7 +293,7 @@ FEZLynx::FEZLynx()
     socket->pins[8] = Pins::P7_2;
     socket->pins[9] = Pins::P7_3;
 
-    socket = this->registerSocket(new Socket(10, Socket::Types::Y));
+    socket = this->registerSocket(new Socket(10, Socket::Types::Y | Socket::Types::X));
     socket->pins[3] = Pins::P3_0;
     socket->pins[4] = Pins::P3_1;
     socket->pins[5] = Pins::P3_2;
@@ -302,7 +302,7 @@ FEZLynx::FEZLynx()
     socket->pins[8] = Pins::P3_5;
     socket->pins[9] = Pins::P3_6;
 
-    socket = this->registerSocket(new Socket(11, Socket::Types::Y | Socket::Types::P));
+    socket = this->registerSocket(new Socket(11, Socket::Types::Y | Socket::Types::P | Socket::Types::X));
     socket->pins[3] = Pins::P0_0;
     socket->pins[4] = Pins::P0_1;
     socket->pins[5] = Pins::P0_2;
@@ -311,7 +311,7 @@ FEZLynx::FEZLynx()
     socket->pins[8] = Pins::P6_1;
     socket->pins[9] = Pins::P6_2;
 
-	socket = this->registerSocket(new Socket(12, Socket::Types::Y));
+	socket = this->registerSocket(new Socket(12, Socket::Types::Y | Socket::Types::X));
     socket->pins[3] = Pins::P4_0;
     socket->pins[4] = Pins::P4_1;
     socket->pins[5] = Pins::P4_2;
@@ -320,7 +320,7 @@ FEZLynx::FEZLynx()
     socket->pins[8] = Pins::P4_5;
     socket->pins[9] = Pins::P4_6;
 
-    socket = this->registerSocket(new Socket(13, Socket::Types::Y | Socket::Types::P));
+    socket = this->registerSocket(new Socket(13, Socket::Types::Y | Socket::Types::P | Socket::Types::X));
     socket->pins[3] = Pins::P0_4;
     socket->pins[4] = Pins::P0_5;
     socket->pins[5] = Pins::P0_6;
@@ -329,7 +329,7 @@ FEZLynx::FEZLynx()
     socket->pins[8] = Pins::P6_4;
     socket->pins[9] = Pins::P6_5;
 
-    socket = this->registerSocket(new Socket(14, Socket::Types::Y));
+    socket = this->registerSocket(new Socket(14, Socket::Types::Y | Socket::Types::X));
     socket->pins[3] = Pins::P4_0;
     socket->pins[4] = Pins::P4_1;
     socket->pins[5] = Pins::P4_2;
@@ -338,7 +338,7 @@ FEZLynx::FEZLynx()
     socket->pins[8] = Pins::P4_5;
     socket->pins[9] = Pins::P4_6;
 
-    socket = this->registerSocket(new Socket(15, Socket::Types::Y | Socket::Types::P));
+    socket = this->registerSocket(new Socket(15, Socket::Types::Y | Socket::Types::P | Socket::Types::X));
     socket->pins[3] = Pins::P5_0;
     socket->pins[4] = Pins::P5_1;
     socket->pins[5] = Pins::P5_2;
