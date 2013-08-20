@@ -56,7 +56,7 @@ void FEZtive::SetAll(Color color)
 
 	//Clear();
 
-	spi->write((unsigned char*)_zeros, _zeroLength);
+	spi->write((unsigned char*)_zeros, 1);
 
 	for (int i = 0; i < ledLength; i += 2)
 	{
@@ -69,14 +69,14 @@ void FEZtive::SetAll(Color color)
 		spi->write(colorarr, 3);
 	}
 
-	spi->write((unsigned char*)_zeros, _zeroLength, true);
+	spi->write((unsigned char*)_zeros, 1, true);
 }
 
 void FEZtive::SetAll(Color *colorArr)
 {
 	unsigned char color[3];
 
-	spi->write((unsigned char*)_zeros, strlen(_zeros));
+	spi->write((unsigned char*)_zeros, 1);
 
 	for (int i = 0; i < ledLength; i += 2)
 	{
@@ -89,7 +89,7 @@ void FEZtive::SetAll(Color *colorArr)
 		spi->write(color, 1);
 	}
 
-	spi->write((unsigned char*)_zeros, strlen(_zeros), true);
+	spi->write((unsigned char*)_zeros, 1, true);
 }
 
 void FEZtive::SetLED(Color color, int numLED, bool redraw)

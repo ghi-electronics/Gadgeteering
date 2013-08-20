@@ -37,7 +37,7 @@ LEDStrip::~LEDStrip()
 }
 
 void LEDStrip::turnOnLED(unsigned char led, bool onlyLED) {
-	if (led < 1 || led > LEDStrip::LEDS)
+	if (led < 1 || led > 7)
 		mainboard->panic(Exceptions::ERR_MODULE_ERROR);
 
 	if (onlyLED)
