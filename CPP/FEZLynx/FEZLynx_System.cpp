@@ -27,6 +27,7 @@ limitations under the License.
 #include "../Gadgeteering/System.hpp"
 
 using namespace GHI;
+using namespace std;
 
 namespace GHI
 {
@@ -107,7 +108,7 @@ unsigned long System::TimeElapsed()
 
 int System::RandomNumber(int low, int high)
 {
-	return (std::rand() % high) + low;
+    return (rand() % high) + low;
 }
 
 void System::RandomNumberSeed(int seed)
@@ -115,6 +116,6 @@ void System::RandomNumberSeed(int seed)
 	if(!RandomSeeded)
 	{
 		RandomSeeded = true;
-		std::srand(seed);
+        srand(seed);
 	}
 }

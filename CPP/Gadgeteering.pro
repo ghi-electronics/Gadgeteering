@@ -19,8 +19,8 @@ SOURCES += \
     FEZMedusa/SPIBus.cpp \
     FEZMedusa/SerialDevice.cpp \
     FEZMedusa/FEZMedusa.cpp \
-    FEZLynx/FEZLynx_SPIBus.cpp \
     FEZMedusa/I2CBus.cpp \
+    FEZLynx/FEZLynx_SPIBus.cpp \
     FEZLynx/FEZLynx_SerialDevice.cpp \
     FEZLynx/FEZLynx_I2CBus.cpp \
     Gadgeteering/Types.cpp \
@@ -143,7 +143,8 @@ fezlynx {
     SOURCES -= FEZMedusa/System.cpp \
                FEZMedusa/SPIBus.cpp \
                FEZMedusa/SerialDevice.cpp \
-               FEZMedusa/FEZMedusa.cpp
+               FEZMedusa/FEZMedusa.cpp \
+               FEZMedusa/I2CBus.cpp
 
     LIBS += -lftd2xx
 
