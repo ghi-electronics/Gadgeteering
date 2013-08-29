@@ -22,7 +22,10 @@ limitations under the License.
 namespace GHI {
 	namespace Modules {
 		class IO60P16 : public Module {
-			unsigned char *RegisterIO;
+			unsigned char outputPorts[8];
+			unsigned char pinDirections[8];
+			unsigned char pwms[8];
+			unsigned char resistors[4][8];
 
 			static const unsigned char INPUT_PORT_0_REGISTER = 0x00;
 			static const unsigned char OUTPUT_PORT_0_REGISTER = 0x08;
@@ -46,7 +49,8 @@ namespace GHI {
 
 			unsigned char getPort(CPUPin pin);
 			unsigned char getMask(CPUPin pin);
-		
+			void changeResistor(unsigned char port, unsigned char mask, unsigned char newResistor);
+
 			public:
 				IO60P16(unsigned char socketNumber);
 				~IO60P16();

@@ -38,7 +38,9 @@ namespace GHI {
 				bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead);
 				
 				bool writeRegister(unsigned char address, unsigned char value);
+				bool writeRegisters(unsigned char startAddress, unsigned char* values, unsigned int count);
 				unsigned char readRegister(unsigned char address);
+				bool readRegisters(unsigned char startAddress, unsigned char* values, unsigned int count);
 		};
 	}
 }

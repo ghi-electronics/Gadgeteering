@@ -46,9 +46,24 @@ bool I2CDevice::writeRegister(unsigned char address, unsigned char value) {
 	return this->write(data, 2, true) == 2;
 }
 
+bool I2CDevice::writeRegisters(unsigned char startAddress, unsigned char* values, unsigned int count) {
+	unsigned char* data = new unsigned char[count + 1];
+	data[0] = startAddress;
+	for (unsigned int i = 0; i < count; i++)
+		data[i + 1] = values[i];
+
+	return this->write(data, count + 1, true) == count + 1;
+}
+
 unsigned char I2CDevice::readRegister(unsigned char address) {
 	unsigned char value;
 	unsigned int a, b;
 	this->writeRead(&address, 1, &value, 1, &a, &b);
 	return value;
+}
+
+bool I2CDevice::readRegisters(unsigned char startAddress, unsigned char* values, unsigned int count) {
+	unsigned char value;
+	unsigned int a, b;
+	return this->writeRead(&startAddress, 1, values, count, &a, &b);
 }
