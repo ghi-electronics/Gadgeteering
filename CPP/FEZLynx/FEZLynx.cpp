@@ -83,7 +83,7 @@ FEZLynx::FEZLynx()
 			ftStatus |= FT_SetUSBParameters(Channels[i].device, 65536, 65535); //Set USB request transfer size
 			ftStatus |= FT_SetChars(Channels[i].device, false, 0, false, 0); //Disable event and error characters
 			ftStatus |= FT_SetTimeouts(Channels[i].device, 2000, 2000); //Sets the read and write timeouts in milliseconds for the FT2232H
-			ftStatus |= FT_SetLatencyTimer(Channels[i].device, 2); //Set the latency timer
+			ftStatus |= FT_SetLatencyTimer(Channels[i].device, 0); //Set the latency timer
 			ftStatus |= FT_SetBitMode(Channels[i].device, 0x0, 0x00); //Reset controller
 
 			//Only channel A and B support MPSSE mode
@@ -709,21 +709,23 @@ Interfaces::I2CBus *FEZLynx::getI2CBus(Socket *socket, Socket::Pin sdaPinNumber,
 
 int main() {
 	FEZLynx board;
-	Modules::LED7R led(10);
-	Modules::Button button(11);
-	Modules::TouchC8 touch(7);
+	//Modules::LED7R led(10);
+	Modules::Button button(4);
+	//Modules::TouchC8 touch(7);
 
 	//while (true)
 
+	DWORD a, b;
 	while (true) {
-		button.isPressed() ? led.turnOnLED(1) : led.turnOffLED(1);
-		touch.IsButtonPressed(Modules::TouchC8::Buttons::A) ? led.turnOnLED(2) : led.turnOffLED(2);
-		touch.IsButtonPressed(Modules::TouchC8::Buttons::B) ? led.turnOnLED(3) : led.turnOffLED(3);
-		touch.IsButtonPressed(Modules::TouchC8::Buttons::C) ? led.turnOnLED(4) : led.turnOffLED(4);
-		touch.IsProximityDetected() ? led.turnOnLED(5) : led.turnOffLED(5);
-
+		a = GetTickCount();
+		button.isPressed() ? button.turnLEDOn() : button.turnLEDOff(); // led.turnOnLED(1) : led.turnOffLED(1);
+		b = GetTickCount();
+		cout << (b - a) << endl;
+		//touch.IsButtonPressed(Modules::TouchC8::Buttons::A) ? led.turnOnLED(2) : led.turnOffLED(2);
+		//touch.IsButtonPressed(Modules::TouchC8::Buttons::B) ? led.turnOnLED(3) : led.turnOffLED(3);
+		//touch.IsButtonPressed(Modules::TouchC8::Buttons::C) ? led.turnOnLED(4) : led.turnOffLED(4);
+		//touch.IsProximityDetected() ? led.turnOnLED(5) : led.turnOffLED(5);
 	}
-
 
 	//Socket* socket = board.getSocket(3);
 	//Interfaces::I2CDevice* i2c = socket->getI2CDevice(0x20);

@@ -24,8 +24,6 @@ using namespace GHI::Mainboards;
 
 #define I2C_DELAY() ;
 
-#define CLOCK_STRETCH
-
 #ifdef CLOCK_STRETCH
 #define WAIT_SCL() while (!readSCL()) ;
 #else
