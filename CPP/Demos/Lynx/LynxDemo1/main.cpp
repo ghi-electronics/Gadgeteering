@@ -12,7 +12,7 @@ using namespace GHI::Mainboards;
 using namespace GHI::Interfaces;
 using namespace GHI::Modules;
 
-int main()
+int main1()
 {
 	FEZLynx board;
 	

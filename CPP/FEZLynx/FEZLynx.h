@@ -360,18 +360,20 @@ namespace GHI
                     class I2CBus : public GHI::Interfaces::I2CBus
                     {
                         FT_HANDLE channel;
-                        bool start;
-
+                        bool startSent;
+						
                         void clearSCL();
+                        void releaseSCL();
                         bool readSCL();
                         void clearSDA();
+                        void releaseSDA();
                         bool readSDA();
 
-                        bool writeBit(bool bit);
+                        void writeBit(bool bit);
                         bool readBit();
 
-                        bool sendStartCondition();
-                        bool sendStopCondition();
+                        void sendStartCondition();
+                        void sendStopCondition();
 
                         bool transmit(bool sendStart, bool sendStop, unsigned char data);
                         unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
@@ -383,7 +385,6 @@ namespace GHI
                             virtual unsigned int write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
                             virtual unsigned int read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
 							virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
-                            virtual bool writeRead2(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
 
                             void SetChannel(FT_HANDLE i2cChannel);
                     };

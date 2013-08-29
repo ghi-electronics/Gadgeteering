@@ -83,7 +83,7 @@ FEZLynx::FEZLynx()
 			ftStatus |= FT_SetUSBParameters(Channels[i].device, 65536, 65535); //Set USB request transfer size
 			ftStatus |= FT_SetChars(Channels[i].device, false, 0, false, 0); //Disable event and error characters
 			ftStatus |= FT_SetTimeouts(Channels[i].device, 2000, 2000); //Sets the read and write timeouts in milliseconds for the FT2232H
-			ftStatus |= FT_SetLatencyTimer(Channels[i].device, 1); //Set the latency timer
+			ftStatus |= FT_SetLatencyTimer(Channels[i].device, 2); //Set the latency timer
 			ftStatus |= FT_SetBitMode(Channels[i].device, 0x0, 0x00); //Reset controller
 
 			//Only channel A and B support MPSSE mode
@@ -92,7 +92,7 @@ FEZLynx::FEZLynx()
 				ftStatus |= FT_SetBitMode(Channels[i].device, Channels[i].direction, 0x02); //Enable MPSSE mode
 
 				dwNumInputBuffer = 0;
-				ftStatus |= FT_SetBaudRate(Channels[i].device, 57600);
+				ftStatus |= FT_SetBaudRate(Channels[i].device, 115200);
 			}
 			else
 			{
@@ -104,7 +104,7 @@ FEZLynx::FEZLynx()
 				Channels[i].data = 0x00;
 
 				ftStatus |= FT_SetBitMode(Channels[i].device, Channels[i].direction, 0x01); //Enable Async BitBang Mode
-				ftStatus |= FT_SetBaudRate(Channels[i].device, 57600);
+				ftStatus |= FT_SetBaudRate(Channels[i].device, 115200);
 
 				ftStatus = FT_Write(Channels[i].device, &Channels[i].data, 1, &dwNumBytesSent);
 			}
@@ -701,4 +701,35 @@ Interfaces::I2CBus *FEZLynx::getI2CBus(CPUPin sdaPin, CPUPin sclPin)
 Interfaces::I2CBus *FEZLynx::getI2CBus(Socket *socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber)
 {
     return this->getI2CBus(socket->pins[sdaPinNumber], socket->pins[sclPinNumber]);
+}
+
+#include "../LED7R/LED7R.h"
+#include "../Button/Button.h"
+#include "../TouchC8/TouchC8.h"
+
+int main() {
+	FEZLynx board;
+	Modules::LED7R led(10);
+	Modules::Button button(11);
+	Modules::TouchC8 touch(7);
+
+	//while (true)
+
+	while (true) {
+		button.isPressed() ? led.turnOnLED(1) : led.turnOffLED(1);
+		touch.IsButtonPressed(Modules::TouchC8::Buttons::A) ? led.turnOnLED(2) : led.turnOffLED(2);
+		touch.IsButtonPressed(Modules::TouchC8::Buttons::B) ? led.turnOnLED(3) : led.turnOffLED(3);
+		touch.IsButtonPressed(Modules::TouchC8::Buttons::C) ? led.turnOnLED(4) : led.turnOffLED(4);
+		touch.IsProximityDetected() ? led.turnOnLED(5) : led.turnOffLED(5);
+
+	}
+
+
+	//Socket* socket = board.getSocket(3);
+	//Interfaces::I2CDevice* i2c = socket->getI2CDevice(0x20);
+	//
+	//i2c->writeRegister(0x2A, 0xBE);
+	//cout << hex << (int)i2c->readRegister(0x2A) << endl;
+
+	return 0;
 }

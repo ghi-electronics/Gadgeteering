@@ -24,9 +24,17 @@ using namespace GHI::Mainboards;
 
 #define I2C_DELAY() ;
 
+#define CLOCK_STRETCH
+
+#ifdef CLOCK_STRETCH
+#define WAIT_SCL() while (!readSCL()) ;
+#else
+#define WAIT_SCL() releaseSCL();
+#endif
+
 FEZLynx::I2CBus::I2CBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
 {
-    this->start = false;
+    this->startSent = false;
     this->readSCL();
     this->readSDA();
 }
@@ -39,7 +47,11 @@ FEZLynx::I2CBus::~I2CBus()
 void FEZLynx::I2CBus::clearSCL()
 {
     mainboard->setIOMode(this->scl, IOStates::DIGITAL_OUTPUT);
-    mainboard->writeDigital(this->scl, false);
+}
+
+void FEZLynx::I2CBus::releaseSCL()
+{
+    mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
 }
 
 bool FEZLynx::I2CBus::readSCL()
@@ -51,7 +63,11 @@ bool FEZLynx::I2CBus::readSCL()
 void FEZLynx::I2CBus::clearSDA()
 {
     mainboard->setIOMode(this->sda, IOStates::DIGITAL_OUTPUT);
-    mainboard->writeDigital(this->sda, false);
+}
+
+void FEZLynx::I2CBus::releaseSDA()
+{
+    mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
 }
 
 bool FEZLynx::I2CBus::readSDA()
@@ -60,174 +76,87 @@ bool FEZLynx::I2CBus::readSDA()
     return mainboard->readDigital(this->sda);
 }
 
-bool FEZLynx::I2CBus::writeBit(bool bit)
+void FEZLynx::I2CBus::writeBit(bool bit)
 {
     if (bit)
-        this->readSDA();
+        releaseSDA();
     else
-        this->clearSDA();
+        clearSDA();
+	
+	WAIT_SCL();
 
-    I2C_DELAY();
-
-    unsigned long endTime = System::TimeElapsed() + 5000;
-    while (!this->readSCL() && System::TimeElapsed() < endTime)
-        ;
-
-    if (bit && !this->readSDA())
-        return false;
-
-    I2C_DELAY();
-    this->clearSCL();
-
-    return true;
+	clearSCL();
 }
 
 bool FEZLynx::I2CBus::readBit()
 {
-    this->readSDA();
+    releaseSDA();
+	
+	WAIT_SCL();
 
-    I2C_DELAY();
-
-    unsigned long endTime = System::TimeElapsed() + 5000;
-    while (!this->readSCL() && System::TimeElapsed() < endTime)
-        ;
-
-    bool bit = this->readSDA();
-
-    I2C_DELAY();
-    this->clearSCL();
+    bool bit = readSDA();
+	
+	clearSCL();
 
     return bit;
 }
 
-bool FEZLynx::I2CBus::sendStartCondition()
+void FEZLynx::I2CBus::sendStartCondition()
 {
-    if (this->start) {
-        this->readSDA();
-        I2C_DELAY();
+	if (startSent) {
+		releaseSDA();
 
-        unsigned long endTime = System::TimeElapsed() + 5000;
-        while (!this->readSCL() && System::TimeElapsed() < endTime)
-            ;
+		WAIT_SCL();
+	}
 
-    }
+	releaseSDA();
 
-    if (!this->readSDA())
-        return false;
+	clearSDA();
 
-    this->clearSDA();
-    I2C_DELAY();
-    this->clearSCL();
+	clearSCL();
 
-    this->start = true;
-
-    return true;
+	startSent = true;
 }
 
-bool FEZLynx::I2CBus::sendStopCondition()
+void FEZLynx::I2CBus::sendStopCondition()
 {
-    this->clearSDA();
-    I2C_DELAY();
+    clearSDA();
+	
+	WAIT_SCL();
 
-    unsigned long endTime = System::TimeElapsed() + 5000;
-    while (!this->readSCL() && System::TimeElapsed() < endTime)
-        ;
+	releaseSDA();
 
-    if (!this->readSDA())
-        return false;
-
-    I2C_DELAY();
-    this->start = false;
-
-    return true;
+	startSent = false;
 }
 
 bool FEZLynx::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data) {
-    unsigned char bit;
-    bool nack;
+	if (sendStart)
+		sendStartCondition();
+	
+    for (unsigned char mask = 0x80; mask != 0x00; mask >>= 1)
+		writeBit(data & mask);
 
-    if (sendStart)
-        this->sendStartCondition();
+	bool nack = readBit();
 
-    char activeState = 0x10;
-    char *OutputBuffer = new char[7];
+	if (sendStop)
+		sendStopCondition();
 
-//    if(configuration->chipSelectActiveState && configuration->clockEdge)
-//        activeState = 0x10;
-
-    DWORD dwNumBytesToSend = 0; //Clear output buffer
-    DWORD dwNumBytesSent = 0;
-
-	//Get instance of FEZ Lynx
-	FEZLynx *board = (FEZLynx *)mainboard;
-
-	unsigned char mask = board->GetChannelMask(1);
-	unsigned char direction = board->GetChannelDirection(1);
-
-	//Set SDA output low before write
-	mask&= (~0x02);
-	direction  |= 0x02;
-
-	OutputBuffer[dwNumBytesToSend++] = 0x80;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
-    OutputBuffer[dwNumBytesToSend++] = mask;
-    OutputBuffer[dwNumBytesToSend++] = direction; //Data length of 0x0000 means 1 byte data to clock out
-
-    OutputBuffer[dwNumBytesToSend++] = 0x11;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
-    OutputBuffer[dwNumBytesToSend++] = 0;
-    OutputBuffer[dwNumBytesToSend++] = 0; //Data length of 0x0000 means 1 byte data to clock out
-    OutputBuffer[dwNumBytesToSend++] = data;
-
-	//this->clearSDA();
-
-	FT_STATUS ftStatus = FT_Write(channel, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); //Send off the commands
-
-    if(ftStatus != FT_OK)
-        mainboard->panic(0x35);
-
-    nack = this->readBit();
-
-    if (sendStop)
-        this->sendStopCondition();
-
-     return nack;
+	return nack;
 }
 
-unsigned char FEZLynx::I2CBus::receive(bool sendAcknowledgeBit, bool sendStopCondition)
+unsigned char FEZLynx::I2CBus::receive(bool sendAcknowledgeBit, bool sendStop)
 {
-	return 0;
+	unsigned char bit, d = 0;
 
-    unsigned char d = 0;
-    unsigned char bit = 0;
+	for (bit = 0; bit < 8; bit++)
+		d = (d << 1) | readBit();
 
-    DWORD dwBytesInQueue = 0;
-    int timeout = 0;
-    FT_STATUS ftStatus = FT_OK;
+	writeBit(!sendAcknowledgeBit);
+	
+	if (sendStop)
+		sendStopCondition();
 
-    //wait for queue to fill to desired amount, or timeout
-    while((dwBytesInQueue < 1) && (timeout < 500))
-    {
-        ftStatus |= FT_GetQueueStatus(channel, &dwBytesInQueue);
-        System::Sleep(1);
-        timeout++;
-    }
-
-    if((timeout >= 499) || (ftStatus != FT_OK))
-        mainboard->panic(0x35);
-
-    DWORD dwNumBytesRead = 0;
-	unsigned char *buffer = new unsigned char[1];
-
-    //ftStatus = FT_Read(channel, buffer, 1, &dwNumBytesRead);
-
-    if((ftStatus != FT_OK))
-        mainboard->panic(0x35);
-
-    this->writeBit(!sendAcknowledgeBit);
-
-    if (sendStopCondition)
-        this->sendStopCondition();
-
-    return d;
+	return d;
 }
 
 unsigned int FEZLynx::I2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
@@ -251,8 +180,6 @@ unsigned int FEZLynx::I2CBus::write(const unsigned char* buffer, unsigned int co
 
 unsigned int FEZLynx::I2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
 {
-	return count;
-
     if (!count) 
 		return 0;
 
@@ -272,11 +199,6 @@ unsigned int FEZLynx::I2CBus::read(unsigned char* buffer, unsigned int count, un
     return numRead;
 }
 
-bool FEZLynx::I2CBus::writeRead2(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address)
-{
-	return false;
-}
-
 bool FEZLynx::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address)
 {
     *numWritten = 0;
@@ -285,17 +207,6 @@ bool FEZLynx::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int w
 	unsigned int i = 0;
 	unsigned int write = 0;
 	unsigned int read = 0;
-
-	DWORD dwNumBytesRead = 0;
-	DWORD dwNumInputBuffer = 0;
-	unsigned char InputBuffer[1024];
-
-	//Purge USB receive buffer first by reading out all old data from FT2232H receive buffer
-	FT_STATUS ftStatus = FT_GetQueueStatus(channel, &dwNumInputBuffer); // Get the number of bytes in the FT2232H receive buffer
-	if ((ftStatus == FT_OK) && (dwNumInputBuffer > 0))
-	{
-		FT_Read(channel, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from FT2232H receive buffer
-	}
 
     if (writeLength > 0) {
 		if (!this->transmit(true, false, address)) {
@@ -312,7 +223,7 @@ bool FEZLynx::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int w
 		*numWritten = write;
     }
 
-    if (false/*readLength > 0*/) {
+    if (readLength > 0) {
 		if (!this->transmit(true, false, address | 1)) {
 			for (i = 0; i < readLength - 1; i++) {
 				readBuffer[i] = this->receive(true, false);
