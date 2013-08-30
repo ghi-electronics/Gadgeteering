@@ -234,8 +234,6 @@ bool FEZLynx::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int w
 		*numRead = read;
     }
 
-	*numRead = read = readLength;
-
 	return (write + read) == (writeLength + readLength);
 }
 

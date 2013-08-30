@@ -89,6 +89,9 @@ namespace GHI
 
                 static const int ExtenderMask = 0xC0000000;
 
+				static const int ANALOG_2 = 0xAA;
+				static const int ANALOG_5 = 0xAB;
+
                 FEZLynxChannel Channels[4];
 
 				bool ChannelDirectionChanged[4];
@@ -356,6 +359,7 @@ namespace GHI
                     unsigned char GetChannelPin(GHI::CPUPin pinNumber);
 
                     Modules::IO60P16* Extender;
+					Interfaces::I2CDevice* analogConverter;
 
                     class I2CBus : public GHI::Interfaces::I2CBus
                     {

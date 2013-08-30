@@ -87,7 +87,7 @@ FEZLynx::FEZLynx()
 			ftStatus |= FT_SetBitMode(Channels[i].device, 0x0, 0x00); //Reset controller
 
 			//Only channel A and B support MPSSE mode
-			if(i == 0 || i == 1)
+			if(i == 0)
 			{
 				ftStatus |= FT_SetBitMode(Channels[i].device, Channels[i].direction, 0x02); //Enable MPSSE mode
 
@@ -124,7 +124,7 @@ FEZLynx::FEZLynx()
 			dwNumBytesToSend = 0;
 
 			//only channel A and B support MPSSE
-			if(i == 0 || i == 1)
+			if(i == 0)
 			{
 				//////////////////////////////////////////////////////////////////
 				// Below codes will synchronize the MPSSE interface by sending bad command 0xAA and checking if the echo command followed by 
@@ -207,11 +207,11 @@ FEZLynx::FEZLynx()
 	/////////////////////////////////////
 	// Socket Setup Code               //
 	/////////////////////////////////////
-
+	
 	Socket* socket = this->registerSocket(new Socket(1, Socket::Types::I | Socket::Types::A));
 	socket->pins[3] = Pins::PD_4;
 	socket->pins[4] = Pins::PD_5;
-	socket->pins[5] = Pins::NotConnected; //VIN5
+	socket->pins[5] = FEZLynx::ANALOG_5; //VIN5
 	socket->pins[6] = Pins::PD_6;
 	socket->pins[7] = Pins::NotConnected;
 	socket->pins[8] = Pins::PB_1;
@@ -220,7 +220,7 @@ FEZLynx::FEZLynx()
 	socket = this->registerSocket(new Socket(2, Socket::Types::I | Socket::Types::A));
 	socket->pins[3] = Pins::PD_1;
 	socket->pins[4] = Pins::PD_2;
-	socket->pins[5] = Pins::NotConnected; //VIN2
+	socket->pins[5] = FEZLynx::ANALOG_2; //VIN2
 	socket->pins[6] = Pins::PD_3;
 	socket->pins[7] = Pins::NotConnected;
 	socket->pins[8] = Pins::PB_1;
@@ -351,7 +351,8 @@ FEZLynx::FEZLynx()
 	// Extender Chip Setup     //
 	/////////////////////////////
 
-    Extender = new Modules::IO60P16(3);
+    this->Extender = new Modules::IO60P16(3);
+	this->analogConverter = this->getI2CBus(this->getSocket(3))->getI2CDevice(0x48);
 }
 
 void FEZLynx::panic(unsigned char error)
@@ -391,7 +392,6 @@ void FEZLynx::SetFTDIPins(int channel)
 	{
 		//Send MPSSE commands to channels 0 & 1
 		case 0:
-		case 1:
 			dwNumBytesToSend = 0;
 
 			OutputBuffer[dwNumBytesToSend++] = 0x80; //Command to set directions of lower 8 pins and force value on bits set as output
@@ -408,6 +408,7 @@ void FEZLynx::SetFTDIPins(int channel)
 			break;
 
 		//Send BitBang commands to channels 2 & 3
+		case 1:
 		case 2:
 		case 3:
 			ftStatus = FT_OK;
@@ -524,15 +525,15 @@ bool FEZLynx::readDigital(GHI::CPUPin pinNumber) {
 				
 			if(dwNumInputBuffer == 0)
 				break;
-
+		
 			if (dwNumInputBuffer <= 1024)
 				FT_Read(Channels[channel].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from FT2232H receive buffer
 			else
 				FT_Read(Channels[channel].device, &InputBuffer, 1024, &dwNumBytesRead);
-
+		
 		} while(dwNumInputBuffer > 0);
 
-		if(channel == 0 || channel == 1)
+		if(channel == 0)
 		{
 			dwNumBytesToSend = 0;
 			buffer[0] = 0x81;
@@ -580,17 +581,34 @@ void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value) {
 }
 
 double FEZLynx::readAnalog(GHI::CPUPin pinNumber) {
-	//return static_cast<double>(::analogRead(this->pins[pinNumber])) / 1024 * 3.3;
+	unsigned char channel = 0x00;
 
-	this->panic(Exceptions::ERR_NOT_IMPLEMENTED);
+	switch (pinNumber) {
+		case Pins::PD_1: channel = 0; break;
+		case Pins::PD_2: channel = 1; break;
+		case FEZLynx::ANALOG_2: channel = 2; break;
+		case Pins::PD_4: channel = 3; break;
+		case Pins::PD_5: channel = 4; break;
+		case FEZLynx::ANALOG_5: channel = 5; break;
+		default: this->panic(Exceptions::ERR_READ_ANALOG_NOT_SUPPORTED);
+	}
 
-	return 0;
+	if (pinNumber != FEZLynx::ANALOG_2 && pinNumber != FEZLynx::ANALOG_5)
+		this->setIOMode(pinNumber, IOStates::DIGITAL_INPUT, ResistorModes::FLOATING);
+
+	unsigned char command = 0x80 | 0x04; //CMD_SD_SE | CMD_PD_ON
+	unsigned char read = 0x00;
+	unsigned int a, b;
+
+	command |= (unsigned char)((channel % 2 == 0 ? channel / 2 : (channel - 1) / 2 + 4) << 4);
+
+	this->analogConverter->writeRead(&command, 1, &read, 1, &a, &b);
+
+	return (double)read / 255.0 * 3.3;
 }
 
 void FEZLynx::writeAnalog(GHI::CPUPin pinNumber, double voltage) {
-	//::analogWrite(this->pins[pinNumber], voltage * (1024 / 3.3));
-
-	this->panic(Exceptions::ERR_NOT_IMPLEMENTED);
+	this->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED);
 }
 
 void FEZLynx::setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency) {
@@ -709,29 +727,25 @@ Interfaces::I2CBus *FEZLynx::getI2CBus(Socket *socket, Socket::Pin sdaPinNumber,
 
 int main() {
 	FEZLynx board;
+	Socket* socket = board.getSocket(1);
+	Socket::Pin pin = Socket::Pins::Three;
 	//Modules::LED7R led(10);
-	Modules::Button button(4);
+	//Modules::Button button(11);
 	//Modules::TouchC8 touch(7);
-
-	//while (true)
-
 	DWORD a, b;
+	double analog;
+
 	while (true) {
 		a = GetTickCount();
-		button.isPressed() ? button.turnLEDOn() : button.turnLEDOff(); // led.turnOnLED(1) : led.turnOffLED(1);
+		analog = board.readAnalog(socket, pin);
+		//button.isPressed() ? led.turnOnLED(1) : led.turnOffLED(1);
 		b = GetTickCount();
-		cout << (b - a) << endl;
+		cout << (b - a) << "     " << analog << endl;
 		//touch.IsButtonPressed(Modules::TouchC8::Buttons::A) ? led.turnOnLED(2) : led.turnOffLED(2);
 		//touch.IsButtonPressed(Modules::TouchC8::Buttons::B) ? led.turnOnLED(3) : led.turnOffLED(3);
 		//touch.IsButtonPressed(Modules::TouchC8::Buttons::C) ? led.turnOnLED(4) : led.turnOffLED(4);
 		//touch.IsProximityDetected() ? led.turnOnLED(5) : led.turnOffLED(5);
 	}
-
-	//Socket* socket = board.getSocket(3);
-	//Interfaces::I2CDevice* i2c = socket->getI2CDevice(0x20);
-	//
-	//i2c->writeRegister(0x2A, 0xBE);
-	//cout << hex << (int)i2c->readRegister(0x2A) << endl;
 
 	return 0;
 }
