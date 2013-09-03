@@ -57,17 +57,17 @@ DigitalInput::DigitalInput(Socket* socket, Socket::Pin pinNumber, ResistorMode r
 		mainboard->panic(Exceptions::ERR_PIN_OUT_OF_RANGE);
 	
 	this->cpuPin = socket->pins[pinNumber];
+	this->setResistorMode(resistorMode);
 	
 	mainboard->ReservePin(this->cpuPin);
-	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_INPUT, resistorMode);
 }
 
 DigitalInput::DigitalInput(CPUPin pin, ResistorMode resistorMode)
 {
 	this->cpuPin = pin;
-	
+	this->setResistorMode(resistorMode);
+
 	mainboard->ReservePin(this->cpuPin);
-	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_INPUT, resistorMode);
 }
 
 DigitalInput::~DigitalInput() {
@@ -79,7 +79,12 @@ bool DigitalInput::read() {
 }
 
 void DigitalInput::setResistorMode(ResistorMode resistorMode) {
+	this->resistorMode = resistorMode;
 	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_INPUT, resistorMode);
+}
+
+ResistorMode DigitalInput::getResistorMode() {
+	return this->resistorMode;
 }
 
 DigitalIO::DigitalIO(Socket* socket, Socket::Pin pinNumber) {
@@ -131,6 +136,14 @@ void DigitalIO::setResistorMode(ResistorMode mode) {
 	
 	this->resistorMode = mode;
 	mainboard->setIOMode(this->cpuPin, this->ioState, this->resistorMode);
+}
+
+ResistorMode DigitalIO::getResistorMode() {
+	return this->resistorMode;
+}
+
+IOState DigitalIO::getIOState() {
+	return this->ioState;
 }
 
 AnalogInput::AnalogInput(Socket* socket, Socket::Pin pinNumber) {

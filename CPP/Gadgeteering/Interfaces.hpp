@@ -35,6 +35,7 @@ namespace GHI {
 
 		class DigitalInput {
 			CPUPin cpuPin;
+			ResistorMode resistorMode;
 
 			public:
 				DigitalInput(Socket* socket, Socket::Pin pinNumber, ResistorMode resistorMode = ResistorModes::FLOATING);
@@ -43,6 +44,7 @@ namespace GHI {
 
 				bool read();
 				void setResistorMode(ResistorMode resistorMode);
+				ResistorMode getResistorMode();
 		};
 
 		class DigitalIO {
@@ -59,6 +61,9 @@ namespace GHI {
 				bool read();
 				void setIOState(IOState state);
 				void setResistorMode(ResistorMode resistorMode);
+
+				IOState getIOState();
+				ResistorMode getResistorMode();
 		};
 
 		class AnalogInput {
