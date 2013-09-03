@@ -24,18 +24,11 @@ TouchC8::TouchC8(unsigned char socketNumber) {
 	Socket* socket = mainboard->getSocket(socketNumber);
 	socket->ensureTypeIsSupported(Socket::Types::I);
 
-	System::Sleep(1000);
-
 	this->reset = new DigitalOutput(socket, Socket::Pins::Six, true);
-
-	System::Sleep(1000);
 
 	this->Reset();
 
-	System::Sleep(1000);
 	this->device = socket->getI2CDevice(TouchC8::I2C_ADDRESS);
-
-	System::Sleep(1000);
 
 	this->ConfigureSPM();
 }
@@ -47,6 +40,7 @@ TouchC8::~TouchC8() {
 
 void TouchC8::Reset()
 {
+	System::Sleep(100);
 	this->reset->write(false);
 	System::Sleep(100);
 	this->reset->write(true);
