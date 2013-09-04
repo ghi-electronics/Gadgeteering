@@ -448,7 +448,7 @@ void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resistor
 		{
 			int channel = this->GetChannel(pinNumber);
             CPUPin pin = this->GetChannelPin(pinNumber);
-
+			
             Channels[channel].direction &= ~(1 << (pin - 1));
 			ChannelDirectionChanged[channel] = true;
 
@@ -527,9 +527,9 @@ bool FEZLynx::readDigital(GHI::CPUPin pinNumber) {
 				break;
 		
 			if (dwNumInputBuffer <= 1024)
-				FT_Read(Channels[channel].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from FT2232H receive buffer
+				FT_Read(Channels[channel].device, InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from FT2232H receive buffer
 			else
-				FT_Read(Channels[channel].device, &InputBuffer, 1024, &dwNumBytesRead);
+				FT_Read(Channels[channel].device, InputBuffer, 1024, &dwNumBytesRead);
 		
 		} while(dwNumInputBuffer > 0);
 
@@ -723,28 +723,18 @@ Interfaces::I2CBus *FEZLynx::getI2CBus(Socket *socket, Socket::Pin sdaPinNumber,
 
 #include "../LED7R/LED7R.h"
 #include "../Button/Button.h"
-#include "../TouchC8/TouchC8.h"
 
 int main() {
 	FEZLynx board;
-	Socket* socket = board.getSocket(1);
-	Socket::Pin pin = Socket::Pins::Three;
-	//Modules::LED7R led(10);
-	//Modules::Button button(11);
-	//Modules::TouchC8 touch(7);
+	Modules::LED7R led(10);
+	Modules::Button button(11);
 	DWORD a, b;
-	double analog;
 
 	while (true) {
 		a = GetTickCount();
-		analog = board.readAnalog(socket, pin);
-		//button.isPressed() ? led.turnOnLED(1) : led.turnOffLED(1);
+		button.isPressed() ? led.turnOnLED(1) : led.turnOffLED(1);
 		b = GetTickCount();
-		cout << (b - a) << "     " << analog << endl;
-		//touch.IsButtonPressed(Modules::TouchC8::Buttons::A) ? led.turnOnLED(2) : led.turnOffLED(2);
-		//touch.IsButtonPressed(Modules::TouchC8::Buttons::B) ? led.turnOnLED(3) : led.turnOffLED(3);
-		//touch.IsButtonPressed(Modules::TouchC8::Buttons::C) ? led.turnOnLED(4) : led.turnOffLED(4);
-		//touch.IsProximityDetected() ? led.turnOnLED(5) : led.turnOffLED(5);
+		cout << (b - a) << endl;
 	}
 
 	return 0;

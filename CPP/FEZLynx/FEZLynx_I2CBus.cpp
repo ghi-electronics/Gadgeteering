@@ -101,13 +101,10 @@ bool FEZLynx::I2CBus::readBit()
 
 void FEZLynx::I2CBus::sendStartCondition()
 {
-	if (startSent) {
-		releaseSDA();
-
-		WAIT_SCL();
-	}
-
 	releaseSDA();
+
+	if (startSent)
+		WAIT_SCL();
 
 	clearSDA();
 
