@@ -46,6 +46,9 @@ namespace GHI {
 			void ReservePin(CPUPin pin);
 			void ReleasePin(CPUPin pin);
 			
+			void registerModule(Module *mod);
+			void processModules();
+
 			virtual void panic(unsigned char error, unsigned char specificError = 0);
 			virtual void print(const char* toPrint);
 			virtual void print(int toPrint);
@@ -66,9 +69,6 @@ namespace GHI {
 			virtual GHI::Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber = Socket::Pins::Four, Socket::Pin rxPinNumber = Socket::Pins::Five);
 			virtual GHI::Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin);
 			virtual GHI::Interfaces::I2CBus* getI2CBus(Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine);
-
-			virtual void registerModule(Module *mod);
-			virtual void processModules();
 	};
 
 	extern GHI::Mainboard* mainboard;

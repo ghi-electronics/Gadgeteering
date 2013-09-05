@@ -53,6 +53,7 @@ namespace GHI {
 		static const unsigned char ERR_NOT_IMPLEMENTED = 16;
 		static const unsigned char ERR_OUT_OF_SYNC = 17;
 		static const unsigned char ERR_I2C_NOT_SUPPORTED = 18;
+		static const unsigned char ERR_MAINBOARD_ERROR = 19;
 	}
 
 	//We didn't use enums because their members are hoisted into and pollute

@@ -34,6 +34,6 @@ SerialDevice::~SerialDevice() {
 void SerialDevice::open() { };
 void SerialDevice::close() { };
 void SerialDevice::write(const unsigned char* buffer, unsigned int count) { mainboard->panic(Exceptions::ERR_SERIAL_NOT_SUPPORTED); };
-void SerialDevice::write(const char* buffer, unsigned int count) { mainboard->panic(Exceptions::ERR_SERIAL_NOT_SUPPORTED); };
+void SerialDevice::write(const char* buffer, unsigned int count) { this->write(reinterpret_cast<const unsigned char*>(buffer), count); };
 unsigned int SerialDevice::read(unsigned char* buffer, unsigned int count) { mainboard->panic(Exceptions::ERR_SERIAL_NOT_SUPPORTED); return 0; };
 unsigned int SerialDevice::available() { mainboard->panic(Exceptions::ERR_SERIAL_NOT_SUPPORTED); return 0; };
