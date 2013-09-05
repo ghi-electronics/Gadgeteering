@@ -27,7 +27,6 @@ DigitalOutput::DigitalOutput(Socket* socket, Socket::Pin pinNumber, bool initial
 	
 	this->cpuPin = socket->pins[pinNumber];
 	
-	mainboard->ReservePin(this->cpuPin);
 	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_OUTPUT);
 
 	this->write(initialState);
@@ -36,14 +35,13 @@ DigitalOutput::DigitalOutput(Socket* socket, Socket::Pin pinNumber, bool initial
 DigitalOutput::DigitalOutput(CPUPin pin, bool initialState) {
 	this->cpuPin = pin;
 	
-	mainboard->ReservePin(this->cpuPin);
 	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_OUTPUT);
 
 	this->write(initialState);
 }
 
 DigitalOutput::~DigitalOutput() {
-	mainboard->ReleasePin(this->cpuPin);
+
 }
 
 void DigitalOutput::write(bool value) {
@@ -58,20 +56,16 @@ DigitalInput::DigitalInput(Socket* socket, Socket::Pin pinNumber, ResistorMode r
 	
 	this->cpuPin = socket->pins[pinNumber];
 	this->setResistorMode(resistorMode);
-	
-	mainboard->ReservePin(this->cpuPin);
 }
 
 DigitalInput::DigitalInput(CPUPin pin, ResistorMode resistorMode)
 {
 	this->cpuPin = pin;
 	this->setResistorMode(resistorMode);
-
-	mainboard->ReservePin(this->cpuPin);
 }
 
 DigitalInput::~DigitalInput() {
-	mainboard->ReleasePin(this->cpuPin);
+
 }
 
 bool DigitalInput::read() {
@@ -94,22 +88,19 @@ DigitalIO::DigitalIO(Socket* socket, Socket::Pin pinNumber) {
 		mainboard->panic(Exceptions::ERR_PIN_OUT_OF_RANGE);
 
 	this->cpuPin = socket->pins[pinNumber];
-	mainboard->ReservePin(this->cpuPin);
-
 	this->resistorMode = static_cast<ResistorMode>(0xFF);
 	this->ioState = static_cast<IOState>(0xFF);
 }
 
 DigitalIO::DigitalIO(CPUPin pin) {
 	this->cpuPin = pin;
-	mainboard->ReservePin(this->cpuPin);
 	
 	this->resistorMode = static_cast<ResistorMode>(0xFF);
 	this->ioState = static_cast<IOState>(0xFF);
 }
 
 DigitalIO::~DigitalIO() {
-	mainboard->ReleasePin(this->cpuPin);
+
 }
 
 void DigitalIO::write(bool value) {
@@ -153,16 +144,14 @@ AnalogInput::AnalogInput(Socket* socket, Socket::Pin pinNumber) {
 		mainboard->panic(Exceptions::ERR_PIN_OUT_OF_RANGE);
 
 	this->cpuPin = socket->pins[pinNumber];
-	mainboard->ReservePin(this->cpuPin);
 }
 
 AnalogInput::AnalogInput(CPUPin pin) {
 	this->cpuPin = pin;
-	mainboard->ReservePin(this->cpuPin);
 }
 
 AnalogInput::~AnalogInput() {
-	mainboard->ReleasePin(this->cpuPin);
+
 }
 
 double AnalogInput::read() {
@@ -180,16 +169,14 @@ AnalogOutput::AnalogOutput(Socket* socket, Socket::Pin pinNumber) {
 		mainboard->panic(Exceptions::ERR_PIN_OUT_OF_RANGE);
 
 	this->cpuPin = socket->pins[pinNumber];
-	mainboard->ReservePin(this->cpuPin);
 }
 
 AnalogOutput::AnalogOutput(CPUPin pin) {
 	this->cpuPin = pin;
-	mainboard->ReservePin(this->cpuPin);
 }
 
 AnalogOutput::~AnalogOutput() {
-	mainboard->ReleasePin(this->cpuPin);
+
 }
 
 void AnalogOutput::write(double value) {
@@ -209,7 +196,6 @@ PWMOutput::PWMOutput(Socket* socket, Socket::Pin pinNumber) {
 	this->cpuPin = socket->pins[pinNumber];
 		
 	mainboard->setIOMode(this->cpuPin, IOStates::PWM);
-	mainboard->ReservePin(this->cpuPin);
 
 	this->set(0, 0);
 }
@@ -218,7 +204,6 @@ PWMOutput::PWMOutput(CPUPin pin) {
 	this->cpuPin = pin;
 		
 	mainboard->setIOMode(this->cpuPin, IOStates::PWM);
-	mainboard->ReservePin(this->cpuPin);
 
 	this->set(0, 0);
 }
@@ -231,7 +216,7 @@ void PWMOutput::set(double frequency, double dutyCycle) {
 }
 
 PWMOutput::~PWMOutput() {
-	mainboard->ReleasePin(this->cpuPin);
+
 }
 
 void PWMOutput::setFrequency(double frequency) {

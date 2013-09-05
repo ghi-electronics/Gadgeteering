@@ -22,7 +22,7 @@ namespace GHI
 {
 	namespace Modules
 	{
-		WiFiRN171::WiFiRN171(int socket, int baud) : Module(this)
+		WiFiRN171::WiFiRN171(int socket, int baud) 
 		{
 			serial = mainboard->getSerialDevice(baud, 0, 1, 8, mainboard->getSocket(socket), 7, 9);
 		}

@@ -30,11 +30,9 @@ namespace GHI {
 	class Mainboard {
 		protected:
 			List sockets;
-			List pins;
 			List spiBusses;
 			List i2cBusses;
 			List serialDevices;
-			List modules;
 
 			Mainboard();
 			virtual ~Mainboard();
@@ -43,12 +41,7 @@ namespace GHI {
 
 		public:
 			Socket* getSocket(unsigned char number);
-			void ReservePin(CPUPin pin);
-			void ReleasePin(CPUPin pin);
 			
-			void registerModule(Module *mod);
-			void processModules();
-
 			virtual void panic(unsigned char error, unsigned char specificError = 0);
 			virtual void print(const char* toPrint);
 			virtual void print(int toPrint);
@@ -62,13 +55,14 @@ namespace GHI {
 			virtual void writeAnalog(CPUPin pin, double voltage);
 			virtual void writeAnalogProportion(CPUPin pin, double voltage);
 			virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
-			
+
 			virtual GHI::Interfaces::SPIBus* getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
-			virtual GHI::Interfaces::SPIBus* getSPIBus(Socket* socket, Socket::Pin mosiPinNumber = Socket::Pins::Seven, Socket::Pin misoPinNumber = Socket::Pins::Eight, Socket::Pin sckPinNumber = Socket::Pins::Nine);
 			virtual GHI::Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin);
-			virtual GHI::Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber = Socket::Pins::Four, Socket::Pin rxPinNumber = Socket::Pins::Five);
 			virtual GHI::Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin);
-			virtual GHI::Interfaces::I2CBus* getI2CBus(Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine);
+
+			GHI::Interfaces::I2CBus* getI2CBus(Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine);
+			GHI::Interfaces::SPIBus* getSPIBus(Socket* socket, Socket::Pin mosiPinNumber = Socket::Pins::Seven, Socket::Pin misoPinNumber = Socket::Pins::Eight, Socket::Pin sckPinNumber = Socket::Pins::Nine);
+			GHI::Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber = Socket::Pins::Four, Socket::Pin rxPinNumber = Socket::Pins::Five);
 	};
 
 	extern GHI::Mainboard* mainboard;

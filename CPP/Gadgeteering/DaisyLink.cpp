@@ -176,7 +176,7 @@ DaisyLinkBus* DaisyLinkBus::GetDaisyLinkForSocket(Socket* socket, DaisyLinkModul
 }
 
 
-DaisyLinkModule::DaisyLinkModule(unsigned char socketNumber, unsigned char manufacturer, unsigned char moduleType, unsigned char minModuleVersionSupported, unsigned char maxModuleVersionSupported) : Module(this)
+DaisyLinkModule::DaisyLinkModule(unsigned char socketNumber, unsigned char manufacturer, unsigned char moduleType, unsigned char minModuleVersionSupported, unsigned char maxModuleVersionSupported) 
 {
     Socket* socket = mainboard->getSocket(socketNumber);
 

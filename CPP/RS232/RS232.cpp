@@ -20,7 +20,7 @@ namespace GHI
 {
 	namespace Modules
 	{
-		RS232::RS232(int socket) : Module(this)
+		RS232::RS232(int socket) 
 		{
 			this->sock = mainboard->getSocket(socket);
 			this->b_IsOpen = false;

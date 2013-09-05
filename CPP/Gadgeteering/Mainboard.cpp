@@ -34,9 +34,6 @@ Mainboard::~Mainboard() {
 		delete current;
 	for (SerialDevice* current = (SerialDevice*)this->serialDevices.start(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.next())
 		delete current;
-	for (Module* current = (Module*)this->modules.start(); !this->modules.ended(); current = (Module*)this->modules.next())
-		delete current;
-
 }
 
 void Mainboard::panic(unsigned char error, unsigned char specificError) {
@@ -70,18 +67,6 @@ Socket* Mainboard::getSocket(unsigned char number) {
 	return NULL;
 }
 
-void Mainboard::ReleasePin(CPUPin pin)
-{
-	this->pins.remove((void*)pin);
-}
-
-void Mainboard::ReservePin(CPUPin pin)
-{
-	if (this->pins.contains((void*)pin))
-		mainboard->panic(Exceptions::ERR_PIN_RESERVED);
-	this->pins.add((void*)pin);
-}
-
 void Mainboard::setPWM(CPUPin pin, double dutyCycle, double frequency) { mainboard->panic(Exceptions::ERR_PWM_NOT_SUPPORTED); }
 bool Mainboard::readDigital(CPUPin pin) { mainboard->panic(Exceptions::ERR_READ_DIGITAL_NOT_SUPPORTED); return false; }
 void Mainboard::writeDigital(CPUPin pin, bool value) { mainboard->panic(Exceptions::ERR_WRITE_DIGITAL_NOT_SUPPORTED); }
@@ -105,15 +90,4 @@ GHI::Interfaces::SPIBus* Mainboard::getSPIBus(Socket* socket, Socket::Pin mosiPi
 
 GHI::Interfaces::I2CBus* Mainboard::getI2CBus(Socket* socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber) { 
 	return this->getI2CBus(socket->pins[sdaPinNumber], socket->pins[sclPinNumber]);
-}
-
-void Mainboard::registerModule(Module *mod)
-{
-	modules.add(mod);
-}
-
-void Mainboard::processModules()
-{
-	for (Module* current = (Module*)this->modules.start(); !this->modules.ended(); current = (Module*)this->modules.next())
-		current->process();
 }

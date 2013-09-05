@@ -20,7 +20,7 @@ namespace GHI
 {
 	namespace Modules
 	{
-		USBSerial::USBSerial(int socket) : Module(this)
+		USBSerial::USBSerial(int socket) 
 		{
 			this->sock = mainboard->getSocket(socket);
 			this->b_IsOpen = false;

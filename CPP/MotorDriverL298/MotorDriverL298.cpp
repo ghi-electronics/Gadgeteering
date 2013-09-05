@@ -20,7 +20,7 @@ namespace GHI
 {
 	namespace Modules
 	{
-		MotorDriverL298::MotorDriverL298(unsigned char socket) : Module(this)
+		MotorDriverL298::MotorDriverL298(unsigned char socket) 
 		{
 			Socket *sock = mainboard->getSocket(socket);
 			sock->ensureTypeIsSupported(Socket::Types::P);

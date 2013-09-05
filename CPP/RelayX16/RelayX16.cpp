@@ -20,7 +20,7 @@ namespace GHI
 {
 	namespace Modules
 	{
-		RelayX16::RelayX16(int socket) : Module(this)
+		RelayX16::RelayX16(int socket) 
 		{
 			Socket *sock = mainboard->getSocket(socket);
 			sock->ensureTypeIsSupported(Socket::Types::Y);
