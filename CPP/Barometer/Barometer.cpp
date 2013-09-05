@@ -77,21 +77,21 @@ Barometer::SensorData Barometer::RequestMeasurement() {
 
 	data[0] = 0xFF;
 	data[1] = 0xF0;
-	bool ack = i2c->write(data, 2);
+	i2c->write(data, 2);
 	System::Sleep(40);
 
 	data[0] = 0xFD;
-	ack = i2c->writeRead(data, 1, read, 2, &a, &b);
+	i2c->writeRead(data, 1, read, 2, &a, &b);
 
 	D1 = (read[0] << 8) | read[1];
 
 	// Get raw temperature value
 	data[0] = 0xFF;
 	data[1] = 0xE8;
-	ack = i2c->write(data, 2);
+	i2c->write(data, 2);
 	System::Sleep(40);
 	data[0] = 0xFD;
-	ack = i2c->writeRead(data, 1, read, 2, &a, &b);
+	i2c->writeRead(data, 1, read, 2, &a, &b);
 
 	D2 = (read[0] << 8) | read[1];
 
@@ -108,12 +108,12 @@ Barometer::SensorData Barometer::RequestMeasurement() {
 	// D2 >= C5 dUT= D2-C5 - ((D2-C5)/2^7) * ((D2-C5)/2^7) * A / 2^C
 	if (D2 >= Coeff.C5)
 	{
-		dUT = D2 - Coeff.C5 - ((D2 - Coeff.C5) / (2 << (7 - 1)) * ((D2 - Coeff.C5) / (2 << (7 - 1))) * Coeff.A / (2 << (Coeff.C - 1)));
+		dUT = (double)(D2 - Coeff.C5 - ((D2 - Coeff.C5) / (2 << (7 - 1)) * ((D2 - Coeff.C5) / (2 << (7 - 1))) * Coeff.A / (2 << (Coeff.C - 1))));
 	}
 	// D2 <  C5 dUT= D2-C5 - ((D2-C5)/2^7) * ((D2-C5)/2^7) * B / 2^C
 	else
 	{
-		dUT = D2 - Coeff.C5 - ((D2 - Coeff.C5) / (2 << (7 - 1)) * ((D2 - Coeff.C5) / (2 << (7 - 1))) * Coeff.B / (2 << (Coeff.C - 1)));
+		dUT = (double)(D2 - Coeff.C5 - ((D2 - Coeff.C5) / (2 << (7 - 1)) * ((D2 - Coeff.C5) / (2 << (7 - 1))) * Coeff.B / (2 << (Coeff.C - 1))));
 	}
 
 	// Step 2. Calculate offset, sensitivity and final pressure value.

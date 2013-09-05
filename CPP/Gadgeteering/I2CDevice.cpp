@@ -63,7 +63,6 @@ unsigned char I2CDevice::readRegister(unsigned char address) {
 }
 
 bool I2CDevice::readRegisters(unsigned char startAddress, unsigned char* values, unsigned int count) {
-	unsigned char value;
 	unsigned int a, b;
 	return this->writeRead(&startAddress, 1, values, count, &a, &b);
 }

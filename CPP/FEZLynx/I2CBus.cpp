@@ -129,7 +129,7 @@ bool FEZLynx::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data
 		sendStartCondition();
 	
     for (unsigned char mask = 0x80; mask != 0x00; mask >>= 1)
-		writeBit(data & mask);
+		writeBit((data & mask) != 0);
 
 	bool nack = readBit();
 
@@ -144,7 +144,7 @@ unsigned char FEZLynx::I2CBus::receive(bool sendAcknowledgeBit, bool sendStop)
 	unsigned char bit, d = 0;
 
 	for (bit = 0; bit < 8; bit++)
-		d = (d << 1) | readBit();
+		d = (d << 1) | (readBit() ? 1 : 0);
 
 	writeBit(!sendAcknowledgeBit);
 	

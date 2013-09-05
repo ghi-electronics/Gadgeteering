@@ -108,9 +108,9 @@ bool ALFAT::isStoragePresent(ALFAT::Drive which) {
 
 	unsigned char status = HEX_TO_UCHAR(result + 1);
 	switch (which) {
-		case Drives::SD: return status & (1 << 0);
-		case Drives::USB0: return status & (1 << 5);
-		case Drives::USB1: return status & (1 << 6);
+		case Drives::SD: return (status & (1 << 0)) != 0;
+		case Drives::USB0: return (status & (1 << 5)) != 0;
+		case Drives::USB1: return (status & (1 << 6)) != 0;
 	}
 
 	return false;
@@ -124,7 +124,7 @@ bool ALFAT::isSDCardWriteProtected() {
 	this->readFromDevice(result, 4);
 	this->readResponseCode();
 
-	return HEX_TO_UCHAR(result + 1) & (1 << 1);
+	return (HEX_TO_UCHAR(result + 1) & (1 << 1)) != 0;
 }
 
 ALFAT::ResponseCode ALFAT::getVersion(unsigned char* major, unsigned char* minor, unsigned char* revision) {

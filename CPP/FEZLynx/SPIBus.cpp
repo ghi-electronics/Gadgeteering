@@ -96,7 +96,7 @@ void FEZLynx::SPIBus::writeThenRead(char* sendBuffer, char* receiveBuffer, unsig
     write((const unsigned char*)sendBuffer, sendCount, configuration);
     read(rcv,receiveCount, configuration);
 
-	for(int i = 0; i < receiveCount; i++)
+	for(unsigned int i = 0; i < receiveCount; i++)
 		receiveBuffer[i] = (char)rcv[i];
 }
 

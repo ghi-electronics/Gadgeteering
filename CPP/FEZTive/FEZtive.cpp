@@ -41,7 +41,7 @@ void FEZtive::Initialize(int numLEDS, unsigned int spiClockRateKHZ)
 	_zeroLength = 3 * ((numLEDS + 63) / 64);
 	_zeros = new char[_zeroLength];
 
-	for(int i = 0; i < strlen(_zeros); i++)
+	for(unsigned int i = 0; i < strlen(_zeros); i++)
 	{
 		_zeros[i] = 0x00;
 	}

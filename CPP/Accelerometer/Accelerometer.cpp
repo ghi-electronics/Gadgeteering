@@ -72,8 +72,9 @@ double Accelerometer::ConvertDataToG(int data)
         case Ranges::TwoG: return ((double)data / 128) * 2;
         case Ranges::FourG: return ((double)data / 128) * 4;
 		case Ranges::EightG: return ((double)data / 128) * 8;
-		default: mainboard->panic(Exceptions::ERR_MODULE_ERROR);
     }
+	mainboard->panic(Exceptions::ERR_MODULE_ERROR);
+	return 0;
 }
 
 void Accelerometer::EnableThresholdDetection(double threshold, bool enableX, bool enableY, bool enableZ, bool absolute, bool detectFreefall, bool autoReset)

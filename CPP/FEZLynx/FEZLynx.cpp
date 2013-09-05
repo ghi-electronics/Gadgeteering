@@ -19,7 +19,6 @@ limitations under the License.
 
 #include "FEZLynx.h"
 #include "../Gadgeteering/System.hpp"
-#include "../LED7R/LED7R.h"
 
 #include <iostream>
 
@@ -50,7 +49,7 @@ FEZLynx::FEZLynx()
 	dwNumBytesToSend = 0;
 	dwNumInputBuffer = 0;
 
-	for(int i = 0; i < 4; i++)
+	for(int i = 1; i < 4; i++)
 	{
 		ftStatus = FT_ListDevices((PVOID)i,& SerialNumBuf, FT_LIST_BY_INDEX|FT_OPEN_BY_SERIAL_NUMBER);
 
@@ -169,7 +168,7 @@ FEZLynx::FEZLynx()
 				OutputBuffer[dwNumBytesToSend++] = '\x97'; //Ensure turn off adaptive clocking
 
 				//Comment back in for I2C
-				OutputBuffer[dwNumBytesToSend++] = '\x8D'; //Enable 3 phase data clock, used by I2C to allow data on both clock edges
+				//OutputBuffer[dwNumBytesToSend++] = '\x8D'; //Enable 3 phase data clock, used by I2C to allow data on both clock edges
 
 				ftStatus = FT_Write(Channels[i].device, OutputBuffer, dwNumBytesToSend, &dwNumBytesSent); // Send off the commands
 				dwNumBytesToSend = 0; //Clear output buffer
@@ -721,21 +720,37 @@ Interfaces::I2CBus *FEZLynx::getI2CBus(Socket *socket, Socket::Pin sdaPinNumber,
     return this->getI2CBus(socket->pins[sdaPinNumber], socket->pins[sclPinNumber]);
 }
 
-#include "../LED7R/LED7R.h"
+#include "../LEDStrip/LEDStrip.h"
+#include "../ButtonS6/ButtonS6.h"
 #include "../Button/Button.h"
+#include "../DisplayN18/DisplayN18.h"
 
 int main() {
 	FEZLynx board;
-	Modules::LED7R led(10);
-	Modules::Button button(11);
-	DWORD a, b;
+	//Modules::LEDStrip led(10);
+	//Modules::ButtonS6 button(11);
+	//Modules::Button button(11);
+	Modules::DisplayN18 display(5);
+	bool state = false;
 
-	while (true) {
-		a = GetTickCount();
-		button.isPressed() ? led.turnOnLED(1) : led.turnOffLED(1);
-		b = GetTickCount();
-		cout << (b - a) << endl;
-	}
+	display.clear(0xBEEF);
+
+	//while (true) {
+	//	//if (state != button.isPressed()) {
+	//	//	button.toggleLED();
+	//	//	state = !state;
+	//	//}
+	//
+	//	//led.set(1, button.isPressed(GHI::Modules::ButtonS6::Buttons::UP));
+	//	//led.set(2, button.isPressed(GHI::Modules::ButtonS6::Buttons::LEFT));
+	//	//led.set(3, button.isPressed(GHI::Modules::ButtonS6::Buttons::DOWN));
+	//	//led.set(4, button.isPressed(GHI::Modules::ButtonS6::Buttons::RIGHT));
+	//	//led.set(5, button.isPressed(GHI::Modules::ButtonS6::Buttons::LEFT_ARROW));
+	//	//led.set(4, button.isPressed()); // button.isPressed(GHI::Modules::ButtonS6::Buttons::RIGHT_ARROW));
+	//	//led.set(7, next);
+	//
+	//	//next = !next;
+	//}
 
 	return 0;
 }
