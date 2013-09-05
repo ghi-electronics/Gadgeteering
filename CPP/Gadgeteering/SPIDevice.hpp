@@ -50,7 +50,6 @@ namespace GHI {
 
 		class SPIDevice {
 			public:
-				
 				SPIDevice(Interfaces::SPIBus* bus, CPUPin chipSelectPin, SPIConfiguration* configuration);
 				SPIDevice(Interfaces::SPIBus* bus, Socket* socket, Socket::Pin chipSelectPinNumber, SPIConfiguration* configuration);
 				~SPIDevice();
@@ -73,7 +72,7 @@ namespace GHI {
 			protected:
 				SPIBus* bus;
 				SPIConfiguration* configuration;
-				DigitalOutput* chipSelect;
+				CPUPin chipSelect;
 		};
 	}
 }

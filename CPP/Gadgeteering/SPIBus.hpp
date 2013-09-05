@@ -39,9 +39,9 @@ namespace GHI
 				SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
 				virtual ~SPIBus();
 
-				SPIDevice* getSPIDevice(CPUPin pin, SPIConfiguration* configuration);
+				SPIDevice* getSPIDevice(CPUPin chipSelectPin, SPIConfiguration* configuration);
 
-				virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, SPIConfiguration* configuration);
+				virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, CPUPin chipSelect, SPIConfiguration* configuration, bool deselectAfter);
 		};
 	}
 }

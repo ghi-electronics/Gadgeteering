@@ -79,7 +79,7 @@ namespace GHI
 					SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin, FT_HANDLE channel);
 					virtual ~SPIBus();
 
-					virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration);
+					virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, CPUPin chipSelect, GHI::Interfaces::SPIConfiguration* configuration, bool deselectAfter);
             };
 
             class I2CBus : public GHI::Interfaces::I2CBus

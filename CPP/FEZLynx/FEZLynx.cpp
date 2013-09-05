@@ -472,18 +472,25 @@ Interfaces::I2CBus* FEZLynx::getI2CBus(CPUPin sdaPin, CPUPin sclPin)
 #include "../ButtonS6/ButtonS6.h"
 #include "../Button/Button.h"
 #include "../DisplayN18/DisplayN18.h"
-#include "../FMRadio/FMRadio.h"
+#include "../FLASH/FLASH.h"
 
 int main() {
 	FEZLynx board;
 	//Modules::LEDStrip led(10);
 	//Modules::ButtonS6 button(11);
 	//Modules::Button button(14);
-	//Modules::DisplayN18 display(5);
-	Modules::FMRadio radio(3);
+	Modules::DisplayN18 display(5);
+	//Modules::FLASH flash(4);
 	bool state = false;
+	
+	unsigned char write[4] = {0xDE, 0xAD, 0xBE, 0xEF};
+	unsigned char read[4] = { };
+	unsigned char id[4] = { };
 
-	//display.clear(0xBEEF);
+	//flash.GetIdentification(id);
+	//flash.EraseSector(0, 1);
+	//flash.WriteData(0x25, write, 4);
+	//flash.ReadData(0x25, read, 4);
 
 	//while (true) {
 	//	if (state != button.isPressed()) {

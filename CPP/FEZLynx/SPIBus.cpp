@@ -24,11 +24,6 @@ using namespace GHI::Mainboards;
 FEZLynx::SPIBus::SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin, FT_HANDLE channel) : GHI::Interfaces::SPIBus(mosiPin, misoPin, sckPin)
 {
 	this->channel = channel;
-	
-	mainboard->setIOMode(this->miso, IOStates::DIGITAL_INPUT, ResistorModes::PULL_DOWN);
-	mainboard->readDigital(this->sck);
-	mainboard->setIOMode(this->sck, IOStates::DIGITAL_OUTPUT);
-	mainboard->writeDigital(this->sck, true);
 }
 
 FEZLynx::SPIBus::~SPIBus()
@@ -36,39 +31,46 @@ FEZLynx::SPIBus::~SPIBus()
 
 }
 
-void FEZLynx::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration) 
+void FEZLynx::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, CPUPin chipSelect, GHI::Interfaces::SPIConfiguration* configuration, bool deselectAfter) 
 {
-    unsigned char next, activeState = !configuration->clockEdge ? 0x33 : 0x36;
-	unsigned char buffer[4];
-	DWORD sent, read, available, timeout = 0;
+	unsigned char* buffer = new unsigned char[count + 3];
+	DWORD sent, read = 0;
 	FT_STATUS status;
+	
+	mainboard->setIOMode(chipSelect, IOStates::DIGITAL_OUTPUT);
+	mainboard->writeDigital(chipSelect, !configuration->chipSelectActiveState);
+	mainboard->setIOMode(this->miso, IOStates::DIGITAL_INPUT);
+	mainboard->readDigital(this->miso);
+	mainboard->setIOMode(this->mosi, IOStates::DIGITAL_OUTPUT);
+	mainboard->writeDigital(this->mosi, false);
+	mainboard->setIOMode(this->sck, IOStates::DIGITAL_OUTPUT);
+	mainboard->writeDigital(this->sck, configuration->clockIdleState);
 
-	for (unsigned int i = 0; i < count; i++) {
-		mainboard->writeDigital(this->sck, configuration->clockEdge);
-		
-		buffer[0] = activeState;
-		buffer[1] = 0;
-		buffer[2] = 0;
-		buffer[3] = sendBuffer != NULL ? sendBuffer[i] : 0x00;
+	mainboard->writeDigital(chipSelect, configuration->chipSelectActiveState);
+	
+	buffer[0] = configuration->clockEdge ? 0x31 : 0x34;
+	buffer[1] = (count - 1) & 0xFF;
+	buffer[2] = ((count - 1) >> 8) & 0xFF;
 
-		status = FT_Write(channel, buffer, 4, &sent);
-		
-		do {
-			status |= FT_GetQueueStatus(this->channel, &available);
-			System::Sleep(1);
-			timeout++;
-		} while (available < count && timeout < 500);
+	for (int i = 0; i < count; i++)
+		buffer[i + 3] = sendBuffer != NULL ? sendBuffer[i] : 0x00;
+	
+	FT_Purge(channel, FT_PURGE_TX);
+	status = FT_Write(channel, buffer, count + 3, &sent);
 
-
-		if(timeout >= 499 || status != FT_OK)
-			mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
-
-		status = FT_Read(channel, &next, 1, &read);
-		
-		if (receiveBuffer != NULL)
-			receiveBuffer[i] = next;
-
-		if(read != 1 || status != FT_OK)
-			mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
+	if (receiveBuffer != NULL) {
+		status |= FT_Read(channel, receiveBuffer, count, &read);
 	}
+	else {
+		FT_Purge(channel, FT_PURGE_RX);
+		read = count;
+	}
+
+	delete [] buffer;
+
+	if (deselectAfter)
+		mainboard->writeDigital(chipSelect, !configuration->chipSelectActiveState);
+
+	if(read != count || status != FT_OK)
+		mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
 }
