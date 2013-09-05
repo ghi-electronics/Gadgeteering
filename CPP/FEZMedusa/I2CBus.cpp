@@ -16,7 +16,7 @@ limitations under the License.
 
 #include "../Gadgeteering/Gadgeteering.h"
 
-#include "FEZMedusa.h"
+#include "FEZMedusaMini.h"
 
 using namespace GHI;
 using namespace GHI::Interfaces;
@@ -24,157 +24,139 @@ using namespace GHI::Mainboards;
 
 #define I2C_DELAY() ;
 
+#ifdef I2C_CLOCK_STRETCH
+#define WAIT_SCL() while (!readSCL()) ;
+#else
+#define WAIT_SCL() releaseSCL();
+#endif
+
 FEZMedusaMini::I2CBus::I2CBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
 {
-	this->start = false;
-	this->readSCL();
-	this->readSDA();
+    this->startSent = false;
+    this->releaseSCL();
+    this->releaseSDA();
 }
 
-FEZMedusaMini::I2CBus::~I2CBus() {
+FEZMedusaMini::I2CBus::~I2CBus()
+{
 
 }
 
-void FEZMedusaMini::I2CBus::clearSCL() {
-	mainboard->setIOMode(this->scl, IOStates::DIGITAL_OUTPUT);
-	mainboard->writeDigital(this->scl, false);
+void FEZMedusaMini::I2CBus::clearSCL()
+{
+    mainboard->setIOMode(this->scl, IOStates::DIGITAL_OUTPUT);
 }
 
-bool FEZMedusaMini::I2CBus::readSCL() {
-	mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
-	return mainboard->readDigital(this->scl);
+void FEZMedusaMini::I2CBus::releaseSCL()
+{
+    mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
 }
 
-void FEZMedusaMini::I2CBus::clearSDA() {
-	mainboard->setIOMode(this->sda, IOStates::DIGITAL_OUTPUT);
-	mainboard->writeDigital(this->sda, false);
+bool FEZMedusaMini::I2CBus::readSCL()
+{
+    mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
+    return mainboard->readDigital(this->scl);
 }
 
-bool FEZMedusaMini::I2CBus::readSDA() {
-	mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
-	return mainboard->readDigital(this->sda);
+void FEZMedusaMini::I2CBus::clearSDA()
+{
+    mainboard->setIOMode(this->sda, IOStates::DIGITAL_OUTPUT);
 }
 
-bool FEZMedusaMini::I2CBus::writeBit(bool bit) {
+void FEZMedusaMini::I2CBus::releaseSDA()
+{
+    mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
+}
+
+bool FEZMedusaMini::I2CBus::readSDA()
+{
+    mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
+    return mainboard->readDigital(this->sda);
+}
+
+void FEZMedusaMini::I2CBus::writeBit(bool bit)
+{
     if (bit)
-		this->readSDA();
+        releaseSDA();
     else
-		this->clearSDA();
+        clearSDA();
 	
-    I2C_DELAY();
+	WAIT_SCL();
 
-	unsigned long endTime = System::TimeElapsed() + 5000;
-	while (!this->readSCL() && System::TimeElapsed() < endTime)
-		;
-	
-    if (bit && !this->readSDA())
-		return false;
-	
-    I2C_DELAY();
-	this->clearSCL();
-
-    return true;
+	clearSCL();
 }
 
-bool FEZMedusaMini::I2CBus::readBit() {
-    this->readSDA();
+bool FEZMedusaMini::I2CBus::readBit()
+{
+    releaseSDA();
 	
-    I2C_DELAY();
-	
-	unsigned long endTime = System::TimeElapsed() + 5000;
-	while (!this->readSCL() && System::TimeElapsed() < endTime)
-		;
+	WAIT_SCL();
 
-    bool bit = this->readSDA();
+    bool bit = readSDA();
 	
-    I2C_DELAY();
-	this->clearSCL();
+	clearSCL();
 
     return bit;
 }
 
-bool FEZMedusaMini::I2CBus::sendStartCondition() {
-	if (this->start) {
-		this->readSDA();
-		I2C_DELAY();
+void FEZMedusaMini::I2CBus::sendStartCondition()
+{
+	releaseSDA();
 
-		unsigned long endTime = System::TimeElapsed() + 5000;
-		while (!this->readSCL() && System::TimeElapsed() < endTime)
-			;
+	if (startSent)
+		WAIT_SCL();
 
-	}
+	clearSDA();
 
-    if (!this->readSDA())
-		return false;
+	clearSCL();
 
-	this->clearSDA();
-	I2C_DELAY();
-	this->clearSCL();
-
-	this->start = true;
-
-	return true;
+	startSent = true;
 }
 
-bool FEZMedusaMini::I2CBus::sendStopCondition() {
-	this->clearSDA();
-	I2C_DELAY();
-
-	unsigned long endTime = System::TimeElapsed() + 5000;
-	while (!this->readSCL() && System::TimeElapsed() < endTime)
-		;
-
-	if (!this->readSDA())
-		return false;
+void FEZMedusaMini::I2CBus::sendStopCondition()
+{
+    clearSDA();
 	
-	I2C_DELAY();
-	this->start = false;
+	WAIT_SCL();
 
-	return true;
+	releaseSDA();
+
+	startSent = false;
 }
 
 bool FEZMedusaMini::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data) {
-	unsigned char bit;
-	bool nack;
-	
 	if (sendStart)
-		this->sendStartCondition();
+		sendStartCondition();
 	
-    for (bit = 0; bit < 8; bit++) {
-		this->writeBit((data & 0x80) != 0);
+    for (unsigned char mask = 0x80; mask != 0x00; mask >>= 1)
+		writeBit((data & mask) != 0);
 
-		data <<= 1;
-    }
-    
-    nack = this->readBit();
+	bool nack = readBit();
 
 	if (sendStop)
-		this->sendStopCondition();
-	
-     return nack;
+		sendStopCondition();
+
+	return nack;
 }
 
-unsigned char FEZMedusaMini::I2CBus::receive(bool sendAcknowledgeBit, bool sendStopCondition) {
-	unsigned char d = 0;
-	unsigned char bit = 0;
+unsigned char FEZMedusaMini::I2CBus::receive(bool sendAcknowledgeBit, bool sendStop)
+{
+	unsigned char bit, d = 0;
 
-	for (bit = 0; bit < 8; bit++) {
-		d <<= 1;
+	for (bit = 0; bit < 8; bit++)
+		d = (d << 1) | (readBit() ? 1 : 0);
 
-		if (this->readBit())
-			d |= 1;
-	}
+	writeBit(!sendAcknowledgeBit);
 	
-	this->writeBit(!sendAcknowledgeBit);
-
-	if (sendStopCondition)
-		this->sendStopCondition();
+	if (sendStop)
+		sendStopCondition();
 
 	return d;
 }
 
-unsigned int FEZMedusaMini::I2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop) {
-	if (!count) 
+unsigned int FEZMedusaMini::I2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
+{
+    if (!count) 
 		return 0;
 
 	unsigned int numWrite = 0;
@@ -191,8 +173,9 @@ unsigned int FEZMedusaMini::I2CBus::write(const unsigned char* buffer, unsigned 
 	return numWrite;
  }
 
-unsigned int FEZMedusaMini::I2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop) {	
-	if (!count) 
+unsigned int FEZMedusaMini::I2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
+{
+    if (!count) 
 		return 0;
 
 	unsigned int numRead = 0;
@@ -211,8 +194,9 @@ unsigned int FEZMedusaMini::I2CBus::read(unsigned char* buffer, unsigned int cou
     return numRead;
 }
 
-bool FEZMedusaMini::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address) {
-	*numWritten = 0;
+bool FEZMedusaMini::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address)
+{
+    *numWritten = 0;
 	*numRead = 0;
 
 	unsigned int i = 0;

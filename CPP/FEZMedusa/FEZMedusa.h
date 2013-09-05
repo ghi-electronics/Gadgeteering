@@ -19,9 +19,10 @@ limitations under the License.
 
 #include "../Gadgeteering/Mainboard.hpp"
 #include "../Gadgeteering/Socket.hpp"
-#include "../IO60P16/IO60P16.h"
+#include "../Gadgeteering/SerialDevice.hpp"
 #include "../Gadgeteering/SPIDevice.hpp"
 #include "../Gadgeteering/I2CBus.hpp"
+#include "../IO60P16/IO60P16.h"
 
 class SPIClass;
 
@@ -48,7 +49,6 @@ namespace GHI {
 					virtual void open();
 					virtual void close();
 					virtual void write(const unsigned char* buffer, unsigned int count);
-					virtual void write(const char* buffer, unsigned int count);
 					virtual unsigned int read(unsigned char* buffer, unsigned int count);
 					virtual unsigned int available();
 			};
@@ -84,7 +84,7 @@ namespace GHI {
 				FEZMedusaMini();
 				virtual ~FEZMedusaMini();
 				
-				virtual void panic(unsigned char error, unsigned char specificError);
+				virtual void panic(unsigned char error, unsigned char specificError = 0);
 				virtual void print(const char* toPrint);
 				virtual void print(int toPrint);
 				virtual void print(double toPrint);
@@ -99,12 +99,9 @@ namespace GHI {
 				virtual void writeAnalogProportion(CPUPin pin, double proportion);
 				virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
 		
-				virtual Interfaces::SPIBus* getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
-				virtual Interfaces::SPIBus* getSPIBus(Socket* socket, Socket::Pin mosiPinNumber = Socket::Pins::Seven, Socket::Pin misoPinNumber = Socket::Pins::Eight, Socket::Pin sckPinNumber = Socket::Pins::Nine);
 				virtual Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin);
-				virtual Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber);
+				virtual Interfaces::SPIBus* getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
 				virtual Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin);
-				virtual Interfaces::I2CBus* getI2CBus(Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine);
 		};
 
 		class FEZMedusa : public FEZMedusaMini {

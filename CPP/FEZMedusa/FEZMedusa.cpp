@@ -16,8 +16,6 @@ limitations under the License.
 
 #include "Arduino.h"
 #include "FEZMedusa.h"
-#include "../Gadgeteering/Types.hpp"
-#include "../IO60P16/IO60P16.h"
 
 using namespace GHI;
 using namespace GHI::Interfaces;
@@ -264,10 +262,6 @@ Interfaces::SPIBus* FEZMedusaMini::getSPIBus(CPUPin mosi, CPUPin miso, CPUPin sc
 	return bus;
 }
 
-Interfaces::SPIBus* FEZMedusaMini::getSPIBus(Socket* socket, Socket::Pin mosiPinNumber, Socket::Pin misoPinNumber, Socket::Pin sckPinNumber) {
-	return this->getSPIBus(socket->pins[mosiPinNumber], socket->pins[misoPinNumber], socket->pins[sckPinNumber]);
-}
-
 Interfaces::SerialDevice* FEZMedusaMini::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin) {
 	for (SerialDevice* current = (SerialDevice*)this->serialDevices.start(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.next())
 		if (current->tx == txPin && current->rx == rxPin)
@@ -279,10 +273,6 @@ Interfaces::SerialDevice* FEZMedusaMini::getSerialDevice(unsigned int baudRate, 
 	return bus;
 }
 
-Interfaces::SerialDevice* FEZMedusaMini::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber) {
-	return this->getSerialDevice(socket->pins[txPinNumber], socket->pins[rxPinNumber], baudRate, parity, stopBits, dataBits);
-}
-
 Interfaces::I2CBus* FEZMedusaMini::getI2CBus(CPUPin sdaPin, CPUPin sclPin) {
 	for (I2CBus* current = (I2CBus*)this->i2cBusses.start(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.next())
 		if (current->scl == sclPin && current->sda == sdaPin)
@@ -291,8 +281,4 @@ Interfaces::I2CBus* FEZMedusaMini::getI2CBus(CPUPin sdaPin, CPUPin sclPin) {
 	I2CBus* bus = new FEZMedusaMini::I2CBus(sdaPin, sclPin);
 	this->i2cBusses.add(bus);
 	return bus;
-}
-
-Interfaces::I2CBus* FEZMedusaMini::getI2CBus(Socket* socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber) {
-	return this->getI2CBus(socket->pins[sdaPinNumber], socket->pins[sclPinNumber]);
 }
