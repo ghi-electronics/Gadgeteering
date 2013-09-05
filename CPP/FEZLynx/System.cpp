@@ -20,7 +20,6 @@ limitations under the License.
 #include <sys/time.h>
 #endif
 
-
 #include <iostream>
 #include <stdlib.h>
 
@@ -29,49 +28,16 @@ limitations under the License.
 using namespace GHI;
 using namespace std;
 
-namespace GHI
-{
-	namespace System
-	{
-		bool RandomSeeded = false;
-	}
-}
-
-unsigned long System::CyclesToMicroseconds(unsigned long cycles)
-{
-	return 0;
-}
-
 void System::Sleep(unsigned long time)
 {
-#ifdef _WIN32
-	::Sleep(time);
-#else
-    timespec t_Sleep;
-    timespec t_Remaining;
-
-    int seconds = 0;
-
-    while(time > 1000)
-    {
-        seconds++;
-        time -= 1000;
-    }
-
-    t_Sleep.tv_nsec = (time * 1000000);
-    t_Sleep.tv_sec = seconds;
-
-    nanosleep(&t_Sleep,&t_Remaining);
-#endif
+	System::SleepMicro(time * 1000);
 }
 
 void System::SleepMicro(unsigned long time)
 {
 #ifdef _WIN32
-	::Sleep(time);
-#endif
-
-#ifdef linux
+	::Sleep(time / 1000);
+#else
     timespec t_Sleep;
     timespec t_Remaining;
 
@@ -90,10 +56,6 @@ void System::SleepMicro(unsigned long time)
 #endif
 }
 
-#ifdef linux
-long int EpochWhenStarted = 0;
-#endif
-
 unsigned long System::TimeElapsed()
 {
 #ifdef _WIN32
@@ -106,6 +68,11 @@ unsigned long System::TimeElapsed()
 #endif
 }
 
+unsigned long System::CyclesToMicroseconds(unsigned long cycles)
+{
+	return 0;
+}
+
 int System::RandomNumber(int low, int high)
 {
     return (rand() % high) + low;
@@ -113,9 +80,5 @@ int System::RandomNumber(int low, int high)
 
 void System::RandomNumberSeed(int seed)
 {
-	if(!RandomSeeded)
-	{
-		RandomSeeded = true;
-        srand(seed);
-	}
+    srand(seed);
 }

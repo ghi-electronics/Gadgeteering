@@ -24,13 +24,13 @@ using namespace GHI::Mainboards;
 
 #define I2C_DELAY() ;
 
-#ifdef CLOCK_STRETCH
+#ifdef I2C_CLOCK_STRETCH
 #define WAIT_SCL() while (!readSCL()) ;
 #else
 #define WAIT_SCL() releaseSCL();
 #endif
 
-FEZLynx::I2CBus::I2CBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
+FEZLynx::I2CBus::I2CBus(CPUPin sda, CPUPin scl, FT_HANDLE channel) : Interfaces::I2CBus(sda, scl)
 {
     this->startSent = false;
     this->releaseSCL();
@@ -232,9 +232,4 @@ bool FEZLynx::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int w
     }
 
 	return (write + read) == (writeLength + readLength);
-}
-
-void FEZLynx::I2CBus::SetChannel(FT_HANDLE i2cChannel)
-{
-    this->channel = i2cChannel;
 }

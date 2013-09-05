@@ -14,20 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// FEZLynx.cpp : Defines the entry point for the console application.
-//
-
-#include "FEZLynx.h"
-#include "../Gadgeteering/System.hpp"
-
 #include <iostream>
 
-using namespace std;
+#include "FEZLynx.h"
 
 using namespace GHI;
+using namespace GHI::Interfaces;
 using namespace GHI::Mainboards;
 
-GHI::Mainboard* GHI::mainboard;
+Mainboard* GHI::mainboard = NULL;
 
 FEZLynx::FEZLynx() 
 {
@@ -351,18 +346,30 @@ FEZLynx::FEZLynx()
 	/////////////////////////////
 
     this->Extender = new Modules::IO60P16(3);
-	this->analogConverter = this->getI2CBus(this->getSocket(3))->getI2CDevice(0x48);
+	this->analogConverter = mainboard->getI2CBus(this->getSocket(3))->getI2CDevice(0x48);
 }
 
-void FEZLynx::panic(unsigned char error)
-{
-	throw error;
+FEZLynx::~FEZLynx() {
+
 }
 
 void FEZLynx::panic(unsigned char error, unsigned char specificError)
 {
-	std::cout <<  std::hex << error << " " << specificError << endl;
+	std::cout <<  std::hex << error << " " << specificError << std::endl;
+
 	throw error;
+}
+
+void FEZLynx::print(const char* toPrint) {
+	std::cout << toPrint << std::endl;
+}
+
+void FEZLynx::print(int toPrint) {
+	std::cout << toPrint << std::endl;
+}
+
+void FEZLynx::print(double toPrint) {
+	std::cout << toPrint << std::endl;
 }
 
 unsigned char FEZLynx::GetChannelDirection(unsigned int channel)
@@ -427,6 +434,30 @@ void FEZLynx::SetFTDIPins(int channel)
 	}
 }
 
+int FEZLynx::GetChannel(GHI::CPUPin pinNumber)
+{
+    int channel = 0;
+
+    while(pinNumber > 8)
+    {
+        pinNumber -= 8;
+        channel++;
+    }
+
+    if(channel > 12)
+        this->panic(Exceptions::ERR_PORT_OUT_OF_RANGE);
+
+    return channel;
+}
+
+unsigned char FEZLynx::GetChannelPin(GHI::CPUPin pinNumber)
+{
+    while(pinNumber > 8)
+        pinNumber -= 8;
+
+    return pinNumber;
+}
+
 void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode) {
 
 	if(isVirtual(pinNumber))
@@ -471,30 +502,6 @@ void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resistor
 
 		mainboard->panic(Exceptions::ERR_IO_MODE_NOT_SUPPORTED);
 	}
-}
-
-int FEZLynx::GetChannel(GHI::CPUPin pinNumber)
-{
-    int channel = 0;
-
-    while(pinNumber > 8)
-    {
-        pinNumber -= 8;
-        channel++;
-    }
-
-    if(channel > 12)
-        this->panic(Exceptions::ERR_PORT_OUT_OF_RANGE);
-
-    return channel;
-}
-
-unsigned char FEZLynx::GetChannelPin(GHI::CPUPin pinNumber)
-{
-    while(pinNumber > 8)
-        pinNumber -= 8;
-
-    return pinNumber;
 }
 
 bool FEZLynx::readDigital(GHI::CPUPin pinNumber) {
@@ -606,8 +613,16 @@ double FEZLynx::readAnalog(GHI::CPUPin pinNumber) {
 	return (double)read / 255.0 * 3.3;
 }
 
+double FEZLynx::readAnalogProportion(CPUPin pinNumber) {
+	return this->readAnalog(pinNumber) / 3.3;
+}
+
 void FEZLynx::writeAnalog(GHI::CPUPin pinNumber, double voltage) {
 	this->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED);
+}
+
+void FEZLynx::writeAnalogProportion(CPUPin pinNumber, double proportion) {
+	this->writeAnalog(pinNumber, proportion * 3.3);
 }
 
 void FEZLynx::setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency) {
@@ -623,81 +638,26 @@ void FEZLynx::setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency) 
     Extender->setPWM(extendedPin,frequency,dutyCycle);
 }
 
-void FEZLynx::setPWM(GHI::Socket* socket, GHI::Socket::Pin pin, double dutyCycle, double frequency)
+Interfaces::SerialDevice* FEZLynx::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin)
 {
-    this->setPWM(socket->pins[pin], dutyCycle, frequency);
+    for (SerialDevice* current = (SerialDevice*)this->serialDevices.start(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.next())
+        if (current->tx == txPin && current->rx == rxPin)
+            return current;
+
+    SerialDevice* bus = new FEZLynx::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits, this->Channels[3].device);
+    this->serialDevices.add(bus);
+
+    return bus;
 }
 
-bool FEZLynx::readDigital(GHI::Socket* socket, GHI::Socket::Pin pin)
-{
-	return this->readDigital(socket->pins[pin]);
-}
-
-void FEZLynx::writeDigital(GHI::Socket* socket, GHI::Socket::Pin pin, bool value)
-{
-	this->writeDigital(socket->pins[pin], value);
-}
-
-double FEZLynx::readAnalog(GHI::Socket* socket, GHI::Socket::Pin pin)
-{
-	return this->readAnalog(socket->pins[pin]);
-}
-
-void FEZLynx::writeAnalog(GHI::Socket* socket, GHI::Socket::Pin pin, double voltage)
-{
-	this->writeAnalog(socket->pins[pin], voltage);
-}
-
-void FEZLynx::setIOMode(GHI::Socket* socket, GHI::Socket::Pin pin, GHI::IOState state, GHI::ResistorMode resistorMode)
-{
-	this->setIOMode(socket->pins[pin], state, resistorMode);
-}
-
-GHI::Interfaces::SPIBus* FEZLynx::getSPIBus(GHI::Socket* socket)
-{
-    for (SPIBus* current = (SPIBus*)this->spiBusses.start(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.next())
-		if (current->mosi == socket->pins[7] && current->miso == socket->pins[8] && current->sck == socket->pins[9])
-            return (GHI::Interfaces::SPIBus*)current;
-
-	SPIBus* bus = new SPIBus(socket, Channels[0].device);
-    this->spiBusses.add(bus);
-
-    return (GHI::Interfaces::SPIBus*)bus;
-
-    return NULL;
-}
-
-GHI::Interfaces::SPIBus* FEZLynx::getSPIBus(CPUPin miso, CPUPin mosi, CPUPin sck)
+Interfaces::SPIBus* FEZLynx::getSPIBus(CPUPin miso, CPUPin mosi, CPUPin sck)
 {
 	for (SPIBus* current = (SPIBus*)this->spiBusses.start(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.next())
         if (current->mosi == mosi && current->miso == miso && current->sck == sck)
             return (GHI::Interfaces::SPIBus*)current;
 
-	SPIBus* bus = new SPIBus(miso, mosi, sck, Channels[0].device);
+	SPIBus* bus = new SPIBus(miso, mosi, sck, this->Channels[0].device);
     this->spiBusses.add(bus);
-
-    return (GHI::Interfaces::SPIBus*)bus;
-
-    return NULL;
-}
-
-GHI::Interfaces::SPIBus* FEZLynx::getSPIBus(Socket* socket, Socket::Pin mosiPinNumber, Socket::Pin misoPinNumber, Socket::Pin sckPinNumber)
-{
-	return this->getSPIBus(socket->pins[misoPinNumber], socket->pins[mosiPinNumber], socket->pins[sckPinNumber]);
-}
-
-GHI::Interfaces::SerialDevice* FEZLynx::getSerialDevice(GHI::Socket* socket, int baudRate, int parity, int stopBits, int dataBits)
-{
-    CPUPin txPin = socket->pins[4];
-    CPUPin rxPin = socket->pins[5];
-
-    for (SerialDevice* current = (SerialDevice*)this->serialDevices.start(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.next())
-        if (current->tx == txPin && current->rx == rxPin)
-            return current;
-
-    SerialDevice* bus = new FEZLynx::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits);
-	bus->SetChannel(Channels[3].device);
-    this->serialDevices.add(bus);
 
     return bus;
 }
@@ -708,16 +668,10 @@ Interfaces::I2CBus *FEZLynx::getI2CBus(CPUPin sdaPin, CPUPin sclPin)
         if (current->scl == sclPin && current->sda == sdaPin)
             return current;
 
-    I2CBus* bus = new FEZLynx::I2CBus(sdaPin, sclPin);
-	bus->SetChannel(this->Channels[1].device);
+    I2CBus* bus = new FEZLynx::I2CBus(sdaPin, sclPin, this->Channels[1].device);
     this->i2cBusses.add(bus);
 
     return bus;
-}
-
-Interfaces::I2CBus *FEZLynx::getI2CBus(Socket *socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber)
-{
-    return this->getI2CBus(socket->pins[sdaPinNumber], socket->pins[sclPinNumber]);
 }
 
 #include "../LEDStrip/LEDStrip.h"

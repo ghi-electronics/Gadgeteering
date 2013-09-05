@@ -2,111 +2,67 @@
 
 #include "../Gadgeteering/System.hpp"
 
-namespace GHI
+using namespace GHI;
+using namespace GHI::Mainboards;
+
+FEZLynx::SerialDevice::SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, FT_HANDLE channel) : Interfaces::SerialDevice(tx, rx, baudRate, parity, stopBits, dataBits)
 {
-    namespace Mainboards
-    {
-        FEZLynx::SerialDevice::SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits)
-            : Interfaces::SerialDevice(tx, rx, baudRate, parity, stopBits, dataBits)
-        {
 
-        }
+}
 
-        FEZLynx::SerialDevice::~SerialDevice()
-        {
-        }
+FEZLynx::SerialDevice::~SerialDevice()
+{
 
-        void FEZLynx::SerialDevice::open()
-        {
-            FT_SetBaudRate(channel, this->baudRate);
-        }
+}
 
-        void FEZLynx::SerialDevice::close()
-        {
+void FEZLynx::SerialDevice::open()
+{
+    FT_SetBaudRate(this->channel, this->baudRate);
+}
 
-        }
+void FEZLynx::SerialDevice::close()
+{
 
-        void FEZLynx::SerialDevice::write(const unsigned char *buffer, unsigned int count)
-        {
-            DWORD dwNumBytesToSend = 0; //Clear output buffer
-            DWORD dwNumBytesSent = 0;
-            FT_STATUS ftStatus = FT_OK;
-            unsigned char *OutputBuffer = new unsigned char[count + 3];
+}
 
-            //OutputBuffer[dwNumBytesToSend++] = 0x10;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
-            OutputBuffer[dwNumBytesToSend++] = 0;
-            OutputBuffer[dwNumBytesToSend++] = count - 1; //Data length of 0x0000 means 1 byte data to clock out
+void FEZLynx::SerialDevice::write(const unsigned char* buffer, unsigned int count)
+{
+    DWORD sent = 0;
 
-            for(unsigned int i = 0; i < count; i++)
-                OutputBuffer[dwNumBytesToSend++] = buffer[i];
+    if(FT_Write(this->channel, const_cast<unsigned char*>(buffer), count, &sent) != FT_OK || sent != count)
+        mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
+}
 
-            ftStatus = FT_Write(channel, OutputBuffer, dwNumBytesToSend + (count - 1), &dwNumBytesSent); //Send off the commands
+unsigned int FEZLynx::SerialDevice::read(unsigned char* buffer, unsigned int count)
+{
+    DWORD available, read;
+    int timeout = 0;
+    FT_STATUS status = FT_OK;
 
-            if(ftStatus != FT_OK)
-                mainboard->panic(0x35);
-        }
+	do {
+        status |= FT_GetQueueStatus(this->channel, &available);
+        System::Sleep(1);
+        timeout++;
+	} while (available < count && timeout < 500);
 
-        void FEZLynx::SerialDevice::write(const char *buffer, unsigned int count)
-        {
-            DWORD dwNumBytesToSend = 0; //Clear output buffer
-            DWORD dwNumBytesSent = 0;
-            FT_STATUS ftStatus = FT_OK;
-            char *OutputBuffer = new char[count + 3];
 
-            //OutputBuffer[dwNumBytesToSend++] = 0x10;//0x31 ; //Clock data byte out on +ve Clock Edge LSB first
-            OutputBuffer[dwNumBytesToSend++] = 0;
-            OutputBuffer[dwNumBytesToSend++] = count - 1; //Data length of 0x0000 means 1 byte data to clock out
+    if(timeout >= 499 || status != FT_OK)
+        mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
 
-            for(unsigned int i = 0; i < count; i++)
-                OutputBuffer[dwNumBytesToSend++] = buffer[i];
+    status = FT_Read(this->channel, buffer, count, &read);
 
-            if(ftStatus != FT_OK)
-                mainboard->panic(0x35);
-        }
+    if(read != count || status != FT_OK)
+        mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
 
-        unsigned int FEZLynx::SerialDevice::read(unsigned char *buffer, unsigned int count)
-        {
-            DWORD dwBytesInQueue = 0;
-            int timeout = 0;
-            FT_STATUS ftStatus = FT_OK;
+    return read;
+}
 
-            //wait for queue to fill to desired amount, or timeout
-            while((dwBytesInQueue < count) && (timeout < 500))
-            {
-                ftStatus |= FT_GetQueueStatus(channel, &dwBytesInQueue);
-                System::Sleep(1);
-                timeout++;
-            }
+unsigned int FEZLynx::SerialDevice::available()
+{
+    DWORD available = 0;
 
-            if((timeout >= 499) || (ftStatus != FT_OK))
-                mainboard->panic(0x25);
+	if(FT_GetQueueStatus(channel, &available) != FT_OK)
+        mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
 
-            DWORD dwNumBytesRead = 0;
-            ftStatus = FT_Read(channel, buffer, count, &dwNumBytesRead);
-
-            if((dwNumBytesRead != count) || (ftStatus != FT_OK))
-                mainboard->panic(0x25);
-
-            return dwNumBytesRead;
-        }
-
-        void FEZLynx::SerialDevice::SetChannel(FT_HANDLE serialChannel)
-        {
-            channel = serialChannel;
-        }
-
-		unsigned int FEZLynx::SerialDevice::available()
-		{
-            DWORD dwBytesInQueue = 0;
-            int timeout = 0;
-            FT_STATUS ftStatus = FT_OK;
-
-            ftStatus |= FT_GetQueueStatus(channel, &dwBytesInQueue);
-
-			if(ftStatus != FT_OK)
-                mainboard->panic(0x25);
-
-			return dwBytesInQueue;
-		}
-    }
+	return available;
 }
