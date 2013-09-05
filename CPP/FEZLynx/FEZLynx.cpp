@@ -662,7 +662,7 @@ Interfaces::SPIBus* FEZLynx::getSPIBus(CPUPin miso, CPUPin mosi, CPUPin sck)
     return bus;
 }
 
-Interfaces::I2CBus *FEZLynx::getI2CBus(CPUPin sdaPin, CPUPin sclPin)
+Interfaces::I2CBus* FEZLynx::getI2CBus(CPUPin sdaPin, CPUPin sclPin)
 {
     for (I2CBus* current = (I2CBus*)this->i2cBusses.start(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.next())
         if (current->scl == sclPin && current->sda == sdaPin)
@@ -683,28 +683,28 @@ int main() {
 	FEZLynx board;
 	//Modules::LEDStrip led(10);
 	//Modules::ButtonS6 button(11);
-	//Modules::Button button(11);
-	Modules::DisplayN18 display(5);
+	Modules::Button button(11);
+	//Modules::DisplayN18 display(5);
 	bool state = false;
 
-	display.clear(0xBEEF);
+	//display.clear(0xBEEF);
 
-	//while (true) {
-	//	//if (state != button.isPressed()) {
-	//	//	button.toggleLED();
-	//	//	state = !state;
-	//	//}
-	//
-	//	//led.set(1, button.isPressed(GHI::Modules::ButtonS6::Buttons::UP));
-	//	//led.set(2, button.isPressed(GHI::Modules::ButtonS6::Buttons::LEFT));
-	//	//led.set(3, button.isPressed(GHI::Modules::ButtonS6::Buttons::DOWN));
-	//	//led.set(4, button.isPressed(GHI::Modules::ButtonS6::Buttons::RIGHT));
-	//	//led.set(5, button.isPressed(GHI::Modules::ButtonS6::Buttons::LEFT_ARROW));
-	//	//led.set(4, button.isPressed()); // button.isPressed(GHI::Modules::ButtonS6::Buttons::RIGHT_ARROW));
-	//	//led.set(7, next);
-	//
-	//	//next = !next;
-	//}
+	while (true) {
+		if (state != button.isPressed()) {
+			button.toggleLED();
+			state = !state;
+		}
+	
+		//led.set(1, button.isPressed(GHI::Modules::ButtonS6::Buttons::UP));
+		//led.set(2, button.isPressed(GHI::Modules::ButtonS6::Buttons::LEFT));
+		//led.set(3, button.isPressed(GHI::Modules::ButtonS6::Buttons::DOWN));
+		//led.set(4, button.isPressed(GHI::Modules::ButtonS6::Buttons::RIGHT));
+		//led.set(5, button.isPressed(GHI::Modules::ButtonS6::Buttons::LEFT_ARROW));
+		//led.set(4, button.isPressed()); // button.isPressed(GHI::Modules::ButtonS6::Buttons::RIGHT_ARROW));
+		//led.set(7, next);
+	
+		//next = !next;
+	}
 
 	return 0;
 }

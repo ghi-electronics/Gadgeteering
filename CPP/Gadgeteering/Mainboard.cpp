@@ -82,21 +82,30 @@ void Mainboard::ReservePin(CPUPin pin)
 	this->pins.add((void*)pin);
 }
 
-void Mainboard::setPWM(CPUPin pin, double dutyCycle, double frequency) { mainboard->panic(Exceptions::ERR_PWM_NOT_SUPPORTED); };
-bool Mainboard::readDigital(CPUPin pin) { mainboard->panic(Exceptions::ERR_READ_DIGITAL_NOT_SUPPORTED); return false; };
-void Mainboard::writeDigital(CPUPin pin, bool value) { mainboard->panic(Exceptions::ERR_WRITE_DIGITAL_NOT_SUPPORTED); };
-double Mainboard::readAnalog(CPUPin pin) { mainboard->panic(Exceptions::ERR_READ_ANALOG_NOT_SUPPORTED); return 0.0; };
-double Mainboard::readAnalogProportion(CPUPin pin) { mainboard->panic(Exceptions::ERR_READ_ANALOG_NOT_SUPPORTED); return 0.0; };
-void Mainboard::writeAnalog(CPUPin pin, double voltage) { mainboard->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED); };
-void Mainboard::writeAnalogProportion(CPUPin pin, double voltage) { mainboard->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED); };
-void Mainboard::setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode) { mainboard->panic(Exceptions::ERR_SET_IO_NOT_SUPPORTED); };
-	
-GHI::Interfaces::SPIBus* Mainboard::getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin) { mainboard->panic(Exceptions::ERR_SPI_NOT_SUPPORTED); return NULL; };
-GHI::Interfaces::SPIBus* Mainboard::getSPIBus(Socket* socket, Socket::Pin mosiPinNumber, Socket::Pin misoPinNumber, Socket::Pin sckPinNumber) { mainboard->panic(Exceptions::ERR_SPI_NOT_SUPPORTED); return NULL; };
-GHI::Interfaces::SerialDevice* Mainboard::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin) { mainboard->panic(Exceptions::ERR_SERIAL_NOT_SUPPORTED); return NULL; };
-GHI::Interfaces::SerialDevice* Mainboard::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber) { mainboard->panic(Exceptions::ERR_SERIAL_NOT_SUPPORTED); return NULL; };
-GHI::Interfaces::I2CBus* Mainboard::getI2CBus(CPUPin sdaPin, CPUPin sclPin) { mainboard->panic(Exceptions::ERR_I2C_NOT_SUPPORTED); return NULL; };
-GHI::Interfaces::I2CBus* Mainboard::getI2CBus(Socket* socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber) { mainboard->panic(Exceptions::ERR_I2C_NOT_SUPPORTED); return NULL; };
+void Mainboard::setPWM(CPUPin pin, double dutyCycle, double frequency) { mainboard->panic(Exceptions::ERR_PWM_NOT_SUPPORTED); }
+bool Mainboard::readDigital(CPUPin pin) { mainboard->panic(Exceptions::ERR_READ_DIGITAL_NOT_SUPPORTED); return false; }
+void Mainboard::writeDigital(CPUPin pin, bool value) { mainboard->panic(Exceptions::ERR_WRITE_DIGITAL_NOT_SUPPORTED); }
+double Mainboard::readAnalog(CPUPin pin) { mainboard->panic(Exceptions::ERR_READ_ANALOG_NOT_SUPPORTED); return 0.0; }
+double Mainboard::readAnalogProportion(CPUPin pin) { mainboard->panic(Exceptions::ERR_READ_ANALOG_NOT_SUPPORTED); return 0.0; }
+void Mainboard::writeAnalog(CPUPin pin, double voltage) { mainboard->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED); }
+void Mainboard::writeAnalogProportion(CPUPin pin, double voltage) { mainboard->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED); }
+void Mainboard::setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode) { mainboard->panic(Exceptions::ERR_SET_IO_NOT_SUPPORTED); }
+
+GHI::Interfaces::SerialDevice* Mainboard::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin) { mainboard->panic(Exceptions::ERR_SERIAL_NOT_SUPPORTED); return NULL; }
+GHI::Interfaces::SPIBus* Mainboard::getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin) { mainboard->panic(Exceptions::ERR_SPI_NOT_SUPPORTED); return NULL; }
+GHI::Interfaces::I2CBus* Mainboard::getI2CBus(CPUPin sdaPin, CPUPin sclPin) { mainboard->panic(Exceptions::ERR_I2C_NOT_SUPPORTED); return NULL; }
+
+GHI::Interfaces::SerialDevice* Mainboard::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber) { 
+	return this->getSerialDevice(baudRate, parity, stopBits, dataBits, socket->pins[txPinNumber], socket->pins[rxPinNumber]);
+}
+
+GHI::Interfaces::SPIBus* Mainboard::getSPIBus(Socket* socket, Socket::Pin mosiPinNumber, Socket::Pin misoPinNumber, Socket::Pin sckPinNumber) { 
+	return this->getSPIBus(socket->pins[mosiPinNumber], socket->pins[misoPinNumber], socket->pins[sckPinNumber]);
+}
+
+GHI::Interfaces::I2CBus* Mainboard::getI2CBus(Socket* socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber) { 
+	return this->getI2CBus(socket->pins[sdaPinNumber], socket->pins[sclPinNumber]);
+}
 
 void Mainboard::registerModule(Module *mod)
 {
