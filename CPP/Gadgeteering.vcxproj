@@ -39,10 +39,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)\FEZLynx\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\FEZLynx\include\windows;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\FEZLynx\lib\windows\i386\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)\FEZLynx\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\FEZLynx\include\windows;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\FEZLynx\lib\windows\i386\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -50,10 +52,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;LYNX;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;$(ProjectDir)\FEZLynx\lib\windows\i386\libMPSSE.lib;$(ProjectDir)\FEZLynx\lib\windows\i386\FTD2XX.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libMPSSE.lib;FTD2XX.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -67,12 +70,13 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;$(ProjectDir)\FEZLynx\lib\windows\i386\libMPSSE.lib;$(ProjectDir)\FEZLynx\lib\windows\i386\FTD2XX.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libMPSSE.lib;FTD2XX.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -89,6 +93,9 @@
     <ClInclude Include="DisplayN18\DisplayN18.h" />
     <ClInclude Include="DistanceUS3\DistanceUS3.h" />
     <ClInclude Include="Extender\Extender.h" />
+    <ClInclude Include="FEZLynx\include\windows\FTD2XX.H" />
+    <ClInclude Include="FEZLynx\include\windows\libMPSSE_i2c.h" />
+    <ClInclude Include="FEZLynx\include\windows\libMPSSE_spi.h" />
     <ClInclude Include="FEZLynx\SoftwareI2C_Lynx.h" />
     <ClInclude Include="FEZTive\FEZtive.h" />
     <ClInclude Include="FLASH\FLASH.h" />
@@ -154,13 +161,12 @@
     <ClCompile Include="ColorSense\ColorSense.cpp" />
     <ClCompile Include="Compass\Compass.cpp" />
     <ClCompile Include="CurrentACS712\CurrentACS712.cpp" />
-    <ClCompile Include="Demos\Lynx\LynxDemo1\main.cpp" />
     <ClCompile Include="DisplayN18\DisplayN18.cpp" />
     <ClCompile Include="DistanceUS3\DistanceUS3.cpp" />
     <ClCompile Include="Extender\Extender.cpp" />
-    <ClCompile Include="FEZLynx\FEZLynx_I2CBus.cpp" />
-    <ClCompile Include="FEZLynx\FEZLynx_SerialDevice.cpp" />
-    <ClCompile Include="FEZLynx\FEZLynx_SPIBus.cpp" />
+    <ClCompile Include="FEZLynx\I2CBus.cpp" />
+    <ClCompile Include="FEZLynx\SerialDevice.cpp" />
+    <ClCompile Include="FEZLynx\SPIBus.cpp" />
     <ClCompile Include="FEZTive\FEZtive.cpp" />
     <ClCompile Include="FLASH\FLASH.cpp" />
     <ClCompile Include="FMRadio\FMRadio.cpp" />
@@ -176,7 +182,7 @@
     <ClCompile Include="Gadgeteering\SoftwareSerial.cpp" />
     <ClCompile Include="Gadgeteering\SPIBus.cpp" />
     <ClCompile Include="Gadgeteering\SPIDevice.cpp" />
-    <ClCompile Include="FEZLynx\FEZLynx_System.cpp" />
+    <ClCompile Include="FEZLynx\System.cpp" />
     <ClCompile Include="FEZLynx\FEZLynx.cpp" />
     <ClCompile Include="CharDisplay\CharDisplay.cpp" />
     <ClCompile Include="Gadgeteering\Types.cpp" />
