@@ -33,13 +33,6 @@ limitations under the License.
 #include "../Gadgeteering/Types.hpp"
 #include "../IO60P16/IO60P16.h"
 
-struct FEZLynxChannel
-{
-    FT_STATUS status;
-    FT_HANDLE device;
-    char data;
-    unsigned char direction;
-};
 
 namespace GHI
 {
@@ -47,44 +40,19 @@ namespace GHI
     {
         class FEZLynx : public GHI::Mainboard
         {
-            static const int MSB_FALLING_EDGE_CLOCK_BYTE_IN = 0x24;
-            static const int MSB_FALLING_EDGE_CLOCK_BYTE_OUT = 0x11;
-            static const int MSB_RISING_EDGE_CLOCK_BIT_IN = 0x22;
-
-            static const DWORD dwClockDivisor = 0x0055; //Value of clock divisor, SCL Frequency = 60/((1+0x0095)*2) (MHz) = 200khz
-
-            FT_STATUS ftStatus;
-            FT_HANDLE ftHandle;
-            unsigned char OutputBuffer[1024];
-            unsigned char InputBuffer[1024];
-
-            DWORD dwNumBytesToSend;
-            DWORD dwNumBytesSent, dwNumBytesRead, dwNumInputBuffer;
-
-            static const int Channel1Mask = 0x00000100;
-            static const int Channel2Mask = 0x00000200;
-            static const int Channel3Mask = 0x00000400;
-            static const int Channel4Mask = 0x00000800;
-
-            static const int Port1Mask = 0x00000100;
-            static const int Port2Mask = 0x00000200;
-            static const int Port3Mask = 0x00000400;
-            static const int Port4Mask = 0x00000800;
-            static const int Port5Mask = 0x00001000;
-            static const int Port6Mask = 0x00002000;
-            static const int Port7Mask = 0x00004000;
-            static const int Port8Mask = 0x00008000;
-
-            static const int ExtenderMask = 0xC0000000;
-
+            static const unsigned short CLOCK_DIVISOR = 0x0055; //Value of clock divisor, SCL Frequency = 60/((1+0x0095)*2) (MHz) = 200khz
 			static const int ANALOG_2 = 0xAA;
 			static const int ANALOG_5 = 0xAB;
+			
+			struct
+			{
+				FT_HANDLE device;
+				bool isMPSSE;
+				unsigned char value;
+				unsigned char direction;
+			} channels[4];
 
-            FEZLynxChannel Channels[4];
-
-			bool ChannelDirectionChanged[4];
-
-            Modules::IO60P16* Extender;
+            Modules::IO60P16* io60;
 			Interfaces::I2CDevice* analogConverter;
 
             class SerialDevice : public GHI::Interfaces::SerialDevice {
@@ -144,13 +112,14 @@ namespace GHI
 					virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
             };
 			
-			unsigned char GetChannelMask(unsigned int channel);
-			unsigned char GetChannelDirection(unsigned int channel);
             bool isVirtual(GHI::CPUPin pinNumber);
-            void SetPinState(bool extended);
-            void SetFTDIPins(int channel);
-            int GetChannel(GHI::CPUPin pinNumber);
-            unsigned char GetChannelPin(GHI::CPUPin pinNumber);
+			GHI::CPUPin getExtenderPin(GHI::CPUPin pinNumber);
+			
+            void sendPinStates(int channel);
+			void setValue(GHI::CPUPin pinNumber);
+			void clearValue(GHI::CPUPin pinNumber);
+			void setDirection(GHI::CPUPin pinNumber);
+			void clearDirection(GHI::CPUPin pinNumber);
 
             public:
                 FEZLynx();
