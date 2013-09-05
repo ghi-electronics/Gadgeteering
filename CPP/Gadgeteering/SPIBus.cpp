@@ -33,7 +33,7 @@ SPIBus::~SPIBus()
 SPIDevice* SPIBus::getSPIDevice(CPUPin pin, SPIConfiguration* configuration) 
 {
 	SPIDevice* device = new SPIDevice(this, pin, configuration);
-	this->spiDevices.add(device);
+	this->spiDevices.addV(device);
 	return device; 
 }
 

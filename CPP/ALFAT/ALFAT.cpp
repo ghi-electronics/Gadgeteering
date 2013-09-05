@@ -95,7 +95,7 @@ void ALFAT::generateHandles() {
 	
 	this->handles = new List();
 	for (unsigned char i = 0; i < 16; i++)
-		this->handles->push(reinterpret_cast<void*>(NIBBLE_TO_HEX(i)));
+		this->handles->push(NIBBLE_TO_HEX(i));
 }
 
 bool ALFAT::isStoragePresent(ALFAT::Drive which) {
@@ -225,11 +225,11 @@ char ALFAT::getHandle() {
 	if (this->handles->getSize() == 0)
 		return -1;
 
-	return reinterpret_cast<int>(this->handles->pop()) & 0xFF;
+	return static_cast<int>(this->handles->pop()) & 0xFF;
 }
 
 void ALFAT::freeHandle(char handle) {
-	this->handles->push(reinterpret_cast<void*>(handle));
+	this->handles->push(handle);
 }
 
 ALFAT::ResponseCode ALFAT::readResponseCode() {

@@ -640,37 +640,34 @@ void FEZLynx::setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency) 
 
 Interfaces::SerialDevice* FEZLynx::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin)
 {
-    for (SerialDevice* current = (SerialDevice*)this->serialDevices.start(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.next())
+    for (SerialDevice* current = (SerialDevice*)this->serialDevices.startV(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.nextV())
         if (current->tx == txPin && current->rx == rxPin)
             return current;
 
     SerialDevice* bus = new FEZLynx::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits, this->Channels[3].device);
-    this->serialDevices.add(bus);
-
+    this->serialDevices.addV(bus);
     return bus;
 }
 
 Interfaces::SPIBus* FEZLynx::getSPIBus(CPUPin miso, CPUPin mosi, CPUPin sck)
 {
-	for (SPIBus* current = (SPIBus*)this->spiBusses.start(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.next())
+	for (SPIBus* current = (SPIBus*)this->spiBusses.startV(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.nextV())
         if (current->mosi == mosi && current->miso == miso && current->sck == sck)
             return (GHI::Interfaces::SPIBus*)current;
 
 	SPIBus* bus = new SPIBus(miso, mosi, sck, this->Channels[0].device);
-    this->spiBusses.add(bus);
-
+    this->spiBusses.addV(bus);
     return bus;
 }
 
 Interfaces::I2CBus* FEZLynx::getI2CBus(CPUPin sdaPin, CPUPin sclPin)
 {
-    for (I2CBus* current = (I2CBus*)this->i2cBusses.start(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.next())
+    for (I2CBus* current = (I2CBus*)this->i2cBusses.startV(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.nextV())
         if (current->scl == sclPin && current->sda == sdaPin)
             return current;
 
     I2CBus* bus = new FEZLynx::I2CBus(sdaPin, sclPin, this->Channels[1].device);
-    this->i2cBusses.add(bus);
-
+    this->i2cBusses.addV(bus);
     return bus;
 }
 

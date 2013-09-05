@@ -253,32 +253,31 @@ void FEZMedusaMini::writeAnalogProportion(CPUPin pinNumber, double proportion) {
 }
 
 Interfaces::SPIBus* FEZMedusaMini::getSPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) {
-	for (SPIBus* current = (SPIBus*)this->spiBusses.start(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.next())
-		if (current->mosi == mosi && current->miso == miso && current->sck == sck)
-			return current;
+    for (SerialDevice* current = (SerialDevice*)this->serialDevices.startV(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.nextV())
+        if (current->tx == txPin && current->rx == rxPin)
+            return current;
 
 	SPIBus* bus = new FEZMedusaMini::SPIBus(mosi, miso, sck);
-	this->spiBusses.add(bus);
+	this->spiBusses.addV(bus);
 	return bus;
 }
 
 Interfaces::SerialDevice* FEZMedusaMini::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin) {
-	for (SerialDevice* current = (SerialDevice*)this->serialDevices.start(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.next())
-		if (current->tx == txPin && current->rx == rxPin)
-			return current;
+	for (SPIBus* current = (SPIBus*)this->spiBusses.startV(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.nextV())
+        if (current->mosi == mosi && current->miso == miso && current->sck == sck)
+            return (GHI::Interfaces::SPIBus*)current;
 
 	SerialDevice* bus = new FEZMedusaMini::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits);
-	this->serialDevices.add(bus);
-
+	this->serialDevices.addV(bus);
 	return bus;
 }
 
 Interfaces::I2CBus* FEZMedusaMini::getI2CBus(CPUPin sdaPin, CPUPin sclPin) {
-	for (I2CBus* current = (I2CBus*)this->i2cBusses.start(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.next())
-		if (current->scl == sclPin && current->sda == sdaPin)
-			return current;
+    for (I2CBus* current = (I2CBus*)this->i2cBusses.startV(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.nextV())
+        if (current->scl == sclPin && current->sda == sdaPin)
+            return current;
 		
 	I2CBus* bus = new FEZMedusaMini::I2CBus(sdaPin, sclPin);
-	this->i2cBusses.add(bus);
+	this->i2cBusses.addV(bus);
 	return bus;
 }

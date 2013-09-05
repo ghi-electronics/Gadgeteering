@@ -30,7 +30,7 @@ I2CBus::~I2CBus() {
 
 I2CDevice* I2CBus::getI2CDevice(unsigned char address) {
 	I2CDevice* device = new I2CDevice(this, address);
-	this->i2cDevices.add(device);
+	this->i2cDevices.addV(device);
 	return device;
 }
 					

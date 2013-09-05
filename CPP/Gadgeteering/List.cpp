@@ -38,7 +38,7 @@ List::~List() {
 	}
 }
 
-void List::add(void* data) {
+void List::add(unsigned int data) {
 	this->count++;
 
 	if (this->head == NULL) {
@@ -62,7 +62,7 @@ void List::add(void* data) {
 	this->tail = newNode;
 }
 
-void List::remove(void* data) {
+void List::remove(unsigned int data) {
 	if (this->head && this->head->data == data) {
 		ListNode* newHead = this->head->next;
 		delete this->head;
@@ -97,7 +97,7 @@ void List::remove(void* data) {
 	}
 }
 
-bool List::contains(void* data) {
+bool List::contains(unsigned int data) {
 	ListNode* current = this->head;
 
 	while (current) {
@@ -111,7 +111,7 @@ bool List::contains(void* data) {
 
 }
 
-void* List::start() {
+unsigned int List::start() {
 	this->currentIteration = this->head;
 
 	if (!this->head)
@@ -120,7 +120,7 @@ void* List::start() {
 	return this->currentIteration->data;
 }
 
-void* List::next() {
+unsigned int List::next() {
 	this->currentIteration = this->currentIteration->next;
 	
 	return this->currentIteration ? this->currentIteration->data : NULL;
@@ -130,15 +130,15 @@ bool List::ended() {
 	return this->currentIteration == NULL;
 }
 
-void List::push(void* data) {
+void List::push(unsigned int data) {
 	this->add(data);
 }
 
-void* List::pop() {
+unsigned int List::pop() {
 	if (this->count == 0)
 		return NULL;
 
-	void* data = this->head->data;
+	unsigned int data = this->head->data;
 
 	ListNode* newHead = this->head->next;
 	delete this->head;
@@ -151,4 +151,32 @@ void* List::pop() {
 
 unsigned int List::getSize() const {
 	return this->count;
+}
+
+void List::addV(void* data) {
+	this->add((unsigned int)(data));
+}
+
+void List::removeV(void* data) {
+	this->remove((unsigned int)(data));
+}
+
+bool List::containsV(void* data) {
+	return this->contains((unsigned int)(data));
+}
+
+void* List::startV() {
+	return (void*)this->start();
+}
+
+void* List::nextV() {
+	return (void*)this->next();
+}
+
+void List::pushV(void* data) {
+	this->push((unsigned int)(data));
+}
+
+void* List::popV() {
+	return (void*)this->pop();
 }

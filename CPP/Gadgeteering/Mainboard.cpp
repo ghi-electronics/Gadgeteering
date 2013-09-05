@@ -26,13 +26,13 @@ Mainboard::Mainboard() {
 }
 
 Mainboard::~Mainboard() {
-	for (Socket* current = (Socket*)this->sockets.start(); !this->sockets.ended(); current = (Socket*)this->sockets.next())
+	for (Socket* current = (Socket*)this->sockets.startV(); !this->sockets.ended(); current = (Socket*)this->sockets.nextV())
 		delete current;
-	for (I2CBus* current = (I2CBus*)this->i2cBusses.start(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.next())
+	for (I2CBus* current = (I2CBus*)this->i2cBusses.startV(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.nextV())
 		delete current;
-	for (SPIBus* current = (SPIBus*)this->spiBusses.start(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.next())
+	for (SPIBus* current = (SPIBus*)this->spiBusses.startV(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.nextV())
 		delete current;
-	for (SerialDevice* current = (SerialDevice*)this->serialDevices.start(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.next())
+	for (SerialDevice* current = (SerialDevice*)this->serialDevices.startV(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.nextV())
 		delete current;
 }
 
@@ -54,13 +54,13 @@ void Mainboard::print(double toPrint) {
 }
 
 Socket* Mainboard::registerSocket(Socket* socket) {
-	this->sockets.add(socket);
+	this->sockets.addV(socket);
 
 	return socket;
 }
 
 Socket* Mainboard::getSocket(unsigned char number) {
-	for (Socket* current = (Socket*)this->sockets.start(); !this->sockets.ended(); current = (Socket*)this->sockets.next())
+	for (Socket* current = (Socket*)this->sockets.startV(); !this->sockets.ended(); current = (Socket*)this->sockets.nextV())
 		if (current->number == number)
 			return current;
 

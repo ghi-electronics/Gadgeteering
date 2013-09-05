@@ -48,7 +48,7 @@ unsigned char DaisyLinkBus::ReserveNextDaisyLinkNodeAddress(DaisyLinkModule* mod
             mainboard->panic(Exceptions::ERR_MODULE_ERROR, 2); //Tried to initialize more modules than were found
     }
     
-	this->socketModuleList.add(moduleInstance);
+	this->socketModuleList.addV(moduleInstance);
     unsigned char ret = (unsigned char)(this->startAddress + this->reservedCount);
     this->reservedCount++;
     return ret;
@@ -170,7 +170,7 @@ DaisyLinkBus* DaisyLinkBus::GetDaisyLinkForSocket(Socket* socket, DaisyLinkModul
 			return current;
 	
     DaisyLinkBus* daisylink = new DaisyLinkBus(socket, module);
-    daisyLinkList.add(daisylink);
+    daisyLinkList.addV(daisylink);
     daisylink->Initialize();
     return daisylink;
 }

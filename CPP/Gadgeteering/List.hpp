@@ -22,7 +22,7 @@ namespace GHI
 	class List
 	{
 		struct ListNode {
-			void* data;
+			unsigned int data;
 			ListNode* next;
 			ListNode* prev;
 		};
@@ -36,15 +36,25 @@ namespace GHI
 		public:
 			List();
 			~List();
-			void add(void* data);
-			void remove(void* data);
-			bool contains(void* data);
-			void* start();
-			void* next();
+
 			bool ended();
-			void push(void* data);
-			void* pop();
 			unsigned int getSize() const;
+
+			void add(unsigned int data);
+			void remove(unsigned int data);
+			bool contains(unsigned int data);
+			unsigned int start();
+			unsigned int next();
+			void push(unsigned int data);
+			unsigned int pop();
+
+			void addV(void* data);
+			void removeV(void* data);
+			bool containsV(void* data);
+			void* startV();
+			void* nextV();
+			void pushV(void* data);
+			void* popV();
 	};
 }
 
