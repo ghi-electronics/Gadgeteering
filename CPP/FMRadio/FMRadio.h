@@ -24,6 +24,7 @@ namespace GHI {
 		class FMRadio : public Module {
 			Interfaces::I2CDevice* i2c;
 			Interfaces::DigitalOutput* resetPin;
+			Interfaces::DigitalInput* senPin;
 			unsigned short registers[16];
 			unsigned short volume;
 

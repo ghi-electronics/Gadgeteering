@@ -27,12 +27,15 @@ const double FMRadio::INVALID_CHANNEL = -1.0;
 FMRadio::FMRadio(unsigned char socketNumber)
 {
 	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::Y);
-
+	//socket->ensureTypeIsSupported(Socket::Types::Y);
+	
 	this->resetPin = new DigitalOutput(socket, 5, false);
+	this->senPin = new DigitalInput(socket, 4, true);
 	this->i2c = socket->getI2CDevice(FMRadio::I2C_ADDRESS);
 	
 	this->resetPin->write(true);
+
+	System::Sleep(100);
 
 	this->ReadRegisters();
 	this->registers[0x07] = 0x8100; //Enable the oscillator
