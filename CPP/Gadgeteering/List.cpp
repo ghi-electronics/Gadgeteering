@@ -67,7 +67,8 @@ void List::remove(void* data) {
 		ListNode* newHead = this->head->next;
 		delete this->head;
 		this->head = newHead;
-		this->head->prev = NULL;
+		if (this->head)
+			this->head->prev = NULL;
 		count--;
 		return;
 	}
@@ -76,7 +77,8 @@ void List::remove(void* data) {
 		ListNode* newTail = this->tail->prev;
 		delete this->tail;
 		this->tail = newTail;
-		this->tail->next = NULL;
+		if (this->tail)
+			this->tail->next = NULL;
 		count--;
 		return;
 	}

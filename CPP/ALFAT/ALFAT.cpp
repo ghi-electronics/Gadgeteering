@@ -109,8 +109,8 @@ bool ALFAT::isStoragePresent(ALFAT::Drive which) {
 	unsigned char status = HEX_TO_UCHAR(result + 1);
 	switch (which) {
 		case Drives::SD: return status & (1 << 0);
-		case Drives::USB0: return status & (1 << 4);
-		case Drives::USB1: return status & (1 << 5);
+		case Drives::USB0: return status & (1 << 5);
+		case Drives::USB1: return status & (1 << 6);
 	}
 
 	return false;

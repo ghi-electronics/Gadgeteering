@@ -40,6 +40,8 @@ namespace GHI {
 				void turnAllOn();
 				void turnAllOff();
 
+				void set(unsigned char led, bool state);
+
 				void animate(unsigned int switchTime, bool clockwise, bool turnOn, bool remainOn = true);
 		};
 	}

@@ -63,6 +63,13 @@ void LEDStrip::turnAllOff() {
 		this->ports[i]->write(false);
 }
 
+void LEDStrip::set(unsigned char led, bool state) {
+	if (led < 1 || led > 7)
+		mainboard->panic(Exceptions::ERR_MODULE_ERROR);
+
+	this->ports[led - 1]->write(state);
+}
+
 void LEDStrip::animate(unsigned int switchTime, bool clockwise, bool turnOn, bool remainOn) {
 	int length = 7;
 
