@@ -17,12 +17,12 @@ limitations under the License.
 #ifndef _MAINBOARD_H_
 #define _MAINBOARD_H_
 
-#include "Types.hpp"
 #include "Socket.hpp"
 #include "SPIBus.hpp"
 #include "SerialDevice.hpp"
 #include "I2CBus.hpp"
 #include "List.hpp"
+#include "Types.hpp"
 
 namespace GHI {
 	class Module;
@@ -60,9 +60,9 @@ namespace GHI {
 			virtual GHI::Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin);
 			virtual GHI::Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin);
 
-			GHI::Interfaces::I2CBus* getI2CBus(Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine);
-			GHI::Interfaces::SPIBus* getSPIBus(Socket* socket, Socket::Pin mosiPinNumber = Socket::Pins::Seven, Socket::Pin misoPinNumber = Socket::Pins::Eight, Socket::Pin sckPinNumber = Socket::Pins::Nine);
-			GHI::Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber = Socket::Pins::Four, Socket::Pin rxPinNumber = Socket::Pins::Five);
+			virtual GHI::Interfaces::I2CBus* getI2CBus(Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine);
+			virtual GHI::Interfaces::SPIBus* getSPIBus(Socket* socket, Socket::Pin mosiPinNumber = Socket::Pins::Seven, Socket::Pin misoPinNumber = Socket::Pins::Eight, Socket::Pin sckPinNumber = Socket::Pins::Nine);
+			virtual GHI::Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber = Socket::Pins::Four, Socket::Pin rxPinNumber = Socket::Pins::Five);
 	};
 
 	extern GHI::Mainboard* mainboard;

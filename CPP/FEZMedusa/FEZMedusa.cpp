@@ -200,9 +200,9 @@ void FEZMedusaMini::print(double toPrint) {
 
 void FEZMedusaMini::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistorMode) {
 	if (state == IOStates::DIGITAL_INPUT)
-		::pinMode(pinNumber, resistorMode == ResistorModes::PULL_UP ? INPUT_PULLUP : INPUT);
-	else if (state == IOStates::DIGITAL_OUTPUT || state == IOStates::PWM)
-		::pinMode(pinNumber, OUTPUT);
+		pinMode(pinNumber, resistorMode == ResistorModes::PULL_UP ? INPUT_PULLUP : INPUT);
+	else if ((state == IOStates::DIGITAL_OUTPUT) || (state == IOStates::PWM))
+		pinMode(pinNumber, OUTPUT);
 }
 
 void FEZMedusaMini::setPWM(CPUPin pinNumber, double dutyCycle, double frequency) {
@@ -253,9 +253,9 @@ void FEZMedusaMini::writeAnalogProportion(CPUPin pinNumber, double proportion) {
 }
 
 Interfaces::SPIBus* FEZMedusaMini::getSPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) {
-    for (SerialDevice* current = (SerialDevice*)this->serialDevices.startV(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.nextV())
-        if (current->tx == txPin && current->rx == rxPin)
-            return current;
+	for (SPIBus* current = (SPIBus*)this->spiBusses.startV(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.nextV())
+        if (current->mosi == mosi && current->miso == miso && current->sck == sck)
+            return (GHI::Interfaces::SPIBus*)current;
 
 	SPIBus* bus = new FEZMedusaMini::SPIBus(mosi, miso, sck);
 	this->spiBusses.addV(bus);
@@ -263,9 +263,9 @@ Interfaces::SPIBus* FEZMedusaMini::getSPIBus(CPUPin mosi, CPUPin miso, CPUPin sc
 }
 
 Interfaces::SerialDevice* FEZMedusaMini::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin) {
-	for (SPIBus* current = (SPIBus*)this->spiBusses.startV(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.nextV())
-        if (current->mosi == mosi && current->miso == miso && current->sck == sck)
-            return (GHI::Interfaces::SPIBus*)current;
+    for (SerialDevice* current = (SerialDevice*)this->serialDevices.startV(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.nextV())
+        if (current->tx == txPin && current->rx == rxPin)
+            return current;
 
 	SerialDevice* bus = new FEZMedusaMini::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits);
 	this->serialDevices.addV(bus);

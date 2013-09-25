@@ -28,11 +28,11 @@ namespace GHI {
 
 	namespace Exceptions
 	{
-		struct Exception
+		/*struct Exception
 		{
 			char ErrorCode;
 			char *Message;
-		};
+		};*/
 
 		static const unsigned char ERR_ONLY_ONE_MAINBOARD = 0;
 		static const unsigned char ERR_SPI_NOT_SUPPORTED = 1;
@@ -61,11 +61,11 @@ namespace GHI {
 	
 	class IOStates {
 		public:
-			static const IOState DIGITAL_OUTPUT = 0;
-			static const IOState DIGITAL_INPUT = 1;
-			static const IOState ANALOG_OUTPUT = 2;
-			static const IOState ANALOG_INPUT = 3;
-			static const IOState PWM = 4;
+			static const unsigned char DIGITAL_OUTPUT = 0;
+			static const unsigned char DIGITAL_INPUT = 1;
+			static const unsigned char ANALOG_OUTPUT = 2;
+			static const unsigned char ANALOG_INPUT = 3;
+			static const unsigned char PWM = 4;
 	};
 
 	class ResistorModes {
