@@ -195,7 +195,7 @@ PWMOutput::PWMOutput(Socket* socket, Socket::Pin pinNumber) {
 
 	this->cpuPin = socket->pins[pinNumber];
 		
-	mainboard->setIOMode(this->cpuPin, IOStates::PWM);
+	mainboard->setIOMode(this->cpuPin, 4);
 
 	this->set(0, 0);
 }
@@ -203,7 +203,7 @@ PWMOutput::PWMOutput(Socket* socket, Socket::Pin pinNumber) {
 PWMOutput::PWMOutput(CPUPin pin) {
 	this->cpuPin = pin;
 		
-	mainboard->setIOMode(this->cpuPin, IOStates::PWM);
+	mainboard->setIOMode(this->cpuPin, 4);
 
 	this->set(0, 0);
 }

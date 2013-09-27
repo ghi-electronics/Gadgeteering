@@ -37,7 +37,7 @@ SPIDevice* SPIBus::getSPIDevice(CPUPin pin, SPIConfiguration* configuration)
 	return device; 
 }
 
-void SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, CPUPin chipSelect, SPIConfiguration* configuration, bool deselectAfter) 
+void SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, SPIConfiguration* configuration, bool deselectAfter) 
 {
 	mainboard->panic(Exceptions::ERR_SPI_NOT_SUPPORTED);
 }

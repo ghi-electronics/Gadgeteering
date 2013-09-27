@@ -65,7 +65,7 @@ namespace GHI {
 			static const unsigned char DIGITAL_INPUT = 1;
 			static const unsigned char ANALOG_OUTPUT = 2;
 			static const unsigned char ANALOG_INPUT = 3;
-			static const unsigned char PWM = 4;
+			//static const unsigned char PWM = 4;
 	};
 
 	class ResistorModes {

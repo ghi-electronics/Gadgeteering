@@ -26,16 +26,25 @@ using namespace GHI::Mainboards;
 
 FEZMedusaMini::SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : Interfaces::SPIBus(mosi, miso, sck)
 {
+#ifndef GADGETEERING_EXTENDED_SPI
 	this->spi = new SPIClass();
 	this->spi->begin();
+#else
+	SPI.begin(0);
+#endif
 }
 
 FEZMedusaMini::SPIBus::~SPIBus() {
+#ifndef GADGETEERING_EXTENDED_SPI
 	this->spi->end();
 	delete this->spi;
+#else
+	SPI.end();
+#endif
 }
 
 void FEZMedusaMini::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configuration) {
+#ifndef GADGETEERING_EXTENDED_SPI
 	if (!configuration->clockIdleState && configuration->clockEdge)
 		this->spi->setDataMode(SPI_MODE0);
 	else if (!configuration->clockIdleState && !configuration->clockEdge)
@@ -47,10 +56,12 @@ void FEZMedusaMini::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configurati
 
 	unsigned int divider = SYSTEM_CLOCK / configuration->clockRate;
 	unsigned char count = 1;
+
 	while ((divider >>= 1) > 0)
 		count++;
 	
-	switch (count) {
+	switch (count) 
+	{
 		case 1: mainboard->panic(Exceptions::ERR_SPI_NOT_SUPPORTED); break;
 		case 2: this->spi->setClockDivider(SPI_CLOCK_DIV2); break;
 		case 3: this->spi->setClockDivider(SPI_CLOCK_DIV4); break;
@@ -60,14 +71,40 @@ void FEZMedusaMini::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configurati
 		case 7: this->spi->setClockDivider(SPI_CLOCK_DIV64); break;
 		case 8: this->spi->setClockDivider(SPI_CLOCK_DIV128); break;
 	}
+#else
+
+	if (!configuration->clockIdleState && configuration->clockEdge)
+		SPI.setDataMode(configuration->chipSelectPin, SPI_MODE0);
+	else if (!configuration->clockIdleState && !configuration->clockEdge)
+		SPI.this->spi->setDataMode(configuration->chipSelectPin, SPI_MODE1);
+	else if (configuration->clockIdleState && !configuration->clockEdge)
+		SPI.this->spi->setDataMode(configuration->chipSelectPin, SPI_MODE2);
+	else if (configuration->clockIdleState && configuration->clockEdge)
+		SPI.this->spi->setDataMode(configuration->chipSelectPin, SPI_MODE3);
+
+	unsigned int divider = SYSTEM_CLOCK / configuration->clockRate;
+	SPI.setClockDivider(0, divider);
+#endif
+}
+
+void FEZMedusaMini::SPIBus::selectChip(GHI::Interfaces::SPIConfiguration* configuration)
+{
+	mainboard->writeDigital(configuration->chipSelect, configuration->chipSelectActiveState);
+	System::Sleep(configuration->chipSelectSetupTime);
+}
+
+void FEZMedusaMini::SPIBus::deselectChip(GHI::Interfaces::SPIConfiguration* configuration)
+{
+	System::Sleep(configuration->chipSelectHoldTime);
+	mainboard->writeDigital(configuration->chipSelect, !configuration->chipSelectActiveState);
 }
 
 void FEZMedusaMini::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration)
 {
 	this->setup(configuration);
+	this->selectChip(configuration);
 
-	System::Sleep(configuration->chipSelectSetupTime);
-	
+#ifndef GADGETEERING_EXTENDED_SPI
 	for (int i = 0; i < count; i++) {
 		if (sendBuffer != NULL && receiveBuffer != NULL)
 			receiveBuffer[i] = this->spi->transfer(sendBuffer[i]);
@@ -76,6 +113,17 @@ void FEZMedusaMini::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned 
 		else if (sendBuffer == NULL && receiveBuffer != NULL)
 			receiveBuffer[i] = this->spi->transfer(0);
 	}
+#else
+	for (int i = 0; i < count; i++) 
+	{
+		if (sendBuffer != NULL && receiveBuffer != NULL)
+			receiveBuffer[i] = SPI.transfer(0, sendBuffer[i]);
+		else if (sendBuffer != NULL && receiveBuffer == NULL)
+			SPI.transfer(0, sendBuffer[i]);
+		else if (sendBuffer == NULL && receiveBuffer != NULL)
+			receiveBuffer[i] = SPI.transfer(0, 0);
+	}
+#endif
 	
-	System::Sleep(configuration->chipSelectHoldTime);
+	this->deselectChip(configuration);
 }

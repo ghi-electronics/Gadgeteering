@@ -33,6 +33,7 @@ SPIConfiguration::SPIConfiguration(bool chipSelectActiveState, unsigned int chip
 SPIDevice::SPIDevice(SPIBus* spiBus, CPUPin chipSelectPin, GHI::Interfaces::SPIConfiguration* configuration) {
 	this->configuration = configuration;
 	this->chipSelect = chipSelectPin;
+	this->configuration->chipSelect = chipSelectPin;
 
 	this->bus = spiBus;
 }
@@ -53,27 +54,27 @@ SPIDevice::~SPIDevice() {
 unsigned char SPIDevice::writeReadByte(unsigned char toSend, bool deselectChip) 
 { 
 	unsigned char received;
-	this->bus->writeRead(&toSend, &received, 1, this->chipSelect, this->configuration, deselectChip);
+	this->bus->writeRead(&toSend, &received, 1, this->configuration, deselectChip);
 	return received;
 }
 
 void SPIDevice::writeAndRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, bool deselectChip) 
 {
-	this->bus->writeRead(sendBuffer, receiveBuffer, count, this->chipSelect, this->configuration, deselectChip);
+	this->bus->writeRead(sendBuffer, receiveBuffer, count, this->configuration, deselectChip);
 }
 
 void SPIDevice::writeThenRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip) 
 {
-	this->bus->writeRead(sendBuffer, NULL, sendCount, this->chipSelect, this->configuration, true);
-	this->bus->writeRead(NULL, receiveBuffer, receiveCount, this->chipSelect, this->configuration, deselectChip);
+	this->bus->writeRead(sendBuffer, NULL, sendCount, this->configuration, true);
+	this->bus->writeRead(NULL, receiveBuffer, receiveCount, this->configuration, deselectChip);
 }
 
 void SPIDevice::write(const unsigned char* buffer, unsigned int count, bool deselectChip) 
 { 
-	this->bus->writeRead(buffer, NULL, count, this->chipSelect, this->configuration, deselectChip);
+	this->bus->writeRead(buffer, NULL, count, this->configuration, deselectChip);
 }
 
 void SPIDevice::read(unsigned char* buffer, unsigned int count, bool deselectChip) 
 {
-	this->bus->writeRead(NULL, buffer, count, this->chipSelect, this->configuration, deselectChip);
+	this->bus->writeRead(NULL, buffer, count, this->configuration, deselectChip);
 }

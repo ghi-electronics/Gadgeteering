@@ -25,8 +25,12 @@ namespace GHI {
 		class DigitalOutput;
 		class SPIBus;
 		
-		class SPIConfiguration {
+		class SPIConfiguration 
+		{
 			public:
+				//The pin SPIBus will toggle for the transaction
+				CPUPin chipSelect;
+
 				//Whether or not the chip select pin is high when the chip is selected.
 				bool chipSelectActiveState;
 

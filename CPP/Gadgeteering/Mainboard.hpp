@@ -27,7 +27,8 @@ limitations under the License.
 namespace GHI {
 	class Module;
 
-	class Mainboard {
+	class Mainboard 
+	{
 		protected:
 			List sockets;
 			List spiBusses;

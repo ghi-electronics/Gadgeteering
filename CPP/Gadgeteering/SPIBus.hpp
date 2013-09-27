@@ -41,7 +41,7 @@ namespace GHI
 
 				SPIDevice* getSPIDevice(CPUPin chipSelectPin, SPIConfiguration* configuration);
 
-				virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, CPUPin chipSelect, SPIConfiguration* configuration, bool deselectAfter);
+				virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, SPIConfiguration* configuration, bool deselectAfter);
 		};
 	}
 }

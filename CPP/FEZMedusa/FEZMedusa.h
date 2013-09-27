@@ -33,6 +33,8 @@ namespace GHI {
 			{
 				SPIClass* spi;
 				void setup(GHI::Interfaces::SPIConfiguration* configuration);
+				void selectChip(GHI::Interfaces::SPIConfiguration* configuration);
+				void deselectChip(GHI::Interfaces::SPIConfiguration* configuration);
 
 				public:
 					SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck);

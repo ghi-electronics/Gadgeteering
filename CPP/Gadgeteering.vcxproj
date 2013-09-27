@@ -93,6 +93,7 @@
     <ClInclude Include="DisplayN18\DisplayN18.h" />
     <ClInclude Include="DistanceUS3\DistanceUS3.h" />
     <ClInclude Include="Extender\Extender.h" />
+    <ClInclude Include="FEZAthena\FEZAthena.h" />
     <ClInclude Include="FEZLynx\include\windows\FTD2XX.H" />
     <ClInclude Include="FEZLynx\include\windows\libMPSSE_i2c.h" />
     <ClInclude Include="FEZLynx\include\windows\libMPSSE_spi.h" />
@@ -164,6 +165,11 @@
     <ClCompile Include="DisplayN18\DisplayN18.cpp" />
     <ClCompile Include="DistanceUS3\DistanceUS3.cpp" />
     <ClCompile Include="Extender\Extender.cpp" />
+    <ClCompile Include="FEZAthena\FEZAthena.cpp" />
+    <ClCompile Include="FEZAthena\I2CBus.cpp" />
+    <ClCompile Include="FEZAthena\SerialDevice.cpp" />
+    <ClCompile Include="FEZAthena\SPIBus.cpp" />
+    <ClCompile Include="FEZAthena\System.cpp" />
     <ClCompile Include="FEZLynx\I2CBus.cpp" />
     <ClCompile Include="FEZLynx\SerialDevice.cpp" />
     <ClCompile Include="FEZLynx\SPIBus.cpp" />
