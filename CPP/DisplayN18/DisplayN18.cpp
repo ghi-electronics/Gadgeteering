@@ -27,7 +27,7 @@ DisplayN18::DisplayN18(unsigned char socketNumber) {
 	this->resetPin = new DigitalOutput(socket, Socket::Pins::Three, false);
 	this->backlightPin = new DigitalOutput(socket, Socket::Pins::Four, true);
 	this->rsPin = new DigitalOutput(socket, Socket::Pins::Five, false);
-	this->spi = socket->getSPIDevice(new SPIConfiguration(false, 0, 0, false, true, 4000), Socket::Pins::Six);
+	this->spi = socket->getSPIDevice(new SPIConfiguration(false, 0, 0, false, true, 8000), Socket::Pins::Six);
   
 	this->initialize();
 }

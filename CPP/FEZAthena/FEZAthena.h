@@ -23,12 +23,13 @@ limitations under the License.
 #include "../Gadgeteering/SPIDevice.hpp"
 #include "../Gadgeteering/I2CBus.hpp"
 #include "../IO60P16/IO60P16.h"
+#include "Environment.h"
 
 class SPIClass;
 
 namespace GHI {
 	namespace Mainboards {
-		class FEZMedusaMini : public GHI::Mainboard {
+		class FEZAthena : public GHI::Mainboard {
 
 			public:
 			class SPIBus : public GHI::Interfaces::SPIBus
@@ -59,6 +60,8 @@ namespace GHI {
 	
 			class I2CBus : public GHI::Interfaces::I2CBus
 			{
+
+#ifndef GADGETEERING_HARDWARE_SPI
 					bool start;
 
 					void clearSCL();
@@ -74,6 +77,7 @@ namespace GHI {
 
 					bool transmit(bool sendStart, bool sendStop, unsigned char data);
 					unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
+#endif
 
 					public:
 							I2CBus(CPUPin sda, CPUPin scl);
@@ -83,8 +87,8 @@ namespace GHI {
 							virtual unsigned int read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
 							virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
 			};
-				FEZMedusaMini();
-				virtual ~FEZMedusaMini();
+				FEZAthena();
+				virtual ~FEZAthena();
 				
 				virtual void panic(unsigned char error, unsigned char specificError = 0);
 				virtual void print(const char* toPrint);
@@ -104,23 +108,6 @@ namespace GHI {
 				virtual Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin);
 				virtual Interfaces::SPIBus* getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
 				virtual Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin);
-		};
-
-		class FEZMedusa : public FEZMedusaMini {
-			static const unsigned char EXTENDER_MASK = 0x80;
-			
-			Modules::IO60P16* extenderChip;
-
-			public:
-				FEZMedusa();
-				virtual ~FEZMedusa();
-
-				virtual void setPWM(CPUPin pin, double dutyCycle, double frequency);
-				virtual bool readDigital(CPUPin pin);
-				virtual void writeDigital(CPUPin pin, bool value);
-				virtual double readAnalog(CPUPin pin);
-				virtual void writeAnalog(CPUPin pin, double voltage);
-				virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
 		};
 	}
 }
