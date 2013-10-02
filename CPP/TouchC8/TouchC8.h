@@ -17,11 +17,15 @@ limitations under the License.
 #ifndef _TOUCHC8_H_
 #define _TOUCHC8_H_
 
-#include "../Gadgeteering/Gadgeteering.h"
+//#include "../Gadgeteering/Gadgeteering.h"
+#include "../Gadgeteering/Interfaces.hpp"
+#include "../Gadgeteering/I2CDevice.hpp"
+#include "../Gadgeteering/Module.hpp"
 
 namespace GHI {
 	namespace Modules {
-		class TouchC8 : public Module {
+		class TouchC8 : public Module 
+		{
 			static const unsigned char I2C_ADDRESS = 0x2B;
 			static const unsigned char IRQ_SRC = 0x0;
 			static const unsigned char CAP_STAT_MSB = 0x1;

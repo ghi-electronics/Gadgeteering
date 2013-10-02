@@ -151,7 +151,8 @@ void FEZAthena::print(int toPrint) {
 	Serial.print(toPrint);
 }
 				
-void FEZAthena::print(double toPrint) {
+void FEZAthena::print(double toPrint) 
+{
 	Serial.begin(9600);
 	Serial.print(toPrint);
 }
@@ -192,19 +193,23 @@ bool FEZAthena::readDigital(CPUPin pinNumber) {
 	return ::digitalRead(pinNumber) == HIGH;
 }
 
-void FEZAthena::writeDigital(CPUPin pinNumber, bool value) {
+void FEZAthena::writeDigital(CPUPin pinNumber, bool value) 
+{
 	::digitalWrite(pinNumber, value ? HIGH : LOW);
 }
 
-double FEZAthena::readAnalog(CPUPin pinNumber) {
+double FEZAthena::readAnalog(CPUPin pinNumber) 
+{
 	return static_cast<double>(::analogRead(pinNumber)) / 1024 * 3.3;
 }
 
-double FEZAthena::readAnalogProportion(CPUPin pinNumber) {
+double FEZAthena::readAnalogProportion(CPUPin pinNumber) 
+{
 	return this->readAnalog(pinNumber) / 3.3;
 }
 
-void FEZAthena::writeAnalog(CPUPin pinNumber, double voltage) {
+void FEZAthena::writeAnalog(CPUPin pinNumber, double voltage) 
+{
 	::analogWrite(pinNumber, voltage * (1024 / 3.3));
 }
 

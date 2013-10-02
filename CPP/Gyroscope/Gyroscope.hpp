@@ -43,19 +43,6 @@ namespace GHI
 						CalibrationOffsets();
 				} offsets;
 
-				class SensorData
-				{
-					public:
-						double X;
-						double Y;
-						double Z;
-						double Temperature;
-
-						SensorData(double x, double y, double z, double temperature);
-
-						char *ToString();
-				};
-
 				class Register
 				{
 					public:
@@ -87,6 +74,19 @@ namespace GHI
 				   _20Hz = 4,
 				   _10Hz = 5,
 				   _5Hz = 6
+				};
+
+				class SensorData
+				{
+					public:
+						double X;
+						double Y;
+						double Z;
+						double Temperature;
+
+						SensorData(double x, double y, double z, double temperature);
+
+						char *ToString();
 				};
 
 				Gyroscope(int socket);
