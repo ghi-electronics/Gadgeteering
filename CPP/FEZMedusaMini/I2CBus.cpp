@@ -16,60 +16,52 @@ limitations under the License.
 
 #include "../Gadgeteering/Gadgeteering.h"
 
-#include "FEZAthena.h"
-
-#ifdef GADGETEERING_HARDWARE_I2C
-#include <Wire.h>
-#endif
+#include "FEZMedusaMini.h"
 
 using namespace GHI;
 using namespace GHI::Interfaces;
 using namespace GHI::Mainboards;
 
-#ifndef GADGETEERING_HARDWARE_I2C
-	#define I2C_DELAY() ;
-#endif
+#define I2C_DELAY() ;
 
-FEZAthena::I2CBus::I2CBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
+FEZMedusaMini::I2CBus::I2CBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
 {
-#ifndef GADGETEERING_HARDWARE_I2C
 	this->start = false;
 	this->readSCL();
 	this->readSDA();
-#else
-	Wire.begin();
-#endif
 }
 
-FEZAthena::I2CBus::~I2CBus() 
+FEZMedusaMini::I2CBus::~I2CBus() 
 {
-#ifdef GADGETEERING_HARDWARE_I2C
-	Wire.end();
-#endif
+
 }
 
-#ifndef GADGETEERING_HARDWARE_I2C
-void FEZAthena::I2CBus::clearSCL() {
+void FEZMedusaMini::I2CBus::clearSCL() 
+{
 	mainboard->setIOMode(this->scl, IOStates::DIGITAL_OUTPUT);
 	mainboard->writeDigital(this->scl, false);
 }
 
-bool FEZAthena::I2CBus::readSCL() {
+bool FEZMedusaMini::I2CBus::readSCL() 
+{
 	mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
 	return mainboard->readDigital(this->scl);
 }
 
-void FEZAthena::I2CBus::clearSDA() {
+void FEZMedusaMini::I2CBus::clearSDA() 
+{
 	mainboard->setIOMode(this->sda, IOStates::DIGITAL_OUTPUT);
 	mainboard->writeDigital(this->sda, false);
 }
 
-bool FEZAthena::I2CBus::readSDA() {
+bool FEZMedusaMini::I2CBus::readSDA() 
+{
 	mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
 	return mainboard->readDigital(this->sda);
 }
 
-bool FEZAthena::I2CBus::writeBit(bool bit) {
+bool FEZMedusaMini::I2CBus::writeBit(bool bit) 
+{
     if (bit)
 		this->readSDA();
     else
@@ -90,7 +82,8 @@ bool FEZAthena::I2CBus::writeBit(bool bit) {
     return true;
 }
 
-bool FEZAthena::I2CBus::readBit() {
+bool FEZMedusaMini::I2CBus::readBit() 
+{
     this->readSDA();
 	
     I2C_DELAY();
@@ -107,7 +100,8 @@ bool FEZAthena::I2CBus::readBit() {
     return bit;
 }
 
-bool FEZAthena::I2CBus::sendStartCondition() {
+bool FEZMedusaMini::I2CBus::sendStartCondition() 
+{
 	if (this->start) {
 		this->readSDA();
 		I2C_DELAY();
@@ -130,7 +124,8 @@ bool FEZAthena::I2CBus::sendStartCondition() {
 	return true;
 }
 
-bool FEZAthena::I2CBus::sendStopCondition() {
+bool FEZMedusaMini::I2CBus::sendStopCondition() 
+{
 	this->clearSDA();
 	I2C_DELAY();
 
@@ -147,7 +142,8 @@ bool FEZAthena::I2CBus::sendStopCondition() {
 	return true;
 }
 
-bool FEZAthena::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data) {
+bool FEZMedusaMini::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data) 
+{
 	unsigned char bit;
 	bool nack;
 	
@@ -168,7 +164,8 @@ bool FEZAthena::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char da
      return nack;
 }
 
-unsigned char FEZAthena::I2CBus::receive(bool sendAcknowledgeBit, bool sendStopCondition) {
+unsigned char FEZMedusaMini::I2CBus::receive(bool sendAcknowledgeBit, bool sendStopCondition) 
+{
 	unsigned char d = 0;
 	unsigned char bit = 0;
 
@@ -186,11 +183,9 @@ unsigned char FEZAthena::I2CBus::receive(bool sendAcknowledgeBit, bool sendStopC
 
 	return d;
 }
-#endif
 
-unsigned int FEZAthena::I2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop) 
+unsigned int FEZMedusaMini::I2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop) 
 {
-#ifndef GADGETEERING_HARDWARE_I2C
 	if (!count) 
 		return 0;
 
@@ -206,18 +201,10 @@ unsigned int FEZAthena::I2CBus::write(const unsigned char* buffer, unsigned int 
 		numWrite++;
 	
 	return numWrite;
-#else
-	Wire.beginTransmission(address);
-	Wire.write(buffer, count);
-
-	if(sendStop)
-		Wire.endTransmission();
-#endif
  }
 
-unsigned int FEZAthena::I2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop) 
-{
-#ifndef GADGETEERING_HARDWARE_I2C
+unsigned int FEZMedusaMini::I2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop) 
+{	
 	if (!count) 
 		return 0;
 
@@ -235,21 +222,10 @@ unsigned int FEZAthena::I2CBus::read(unsigned char* buffer, unsigned int count, 
 	numRead++;
 
     return numRead;
-#else
-	Wire.requestFrom(address, count, sendStop);
-
-	for(int i = 0; i < count; i++)
-	{
-		while(Wire.available() < 1) //Wait for one byte to avoid overflowing the buffer
-			System::Sleep(10);
-
-		buffer[i] = Wire.read();
-	}
-#endif
 }
 
-bool FEZAthena::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address) {
-#ifndef GADGETEERING_HARDWARE_I2C
+bool FEZMedusaMini::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address) 
+{
 	*numWritten = 0;
 	*numRead = 0;
 
@@ -258,9 +234,12 @@ bool FEZAthena::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int
 	unsigned int read = 0;
 
     if (writeLength > 0) {
-		if (!this->transmit(true, false, address)) {
-			for (i = 0; i < writeLength - 1; i++) {
-				if (!this->transmit(false, false, writeBuffer[i])) {
+		if (!this->transmit(true, false, address)) 
+		{
+			for (i = 0; i < writeLength - 1; i++) 
+			{
+				if (!this->transmit(false, false, writeBuffer[i])) 
+				{
 					(write)++;
 				}
 			}
@@ -272,9 +251,12 @@ bool FEZAthena::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int
 		*numWritten = write;
     }
 
-    if (readLength > 0) {
-		if (!this->transmit(true, false, address | 1)) {
-			for (i = 0; i < readLength - 1; i++) {
+    if (readLength > 0) 
+	{
+		if (!this->transmit(true, false, address | 1)) 
+		{
+			for (i = 0; i < readLength - 1; i++) 
+			{
 				readBuffer[i] = this->receive(true, false);
 				read++;
 			}
@@ -286,8 +268,4 @@ bool FEZAthena::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int
     }
 
 	return (write + read) == (writeLength + readLength);
-#else
-	this->write(writeBuffer, writeLength, address, false);
-	this->read(readBuffer, readLength, address, true);
-#endif
 }

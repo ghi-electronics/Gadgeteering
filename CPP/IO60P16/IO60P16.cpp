@@ -72,7 +72,7 @@ void IO60P16::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistorMo
 	unsigned char port = this->getPort(pinNumber);
 	unsigned char resistorRegister;
 
-	if (state == IOStates::PWM)	{
+	if (state == IOStates::PWM_OUTPUT)	{
 		if ((this->pwms[port] & mask) != 0x00)
 			return; //already set as a PWM
 

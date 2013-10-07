@@ -201,7 +201,7 @@ void FEZMedusaMini::print(double toPrint) {
 void FEZMedusaMini::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistorMode) {
 	if (state == IOStates::DIGITAL_INPUT)
 		pinMode(pinNumber, resistorMode == ResistorModes::PULL_UP ? INPUT_PULLUP : INPUT);
-	else if ((state == IOStates::DIGITAL_OUTPUT) || (state == IOStates::PWM))
+	else if ((state == IOStates::DIGITAL_OUTPUT) || (state == IOStates::PWM_OUTPUT))
 		pinMode(pinNumber, OUTPUT);
 }
 

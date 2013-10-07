@@ -17,18 +17,14 @@ limitations under the License.
 #include "../Gadgeteering/Gadgeteering.h"
 #include <SPI.h>
 
-#include "FEZAthena.h"
-#include "Environment.h"
+#include "FEZMedusaMini.h"
 
-//#define SYSTEM_CLOCK 84000U /*KHz*/
-//#define GADGETEERING_SYSTEM_CLOCK 84000U /*KHz*/
-//#define GADGETEERING_EXTENDED_SPI
+#define SYSTEM_CLOCK 12000U /*KHz*/
 
 using namespace GHI;
 using namespace GHI::Mainboards;
-using namespace GHI::Interfaces;
 
-FEZAthena::SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : Interfaces::SPIBus(mosi, miso, sck)
+FEZMedusaMini::SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : Interfaces::SPIBus(mosi, miso, sck)
 {
 #ifndef GADGETEERING_EXTENDED_SPI
 	this->spi = new SPIClass();
@@ -38,7 +34,7 @@ FEZAthena::SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : Interfaces::SP
 #endif
 }
 
-FEZAthena::SPIBus::~SPIBus() {
+FEZMedusaMini::SPIBus::~SPIBus() {
 #ifndef GADGETEERING_EXTENDED_SPI
 	this->spi->end();
 	delete this->spi;
@@ -47,7 +43,7 @@ FEZAthena::SPIBus::~SPIBus() {
 #endif
 }
 
-void FEZAthena::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configuration) {
+void FEZMedusaMini::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configuration) {
 #ifndef GADGETEERING_EXTENDED_SPI
 	if (!configuration->clockIdleState && configuration->clockEdge)
 		this->spi->setDataMode(SPI_MODE0);
@@ -78,37 +74,32 @@ void FEZAthena::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configuration) 
 #else
 
 	if (!configuration->clockIdleState && configuration->clockEdge)
-		SPI.setDataMode(configuration->chipSelect, SPI_MODE0);
+		SPI.setDataMode(configuration->chipSelectPin, SPI_MODE0);
 	else if (!configuration->clockIdleState && !configuration->clockEdge)
-		SPI.setDataMode(configuration->chipSelect, SPI_MODE1);
+		SPI.this->spi->setDataMode(configuration->chipSelectPin, SPI_MODE1);
 	else if (configuration->clockIdleState && !configuration->clockEdge)
-		SPI.setDataMode(configuration->chipSelect, SPI_MODE2);
+		SPI.this->spi->setDataMode(configuration->chipSelectPin, SPI_MODE2);
 	else if (configuration->clockIdleState && configuration->clockEdge)
-		SPI.setDataMode(configuration->chipSelect, SPI_MODE3);
+		SPI.this->spi->setDataMode(configuration->chipSelectPin, SPI_MODE3);
 
-	unsigned int divider = GADGETEERING_SYSTEM_CLOCK / configuration->clockRate;
+	unsigned int divider = SYSTEM_CLOCK / configuration->clockRate;
 	SPI.setClockDivider(0, divider);
 #endif
 }
 
-void FEZAthena::SPIBus::selectChip(GHI::Interfaces::SPIConfiguration* configuration)
+void FEZMedusaMini::SPIBus::selectChip(GHI::Interfaces::SPIConfiguration* configuration)
 {
-	mainboard->setIOMode(configuration->chipSelect, IOStates::DIGITAL_OUTPUT, ResistorModes::FLOATING);
 	mainboard->writeDigital(configuration->chipSelect, configuration->chipSelectActiveState);
 	System::Sleep(configuration->chipSelectSetupTime);
 }
 
-void FEZAthena::SPIBus::deselectChip(GHI::Interfaces::SPIConfiguration* configuration)
+void FEZMedusaMini::SPIBus::deselectChip(GHI::Interfaces::SPIConfiguration* configuration)
 {
-	mainboard->setIOMode(configuration->chipSelect, IOStates::DIGITAL_OUTPUT, ResistorModes::FLOATING);
 	System::Sleep(configuration->chipSelectHoldTime);
 	mainboard->writeDigital(configuration->chipSelect, !configuration->chipSelectActiveState);
-//#ifdef GADGETEERING_EXTENDED_SPI
-//	SPI.end();
-//#endif
 }
 
-void FEZAthena::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration, bool deselectAfter)
+void FEZMedusaMini::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration)
 {
 	this->setup(configuration);
 	this->selectChip(configuration);
@@ -134,6 +125,5 @@ void FEZAthena::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char
 	}
 #endif
 	
-	if(deselectAfter)
-		this->deselectChip(configuration);
+	this->deselectChip(configuration);
 }

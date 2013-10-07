@@ -159,11 +159,9 @@ void FEZAthena::print(double toPrint)
 
 void FEZAthena::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistorMode) {
 	if (state == IOStates::DIGITAL_INPUT)
-		pinMode(pinNumber, resistorMode == ResistorModes::PULL_UP ? INPUT_PULLUP : INPUT);
-	else
-	{
-		pinMode(pinNumber, OUTPUT);
-	}
+		::pinMode(pinNumber, resistorMode == ResistorModes::PULL_UP ? INPUT_PULLUP : INPUT);
+	else if ((state == IOStates::DIGITAL_OUTPUT) || (state == IOStates::PWM_OUTPUT))
+		::pinMode(pinNumber, OUTPUT);
 }
 
 void FEZAthena::setPWM(CPUPin pinNumber, double dutyCycle, double frequency) {

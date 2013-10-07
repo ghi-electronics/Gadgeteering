@@ -21,6 +21,7 @@ limitations under the License.
 #include "../Gadgeteering/Interfaces.hpp"
 #include "../Gadgeteering/I2CDevice.hpp"
 #include "../Gadgeteering/Module.hpp"
+#include "../Gadgeteering/System.hpp"
 
 namespace GHI {
 	namespace Modules {

@@ -14,24 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _FEZATHENA_H_
-#define _FEZATHENA_H_
+#ifndef _FEZMEDUSA_H_
+#define _FEZMEDUSA_H_
 
 #include "../Gadgeteering/Mainboard.hpp"
 #include "../Gadgeteering/Socket.hpp"
 #include "../Gadgeteering/SerialDevice.hpp"
 #include "../Gadgeteering/SPIDevice.hpp"
 #include "../Gadgeteering/I2CBus.hpp"
-#include "../IO60P16/IO60P16.h"
-#include "Environment.h"
 
 class SPIClass;
 
 namespace GHI {
 	namespace Mainboards {
-		class FEZAthena : public GHI::Mainboard {
-
-			public:
+		class FEZMedusaMini : public GHI::Mainboard {
 			class SPIBus : public GHI::Interfaces::SPIBus
 			{
 				SPIClass* spi;
@@ -43,7 +39,7 @@ namespace GHI {
 					SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck);
 					virtual ~SPIBus();
 					
-					virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration, bool deselectAfter);
+					virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration);
 			};
 
 			class SerialDevice : public GHI::Interfaces::SerialDevice {
@@ -60,8 +56,6 @@ namespace GHI {
 	
 			class I2CBus : public GHI::Interfaces::I2CBus
 			{
-
-#ifndef GADGETEERING_HARDWARE_I2C
 					bool start;
 
 					void clearSCL();
@@ -77,7 +71,6 @@ namespace GHI {
 
 					bool transmit(bool sendStart, bool sendStop, unsigned char data);
 					unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
-#endif
 
 					public:
 							I2CBus(CPUPin sda, CPUPin scl);
@@ -87,8 +80,10 @@ namespace GHI {
 							virtual unsigned int read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
 							virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
 			};
-				FEZAthena();
-				virtual ~FEZAthena();
+
+			public:
+				FEZMedusaMini();
+				virtual ~FEZMedusaMini();
 				
 				virtual void panic(unsigned char error, unsigned char specificError = 0);
 				virtual void print(const char* toPrint);
@@ -109,6 +104,7 @@ namespace GHI {
 				virtual Interfaces::SPIBus* getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
 				virtual Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin);
 		};
+
 	}
 }
 
