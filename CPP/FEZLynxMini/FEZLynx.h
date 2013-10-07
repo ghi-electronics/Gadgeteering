@@ -32,6 +32,7 @@ limitations under the License.
 #include "../Gadgeteering/I2CBus.hpp"
 #include "../Gadgeteering/Types.hpp"
 #include "../Gadgeteering/System.hpp"
+#include "../IO60P16/IO60P16.h"
 
 namespace GHI
 {
@@ -112,6 +113,7 @@ namespace GHI
 			
             bool isVirtual(GHI::CPUPin pinNumber);
 			GHI::CPUPin getExtenderPin(GHI::CPUPin pinNumber);
+            Modules::IO60P16* Extender;
 			
             void sendPinStates(int channel);
 			void setValue(GHI::CPUPin pinNumber);
@@ -278,11 +280,19 @@ namespace GHI
 						static const CPUPin PD_6 = ((8 * 3) + 7);
 						static const CPUPin PD_7 = ((8 * 3) + 8);
 
-						static const CPUPin Analog_1 = 0x00;
-						static const CPUPin Analog_2 = 0x00;
-						static const CPUPin Analog_3 = 0x00;
-						static const CPUPin Analog_4 = 0x00;
-						static const CPUPin Analog_5 = 0x00;
+						static const CPUPin Analog_01 = PD_1;
+						static const CPUPin Analog_02 = PD_2;
+						static const CPUPin Analog_03 = PA_3;
+						static const CPUPin Analog_04 = PD_4;
+						static const CPUPin Analog_05 = PD_5;
+						static const CPUPin Analog_06 = PA_4;
+
+						//Analog Ports on HubAP5
+						static const CPUPin Analog_07 = PD_1;
+						static const CPUPin Analog_08 = 0x00;
+						static const CPUPin Analog_09 = 0x00;
+						static const CPUPin Analog_10 = 0x00;
+						static const CPUPin Analog_11 = 0x00;
                 };
 
 				virtual void panic(unsigned char error, unsigned char specificError = 0);

@@ -67,8 +67,8 @@ FEZLynx::FEZLynx()
 	}
 
 	this->mapSockets();
-	this->analogConverter = mainboard->getI2CBus(this->getSocket(3))->getI2CDevice(0x49);
-
+	this->analogConverter = mainboard->getI2CBus(this->getSocket(3))->getI2CDevice(0x48);
+	this->Extender = new Modules::IO60P16(3);
 	//delete [] infoList;
 }
 
@@ -222,25 +222,34 @@ void FEZLynx::purgeChannel(unsigned char channel)
 
 void FEZLynx::mapSockets()
 {
-	Socket* socket = this->registerSocket(new Socket(1, Socket::Types::I | Socket::Types::A));
-	socket->pins[3] = Pins::PD_4;
-	socket->pins[4] = Pins::PD_5;
-	socket->pins[5] = FEZLynx::ANALOG_5; //VIN5
+	Socket* socket = this->registerSocket(new Socket(1, Socket::Types::Y | Socket::Types::A));
+	socket->pins[3] = Pins::PD_4; //VIN3
+	socket->pins[4] = Pins::PD_5; //VIN4
+	socket->pins[5] = Pins::PA_4; //VIN5
 	socket->pins[6] = Pins::PD_6;
-	socket->pins[7] = Pins::NotConnected;
-	socket->pins[8] = Pins::PB_1;
-	socket->pins[9] = Pins::PB_0;
+	socket->pins[7] = Pins::PA_5;
+	socket->pins[8] = Pins::PA_6;
+	socket->pins[9] = Pins::PA_7;
 
 	socket = this->registerSocket(new Socket(2, Socket::Types::I | Socket::Types::A));
 	socket->pins[3] = Pins::PD_1;
 	socket->pins[4] = Pins::PD_2;
-	socket->pins[5] = FEZLynx::ANALOG_2; //VIN2
+	socket->pins[5] = Pins::PA_1; //VIN2
 	socket->pins[6] = Pins::PD_3;
 	socket->pins[7] = Pins::NotConnected;
 	socket->pins[8] = Pins::PB_1;
 	socket->pins[9] = Pins::PB_0;
 
-	socket = this->registerSocket(new Socket(3, Socket::Types::K | Socket::Types::I | Socket::Types::X | Socket::Types::U));
+	socket = this->registerSocket(new Socket(0, Socket::Types::K | Socket::Types::I | Socket::Types::X | Socket::Types::U));
+	socket->pins[3] = Pins::PD_7;
+	socket->pins[4] = Pins::NotConnected;
+	socket->pins[5] = Pins::NotConnected;
+	socket->pins[6] = Pins::NotConnected;
+	socket->pins[7] = Pins::NotConnected;
+	socket->pins[8] = Pins::PB_1;
+	socket->pins[9] = Pins::PB_0;
+
+	socket = this->registerSocket(new Socket(3, Socket::Types::S | Socket::Types::X));
 	socket->pins[3] = Pins::PD_0;
 	socket->pins[4] = Pins::PC_0;
 	socket->pins[5] = Pins::PC_1;
@@ -254,18 +263,81 @@ void FEZLynx::mapSockets()
 	socket->pins[4] = Pins::PB_5;
 	socket->pins[5] = Pins::PB_6;
 	socket->pins[6] = Pins::PB_7;
-	socket->pins[7] = Pins::PA_1;
-	socket->pins[8] = Pins::PA_2;
-	socket->pins[9] = Pins::PA_0;
-
-	socket = this->registerSocket(new Socket(5, Socket::Types::S | Socket::Types::X));
-	socket->pins[3] = Pins::PA_4;
-	socket->pins[4] = Pins::PA_5;
-	socket->pins[5] = Pins::PA_6;
-	socket->pins[6] = Pins::PA_7;
-	socket->pins[7] = Pins::PA_1;
+	socket->pins[7] = Pins::PB_1;
 	socket->pins[8] = Pins::PA_2;
     socket->pins[9] = Pins::PA_0;
+
+	socket = this->registerSocket(new Socket(11, Socket::Types::Y | Socket::Types::A));
+    socket->pins[3] = Pins::P5_0;
+	socket->pins[4] = Pins::P5_1;
+    socket->pins[5] = Pins::P5_2;
+    socket->pins[6] = Pins::P5_3;
+    socket->pins[7] = Pins::P5_4;
+    socket->pins[8] = Pins::P5_5;
+    socket->pins[9] = Pins::P5_6;
+
+    socket = this->registerSocket(new Socket(12, Socket::Types::Y | Socket::Types::A));
+    socket->pins[3] = Pins::P4_0;
+    socket->pins[4] = Pins::P4_1;
+    socket->pins[5] = Pins::P4_2;
+    socket->pins[6] = Pins::P4_3;
+    socket->pins[7] = Pins::P4_4;
+    socket->pins[8] = Pins::P4_5;
+    socket->pins[9] = Pins::P4_6;
+
+    socket = this->registerSocket(new Socket(13, Socket::Types::Y | Socket::Types::X));
+    socket->pins[3] = Pins::P3_0;
+    socket->pins[4] = Pins::P3_1;
+    socket->pins[5] = Pins::P3_2;
+    socket->pins[6] = Pins::P3_3;
+    socket->pins[7] = Pins::P3_4;
+    socket->pins[8] = Pins::P3_5;
+    socket->pins[9] = Pins::P3_6;
+
+    socket = this->registerSocket(new Socket(14, Socket::Types::Y | Socket::Types::P | Socket::Types::X));
+    socket->pins[3] = Pins::P2_0;
+    socket->pins[4] = Pins::P2_1;
+    socket->pins[5] = Pins::P2_2;
+    socket->pins[6] = Pins::P2_3;
+    socket->pins[7] = Pins::P7_4;
+    socket->pins[8] = Pins::P7_5;
+    socket->pins[9] = Pins::P7_6;
+
+	socket = this->registerSocket(new Socket(15, Socket::Types::Y | Socket::Types::P | Socket::Types::X));
+    socket->pins[3] = Pins::P1_4;
+    socket->pins[4] = Pins::P1_5;
+    socket->pins[5] = Pins::P1_6;
+    socket->pins[6] = Pins::P1_7;
+    socket->pins[7] = Pins::P7_1;
+    socket->pins[8] = Pins::P7_2;
+    socket->pins[9] = Pins::P7_3;
+
+    socket = this->registerSocket(new Socket(16, Socket::Types::Y | Socket::Types::P | Socket::Types::X));
+    socket->pins[3] = Pins::P1_0;
+    socket->pins[4] = Pins::P1_1;
+    socket->pins[5] = Pins::P1_2;
+    socket->pins[6] = Pins::P1_3;
+    socket->pins[7] = Pins::P6_6;
+    socket->pins[8] = Pins::P6_7;
+    socket->pins[9] = Pins::P7_0;
+
+    socket = this->registerSocket(new Socket(17, Socket::Types::Y | Socket::Types::P | Socket::Types::X));
+    socket->pins[3] = Pins::P0_4;
+    socket->pins[4] = Pins::P0_5;
+    socket->pins[5] = Pins::P0_6;
+    socket->pins[6] = Pins::P0_7;
+    socket->pins[7] = Pins::P6_3;
+    socket->pins[8] = Pins::P6_4;
+    socket->pins[9] = Pins::P6_5;
+
+    socket = this->registerSocket(new Socket(18, Socket::Types::Y | Socket::Types::P | Socket::Types::X));
+    socket->pins[3] = Pins::P0_0;
+    socket->pins[4] = Pins::P0_1;
+    socket->pins[5] = Pins::P0_2;
+    socket->pins[6] = Pins::P0_3;
+    socket->pins[7] = Pins::P6_0;
+    socket->pins[8] = Pins::P6_1;
+    socket->pins[9] = Pins::P6_2;
 }
 
 void FEZLynx::panic(unsigned char error, unsigned char specificError)
@@ -347,6 +419,17 @@ void FEZLynx::sendPinStates(int channel)
 
 void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode) 
 {
+	if(isVirtual(pinNumber))
+	{
+        int channel = FTDI_CHANNEL(pinNumber);
+        int pin = FTDI_PIN(pinNumber);
+        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 1));
+
+        Extender->setIOMode(extendedPin, state, resistorMode);
+
+		return;
+	}
+
 	if(state == GHI::IOStates::DIGITAL_INPUT)
 		this->clearDirection(pinNumber);
 	else if(state == GHI::IOStates::DIGITAL_OUTPUT)
@@ -357,6 +440,15 @@ void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resistor
 
 bool FEZLynx::readDigital(GHI::CPUPin pinNumber) 
 {
+	if(isVirtual(pinNumber))
+    {
+        int channel = FTDI_CHANNEL(pinNumber);
+        int pin = FTDI_PIN(pinNumber);
+        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 1));
+
+        return Extender->readDigital(extendedPin);
+	}
+
 	DWORD sent = 0;
 	FT_STATUS status = FT_OK;
 	BYTE result = 0x00;
@@ -381,6 +473,17 @@ bool FEZLynx::readDigital(GHI::CPUPin pinNumber)
 
 void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value) 
 {
+	if(isVirtual(pinNumber))
+	{
+        int channel = FTDI_CHANNEL(pinNumber);
+        int pin = FTDI_PIN(pinNumber);
+        CPUPin extendedPin = (((channel - 4) << 4) | (pin - 1));
+
+        Extender->writeDigital(extendedPin, value);
+
+		return;
+	}
+
 	value ? this->setValue(pinNumber) : this->clearValue(pinNumber);
 }
 
@@ -471,14 +574,20 @@ Interfaces::I2CBus* FEZLynx::getI2CBus(CPUPin sdaPin, CPUPin sclPin)
 #include "../DisplayN18/DisplayN18.h"
 #include "../FLASH/FLASH.h"
 
-int main() {
+int main() 
+{
 	FEZLynx board;
 
-	AnalogInput input(board.getSocket(1)->pins[3]);
+	Modules::LEDStrip leds(8);
 
 	while(true)
 	{
-		std::cout << input.read() << std::endl;
+		for(int i = 0; i < 3; i++)
+		{
+			leds.turnOnLED(i + 1, true);
+			System::Sleep(100);
+		}
+
 		System::Sleep(100);
 	}
 
