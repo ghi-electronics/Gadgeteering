@@ -20,7 +20,17 @@ limitations under the License.
 namespace GHI
 {
 	namespace System
-	{
+    {
+        namespace Pins {
+            class Analog;
+        }
+
+        namespace InterfaceChannels {
+            class SPI;
+            class I2C;
+            class Serial;
+        }
+
 		void Sleep(unsigned long time);
 		void SleepMicro(unsigned long time);
 		unsigned long TimeElapsed();

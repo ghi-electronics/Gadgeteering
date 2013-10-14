@@ -43,10 +43,10 @@ void System::SleepMicro(unsigned long time)
 
     int seconds = 0;
 
-    while(time > 1000)
+    while(time > 1000000)
     {
         seconds++;
-        time -= 1000;
+        time -= 1000000;
     }
 
     t_Sleep.tv_nsec = (time * 1000);

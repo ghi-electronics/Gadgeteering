@@ -17,13 +17,7 @@ limitations under the License.
 #ifndef _FEZLYNX_H_
 #define _FEZLYNX_H_
 
-#ifdef _WIN32
-	#include <Windows.h>
-	#include "FTD2XX.H"
-#else
-	#include "Linux/WinTypes.h"
-	#include "Linux/ftd2xx.h"
-#endif
+#include "include/FTDI_Device.h"
 
 #include "../Gadgeteering/Mainboard.hpp"
 #include "../Gadgeteering/Socket.hpp"
@@ -34,6 +28,9 @@ limitations under the License.
 #include "../Gadgeteering/System.hpp"
 #include "../IO60P16/IO60P16.h"
 
+#define FTDI_CHANNEL(pin) ((pin - 1) / 8)
+#define FTDI_PIN(pin) (((pin - 1) % 8) + 1)
+
 namespace GHI
 {
     namespace Mainboards
@@ -43,22 +40,16 @@ namespace GHI
             static const unsigned short CLOCK_DIVISOR = 0x0055; //Value of clock divisor, SCL Frequency = 60/((1+0x0095)*2) (MHz) = 200khz
 			static const int ANALOG_2 = 0xAA;
 			static const int ANALOG_5 = 0xAB;
-			
-			struct
-			{
-				FT_HANDLE device;
-				bool isMPSSE;
-				unsigned char value;
-				unsigned char direction;
-			} channels[4];
 
-			Interfaces::I2CDevice* analogConverter;
+            FTDI_Device *m_devices[4];
+            Interfaces::I2CDevice* analogConverter;
+            Modules::IO60P16* Extender;
 
             class SerialDevice : public GHI::Interfaces::SerialDevice {
-                FT_HANDLE channel;
+                FTDI_Device *m_device;
 
                 public:
-                    SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, FT_HANDLE channel);
+                    SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, FTDI_Device *device);
                     virtual ~SerialDevice();
 
                     virtual void open();
@@ -70,22 +61,37 @@ namespace GHI
 
             class SPIBus : public GHI::Interfaces::SPIBus
             {
-				Interfaces::DigitalInput* MISO;
+                FTDI_Device *m_device;
 
-                FT_HANDLE channel;
+                Interfaces::DigitalInput* MISO;
 
 				public:
-					SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin, FT_HANDLE channel);
+					SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin, FTDI_Device *device);
 					virtual ~SPIBus();
 
-					virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, CPUPin chipSelect, GHI::Interfaces::SPIConfiguration* configuration, bool deselectAfter);
+                    virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration, bool deselectAfter);
             };
 
-            class I2CBus : public GHI::Interfaces::I2CBus
+            class I2CBus : public Interfaces::I2CBus
             {
-                FT_HANDLE channel;
+                FTDI_Device *m_device;
+
+                bool sendStartCondition(unsigned char address);
+                void sendStopCondition();
+
+                public:
+                    I2CBus(CPUPin sdaPin, CPUPin sclPin, FTDI_Device *device);
+                    virtual ~I2CBus();
+
+                    virtual unsigned int write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop = true);
+                    virtual unsigned int read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop = true);
+                    virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
+            };
+
+            class SoftwareI2CBus : public GHI::Interfaces::I2CBus
+            {
                 bool startSent;
-						
+
                 void clearSCL();
                 void releaseSCL();
                 bool readSCL();
@@ -103,28 +109,17 @@ namespace GHI
                 unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
 
                 public:
-                    I2CBus(CPUPin sda, CPUPin scl, FT_HANDLE channel);
-                    virtual ~I2CBus();
+                    SoftwareI2CBus(CPUPin sda, CPUPin scl);
+                    virtual ~SoftwareI2CBus();
 
                     virtual unsigned int write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
                     virtual unsigned int read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
-					virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
+                    virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
             };
-			
-            bool isVirtual(GHI::CPUPin pinNumber);
-			GHI::CPUPin getExtenderPin(GHI::CPUPin pinNumber);
-            Modules::IO60P16* Extender;
-			
-            void sendPinStates(int channel);
-			void setValue(GHI::CPUPin pinNumber);
-			void clearValue(GHI::CPUPin pinNumber);
-			void setDirection(GHI::CPUPin pinNumber);
-			void clearDirection(GHI::CPUPin pinNumber);
 
-			void initChannelPins(unsigned char channel);
-			void syncChannel(unsigned char channel);
-			void setupChannel(unsigned char channel);
-			void purgeChannel(unsigned char channel);
+            bool isVirtual(GHI::CPUPin pinNumber);
+            GHI::CPUPin getExtenderPin(GHI::CPUPin pinNumber);
+
 			void mapSockets();
 
             public:
@@ -308,10 +303,10 @@ namespace GHI
                 virtual void writeAnalog(GHI::CPUPin pinNumber, double voltage);
 				virtual void writeAnalogProportion(CPUPin pin, double proportion);
                 virtual void setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode = GHI::ResistorModes::FLOATING);
-				
+
                 virtual Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin);
 				virtual Interfaces::SPIBus* getSPIBus(CPUPin miso, CPUPin mosi, CPUPin sck);
-                virtual Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin);
+                virtual Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hardwareI2C);
         };
     }
 }

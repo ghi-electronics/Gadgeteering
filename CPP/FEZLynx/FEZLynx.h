@@ -21,8 +21,8 @@ limitations under the License.
 	#include <Windows.h>
 	#include "FTD2XX.H"
 #else
-	#include "Linux/WinTypes.h"
-	#include "Linux/ftd2xx.h"
+	#include "include/linux/WinTypes.h"
+	#include "include/linux/ftd2xx.h"
 #endif
 
 #include "../Gadgeteering/Mainboard.hpp"
@@ -43,7 +43,7 @@ namespace GHI
             static const unsigned short CLOCK_DIVISOR = 0x0055; //Value of clock divisor, SCL Frequency = 60/((1+0x0095)*2) (MHz) = 200khz
 			static const int ANALOG_2 = 0xAA;
 			static const int ANALOG_5 = 0xAB;
-			
+
 			struct
 			{
 				FT_HANDLE device;
@@ -86,7 +86,7 @@ namespace GHI
             {
                 FT_HANDLE channel;
                 bool startSent;
-						
+
                 void clearSCL();
                 void releaseSCL();
                 bool readSCL();
@@ -111,10 +111,10 @@ namespace GHI
                     virtual unsigned int read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
 					virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
             };
-			
+
             bool isVirtual(GHI::CPUPin pinNumber);
 			GHI::CPUPin getExtenderPin(GHI::CPUPin pinNumber);
-			
+
             void sendPinStates(int channel);
 			void setValue(GHI::CPUPin pinNumber);
 			void clearValue(GHI::CPUPin pinNumber);
@@ -288,7 +288,7 @@ namespace GHI
                 virtual void writeAnalog(GHI::CPUPin pinNumber, double voltage);
 				virtual void writeAnalogProportion(CPUPin pin, double proportion);
                 virtual void setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode = GHI::ResistorModes::FLOATING);
-				
+
                 virtual Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin);
 				virtual Interfaces::SPIBus* getSPIBus(CPUPin miso, CPUPin mosi, CPUPin sck);
                 virtual Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin);

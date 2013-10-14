@@ -1,0 +1,751 @@
+# depslib dependency file v1.0
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Accelerometer/Accelerometer.cpp
+	"Accelerometer.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Accelerometer/Accelerometer.h
+	"../Gadgeteering/Gadgeteering.h"
+	"../Gadgeteering/I2CDevice.hpp"
+	"../Gadgeteering/I2CBus.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/Gadgeteering.h
+	"Socket.hpp"
+	"Interfaces.hpp"
+	"Mainboard.hpp"
+	"SerialDevice.hpp"
+	"I2CDevice.hpp"
+	"I2CBus.hpp"
+	"SPIDevice.hpp"
+	"SPIBus.hpp"
+	"System.hpp"
+	"List.hpp"
+	"Module.hpp"
+	"DaisyLink.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/Socket.hpp
+	"Types.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/Types.hpp
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/Interfaces.hpp
+	"Socket.hpp"
+	"Mainboard.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/Mainboard.hpp
+	"Types.hpp"
+	"Socket.hpp"
+	"SPIBus.hpp"
+	"SerialDevice.hpp"
+	"I2CBus.hpp"
+	"List.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/SPIBus.hpp
+	"Socket.hpp"
+	"SPIDevice.hpp"
+	"Interfaces.hpp"
+	"Types.hpp"
+	"List.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/SPIDevice.hpp
+	"Types.hpp"
+	"Socket.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/List.hpp
+
+1378488522 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/SerialDevice.hpp
+	"Types.hpp"
+	"Socket.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/I2CBus.hpp
+	"Socket.hpp"
+	"I2CDevice.hpp"
+	"Interfaces.hpp"
+	"List.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/I2CDevice.hpp
+	"Types.hpp"
+	"Socket.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/System.hpp
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/Module.hpp
+	"Mainboard.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/DaisyLink.hpp
+	"Mainboard.hpp"
+	"Module.hpp"
+	"I2CBus.hpp"
+	"Interfaces.hpp"
+	"List.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/AccelG248/AccelG248.cpp
+	"AccelG248.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/AccelG248/AccelG248.h
+	"../Gadgeteering/Gadgeteering.h"
+	"../Gadgeteering/I2CDevice.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/ALFAT/ALFAT.cpp
+	"ALFAT.h"
+	"string.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/ALFAT/ALFAT.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Barometer/Barometer.cpp
+	"Barometer.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Barometer/Barometer.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Breakout/Breakout.cpp
+	"Breakout.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Breakout/Breakout.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Button/Button.cpp
+	"Button.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Button/Button.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/ButtonS6/ButtonS6.cpp
+	"ButtonS6.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/ButtonS6/ButtonS6.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/CharDisplay/CharDisplay.cpp
+	"CharDisplay.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/CharDisplay/CharDisplay.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/ColorSense/ColorSense.cpp
+	"ColorSense.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/ColorSense/ColorSense.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Compass/Compass.cpp
+	"Compass.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Compass/Compass.h
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/Module.hpp"
+	"../Gadgeteering/Socket.hpp"
+	"../Gadgeteering/Types.hpp"
+	"../Gadgeteering/I2CDevice.hpp"
+	"../Gadgeteering/System.hpp"
+	<string.h>
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/CurrentACS712/CurrentACS712.cpp
+	"CurrentACS712.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/CurrentACS712/CurrentACS712.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378742530 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Demos/Lynx/LynxDemo1/main.cpp
+	"../../../FEZLynx/FEZLynx.h"
+	"../../../Button/Button.h"
+	<iostream>
+
+1378754605 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/FEZLynx/FEZLynx.h
+	<Windows.h>
+	"include\windows\FTD2XX.H"
+	"include/linux/WinTypes.h"
+	"include/linux/ftd2xx.h"
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/Socket.hpp"
+	"../Gadgeteering/SPIBus.hpp"
+	"../IO60P16/IO60P16.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/FEZLynx/include/linux/WinTypes.h
+	<sys/time.h>
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/FEZLynx/include/linux/ftd2xx.h
+	<pthread.h>
+	"WinTypes.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/IO60P16/IO60P16.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/FEZTive/FEZtive.h
+	"../Gadgeteering/Interfaces.hpp"
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/System.hpp"
+	"../Gadgeteering/Types.hpp"
+	"../Gadgeteering/Module.hpp"
+	"../Gadgeteering/SPIDevice.hpp"
+	"../Gadgeteering/System.hpp"
+	<string.h>
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/RelayX1/RelayX1.h
+	"../Gadgeteering/Interfaces.hpp"
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/System.hpp"
+	"../Gadgeteering/Types.hpp"
+	"../Gadgeteering/Module.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/LEDStrip/LEDStrip.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/DisplayN18/DisplayN18.cpp
+	"DisplayN18.h"
+	<avr/pgmspace.h>
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/DisplayN18/DisplayN18.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/DistanceUS3/DistanceUS3.cpp
+	"DistanceUS3.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/DistanceUS3/DistanceUS3.h
+	"../Gadgeteering/Interfaces.hpp"
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/System.hpp"
+	"../Gadgeteering/Types.hpp"
+	"../Gadgeteering/Module.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Extender/Extender.cpp
+	"Extender.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Extender/Extender.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378742320 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/FEZLynx/FEZLynx_I2CBus.cpp
+	"../Gadgeteering/Gadgeteering.h"
+	"FEZLynx.h"
+
+1378754319 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/FEZLynx/FEZLynx_SerialDevice.cpp
+	"FEZLynx.h"
+	"../Gadgeteering/System.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/FEZLynx/FEZLynx_SPIBus.cpp
+	"FEZLynx.h"
+	"../Gadgeteering/System.hpp"
+	"../Gadgeteering/Types.hpp"
+
+1378735707 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/FEZLynx/FEZLynx_System.cpp
+	<Windows.h>
+	<sys/time.h>
+	<iostream>
+	<stdlib.h>
+	"../Gadgeteering/System.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/FEZTive/FEZtive.cpp
+	"FEZtive.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/FLASH/FLASH.cpp
+	"FLASH.h"
+	<string.h>
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/FLASH/FLASH.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/FMRadio/FMRadio.cpp
+	"FMRadio.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/FMRadio/FMRadio.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/DaisyLink.cpp
+	"DaisyLink.hpp"
+	"System.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/I2CBus.cpp
+	"I2CBus.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/I2CDevice.cpp
+	"I2CDevice.hpp"
+	"I2CBus.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/Interfaces.cpp
+	"Interfaces.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/List.cpp
+	"List.hpp"
+	"Types.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/Mainboard.cpp
+	"Mainboard.hpp"
+	"Module.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/Module.cpp
+	"Module.hpp"
+
+1378488575 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/SerialDevice.cpp
+	"SerialDevice.hpp"
+	"Mainboard.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/Socket.cpp
+	"Socket.hpp"
+	"Mainboard.hpp"
+	"I2CBus.hpp"
+	"SPIBus.hpp"
+	"SerialDevice.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/SoftwareSerial.cpp
+	"SoftwareSerial.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/SoftwareSerial.hpp
+	"Interfaces.hpp"
+	"Types.hpp"
+	"System.hpp"
+	"SerialDevice.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/SPIBus.cpp
+	"SPIBus.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/SPIDevice.cpp
+	"SPIDevice.hpp"
+	"SPIBus.hpp"
+	"Interfaces.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gadgeteering/Types.cpp
+	"Types.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/GasSense/GasSense.cpp
+	"GasSense.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/GasSense/GasSense.h
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/Interfaces.hpp"
+	"../Gadgeteering/System.hpp"
+	"../Gadgeteering/Types.hpp"
+	"../Gadgeteering/Module.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gyroscope/Gyroscope.cpp
+	"Gyroscope.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Gyroscope/Gyroscope.hpp
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/Module.hpp"
+	"../Gadgeteering/Socket.hpp"
+	"../Gadgeteering/Interfaces.hpp"
+	"../Gadgeteering/I2CDevice.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/IO60P16/IO60P16.cpp
+	"IO60P16.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Joystick/Joystick.cpp
+	"Joystick.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Joystick/Joystick.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/KeypadKP16/KeypadKP16.cpp
+	"KeypadKP16.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/KeypadKP16/KeypadKP16.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/LED7C/LED7C.cpp
+	"LED7C.h"
+	"../Gadgeteering/System.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/LED7C/LED7C.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/LED7R/LED7R.cpp
+	"LED7R.h"
+	"../Gadgeteering/System.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/LED7R/LED7R.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/LEDMatrix/LEDMatrix.cpp
+	"LEDMatrix.h"
+	"../Gadgeteering/System.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/LEDMatrix/LEDMatrix.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/LEDStrip/LEDStrip.cpp
+	"LEDStrip.h"
+	"../Gadgeteering/System.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/LightSensor/LightSensor.cpp
+	"LightSensor.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/LightSensor/LightSensor.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Load/Load.cpp
+	"Load.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Load/Load.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/MaxO/MaxO.cpp
+	"MaxO.h"
+	<string.h>
+	<stdlib.h>
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/MaxO/MaxO.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Moisture/Moisture.cpp
+	"Moisture.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Moisture/Moisture.h
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/Interfaces.hpp"
+	"../Gadgeteering/System.hpp"
+	"../Gadgeteering/Types.hpp"
+	"../Gadgeteering/Module.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/MotionSensor/MotionSensor.cpp
+	"MotionSensor.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/MotionSensor/MotionSensor.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/MotorDriverL298/MotorDriverL298.cpp
+	"MotorDriverL298.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/MotorDriverL298/MotorDriverL298.h
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/Interfaces.hpp"
+	"../Gadgeteering/System.hpp"
+	"../Gadgeteering/Types.hpp"
+	"../Gadgeteering/Module.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/MultiColorLED/MultiColorLED.cpp
+	"MultiColorLED.h"
+	"../Gadgeteering/System.hpp"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/MultiColorLED/MultiColorLED.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Potentiometer/Potentiometer.cpp
+	"Potentiometer.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Potentiometer/Potentiometer.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/RelayX1/RelayX1.cpp
+	"RelayX1.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/RelayX16/RelayX16.cpp
+	"RelayX16.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/RelayX16/RelayX16.h
+	"../Gadgeteering/Interfaces.hpp"
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/System.hpp"
+	"../Gadgeteering/Types.hpp"
+	"../Gadgeteering/Module.hpp"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/RS232/RS232.cpp
+	"RS232.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/RS232/RS232.h
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/Module.hpp"
+	"../Gadgeteering/Socket.hpp"
+	"../Gadgeteering/Types.hpp"
+	<string.h>
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/TemperatureHumidity/TemperatureHumidity.cpp
+	"TemperatureHumidity.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/TemperatureHumidity/TemperatureHumidity.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Thermocouple/Thermocouple.cpp
+	"Thermocouple.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Thermocouple/Thermocouple.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Tunes/Tunes.cpp
+	"Tunes.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/Tunes/Tunes.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/USBSerial/USBSerial.cpp
+	"USBSerial.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/USBSerial/USBSerial.h
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/Module.hpp"
+	"../Gadgeteering/Socket.hpp"
+	"../Gadgeteering/Types.hpp"
+	<string.h>
+
+1378485448 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/WiFiRN171/WiFiRN171.cpp
+	"WiFiRN171.h"
+
+1378485448 /home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/WiFiRN171/WiFiRN171.h
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/Socket.hpp"
+	"../Gadgeteering/SerialDevice.hpp"
+	"../Gadgeteering/System.hpp"
+	"../Gadgeteering/Types.hpp"
+	"../Gadgeteering/Module.hpp"
+	<stdio.h>
+	<string.h>
+
+1378754076 source:/home/james/Repositories/Git/ghi_elect-gadgeteering/CPP/FEZLynx/FEZLynx.cpp
+	"FEZLynx.h"
+	"../Gadgeteering/System.hpp"
+	"../LED7R/LED7R.h"
+	<iostream>
+
+1381448678 source:/home/james/Repositories/GHI/gadgeteering/CPP/Accelerometer/Accelerometer.cpp
+	"Accelerometer.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Accelerometer/Accelerometer.h
+	"../Gadgeteering/Gadgeteering.h"
+	"../Gadgeteering/I2CDevice.hpp"
+	"../Gadgeteering/I2CBus.hpp"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Gadgeteering.h
+	"Socket.hpp"
+	"Interfaces.hpp"
+	"Mainboard.hpp"
+	"SerialDevice.hpp"
+	"I2CDevice.hpp"
+	"I2CBus.hpp"
+	"SPIDevice.hpp"
+	"SPIBus.hpp"
+	"System.hpp"
+	"List.hpp"
+	"Module.hpp"
+	"DaisyLink.hpp"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Socket.hpp
+	"Types.hpp"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Types.hpp
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Interfaces.hpp
+	"Socket.hpp"
+	"Mainboard.hpp"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Mainboard.hpp
+	"Socket.hpp"
+	"SPIBus.hpp"
+	"SerialDevice.hpp"
+	"I2CBus.hpp"
+	"List.hpp"
+	"Types.hpp"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/SPIBus.hpp
+	"Socket.hpp"
+	"SPIDevice.hpp"
+	"Interfaces.hpp"
+	"Types.hpp"
+	"List.hpp"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/SPIDevice.hpp
+	"Types.hpp"
+	"Socket.hpp"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/List.hpp
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/SerialDevice.hpp
+	"Types.hpp"
+	"Socket.hpp"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/I2CBus.hpp
+	"Socket.hpp"
+	"I2CDevice.hpp"
+	"Interfaces.hpp"
+	"List.hpp"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/I2CDevice.hpp
+	"Types.hpp"
+	"Socket.hpp"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/System.hpp
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Module.hpp
+	"Mainboard.hpp"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/DaisyLink.hpp
+	"Mainboard.hpp"
+	"Module.hpp"
+	"I2CBus.hpp"
+	"Interfaces.hpp"
+	"List.hpp"
+
+1381448678 source:/home/james/Repositories/GHI/gadgeteering/CPP/AccelG248/AccelG248.cpp
+	"AccelG248.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/AccelG248/AccelG248.h
+	"../Gadgeteering/Gadgeteering.h"
+	"../Gadgeteering/I2CDevice.hpp"
+
+1381448678 source:/home/james/Repositories/GHI/gadgeteering/CPP/ALFAT/ALFAT.cpp
+	"ALFAT.h"
+	"string.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/ALFAT/ALFAT.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1381448678 source:/home/james/Repositories/GHI/gadgeteering/CPP/Barometer/Barometer.cpp
+	"Barometer.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Barometer/Barometer.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1381448678 source:/home/james/Repositories/GHI/gadgeteering/CPP/Breakout/Breakout.cpp
+	"Breakout.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Breakout/Breakout.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1381448678 source:/home/james/Repositories/GHI/gadgeteering/CPP/Button/Button.cpp
+	"Button.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Button/Button.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1381448678 source:/home/james/Repositories/GHI/gadgeteering/CPP/ButtonS6/ButtonS6.cpp
+	"ButtonS6.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/ButtonS6/ButtonS6.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1381448678 source:/home/james/Repositories/GHI/gadgeteering/CPP/CharDisplay/CharDisplay.cpp
+	"CharDisplay.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/CharDisplay/CharDisplay.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1381448678 source:/home/james/Repositories/GHI/gadgeteering/CPP/ColorSense/ColorSense.cpp
+	"ColorSense.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/ColorSense/ColorSense.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1381448678 source:/home/james/Repositories/GHI/gadgeteering/CPP/Compass/Compass.cpp
+	"Compass.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Compass/Compass.h
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/Module.hpp"
+	"../Gadgeteering/Socket.hpp"
+	"../Gadgeteering/Types.hpp"
+	"../Gadgeteering/I2CDevice.hpp"
+	"../Gadgeteering/System.hpp"
+	<string.h>
+
+1381448678 source:/home/james/Repositories/GHI/gadgeteering/CPP/CurrentACS712/CurrentACS712.cpp
+	"CurrentACS712.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/CurrentACS712/CurrentACS712.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1381448678 source:/home/james/Repositories/GHI/gadgeteering/CPP/Demos/Lynx/LynxDemo1/main.cpp
+	"../../../FEZLynx/FEZLynx.h"
+	"../../../Gadgeteering/Interfaces.hpp"
+	"../../../Gadgeteering/System.hpp"
+	"../../../Gadgeteering/Types.hpp"
+	"../../../FEZTive/FEZtive.h"
+	"../../../RelayX1/RelayX1.h"
+	"../../../LEDStrip/LEDStrip.h"
+
+1381453902 /home/james/Repositories/GHI/gadgeteering/CPP/FEZLynx/FEZLynx.h
+	<Windows.h>
+	"FTD2XX.H"
+	"include/linux/WinTypes.h"
+	"include/linux/ftd2xx.h"
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/Socket.hpp"
+	"../Gadgeteering/SerialDevice.hpp"
+	"../Gadgeteering/SPIDevice.hpp"
+	"../Gadgeteering/I2CBus.hpp"
+	"../Gadgeteering/Types.hpp"
+	"../IO60P16/IO60P16.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/FEZLynx/include/linux/WinTypes.h
+	<sys/time.h>
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/FEZLynx/include/linux/ftd2xx.h
+	<pthread.h>
+	"WinTypes.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/IO60P16/IO60P16.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/FEZTive/FEZtive.h
+	"../Gadgeteering/Interfaces.hpp"
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/System.hpp"
+	"../Gadgeteering/Types.hpp"
+	"../Gadgeteering/Module.hpp"
+	"../Gadgeteering/SPIDevice.hpp"
+	"../Gadgeteering/System.hpp"
+	<string.h>
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/RelayX1/RelayX1.h
+	"../Gadgeteering/Interfaces.hpp"
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/System.hpp"
+	"../Gadgeteering/Types.hpp"
+	"../Gadgeteering/Module.hpp"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/LEDStrip/LEDStrip.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1381448678 source:/home/james/Repositories/GHI/gadgeteering/CPP/DisplayN18/DisplayN18.cpp
+	"DisplayN18.h"
+	<avr/pgmspace.h>
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/DisplayN18/DisplayN18.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1381448678 source:/home/james/Repositories/GHI/gadgeteering/CPP/DistanceUS3/DistanceUS3.cpp
+	"DistanceUS3.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/DistanceUS3/DistanceUS3.h
+	"../Gadgeteering/Interfaces.hpp"
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/System.hpp"
+	"../Gadgeteering/Types.hpp"
+	"../Gadgeteering/Module.hpp"
+
+1381448678 source:/home/james/Repositories/GHI/gadgeteering/CPP/Extender/Extender.cpp
+	"Extender.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/Extender/Extender.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1381453999 source:/home/james/Repositories/GHI/gadgeteering/CPP/FEZLynxMini/FEZLynx.cpp
+	<iostream>
+	"FEZLynx.h"
+	<cstring>
+	"../LEDStrip/LEDStrip.h"
+	"../ButtonS6/ButtonS6.h"
+	"../Button/Button.h"
+	"../DisplayN18/DisplayN18.h"
+	"../FLASH/FLASH.h"
+
+1381449636 /home/james/Repositories/GHI/gadgeteering/CPP/FEZLynxMini/FEZLynx.h
+	<Windows.h>
+	"FTD2XX.H"
+	"include/linux/WinTypes.h"
+	"include/linux/ftd2xx.h"
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/Socket.hpp"
+	"../Gadgeteering/SerialDevice.hpp"
+	"../Gadgeteering/SPIDevice.hpp"
+	"../Gadgeteering/I2CBus.hpp"
+	"../Gadgeteering/Types.hpp"
+	"../Gadgeteering/System.hpp"
+	"../IO60P16/IO60P16.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/FEZLynxMini/include/linux/WinTypes.h
+	<sys/time.h>
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/FEZLynxMini/include/linux/ftd2xx.h
+	<pthread.h>
+	"WinTypes.h"
+
+1381448678 /home/james/Repositories/GHI/gadgeteering/CPP/FLASH/FLASH.h
+	"../Gadgeteering/Gadgeteering.h"
+

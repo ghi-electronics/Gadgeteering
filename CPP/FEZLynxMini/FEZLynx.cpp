@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 #include <iostream>
+#include <cstring>
 
 #include "FEZLynx.h"
 
@@ -22,202 +23,88 @@ using namespace GHI;
 using namespace GHI::Interfaces;
 using namespace GHI::Mainboards;
 
-#define FTDI_CHANNEL(pin) ((pin - 1) / 8)
-#define FTDI_PIN(pin) (((pin - 1) % 8) + 1)
-
 Mainboard* GHI::mainboard = NULL;
 
-FEZLynx::FEZLynx() 
+FEZLynx::FEZLynx()
 {
 	GHI::mainboard = this;
-	
-	FT_STATUS status = FT_OK;
-	DWORD sent = 0, numDevices = 0;
+
+    FT_STATUS status = FT_OK;
 	char serialNumberBuffer[64];
-	unsigned char channel = 255;
+    unsigned char channel = 255;
+    int devices = 0;
 
-	/*FT_DEVICE_LIST_INFO_NODE *infoList = new FT_DEVICE_LIST_INFO_NODE[10];
-	status |= FT_GetDeviceInfoList(infoList, &numDevices);
+    FTDI_Configuration config;
+    config.Latency = 1;
 
-	if(numDevices != 4)
-		this->panic(Exceptions::ERR_MAINBOARD_ERROR);*/
-
-	for(int i = 0; i < 4; i++)
+	for(int i = 0; devices < 4; i++)
 	{
-		status = FT_ListDevices((PVOID)i, &serialNumberBuffer, FT_LIST_BY_INDEX | FT_OPEN_BY_SERIAL_NUMBER);
+        status = FT_ListDevices((PVOID)i, &serialNumberBuffer, FT_LIST_BY_INDEX | FT_OPEN_BY_SERIAL_NUMBER);
 
-		//Sort devices by the serial number to ensure proper is selected
-		if(serialNumberBuffer[strlen(serialNumberBuffer) - 1] == 'A')
-			channel = 0;
-		else if(serialNumberBuffer[strlen(serialNumberBuffer) - 1] == 'B')
-			channel = 1;
-		else if(serialNumberBuffer[strlen(serialNumberBuffer) - 1] == 'C')
-			channel = 2;
-		else if(serialNumberBuffer[strlen(serialNumberBuffer) - 1] == 'D')
-			channel = 3;
+		//Sort devices by the serial number to ensure proper channel is selected
+        if(serialNumberBuffer[std::strlen(serialNumberBuffer) - 1] == 'A')
+		{
+            config.BitMode = FTDI_Configuration::BIT_MODE_MPSSE;
+            this->m_devices[0] = new FTDI_Device(0xFB, 0x00, true, i);
+            channel = 0;
 
-		status |= FT_Open(i, &this->channels[channel].device);
+            std::cout << "Found Channel A" << std::endl;
+		}
+        else if(serialNumberBuffer[std::strlen(serialNumberBuffer) - 1] == 'B')
+		{
+            config.BitMode = FTDI_Configuration::BIT_MODE_MPSSE;
+            this->m_devices[1] = new FTDI_Device(0xFB, 0x00, true, i);
+            channel = 1;
 
-		if (status != FT_OK)
-			mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
+            std::cout << "Found Channel B" << std::endl;
+		}
+        else if(serialNumberBuffer[std::strlen(serialNumberBuffer) - 1] == 'C')
+		{
+            config.BitMode = FTDI_Configuration::BIT_MODE_ASYNC_BITBANG;
+            this->m_devices[2] = new FTDI_Device(0xFF, 0x00, false, i);
+            channel = 2;
 
-		this->initChannelPins(channel);
-		this->setupChannel(channel);
-		this->syncChannel(channel);
-	}
+            std::cout << "Found Channel C" << std::endl;
+		}
+        else if(serialNumberBuffer[std::strlen(serialNumberBuffer) - 1] == 'D')
+		{
+            config.BitMode = FTDI_Configuration::BIT_MODE_ASYNC_BITBANG;
+            this->m_devices[3] = new FTDI_Device(0xFF, 0x00, false, i);
+            channel = 3;
 
-	this->mapSockets();
-	this->analogConverter = mainboard->getI2CBus(this->getSocket(3))->getI2CDevice(0x48);
-	this->Extender = new Modules::IO60P16(3);
+            std::cout << "Found Channel D" << std::endl;
+		}
+
+		if(channel != 255)
+        {
+            std::cout << "|--Setting up channel..." << std::endl;
+            this->m_devices[channel]->SetupChannel(config);
+            std::cout << "|--Syncing channel..." << std::endl << std::endl;
+            this->m_devices[channel]->BadCommandSync();
+
+            devices++;
+            channel = 255;
+
+            if(channel == 1 || channel == 0)
+                this->m_devices[channel]->Open();
+		}
+    }
+
+    this->mapSockets();
+    this->analogConverter = mainboard->getI2CBus(this->getSocket(0),
+                                                 Socket::Pins::Eight,
+                                                 Socket::Pins::Nine,
+                                                 true)->getI2CDevice(0x49);
+    this->Extender = new Modules::IO60P16(0);
 	//delete [] infoList;
 }
 
-FEZLynx::~FEZLynx() 
+FEZLynx::~FEZLynx()
 {
-	for(int i = 0; i < 4; i++)
-	{
-		//Return to default state before closing
-		this->initChannelPins(i);
-		this->setupChannel(i);
+    delete this->Extender;
+    delete this->analogConverter;
 
-		FT_Close(this->channels[i].device);
-	}
-}
-
-void FEZLynx::initChannelPins(unsigned char channel)
-{
-	this->channels[channel].isMPSSE = ((channel == 0 || channel == 1));
-
-	if (channel == 1 ||channel == 0)
-	{
-		this->channels[channel].direction = 0xFB;
-		this->channels[channel].value = 0x00;
-	}
-	else if (channel == 2)
-	{
-		this->channels[channel].direction = 0x00;
-		this->channels[channel].value = 0x00;
-	}
-	else
-	{
-		this->channels[channel].direction = 0x00;
-		this->channels[channel].value = 0x00;
-	}
-}
-
-void FEZLynx::syncChannel(unsigned char channel)
-{
-	if(!this->channels[channel].isMPSSE)
-		return;
-	
-	DWORD read, sent;
-	FT_STATUS status = FT_OK;
-	BYTE buffer[5];
-
-	buffer[0] = 0xAA;
-	status = FT_Write(this->channels[channel].device, buffer, 1, &sent);
-
-	buffer[0] = 0x00;
-	buffer[1] = 0x00;
-	buffer[2] = 0x00;
-
-	unsigned char loops = 0x00;
-
-    while (true) 
-	{
-		status = FT_Read(this->channels[channel].device, buffer, 2, &read);
-
-		if (buffer[0] == 0xFA && buffer[1] == 0xAA)
-			break;
-
-		if (++loops > 200)
-			this->panic(Exceptions::ERR_OUT_OF_SYNC);
-	}
-
-	this->channels[channel].direction = 0xFB;
-	this->channels[channel].value = 0x00;
-
-	buffer[0] = 0x8A; //Disable clock divide by 5 for 60Mhz master clock
-	buffer[1] = 0x97; //Turn off adaptive clocking
-	//buffer[2] = 0x8D; //Enable 3 phase data clock
-	status = FT_Write(this->channels[channel].device, buffer, 2, &sent);
-
-	buffer[0] = 0x86; //Set clock divisor
-	buffer[1] = FEZLynx::CLOCK_DIVISOR & 0xFF;
-	buffer[2] = (FEZLynx::CLOCK_DIVISOR >> 8) & 0xFF;
-	status = FT_Write(this->channels[channel].device, buffer, 3, &sent);
-
-	System::Sleep(20);
-
-	buffer[0] = 0x85; //Disable loop back of TDI/TDO connection
-	status = FT_Write(this->channels[channel].device, buffer, 1, &sent);
-
-	System::Sleep(30);
-	
-	if (status != FT_OK)
-		this->panic(Exceptions::ERR_OUT_OF_SYNC);
-}
-
-void FEZLynx::setupChannel(unsigned char channel)
-{
-	FT_STATUS status = FT_OK;
-	DWORD sent = 0;
-	char *buffer = new char[3];
-
-	status |= FT_ResetDevice(this->channels[channel].device);
-	this->purgeChannel(channel);
-	status |= FT_SetUSBParameters(this->channels[channel].device, 65536, 65535);
-	status |= FT_SetChars(this->channels[channel].device, false, 0, false, 0);
-	status |= FT_SetTimeouts(this->channels[channel].device, 2000, 2000);
-	status |= FT_SetLatencyTimer(this->channels[channel].device, 2);
-	status |= FT_SetBitMode(this->channels[channel].device, 0x0, 0x00);
-
-	if (channel == 0 || channel == 1)
-	{
-		status |= FT_SetBitMode(this->channels[channel].device, this->channels[channel].direction, 0x02); //MPSSE mode
-
-		buffer[0] = 0x80; //Set directions and values of lower 8 pins
-		buffer[1] = this->channels[channel].value;
-		buffer[2] = this->channels[channel].direction;
-	
-		status = FT_Write(this->channels[channel].device, buffer, 3, &sent);
-
-		delete [] buffer;
-	}
-	else
-	{
-		status |= FT_SetBitMode(this->channels[channel].device, this->channels[channel].direction, 0x01); //Async BitBang Mode
-		status |= FT_Write(this->channels[channel].device, &this->channels[channel].value, 1, &sent);
-	}
-
-	status |= FT_SetBaudRate(this->channels[channel].device, 19200);
-
-	if (status != FT_OK)
-		this->panic(Exceptions::ERR_OUT_OF_SYNC);
-
-	System::Sleep(50);
-}
-
-void FEZLynx::purgeChannel(unsigned char channel)
-{
-	DWORD dwNumInputBuffer = 0, dwNumBytesRead = 0;
-	char *InputBuffer = new char[1024];
-
-	do
-	{
-		FT_STATUS ftStatus = FT_GetQueueStatus(channels[channel].device, &dwNumInputBuffer); // Get the number of bytes in the FT2232H receive buffer
-
-		if(dwNumInputBuffer == 0)
-			break;
-
-		if (dwNumInputBuffer <= 1024)
-			ftStatus |= FT_Read(channels[channel].device, &InputBuffer, dwNumInputBuffer, &dwNumBytesRead); //Read out the data from FT2232H receive buffer
-		else
-			ftStatus |= FT_Read(channels[channel].device, &InputBuffer, 1024, &dwNumBytesRead);
-
-	} while(dwNumInputBuffer > 0);
-
-	delete [] InputBuffer;
+    delete [] this->m_devices;
 }
 
 void FEZLynx::mapSockets()
@@ -347,7 +234,7 @@ void FEZLynx::panic(unsigned char error, unsigned char specificError)
 	throw error;
 }
 
-void FEZLynx::print(const char* toPrint) 
+void FEZLynx::print(const char* toPrint)
 {
 	std::cout << toPrint << std::endl;
 }
@@ -356,36 +243,12 @@ void FEZLynx::print(int toPrint) {
 	std::cout << toPrint << std::endl;
 }
 
-void FEZLynx::print(double toPrint) 
+void FEZLynx::print(double toPrint)
 {
 	std::cout << toPrint << std::endl;
 }
 
-void FEZLynx::setValue(GHI::CPUPin pinNumber) 
-{
-    this->channels[FTDI_CHANNEL(pinNumber)].value |= (1 << (FTDI_PIN(pinNumber) - 1));
-	this->sendPinStates(FTDI_CHANNEL(pinNumber));
-}
-
-void FEZLynx::clearValue(GHI::CPUPin pinNumber) 
-{
-    this->channels[FTDI_CHANNEL(pinNumber)].value &= ~(1 << (FTDI_PIN(pinNumber) - 1));
-	this->sendPinStates(FTDI_CHANNEL(pinNumber));
-}
-
-void FEZLynx::setDirection(GHI::CPUPin pinNumber) 
-{
-    this->channels[FTDI_CHANNEL(pinNumber)].direction |= (1 << (FTDI_PIN(pinNumber) - 1));
-	this->sendPinStates(FTDI_CHANNEL(pinNumber));
-}
-
-void FEZLynx::clearDirection(GHI::CPUPin pinNumber) 
-{
-    this->channels[FTDI_CHANNEL(pinNumber)].direction &= ~(1 << (FTDI_PIN(pinNumber) - 1));
-	this->sendPinStates(FTDI_CHANNEL(pinNumber));
-}
-
-CPUPin FEZLynx::getExtenderPin(CPUPin pinNumber) 
+CPUPin FEZLynx::getExtenderPin(CPUPin pinNumber)
 {
     return (((FTDI_CHANNEL(pinNumber) - 4) << 4) | (FTDI_PIN(pinNumber) - 1));
 }
@@ -395,29 +258,7 @@ bool FEZLynx::isVirtual(GHI::CPUPin pinNumber)
 	return FTDI_CHANNEL(pinNumber) > 3;
 }
 
-void FEZLynx::sendPinStates(int channel)
-{
-	DWORD sent = 0;
-
-	if (this->channels[channel].isMPSSE) 
-	{
-		BYTE buffer[3] = { 0x80, this->channels[channel].value, this->channels[channel].direction };
-
-		if(FT_Write(this->channels[channel].device, buffer, 3, &sent) != FT_OK)
-			this->panic(Exceptions::ERR_MAINBOARD_ERROR);
-
-	}
-	else 
-	{
-		FT_STATUS status = FT_SetBitMode(this->channels[channel].device, this->channels[channel].direction, 0x01);
-		status |= FT_Write(this->channels[channel].device, &this->channels[channel].value, 1, &sent);
-
-		if(status != FT_OK)
-			this->panic(Exceptions::ERR_MAINBOARD_ERROR);
-	}
-}
-
-void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode) 
+void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode)
 {
 	if(isVirtual(pinNumber))
 	{
@@ -428,17 +269,32 @@ void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resistor
         Extender->setIOMode(extendedPin, state, resistorMode);
 
 		return;
-	}
+    }
 
-	if(state == GHI::IOStates::DIGITAL_INPUT)
-		this->clearDirection(pinNumber);
+    if(state == GHI::IOStates::DIGITAL_INPUT)
+        this->m_devices[FTDI_CHANNEL(pinNumber)]->ClearDirection(FTDI_PIN(pinNumber));
 	else if(state == GHI::IOStates::DIGITAL_OUTPUT)
-		this->setDirection(pinNumber);
+        this->m_devices[FTDI_CHANNEL(pinNumber)]->SetDirection(FTDI_PIN(pinNumber));
 	else
 		mainboard->panic(Exceptions::ERR_IO_MODE_NOT_SUPPORTED);
+
+    if(FTDI_CHANNEL(pinNumber) == 0 || FTDI_CHANNEL(pinNumber) == 1)
+        this->m_devices[FTDI_CHANNEL(pinNumber)]->SetPinState();
+    else
+    {
+        this->m_devices[0]->Pause();
+        this->m_devices[1]->Pause();
+
+        this->m_devices[FTDI_CHANNEL(pinNumber)]->Open();
+        this->m_devices[FTDI_CHANNEL(pinNumber)]->SetPinState();
+        this->m_devices[FTDI_CHANNEL(pinNumber)]->Close();
+
+        this->m_devices[0]->Resume();
+        this->m_devices[1]->Resume();
+    }
 }
 
-bool FEZLynx::readDigital(GHI::CPUPin pinNumber) 
+bool FEZLynx::readDigital(GHI::CPUPin pinNumber)
 {
 	if(isVirtual(pinNumber))
     {
@@ -447,31 +303,29 @@ bool FEZLynx::readDigital(GHI::CPUPin pinNumber)
         CPUPin extendedPin = (((channel - 4) << 4) | (pin - 1));
 
         return Extender->readDigital(extendedPin);
-	}
+    }
 
-	DWORD sent = 0;
-	FT_STATUS status = FT_OK;
-	BYTE result = 0x00;
-	int channel = FTDI_CHANNEL(pinNumber);
+    unsigned char result = 0x00;
 
-	//FT_Purge(this->channels[channel].device, FT_PURGE_RX);
+    if(FTDI_CHANNEL(pinNumber) == 0 || FTDI_CHANNEL(pinNumber) == 1)
+        result = this->m_devices[FTDI_CHANNEL(pinNumber)]->GetValue();
+    else
+    {
+        this->m_devices[0]->Pause();
+        this->m_devices[1]->Pause();
 
-	if(this->channels[channel].isMPSSE)
-	{
-		BYTE command = 0x81;
+        this->m_devices[FTDI_CHANNEL(pinNumber)]->Open();
+        result = this->m_devices[FTDI_CHANNEL(pinNumber)]->GetValue();
+        this->m_devices[FTDI_CHANNEL(pinNumber)]->Close();
 
-		status = FT_Write(this->channels[channel].device, &command, 1, &sent); 
-	}
-
-	status |= FT_Read(this->channels[channel].device, &result, 1, &sent);   
-
-	if (status != FT_OK)
-		mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
+        this->m_devices[0]->Resume();
+        this->m_devices[1]->Resume();
+    }
 
     return (result & (1 << (FTDI_PIN(pinNumber) - 1))) > 0 ? true : false;
 }
 
-void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value) 
+void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value)
 {
 	if(isVirtual(pinNumber))
 	{
@@ -482,12 +336,30 @@ void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value)
         Extender->writeDigital(extendedPin, value);
 
 		return;
-	}
+    }
 
-	value ? this->setValue(pinNumber) : this->clearValue(pinNumber);
+    if(value)
+        this->m_devices[FTDI_CHANNEL(pinNumber)]->SetValue(FTDI_PIN(pinNumber));
+    else
+        this->m_devices[FTDI_CHANNEL(pinNumber)]->ClearValue(FTDI_PIN(pinNumber));
+
+    if(FTDI_CHANNEL(pinNumber) == 0 || FTDI_CHANNEL(pinNumber) == 1)
+        this->m_devices[FTDI_CHANNEL(pinNumber)]->SetPinState();
+    else
+    {
+        this->m_devices[0]->Pause();
+        this->m_devices[1]->Pause();
+
+        this->m_devices[FTDI_CHANNEL(pinNumber)]->Open();
+        this->m_devices[FTDI_CHANNEL(pinNumber)]->SetPinState();
+        this->m_devices[FTDI_CHANNEL(pinNumber)]->Close();
+
+        this->m_devices[0]->Resume();
+        this->m_devices[1]->Resume();
+    }
 }
 
-double FEZLynx::readAnalog(GHI::CPUPin pinNumber) 
+double FEZLynx::readAnalog(GHI::CPUPin pinNumber)
 {
 	unsigned char channel = 0x00;
 
@@ -515,22 +387,22 @@ double FEZLynx::readAnalog(GHI::CPUPin pinNumber)
 	return (double)read / 255.0 * 3.3;
 }
 
-double FEZLynx::readAnalogProportion(CPUPin pinNumber) 
+double FEZLynx::readAnalogProportion(CPUPin pinNumber)
 {
 	return this->readAnalog(pinNumber) / 3.3;
 }
 
-void FEZLynx::writeAnalog(GHI::CPUPin pinNumber, double voltage) 
+void FEZLynx::writeAnalog(GHI::CPUPin pinNumber, double voltage)
 {
 	this->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED);
 }
 
-void FEZLynx::writeAnalogProportion(CPUPin pinNumber, double proportion) 
+void FEZLynx::writeAnalogProportion(CPUPin pinNumber, double proportion)
 {
 	this->writeAnalog(pinNumber, proportion * 3.3);
 }
 
-void FEZLynx::setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency) 
+void FEZLynx::setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency)
 {
 	this->panic(Exceptions::ERR_PWM_NOT_SUPPORTED);
 }
@@ -541,7 +413,7 @@ Interfaces::SerialDevice* FEZLynx::getSerialDevice(unsigned int baudRate, unsign
         if (current->tx == txPin && current->rx == rxPin)
             return current;
 
-    SerialDevice* bus = new FEZLynx::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits, this->channels[3].device);
+    SerialDevice* bus = new FEZLynx::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits, this->m_devices[3]);
     this->serialDevices.addV(bus);
     return bus;
 }
@@ -552,20 +424,31 @@ Interfaces::SPIBus* FEZLynx::getSPIBus(CPUPin miso, CPUPin mosi, CPUPin sck)
         if (current->mosi == mosi && current->miso == miso && current->sck == sck)
             return (GHI::Interfaces::SPIBus*)current;
 
-	SPIBus* bus = new SPIBus(miso, mosi, sck, this->channels[0].device);
+    SPIBus* bus = new SPIBus(miso, mosi, sck, this->m_devices[0]); //this->channels[0].device);
     this->spiBusses.addV(bus);
     return bus;
 }
 
-Interfaces::I2CBus* FEZLynx::getI2CBus(CPUPin sdaPin, CPUPin sclPin)
+Interfaces::I2CBus* FEZLynx::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hardwareI2C)
 {
     for (I2CBus* current = (I2CBus*)this->i2cBusses.startV(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.nextV())
         if (current->scl == sclPin && current->sda == sdaPin)
             return current;
 
-    I2CBus* bus = new FEZLynx::I2CBus(sdaPin, sclPin, this->channels[1].device);
-    this->i2cBusses.addV(bus);
-    return bus;
+    if(!hardwareI2C)
+    {
+        SoftwareI2CBus *bus = new SoftwareI2CBus(sdaPin, sclPin); //this->channels[1].device);
+
+        this->i2cBusses.addV(bus);
+        return bus;
+    }
+    else
+    {
+        I2CBus *bus = new I2CBus(sdaPin, sclPin, this->m_devices[1]); //this->channels[1].device);
+
+        this->i2cBusses.addV(bus);
+        return bus;
+    }
 }
 
 #include "../LEDStrip/LEDStrip.h"
@@ -574,21 +457,37 @@ Interfaces::I2CBus* FEZLynx::getI2CBus(CPUPin sdaPin, CPUPin sclPin)
 #include "../DisplayN18/DisplayN18.h"
 #include "../FLASH/FLASH.h"
 
-int main() 
+int main()
 {
 	FEZLynx board;
 
-	Modules::LEDStrip leds(8);
+    Modules::Button btn(3);
+    Modules::DisplayN18 display(4);
+    Interfaces::AnalogInput input(FEZLynx::Pins::Analog_01);
+
+    bool buttonPressed = false;
 
 	while(true)
 	{
-		for(int i = 0; i < 3; i++)
-		{
-			leds.turnOnLED(i + 1, true);
-			System::Sleep(100);
-		}
+        //std::cout << input.read() << std::endl;
 
-		System::Sleep(100);
+        if(btn.isPressed())
+        {
+            if(!buttonPressed)
+            {
+                buttonPressed = true;
+                display.fillRect(0,0,128,160,0xF0FF);
+
+                std::cout << "Pressed" << std::endl;
+            }
+        }
+        else if(buttonPressed)
+        {
+            buttonPressed = false;
+            display.fillRect(0,0,128,160,0x0000);
+
+            std::cout << "Released" << std::endl;
+        }
 	}
 
 	return 0;

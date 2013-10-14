@@ -13,16 +13,11 @@ SOURCES += \
     Gadgeteering/Interfaces.cpp \
     Tunes/Tunes.cpp \
     LEDStrip/LEDStrip.cpp \
-    FEZLynx/FEZLynx_System.cpp \
-    FEZLynx/FEZLynx.cpp \
     FEZMedusa/System.cpp \
     FEZMedusa/SPIBus.cpp \
     FEZMedusa/SerialDevice.cpp \
     FEZMedusa/FEZMedusa.cpp \
     FEZMedusa/I2CBus.cpp \
-    FEZLynx/FEZLynx_SPIBus.cpp \
-    FEZLynx/FEZLynx_SerialDevice.cpp \
-    FEZLynx/FEZLynx_I2CBus.cpp \
     Gadgeteering/Types.cpp \
     Gadgeteering/SoftwareSerial.cpp \
     Gadgeteering/Module.cpp \
@@ -73,7 +68,13 @@ SOURCES += \
     TouchL12/TouchL12.cpp \
     USBSerial/USBSerial.cpp \
     WiFiRN171/WiFiRN171.cpp \
-    Demos/Lynx/LynxDemo1/main.cpp
+    FEZLynxMini/FTDI_Device.cpp \
+    FEZLynxMini/FEZLynx.cpp \
+    FEZLynxMini/FEZLynx_I2CBus.cpp \
+    FEZLynxMini/FEZLynx_SerialDevice.cpp \
+    FEZLynxMini/FEZLynx_SPIBus.cpp \
+    FEZLynxMini/FEZLynx_SoftwareI2CBus.cpp \
+    FEZLynxMini/FEZLynx_System.cpp
 
 HEADERS += \
     Gadgeteering/Types.hpp \
@@ -87,13 +88,11 @@ HEADERS += \
     Gadgeteering/Gadgeteering.h \
     Tunes/Tunes.h \
     LEDStrip/LEDStrip.h \
-    FEZLynx/FEZLynx.h \
     FEZMedusa/FEZMedusa.h \
     Gadgeteering/SoftwareSerial.hpp \
     Gadgeteering/Module.hpp \
     Gadgeteering/List.hpp \
     Gadgeteering/I2CDevice.hpp \
-    Gadgeteering/I2CBus.hpp \
     Gadgeteering/DaisyLink.hpp \
     Accelerometer/Accelerometer.h \
     AccelG248/AccelG248.h \
@@ -137,16 +136,30 @@ HEADERS += \
     TouchC8/TouchC8.h \
     TouchL12/TouchL12.h \
     USBSerial/USBSerial.h \
-    WiFiRN171/WiFiRN171.h
+    WiFiRN171/WiFiRN171.h \
+    FEZLynxMini/FEZLynx.h \
+    FEZLynxMini/include/FTDI_Device.h \
+    Gadgeteering/I2CBus.hpp \
+    FEZLynxMini/Environment.h
 
 fezlynx {
     SOURCES -= FEZMedusa/System.cpp \
                FEZMedusa/SPIBus.cpp \
                FEZMedusa/SerialDevice.cpp \
                FEZMedusa/FEZMedusa.cpp \
-               FEZMedusa/I2CBus.cpp
+               FEZMedusa/I2CBus.cpp \
+                TouchC8/TouchC8.cpp \
+                TouchL12/TouchL12.cpp \
+                PulseCount/PulseCount.cpp \
+                RotaryH1/RotaryH1.cpp
 
-    LIBS += -lftd2xx
+    LIBS += -L/usr/local/lib -lftd2xx
 
-    HEADERS -= FEZMedusa/FEZMedusa.h
+    HEADERS -= FEZMedusa/FEZMedusa.h \
+                RotaryH1/RotaryH1.h \
+                TouchC8/TouchC8.h \
+                TouchL12/TouchL12.h \
+                PulseCount/PulseCount.h
+
+    DEFINES += LYNX
 }

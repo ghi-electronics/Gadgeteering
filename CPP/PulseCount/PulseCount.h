@@ -110,7 +110,7 @@ namespace GHI {
 			void SoftwareSPI_WriteRead(const unsigned char* write, unsigned int writeLength, unsigned char* read, unsigned int readLength);
 
 			public:
-				typedef unsigned char Direction;
+                typedef char Direction;
 				class Directions
 				{
 					public:

@@ -38,7 +38,7 @@ List::~List() {
 	}
 }
 
-void List::add(unsigned int data) {
+void List::add(void *data) {
 	this->count++;
 
 	if (this->head == NULL) {
@@ -62,7 +62,7 @@ void List::add(unsigned int data) {
 	this->tail = newNode;
 }
 
-void List::remove(unsigned int data) {
+void List::remove(void *data) {
 	if (this->head && this->head->data == data) {
 		ListNode* newHead = this->head->next;
 		delete this->head;
@@ -97,7 +97,7 @@ void List::remove(unsigned int data) {
 	}
 }
 
-bool List::contains(unsigned int data) {
+bool List::contains(void *data) {
 	ListNode* current = this->head;
 
 	while (current) {
@@ -111,7 +111,7 @@ bool List::contains(unsigned int data) {
 
 }
 
-unsigned int List::start() {
+void *List::start() {
 	this->currentIteration = this->head;
 
 	if (!this->head)
@@ -120,7 +120,7 @@ unsigned int List::start() {
 	return this->currentIteration->data;
 }
 
-unsigned int List::next() {
+void *List::next() {
 	this->currentIteration = this->currentIteration->next;
 	
 	return this->currentIteration ? this->currentIteration->data : NULL;
@@ -130,15 +130,15 @@ bool List::ended() {
 	return this->currentIteration == NULL;
 }
 
-void List::push(unsigned int data) {
+void List::push(void *data) {
 	this->add(data);
 }
 
-unsigned int List::pop() {
+void *List::pop() {
 	if (this->count == 0)
 		return NULL;
 
-	unsigned int data = this->head->data;
+    void *data = this->head->data;
 
 	ListNode* newHead = this->head->next;
 	delete this->head;
@@ -154,29 +154,29 @@ unsigned int List::getSize() const {
 }
 
 void List::addV(void* data) {
-	this->add((unsigned int)(data));
+    this->add(data);
 }
 
 void List::removeV(void* data) {
-	this->remove((unsigned int)(data));
+    this->remove(data);
 }
 
 bool List::containsV(void* data) {
-	return this->contains((unsigned int)(data));
+    return this->contains(data);
 }
 
 void* List::startV() {
-	return (void*)this->start();
+    return this->start();
 }
 
 void* List::nextV() {
-	return (void*)this->next();
+    return this->next();
 }
 
 void List::pushV(void* data) {
-	this->push((unsigned int)(data));
+    this->push(data);
 }
 
 void* List::popV() {
-	return (void*)this->pop();
+    return this->pop();
 }

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="../CPP/FEZLynxMini/include/FTDI_Device.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="411" topLine="11" />
+		</Cursor>
+	</File>
+	<File name="../CPP/Button/Button.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1440" topLine="18" />
+		</Cursor>
+	</File>
+	<File name="../CPP/Gadgeteering/Interfaces.hpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="86" />
+		</Cursor>
+	</File>
+	<File name="../CPP/FEZLynxMini/SPIBus.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1831" topLine="40" />
+		</Cursor>
+	</File>
+	<File name="../CPP/Gadgeteering/Mainboard.hpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2545" topLine="47" />
+		</Cursor>
+	</File>
+	<File name="../CPP/WiFiRN171/WiFiRN171.cpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1031" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../CPP/FEZLynxMini/SerialDevice.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1279" topLine="35" />
+		</Cursor>
+	</File>
+	<File name="../CPP/Gadgeteering/Interfaces.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1990" topLine="36" />
+		</Cursor>
+	</File>
+	<File name="../CPP/FEZLynxMini/I2CBus.cpp" open="1" top="1" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="22" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../CPP/FEZLynxMini/FTDI_Device.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="212" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../CPP/Gadgeteering/Types.hpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1977" topLine="33" />
+		</Cursor>
+	</File>
+	<File name="../CPP/Demos/Lynx/LynxDemo1/main.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="171" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../CPP/Gadgeteering/Mainboard.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3743" topLine="68" />
+		</Cursor>
+	</File>
+	<File name="../CPP/Gadgeteering/I2CDevice.hpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="675" topLine="16" />
+		</Cursor>
+	</File>
+	<File name="../CPP/FEZLynxMini/FEZLynx.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5332" topLine="216" />
+		</Cursor>
+	</File>
+	<File name="../CPP/Gadgeteering/I2CBus.hpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="766" topLine="21" />
+		</Cursor>
+	</File>
+	<File name="../CPP/DisplayN18/DisplayN18.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="11040" topLine="349" />
+		</Cursor>
+	</File>
+	<File name="../CPP/Gadgeteering/List.hpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="935" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../CPP/FEZLynxMini/FEZLynx.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="19155" topLine="615" />
+		</Cursor>
+	</File>
+</CodeBlocks_layout_file>

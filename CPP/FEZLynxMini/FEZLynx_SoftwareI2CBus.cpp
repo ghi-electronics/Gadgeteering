@@ -23,84 +23,78 @@ using namespace GHI::Interfaces;
 using namespace GHI::Mainboards;
 
 #define I2C_DELAY() ;
-#define I2C_CLOCK_STRETCH 1
-
-#ifdef I2C_CLOCK_STRETCH
 #define WAIT_SCL() while (!readSCL()) ;
-#else
-#define WAIT_SCL() releaseSCL();
-#endif
 
-FEZLynx::I2CBus::I2CBus(CPUPin sda, CPUPin scl, FT_HANDLE channel) : Interfaces::I2CBus(sda, scl)
+FEZLynx::SoftwareI2CBus::SoftwareI2CBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
 {
     this->startSent = false;
     this->releaseSCL();
     this->releaseSDA();
 }
 
-FEZLynx::I2CBus::~I2CBus()
+FEZLynx::SoftwareI2CBus::~SoftwareI2CBus()
 {
 
 }
 
-void FEZLynx::I2CBus::clearSCL()
+void FEZLynx::SoftwareI2CBus::clearSCL()
 {
     mainboard->setIOMode(this->scl, IOStates::DIGITAL_OUTPUT);
 }
 
-void FEZLynx::I2CBus::releaseSCL()
+void FEZLynx::SoftwareI2CBus::releaseSCL()
 {
     mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
 }
 
-bool FEZLynx::I2CBus::readSCL()
+bool FEZLynx::SoftwareI2CBus::readSCL()
 {
     mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
     return mainboard->readDigital(this->scl);
 }
 
-void FEZLynx::I2CBus::clearSDA()
+void FEZLynx::SoftwareI2CBus::clearSDA()
 {
     mainboard->setIOMode(this->sda, IOStates::DIGITAL_OUTPUT);
 }
 
-void FEZLynx::I2CBus::releaseSDA()
+void FEZLynx::SoftwareI2CBus::releaseSDA()
 {
     mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
 }
 
-bool FEZLynx::I2CBus::readSDA()
+bool FEZLynx::SoftwareI2CBus::readSDA()
 {
     mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
     return mainboard->readDigital(this->sda);
 }
 
-void FEZLynx::I2CBus::writeBit(bool bit)
+void FEZLynx::SoftwareI2CBus::writeBit(bool bit)
 {
     if (bit)
         releaseSDA();
     else
         clearSDA();
-	
+
 	WAIT_SCL();
 
 	clearSCL();
 }
 
-bool FEZLynx::I2CBus::readBit()
+bool FEZLynx::SoftwareI2CBus::readBit()
 {
     releaseSDA();
-	
+
 	WAIT_SCL();
 
     bool bit = readSDA();
-	
+
 	clearSCL();
 
     return bit;
 }
 
-void FEZLynx::I2CBus::sendStartCondition()
+void FEZLynx::SoftwareI2CBus::sendStartCondition()
 {
 	releaseSDA();
 
@@ -114,10 +108,10 @@ void FEZLynx::I2CBus::sendStartCondition()
 	startSent = true;
 }
 
-void FEZLynx::I2CBus::sendStopCondition()
+void FEZLynx::SoftwareI2CBus::sendStopCondition()
 {
     clearSDA();
-	
+
 	WAIT_SCL();
 
 	releaseSDA();
@@ -125,10 +119,10 @@ void FEZLynx::I2CBus::sendStopCondition()
 	startSent = false;
 }
 
-bool FEZLynx::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data) {
+bool FEZLynx::SoftwareI2CBus::transmit(bool sendStart, bool sendStop, unsigned char data) {
 	if (sendStart)
 		sendStartCondition();
-	
+
     for (unsigned char mask = 0x80; mask != 0x00; mask >>= 1)
 		writeBit((data & mask) != 0);
 
@@ -140,7 +134,7 @@ bool FEZLynx::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data
 	return nack;
 }
 
-unsigned char FEZLynx::I2CBus::receive(bool sendAcknowledgeBit, bool sendStop)
+unsigned char FEZLynx::SoftwareI2CBus::receive(bool sendAcknowledgeBit, bool sendStop)
 {
 	unsigned char bit, d = 0;
 
@@ -148,35 +142,35 @@ unsigned char FEZLynx::I2CBus::receive(bool sendAcknowledgeBit, bool sendStop)
 		d = (d << 1) | (readBit() ? 1 : 0);
 
 	writeBit(!sendAcknowledgeBit);
-	
+
 	if (sendStop)
 		sendStopCondition();
 
 	return d;
 }
 
-unsigned int FEZLynx::I2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
+unsigned int FEZLynx::SoftwareI2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
 {
-    if (!count) 
+    if (!count)
 		return 0;
 
 	unsigned int numWrite = 0;
 	unsigned int i = 0;
-	
+
 	if (!this->transmit(true, false, address))
 		for (i = 0; i < count - 1; i++)
 			if (!this->transmit(false, false, buffer[i]))
 				numWrite++;
-	
+
 	if (!this->transmit(false, sendStop, buffer[i]))
 		numWrite++;
-	
+
 	return numWrite;
  }
 
-unsigned int FEZLynx::I2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
+unsigned int FEZLynx::SoftwareI2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
 {
-    if (!count) 
+    if (!count)
 		return 0;
 
 	unsigned int numRead = 0;
@@ -195,7 +189,7 @@ unsigned int FEZLynx::I2CBus::read(unsigned char* buffer, unsigned int count, un
     return numRead;
 }
 
-bool FEZLynx::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address)
+bool FEZLynx::SoftwareI2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address)
 {
     *numWritten = 0;
 	*numRead = 0;
@@ -214,7 +208,7 @@ bool FEZLynx::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int w
 		}
 
 		if (!this->transmit(false, (readLength == 0), writeBuffer[i]))
-			write++; 
+			write++;
 
 		*numWritten = write;
     }

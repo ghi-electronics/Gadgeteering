@@ -24,8 +24,15 @@ namespace GHI {
 		using namespace GHI::Interfaces;
 
 		class DisplayN18 : public Module {
+#ifndef LYNX
 			static const unsigned char STEP_X = 4;
 			static const unsigned char STEP_Y = 5;
+#else
+            static const unsigned char STEP_X = 128;
+            static const unsigned char STEP_Y = 160;
+
+            unsigned short m_data[128 * 160];
+#endif
 
 			DigitalOutput* resetPin;
 			DigitalOutput* backlightPin;
@@ -71,6 +78,8 @@ namespace GHI {
 				void setupDraw(int x, int y, int width, int height);
 				void sendDrawData(const unsigned char* data, unsigned int length, bool deselectChip = false);
 				void sendDrawData(const unsigned short* data, unsigned int length, bool deselectChip = false);
+
+
 		};
 	}
 }
