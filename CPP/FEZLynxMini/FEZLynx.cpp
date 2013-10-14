@@ -280,6 +280,7 @@ void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resistor
 
     if(FTDI_CHANNEL(pinNumber) == 0 || FTDI_CHANNEL(pinNumber) == 1)
 	{
+		this->m_devices[FTDI_CHANNEL(pinNumber)]->Open();
         this->m_devices[FTDI_CHANNEL(pinNumber)]->SetPinState();
 	}
     else
@@ -310,7 +311,10 @@ bool FEZLynx::readDigital(GHI::CPUPin pinNumber)
     unsigned char result = 0x00;
 
     if(FTDI_CHANNEL(pinNumber) == 0 || FTDI_CHANNEL(pinNumber) == 1)
+	{
+		this->m_devices[FTDI_CHANNEL(pinNumber)]->Open();
         result = this->m_devices[FTDI_CHANNEL(pinNumber)]->GetValue();
+	}
     else
     {
         this->m_devices[0]->Pause();
@@ -346,7 +350,10 @@ void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value)
         this->m_devices[FTDI_CHANNEL(pinNumber)]->ClearValue(FTDI_PIN(pinNumber));
 
     if(FTDI_CHANNEL(pinNumber) == 0 || FTDI_CHANNEL(pinNumber) == 1)
+	{
+		this->m_devices[FTDI_CHANNEL(pinNumber)]->Open();
         this->m_devices[FTDI_CHANNEL(pinNumber)]->SetPinState();
+	}
     else
     {
         this->m_devices[0]->Pause();
@@ -471,7 +478,7 @@ int main()
 
 	while(true)
 	{
-        //std::cout << input.read() << std::endl;
+        std::cout << input.read() << std::endl;
 
         if(btn.isPressed())
         {
