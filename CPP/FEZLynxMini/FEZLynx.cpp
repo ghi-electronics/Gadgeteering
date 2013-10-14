@@ -279,7 +279,9 @@ void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resistor
 		mainboard->panic(Exceptions::ERR_IO_MODE_NOT_SUPPORTED);
 
     if(FTDI_CHANNEL(pinNumber) == 0 || FTDI_CHANNEL(pinNumber) == 1)
+	{
         this->m_devices[FTDI_CHANNEL(pinNumber)]->SetPinState();
+	}
     else
     {
         this->m_devices[0]->Pause();

@@ -165,8 +165,10 @@
     <ClCompile Include="DistanceUS3\DistanceUS3.cpp" />
     <ClCompile Include="Extender\Extender.cpp" />
     <ClCompile Include="FEZLynxMini\FEZLynx.cpp" />
+    <ClCompile Include="FEZLynxMini\FTDI_Device.cpp" />
     <ClCompile Include="FEZLynxMini\I2CBus.cpp" />
     <ClCompile Include="FEZLynxMini\SerialDevice.cpp" />
+    <ClCompile Include="FEZLynxMini\SoftwareI2CBus.cpp" />
     <ClCompile Include="FEZLynxMini\SPIBus.cpp" />
     <ClCompile Include="FEZLynxMini\System.cpp" />
     <ClCompile Include="FEZTive\FEZtive.cpp" />

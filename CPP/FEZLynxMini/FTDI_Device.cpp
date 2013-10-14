@@ -122,8 +122,6 @@ unsigned char FTDI_Device::GetValue()
         } while(dwNumInputBuffer > 0);
 
         delete [] InputBuffer;
-
-        this->m_locked = false;
     }
     else
     {
