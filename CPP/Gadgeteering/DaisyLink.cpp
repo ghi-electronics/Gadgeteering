@@ -25,7 +25,8 @@ unsigned char DaisyLinkBus::totalNodeCount = 0;
 
 DaisyLinkBus::DaisyLinkBus(Socket* socket, DaisyLinkModule* module)
 {
-	this->i2c = mainboard->getI2CBus(socket, DaisyLinkBus::SDA_PIN, DaisyLinkBus::SCL_PIN);
+	//this->i2c = mainboard->getI2CBus(socket, DaisyLinkBus::SDA_PIN, DaisyLinkBus::SCL_PIN);
+	this->i2c = new DaisyLinkCommandBus(socket->pins[DaisyLinkBus::SDA_PIN], socket->pins[DaisyLinkBus::SCL_PIN]);
 	this->ready = false;
 	this->socket = socket;
 	this->reservedCount = 0;
@@ -175,12 +176,12 @@ DaisyLinkBus* DaisyLinkBus::GetDaisyLinkForSocket(Socket* socket, DaisyLinkModul
     return daisylink;
 }
 
-
 DaisyLinkModule::DaisyLinkModule(unsigned char socketNumber, unsigned char manufacturer, unsigned char moduleType, unsigned char minModuleVersionSupported, unsigned char maxModuleVersionSupported) 
 {
     Socket* socket = mainboard->getSocket(socketNumber);
 
     this->daisyLink = DaisyLinkBus::GetDaisyLinkForSocket(socket, this);
+
     if (this->daisyLink->nodeCount == 0)
 		mainboard->panic(Exceptions::ERR_MODULE_ERROR, 1); //No DaisyLink modules present
 
@@ -190,7 +191,7 @@ DaisyLinkModule::DaisyLinkModule(unsigned char socketNumber, unsigned char manuf
     // NOTE:  PositionOnChain will be invalid until the end of the constructor (it is dependent on DeviceAddress) so this->daisyLink->reservedCount is used until then
     DaisyLinkVersion = this->daisyLink->GetDaisyLinkVersion(this->daisyLink->reservedCount);
     if (DaisyLinkVersion != DaisyLinkModule::VERSION_IMPLEMENTED)
-		mainboard->panic(Exceptions::ERR_MODULE_ERROR, 3); //Unsupported DaisyLink version
+		mainboard->panic(Exceptions::ERR_MODULE_ERROR, DaisyLinkVersion); //Unsupported DaisyLink version
 
     this->daisyLink->GetModuleParameters(this->daisyLink->reservedCount, &this->Manufacturer, &this->ModuleType, &this->ModuleVersion);
 

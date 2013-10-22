@@ -272,7 +272,7 @@ Interfaces::SerialDevice* FEZMedusaMini::getSerialDevice(unsigned int baudRate, 
 	return bus;
 }
 
-Interfaces::I2CBus* FEZMedusaMini::getI2CBus(CPUPin sdaPin, CPUPin sclPin) {
+Interfaces::I2CBus* FEZMedusaMini::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool isHardware) {
     for (I2CBus* current = (I2CBus*)this->i2cBusses.startV(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.nextV())
         if (current->scl == sclPin && current->sda == sdaPin)
             return current;

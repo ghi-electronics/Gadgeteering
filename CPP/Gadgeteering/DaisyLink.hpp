@@ -17,6 +17,7 @@ limitations under the License.
 #ifndef _DAISYLINK_
 #define _DAISYLINK_
 
+#include "DaisyLinkCommandBus.hpp"
 #include "Mainboard.hpp"
 #include "Module.hpp"
 #include "I2CBus.hpp"
@@ -45,7 +46,8 @@ namespace GHI
 			unsigned char reservedCount;
 			unsigned char startAddress;
 			Socket* socket;
-			Interfaces::I2CBus* i2c;
+			//Interfaces::I2CBus* i2c;
+			Interfaces::DaisyLinkCommandBus *i2c;
 
 			DaisyLinkBus(Socket* socket, DaisyLinkModule* module);
 			~DaisyLinkBus();

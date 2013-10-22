@@ -14,13 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "../Gadgeteering/Gadgeteering.h"
-
-#include "FEZMedusa.h"
+#include "DaisyLinkCommandBus.hpp"
 
 using namespace GHI;
 using namespace GHI::Interfaces;
-using namespace GHI::Mainboards;
 
 #define I2C_DELAY() ;
 
@@ -32,51 +29,51 @@ using namespace GHI::Mainboards;
 #define WAIT_SCL() releaseSCL();
 #endif
 
-FEZMedusaMini::I2CBus::I2CBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
+DaisyLinkCommandBus::DaisyLinkCommandBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
 {
     this->startSent = false;
     this->releaseSCL();
     this->releaseSDA();
 }
 
-FEZMedusaMini::I2CBus::~I2CBus()
+DaisyLinkCommandBus::~DaisyLinkCommandBus()
 {
 
 }
 
-void FEZMedusaMini::I2CBus::clearSCL()
+void DaisyLinkCommandBus::clearSCL()
 {
     mainboard->setIOMode(this->scl, IOStates::DIGITAL_OUTPUT);
 }
 
-void FEZMedusaMini::I2CBus::releaseSCL()
+void DaisyLinkCommandBus::releaseSCL()
 {
-    mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
+    mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::FLOATING);
 }
 
-bool FEZMedusaMini::I2CBus::readSCL()
+bool DaisyLinkCommandBus::readSCL()
 {
-    mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
+    mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::FLOATING);
     return mainboard->readDigital(this->scl);
 }
 
-void FEZMedusaMini::I2CBus::clearSDA()
+void DaisyLinkCommandBus::clearSDA()
 {
     mainboard->setIOMode(this->sda, IOStates::DIGITAL_OUTPUT);
 }
 
-void FEZMedusaMini::I2CBus::releaseSDA()
+void DaisyLinkCommandBus::releaseSDA()
 {
-    mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
+    mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::FLOATING);
 }
 
-bool FEZMedusaMini::I2CBus::readSDA()
+bool DaisyLinkCommandBus::readSDA()
 {
-    mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
+    mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::FLOATING);
     return mainboard->readDigital(this->sda);
 }
 
-void FEZMedusaMini::I2CBus::writeBit(bool bit)
+void DaisyLinkCommandBus::writeBit(bool bit)
 {
     if (bit)
         releaseSDA();
@@ -88,7 +85,7 @@ void FEZMedusaMini::I2CBus::writeBit(bool bit)
         clearSCL();
 }
 
-bool FEZMedusaMini::I2CBus::readBit()
+bool DaisyLinkCommandBus::readBit()
 {
     releaseSDA();
         
@@ -101,7 +98,7 @@ bool FEZMedusaMini::I2CBus::readBit()
     return bit;
 }
 
-void FEZMedusaMini::I2CBus::sendStartCondition()
+void DaisyLinkCommandBus::sendStartCondition()
 {
         releaseSDA();
 
@@ -115,7 +112,7 @@ void FEZMedusaMini::I2CBus::sendStartCondition()
         startSent = true;
 }
 
-void FEZMedusaMini::I2CBus::sendStopCondition()
+void DaisyLinkCommandBus::sendStopCondition()
 {
     clearSDA();
         
@@ -126,7 +123,7 @@ void FEZMedusaMini::I2CBus::sendStopCondition()
         startSent = false;
 }
 
-bool FEZMedusaMini::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data) {
+bool DaisyLinkCommandBus::transmit(bool sendStart, bool sendStop, unsigned char data) {
         if (sendStart)
                 sendStartCondition();
         
@@ -141,7 +138,7 @@ bool FEZMedusaMini::I2CBus::transmit(bool sendStart, bool sendStop, unsigned cha
         return nack;
 }
 
-unsigned char FEZMedusaMini::I2CBus::receive(bool sendAcknowledgeBit, bool sendStop)
+unsigned char DaisyLinkCommandBus::receive(bool sendAcknowledgeBit, bool sendStop)
 {
         unsigned char bit, d = 0;
 
@@ -156,7 +153,7 @@ unsigned char FEZMedusaMini::I2CBus::receive(bool sendAcknowledgeBit, bool sendS
         return d;
 }
 
-unsigned int FEZMedusaMini::I2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
+unsigned int DaisyLinkCommandBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
 {
     if (!count) 
                 return 0;
@@ -175,7 +172,7 @@ unsigned int FEZMedusaMini::I2CBus::write(const unsigned char* buffer, unsigned 
         return numWrite;
  }
 
-unsigned int FEZMedusaMini::I2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
+unsigned int DaisyLinkCommandBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
 {
     if (!count) 
                 return 0;
@@ -196,7 +193,7 @@ unsigned int FEZMedusaMini::I2CBus::read(unsigned char* buffer, unsigned int cou
     return numRead;
 }
 
-bool FEZMedusaMini::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address)
+bool DaisyLinkCommandBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address)
 {
     *numWritten = 0;
         *numRead = 0;

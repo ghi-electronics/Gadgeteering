@@ -57,29 +57,31 @@ namespace GHI {
 	
 			class I2CBus : public GHI::Interfaces::I2CBus
 			{
-					bool start;
-
+					bool startSent;
+                                                
 					void clearSCL();
+					void releaseSCL();
 					bool readSCL();
 					void clearSDA();
+					void releaseSDA();
 					bool readSDA();
 
-					bool writeBit(bool bit);
+					void writeBit(bool bit);
 					bool readBit();
 
-					bool sendStartCondition();
-					bool sendStopCondition();                       
+					void sendStartCondition();
+					void sendStopCondition();
 
 					bool transmit(bool sendStart, bool sendStop, unsigned char data);
 					unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
 
 					public:
-							I2CBus(CPUPin sda, CPUPin scl);
-							virtual ~I2CBus();
-							
-							virtual unsigned int write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
-							virtual unsigned int read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
-							virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
+						I2CBus(GHI::CPUPin sda, GHI::CPUPin scl);
+						virtual ~I2CBus();
+
+						virtual unsigned int write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop = true);
+						virtual unsigned int read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop = true);
+						virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
 			};
 
 			public:
@@ -103,7 +105,7 @@ namespace GHI {
 		
 				virtual Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin);
 				virtual Interfaces::SPIBus* getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
-				virtual Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin);
+				virtual Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool isHardware = false);
 		};
 
 		class FEZMedusa : public FEZMedusaMini {
