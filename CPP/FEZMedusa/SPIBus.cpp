@@ -99,7 +99,7 @@ void FEZMedusaMini::SPIBus::deselectChip(GHI::Interfaces::SPIConfiguration* conf
 	mainboard->writeDigital(configuration->chipSelect, !configuration->chipSelectActiveState);
 }
 
-void FEZMedusaMini::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration)
+void FEZMedusaMini::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration, bool deselectAfter)
 {
 	this->setup(configuration);
 	this->selectChip(configuration);
@@ -125,5 +125,6 @@ void FEZMedusaMini::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned 
 	}
 #endif
 	
-	this->deselectChip(configuration);
+	if(deselectAfter)
+		this->deselectChip(configuration);
 }

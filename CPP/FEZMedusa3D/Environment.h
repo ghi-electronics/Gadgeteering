@@ -1,3 +1,16 @@
+#define AD0 54
+#define AD1 55
+#define AD2 56
+#define AD3 57
+#define AD4 58
+#define AD5 59
+#define AD6 60
+#define AD7 61
+#define AD8 62
+#define AD9 63
+#define AD10 64
+#define AD11 65
+
 #define GADGETEERING_MAINBOARD_UNO 1
 #define GADGETEERING_MAINBOARD_MEGA 2
 #define GADGETEERING_MAINBOARD_MEGA_ADK 3

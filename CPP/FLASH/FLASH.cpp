@@ -72,7 +72,7 @@ bool FLASH::WriteInProgress() {
     unsigned char readData = 0xFF;
     unsigned char writeData = CMD_READ_STATUS;
 	
-    spi->write(&writeData, 1);
+    spi->write(&writeData, 1, false);
     spi->read(&readData, 1, true);
 
     statusLED->write(false);

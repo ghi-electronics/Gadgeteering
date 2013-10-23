@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "Arduino.h"
+#include <Arduino.h>
 #include "FEZMedusa3D.h"
 
 using namespace GHI;
@@ -27,9 +27,9 @@ FEZAthena::FEZAthena() {
 	mainboard = this;
 	
 	Socket* socket = this->registerSocket(new Socket(1, Socket::Types::I | Socket::Types::S | Socket::Types::Y | Socket::Types::X));
-	socket->pins[3] = AD5;
-	socket->pins[4] = AD3;
-	socket->pins[5] = AD4;
+	socket->pins[3] = A5;
+	socket->pins[4] = A3;
+	socket->pins[5] = A4;
 	socket->pins[6] = 22;
 	socket->pins[7] = 8;
 	socket->pins[8] = 9;
@@ -97,11 +97,11 @@ FEZAthena::FEZAthena() {
 	socket->pins[8] = 12;
 	socket->pins[9] = 13;
 
-	socket = this->registerSocket(new Socket(9, Socket::Types::I | Socket::Types::P | Socket::Types::U | Socket::Types::Y | Socket::Types::X));
-	socket->pins[3] = 2;
-	socket->pins[4] = 1;
-	socket->pins[5] = 0;
-	socket->pins[6] = 4;
+	socket = this->registerSocket(new Socket(9, Socket::Types::S | Socket::Types::X));
+	socket->pins[3] = 41;
+	socket->pins[4] = 40;
+	socket->pins[5] = 43;
+	socket->pins[6] = 42;
 	socket->pins[7] = 3;
 	socket->pins[8] = 5;
 	socket->pins[9] = 6;
@@ -246,7 +246,7 @@ Interfaces::SerialDevice* FEZAthena::getSerialDevice(unsigned int baudRate, unsi
 	return bus;
 }
 
-Interfaces::I2CBus* FEZAthena::getI2CBus(CPUPin sdaPin, CPUPin sclPin) {
+Interfaces::I2CBus* FEZAthena::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool isHardware) {
     for (I2CBus* current = (I2CBus*)this->i2cBusses.startV(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.nextV())
         if (current->scl == sclPin && current->sda == sdaPin)
             return current;

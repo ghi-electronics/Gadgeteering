@@ -29,6 +29,7 @@ class SPIClass;
 namespace GHI {
 	namespace Mainboards {
 		class FEZMedusaMini : public GHI::Mainboard {
+
 			class SPIBus : public GHI::Interfaces::SPIBus
 			{
 				SPIClass* spi;
@@ -40,7 +41,7 @@ namespace GHI {
 					SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck);
 					virtual ~SPIBus();
 					
-					virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration);
+					virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration, bool deselectAfter = false);
 			};
 
 			class SerialDevice : public GHI::Interfaces::SerialDevice {

@@ -93,19 +93,14 @@ void FEZAthena::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configuration) 
 
 void FEZAthena::SPIBus::selectChip(GHI::Interfaces::SPIConfiguration* configuration)
 {
-	mainboard->setIOMode(configuration->chipSelect, IOStates::DIGITAL_OUTPUT, ResistorModes::FLOATING);
 	mainboard->writeDigital(configuration->chipSelect, configuration->chipSelectActiveState);
 	System::Sleep(configuration->chipSelectSetupTime);
 }
 
 void FEZAthena::SPIBus::deselectChip(GHI::Interfaces::SPIConfiguration* configuration)
 {
-	mainboard->setIOMode(configuration->chipSelect, IOStates::DIGITAL_OUTPUT, ResistorModes::FLOATING);
 	System::Sleep(configuration->chipSelectHoldTime);
 	mainboard->writeDigital(configuration->chipSelect, !configuration->chipSelectActiveState);
-//#ifdef GADGETEERING_EXTENDED_SPI
-//	SPI.end();
-//#endif
 }
 
 void FEZAthena::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration, bool deselectAfter)
@@ -126,11 +121,11 @@ void FEZAthena::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char
 	for (int i = 0; i < count; i++) 
 	{
 		if (sendBuffer != NULL && receiveBuffer != NULL)
-			receiveBuffer[i] = SPI.transfer(0, sendBuffer[i]);
+			receiveBuffer[i] = SPI.transfer(0, sendBuffer[i], SPI_CONTINUE);
 		else if (sendBuffer != NULL && receiveBuffer == NULL)
-			SPI.transfer(0, sendBuffer[i]);
+			SPI.transfer(0, sendBuffer[i], SPI_CONTINUE);
 		else if (sendBuffer == NULL && receiveBuffer != NULL)
-			receiveBuffer[i] = SPI.transfer(0, 0);
+			receiveBuffer[i] = SPI.transfer(0, 0, SPI_CONTINUE);
 	}
 #endif
 	
