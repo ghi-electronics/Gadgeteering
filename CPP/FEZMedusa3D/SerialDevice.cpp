@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 #include "../Gadgeteering/SerialDevice.hpp"
-#include "FEZAthena.h"
+#include "FEZMedusa3D.h"
 #include "Arduino.h"
 
 using namespace GHI;

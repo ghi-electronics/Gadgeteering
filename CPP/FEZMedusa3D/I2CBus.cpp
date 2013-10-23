@@ -16,7 +16,7 @@ limitations under the License.
 
 #include "../Gadgeteering/Gadgeteering.h"
 
-#include "FEZAthena.h"
+#include "FEZMedusa3D.h"
 
 #ifdef GADGETEERING_HARDWARE_I2C
 #include <Wire.h>

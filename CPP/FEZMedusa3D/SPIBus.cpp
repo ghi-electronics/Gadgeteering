@@ -17,7 +17,7 @@ limitations under the License.
 #include "../Gadgeteering/Gadgeteering.h"
 #include <SPI.h>
 
-#include "FEZAthena.h"
+#include "FEZMedusa3D.h"
 #include "Environment.h"
 
 //#define SYSTEM_CLOCK 84000U /*KHz*/
