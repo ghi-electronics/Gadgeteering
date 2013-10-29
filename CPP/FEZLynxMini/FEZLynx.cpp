@@ -103,8 +103,6 @@ FEZLynx::~FEZLynx()
 {
     delete this->Extender;
     delete this->analogConverter;
-
-    delete [] this->m_devices;
 }
 
 void FEZLynx::mapSockets()
@@ -472,20 +470,20 @@ int main()
 
     Modules::Button btn(3);
     Modules::DisplayN18 display(4);
-    Interfaces::AnalogInput input(FEZLynx::Pins::Analog_01);
+    //Interfaces::AnalogInput input(FEZLynx::Pins::Analog_01);
 
     bool buttonPressed = false;
 
 	while(true)
 	{
-        std::cout << input.read() << std::endl;
+        //std::cout << input.read() << std::endl;
 
         if(btn.isPressed())
         {
             if(!buttonPressed)
             {
                 buttonPressed = true;
-                display.fillRect(0,0,128,160,0xF0FF);
+                display.fillRect(5, 5, 118, 150, 0xF81F);
 
                 std::cout << "Pressed" << std::endl;
             }
@@ -493,7 +491,7 @@ int main()
         else if(buttonPressed)
         {
             buttonPressed = false;
-            display.fillRect(0,0,128,160,0x0000);
+			display.fillRect(0, 0, 128, 160, 0x0000);
 
             std::cout << "Released" << std::endl;
         }

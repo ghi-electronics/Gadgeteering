@@ -228,22 +228,24 @@ void DisplayN18::setPixel(int x, int y, unsigned short color) {
 }
 
 void DisplayN18::fillRect(int x, int y, int width, int height, unsigned short color) {
-	this->setClippingArea((unsigned char)x, (unsigned char)y, (unsigned char)width - 1, (unsigned char)height - 1);
+	this->setClippingArea((unsigned char)x, (unsigned char)y, (unsigned char)width - 1, (unsigned char)height);
 	this->writeCommand(0x2C);
-	
-	unsigned short data[DisplayN18::STEP_X * DisplayN18::STEP_Y];
-	for (int i = 0; i < DisplayN18::STEP_X * DisplayN18::STEP_Y; i++)
-		data[i] = color;
-   
-	unsigned char drawWidth = 0, drawHeight = 0;
-	for (unsigned char thisX = x; thisX < x + width; thisX += DisplayN18::STEP_X) {
-		for (unsigned char thisY = y; thisY < y + height; thisY += DisplayN18::STEP_Y) {
-			drawWidth = x + width - thisX >= DisplayN18::STEP_X ? DisplayN18::STEP_X : x + width - thisX;
-			drawHeight = y + height - thisY >= DisplayN18::STEP_Y ? DisplayN18::STEP_Y : y + height - thisY;
 
-			this->writeData(reinterpret_cast<unsigned char*>(data), drawWidth * drawHeight * 2);
-		}
-	}
+	unsigned short* buffer = new unsigned short[width * DisplayN18::STEP];
+	for (int j = 0; j < width * DisplayN18::STEP; j++)
+		buffer[j] = color;
+
+	this->rsPin->write(true);
+
+	int i;
+	for (i = DisplayN18::STEP; i <= height; i += DisplayN18::STEP)
+		this->writeData(reinterpret_cast<unsigned char*>(buffer), width * DisplayN18::STEP * 2);
+	
+	i -= DisplayN18::STEP;
+	if (height - i > 0)
+		this->writeData(reinterpret_cast<unsigned char*>(buffer), width * (height - i)* 2);
+
+	delete[] buffer;
 }
 
 void DisplayN18::drawRect(int x, int y, int width, int height, unsigned short color) {

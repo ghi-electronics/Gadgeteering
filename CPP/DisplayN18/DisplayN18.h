@@ -27,11 +27,11 @@ namespace GHI {
 #ifndef LYNX
 			static const unsigned char STEP_X = 4;
 			static const unsigned char STEP_Y = 5;
+			static const unsigned char STEP = 1;
 #else
-            static const unsigned char STEP_X = 128;
-            static const unsigned char STEP_Y = 160;
-
-            unsigned short m_data[128 * 160];
+			static const unsigned char STEP_X = 128;
+			static const unsigned char STEP_Y = 160;
+			static const unsigned char STEP = 160;
 #endif
 
 			DigitalOutput* resetPin;
