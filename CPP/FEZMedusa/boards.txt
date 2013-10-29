@@ -4,7 +4,7 @@ menu.cpu=Processor
 
 ##############################################################
 
-yun.name=Arduino Yún
+yun.name=Arduino YÃºn
 yun.upload.via_ssh=true
 
 yun.vid.0=0x2341
@@ -65,28 +65,28 @@ uno.build.variant=standard
 
 ##############################################################
 
-uno.name=FEZ Medusa
-uno.vid.0=0x2341
-uno.pid.0=0x0043
-uno.upload.tool=avrdude
-uno.upload.protocol=arduino
-uno.upload.maximum_size=32256
-uno.upload.maximum_data_size=2048
-uno.upload.speed=115200
+medusa.name=FEZ Medusa
+medusa.vid.0=0x2341
+medusa.pid.0=0x0043
+medusa.upload.tool=avrdude
+medusa.upload.protocol=arduino
+medusa.upload.maximum_size=32256
+medusa.upload.maximum_data_size=2048
+medusa.upload.speed=57600
 
-uno.bootloader.tool=avrdude
-uno.bootloader.low_fuses=0xFF
-uno.bootloader.high_fuses=0xDE
-uno.bootloader.extended_fuses=0x05
-uno.bootloader.unlock_bits=0x3F
-uno.bootloader.lock_bits=0x0F
-uno.bootloader.file=optiboot/optiboot_atmega328.hex
+medusa.bootloader.tool=avrdude
+medusa.bootloader.low_fuses=0xFF
+medusa.bootloader.high_fuses=0xDE
+medusa.bootloader.extended_fuses=0x05
+medusa.bootloader.unlock_bits=0x3F
+medusa.bootloader.lock_bits=0x0F
+medusa.bootloader.file=optiboot/optiboot_medusa.hex
 
-uno.build.mcu=atmega328p
-uno.build.f_cpu=12000000L
-uno.build.board=AVR_UNO
-uno.build.core=gadgeteering
-uno.build.variant=standard
+medusa.build.mcu=atmega328p
+medusa.build.f_cpu=12000000L
+medusa.build.board=AVR_medusa
+medusa.build.core=arduino
+medusa.build.variant=standard
 
 ##############################################################
 
@@ -727,4 +727,5 @@ robotMotor.build.board=AVR_ROBOT_MOTOR
 robotMotor.build.core=arduino
 robotMotor.build.variant=robot_motor
 robotMotor.build.extra_flags={build.usb_flags}
+
 
