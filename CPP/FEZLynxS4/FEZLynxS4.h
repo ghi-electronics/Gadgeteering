@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _FEZLYNX_H_
-#define _FEZLYNX_H_
+#ifndef _FEZLYNXS4_H_
+#define _FEZLYNXS4_H_
 
 #include "include/FTDI_Device.h"
 
@@ -35,7 +35,7 @@ namespace GHI
 {
     namespace Mainboards
     {
-        class FEZLynx : public GHI::Mainboard
+        class FEZLynxS4 : public GHI::Mainboard
         {
             static const unsigned short CLOCK_DIVISOR = 0x0055; //Value of clock divisor, SCL Frequency = 60/((1+0x0095)*2) (MHz) = 200khz
 			static const int ANALOG_2 = 0xAA;
@@ -123,8 +123,8 @@ namespace GHI
 			void mapSockets();
 
             public:
-                FEZLynx();
-				~FEZLynx();
+                FEZLynxS4();
+				~FEZLynxS4();
 
                 class Pins
                 {

@@ -1,18 +1,34 @@
-﻿#include "FEZLynx.h"
+﻿/*
+Copyright 2013 GHI Electronics LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+#include "FEZLynxS4.h"
 
 using namespace GHI;
 using namespace Mainboards;
 
-FEZLynx::I2CBus::I2CBus(CPUPin sdaPin, CPUPin sclPin, FTDI_Device *device) : Interfaces::I2CBus(sdaPin, sclPin)
+FEZLynxS4::I2CBus::I2CBus(CPUPin sdaPin, CPUPin sclPin, FTDI_Device *device) : Interfaces::I2CBus(sdaPin, sclPin)
 {
     this->m_device = device;
 }
 
-FEZLynx::I2CBus::~I2CBus()
+FEZLynxS4::I2CBus::~I2CBus()
 {
 }
 
-void FEZLynx::I2CBus::sendStopCondition()
+void FEZLynxS4::I2CBus::sendStopCondition()
 {
     char* buffer = new char[30];
     DWORD sent = 0, read = 0, timeout = 0, dwNumBytesToSend = 0;
@@ -58,7 +74,7 @@ void FEZLynx::I2CBus::sendStopCondition()
 	return;
 }
 
-bool FEZLynx::I2CBus::sendStartCondition(unsigned char address)
+bool FEZLynxS4::I2CBus::sendStartCondition(unsigned char address)
 {
     char* buffer = new char[30];
 
@@ -112,7 +128,7 @@ bool FEZLynx::I2CBus::sendStartCondition(unsigned char address)
     return !nack;
 }
 
-unsigned int FEZLynx::I2CBus::write(const unsigned char *buffer, unsigned int count, unsigned char address, bool sendStop)
+unsigned int FEZLynxS4::I2CBus::write(const unsigned char *buffer, unsigned int count, unsigned char address, bool sendStop)
 {
     unsigned char* writeBuffer = new unsigned char[count + 3];
     DWORD sent = 0;
@@ -137,7 +153,7 @@ unsigned int FEZLynx::I2CBus::write(const unsigned char *buffer, unsigned int co
 	return sent;
 }
 
-unsigned int FEZLynx::I2CBus::read(unsigned char *buffer, unsigned int count, unsigned char address, bool sendStop)
+unsigned int FEZLynxS4::I2CBus::read(unsigned char *buffer, unsigned int count, unsigned char address, bool sendStop)
 {
     DWORD read = 0, available = 0, sent = 0;
     unsigned char obuffer[3];
@@ -173,7 +189,7 @@ unsigned int FEZLynx::I2CBus::read(unsigned char *buffer, unsigned int count, un
 	return read;
 }
 
-bool FEZLynx::I2CBus::writeRead(const unsigned char *writeBuffer, unsigned int writeLength, unsigned char *readBuffer, unsigned int readLength, unsigned int *numWritten, unsigned int *numRead, unsigned char address)
+bool FEZLynxS4::I2CBus::writeRead(const unsigned char *writeBuffer, unsigned int writeLength, unsigned char *readBuffer, unsigned int readLength, unsigned int *numWritten, unsigned int *numRead, unsigned char address)
 {
     unsigned char* buffer = new unsigned char[writeLength + 3];
     DWORD sent = 0, read = 0, available = 0;
