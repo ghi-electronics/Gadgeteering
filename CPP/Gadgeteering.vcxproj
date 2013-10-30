@@ -39,12 +39,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)\FEZLynx\include\windows;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)\FEZLynx\lib\windows\i386\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\FEZLynxS4\include\windows;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\FEZLynxS4\lib\windows\i386\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)\FEZLynx\include\windows;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)\FEZLynx\lib\windows\i386\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\FEZLynxS4\include\windows;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\FEZLynxS4\lib\windows\i386\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -94,6 +94,7 @@
     <ClInclude Include="DistanceUS3\DistanceUS3.h" />
     <ClInclude Include="Extender\Extender.h" />
     <ClInclude Include="FEZLynxS4\FEZLynxS4.h" />
+    <ClInclude Include="FEZLynxS4\include\FTDI_Device.h" />
     <ClInclude Include="FEZLynxS4\include\windows\FTD2XX.H" />
     <ClInclude Include="FEZLynxS4\include\windows\libMPSSE_i2c.h" />
     <ClInclude Include="FEZLynxS4\include\windows\libMPSSE_spi.h" />
