@@ -28,6 +28,8 @@ socket->ensureTypeIsSupported(Socket::Types::Y);
     MISO = new DigitalInput(socket, Socket::Pins::Eight, ResistorModes::FLOATING);
     MOSI = new DigitalOutput(socket, Socket::Pins::Seven, false);
     CLOCK = new DigitalOutput(socket, Socket::Pins::Nine, false);
+	
+	Initialize();
 }
 
 PulseCount::~PulseCount() {
@@ -188,4 +190,14 @@ PulseCount::Direction PulseCount::ReadDirection()
 {
     unsigned char dir = (unsigned char)((ReadStatusReg() & 0x2)>> 1);
     return dir == 1 ? Directions::DOWN : Directions::UP;
+}
+
+void PulseCount::SetCountMode(unsigned char mode)
+{
+	Write2Bytes((unsigned char)Commands::LS7366_WRITE | (unsigned char)Registers::LS7366_MDR0, mode);
+}
+
+void PulseCount::ClearRegister()
+{
+	Write1Byte((unsigned char)Commands::LS7366_CLEAR | (unsigned char)Registers::LS7366_CNTR);
 }
