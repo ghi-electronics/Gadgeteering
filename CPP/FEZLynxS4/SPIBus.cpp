@@ -14,24 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "FEZLynx.h"
+#include "FEZLynxS4.h"
 #include "../Gadgeteering/System.hpp"
 #include "../Gadgeteering/Types.hpp"
 
 using namespace GHI;
 using namespace GHI::Mainboards;
 
-FEZLynx::SPIBus::SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin, FTDI_Device *device) : GHI::Interfaces::SPIBus(mosiPin, misoPin, sckPin)
+FEZLynxS4::SPIBus::SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin, FTDI_Device *device) : GHI::Interfaces::SPIBus(mosiPin, misoPin, sckPin)
 {
     this->m_device = device;
 }
 
-FEZLynx::SPIBus::~SPIBus()
+FEZLynxS4::SPIBus::~SPIBus()
 {
 
 }
 
-void FEZLynx::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration, bool deselectAfter)
+void FEZLynxS4::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration, bool deselectAfter)
 {
 	unsigned char* buffer = new unsigned char[count + 3];
     DWORD sent = 0, read = 0, available = 0;

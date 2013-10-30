@@ -16,7 +16,7 @@ limitations under the License.
 
 #include "../Gadgeteering/Gadgeteering.h"
 
-#include "FEZLynx.h"
+#include "FEZLynxS4.h"
 
 using namespace GHI;
 using namespace GHI::Interfaces;
@@ -25,51 +25,51 @@ using namespace GHI::Mainboards;
 #define I2C_DELAY() ;
 #define WAIT_SCL() while (!readSCL()) ;
 
-FEZLynx::SoftwareI2CBus::SoftwareI2CBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
+FEZLynxS4::SoftwareI2CBus::SoftwareI2CBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
 {
     this->startSent = false;
     this->releaseSCL();
     this->releaseSDA();
 }
 
-FEZLynx::SoftwareI2CBus::~SoftwareI2CBus()
+FEZLynxS4::SoftwareI2CBus::~SoftwareI2CBus()
 {
 
 }
 
-void FEZLynx::SoftwareI2CBus::clearSCL()
+void FEZLynxS4::SoftwareI2CBus::clearSCL()
 {
     mainboard->setIOMode(this->scl, IOStates::DIGITAL_OUTPUT);
 }
 
-void FEZLynx::SoftwareI2CBus::releaseSCL()
+void FEZLynxS4::SoftwareI2CBus::releaseSCL()
 {
     mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
 }
 
-bool FEZLynx::SoftwareI2CBus::readSCL()
+bool FEZLynxS4::SoftwareI2CBus::readSCL()
 {
     mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
     return mainboard->readDigital(this->scl);
 }
 
-void FEZLynx::SoftwareI2CBus::clearSDA()
+void FEZLynxS4::SoftwareI2CBus::clearSDA()
 {
     mainboard->setIOMode(this->sda, IOStates::DIGITAL_OUTPUT);
 }
 
-void FEZLynx::SoftwareI2CBus::releaseSDA()
+void FEZLynxS4::SoftwareI2CBus::releaseSDA()
 {
     mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
 }
 
-bool FEZLynx::SoftwareI2CBus::readSDA()
+bool FEZLynxS4::SoftwareI2CBus::readSDA()
 {
     mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
     return mainboard->readDigital(this->sda);
 }
 
-void FEZLynx::SoftwareI2CBus::writeBit(bool bit)
+void FEZLynxS4::SoftwareI2CBus::writeBit(bool bit)
 {
     if (bit)
         releaseSDA();
@@ -81,7 +81,7 @@ void FEZLynx::SoftwareI2CBus::writeBit(bool bit)
 	clearSCL();
 }
 
-bool FEZLynx::SoftwareI2CBus::readBit()
+bool FEZLynxS4::SoftwareI2CBus::readBit()
 {
     releaseSDA();
 
@@ -94,7 +94,7 @@ bool FEZLynx::SoftwareI2CBus::readBit()
     return bit;
 }
 
-void FEZLynx::SoftwareI2CBus::sendStartCondition()
+void FEZLynxS4::SoftwareI2CBus::sendStartCondition()
 {
 	releaseSDA();
 
@@ -108,7 +108,7 @@ void FEZLynx::SoftwareI2CBus::sendStartCondition()
 	startSent = true;
 }
 
-void FEZLynx::SoftwareI2CBus::sendStopCondition()
+void FEZLynxS4::SoftwareI2CBus::sendStopCondition()
 {
     clearSDA();
 
@@ -119,7 +119,7 @@ void FEZLynx::SoftwareI2CBus::sendStopCondition()
 	startSent = false;
 }
 
-bool FEZLynx::SoftwareI2CBus::transmit(bool sendStart, bool sendStop, unsigned char data) {
+bool FEZLynxS4::SoftwareI2CBus::transmit(bool sendStart, bool sendStop, unsigned char data) {
 	if (sendStart)
 		sendStartCondition();
 
@@ -134,7 +134,7 @@ bool FEZLynx::SoftwareI2CBus::transmit(bool sendStart, bool sendStop, unsigned c
 	return nack;
 }
 
-unsigned char FEZLynx::SoftwareI2CBus::receive(bool sendAcknowledgeBit, bool sendStop)
+unsigned char FEZLynxS4::SoftwareI2CBus::receive(bool sendAcknowledgeBit, bool sendStop)
 {
 	unsigned char bit, d = 0;
 
@@ -149,7 +149,7 @@ unsigned char FEZLynx::SoftwareI2CBus::receive(bool sendAcknowledgeBit, bool sen
 	return d;
 }
 
-unsigned int FEZLynx::SoftwareI2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
+unsigned int FEZLynxS4::SoftwareI2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
 {
     if (!count)
 		return 0;
@@ -168,7 +168,7 @@ unsigned int FEZLynx::SoftwareI2CBus::write(const unsigned char* buffer, unsigne
 	return numWrite;
  }
 
-unsigned int FEZLynx::SoftwareI2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
+unsigned int FEZLynxS4::SoftwareI2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
 {
     if (!count)
 		return 0;
@@ -189,7 +189,7 @@ unsigned int FEZLynx::SoftwareI2CBus::read(unsigned char* buffer, unsigned int c
     return numRead;
 }
 
-bool FEZLynx::SoftwareI2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address)
+bool FEZLynxS4::SoftwareI2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address)
 {
     *numWritten = 0;
 	*numRead = 0;

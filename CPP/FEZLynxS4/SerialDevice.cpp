@@ -1,33 +1,49 @@
-#include "FEZLynx.h"
+/*
+Copyright 2013 GHI Electronics LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+#include "FEZLynxS4.h"
 
 #include "../Gadgeteering/System.hpp"
 
 using namespace GHI;
 using namespace GHI::Mainboards;
 
-FEZLynx::SerialDevice::SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, FTDI_Device *device) : Interfaces::SerialDevice(tx, rx, baudRate, parity, stopBits, dataBits)
+FEZLynxS4::SerialDevice::SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, FTDI_Device *device) : Interfaces::SerialDevice(tx, rx, baudRate, parity, stopBits, dataBits)
 {
     this->m_device = device;
 }
 
-FEZLynx::SerialDevice::~SerialDevice()
+FEZLynxS4::SerialDevice::~SerialDevice()
 {
 
 }
 
-void FEZLynx::SerialDevice::open()
+void FEZLynxS4::SerialDevice::open()
 {
     this->m_device->SetBitMode(FTDI_Configuration::BIT_MODE_SERIAL);
     this->m_device->SetBaudRate(this->baudRate);
     this->m_device->Open();
 }
 
-void FEZLynx::SerialDevice::close()
+void FEZLynxS4::SerialDevice::close()
 {
     this->m_device->Close();
 }
 
-void FEZLynx::SerialDevice::write(const unsigned char* buffer, unsigned int count)
+void FEZLynxS4::SerialDevice::write(const unsigned char* buffer, unsigned int count)
 {
     DWORD sent = 0;
 
@@ -35,7 +51,7 @@ void FEZLynx::SerialDevice::write(const unsigned char* buffer, unsigned int coun
         mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
 }
 
-unsigned int FEZLynx::SerialDevice::read(unsigned char* buffer, unsigned int count)
+unsigned int FEZLynxS4::SerialDevice::read(unsigned char* buffer, unsigned int count)
 {
     DWORD available, read;
     int timeout = 0;
@@ -58,7 +74,7 @@ unsigned int FEZLynx::SerialDevice::read(unsigned char* buffer, unsigned int cou
     return read;
 }
 
-unsigned int FEZLynx::SerialDevice::available()
+unsigned int FEZLynxS4::SerialDevice::available()
 {
     DWORD available = 0;
 

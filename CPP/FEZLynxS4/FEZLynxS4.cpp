@@ -17,7 +17,7 @@ limitations under the License.
 #include <iostream>
 #include <cstring>
 
-#include "FEZLynx.h"
+#include "FEZLynxS4.h"
 
 using namespace GHI;
 using namespace GHI::Interfaces;
@@ -25,7 +25,7 @@ using namespace GHI::Mainboards;
 
 Mainboard* GHI::mainboard = NULL;
 
-FEZLynx::FEZLynx()
+FEZLynxS4::FEZLynxS4()
 {
 	GHI::mainboard = this;
 
@@ -99,13 +99,13 @@ FEZLynx::FEZLynx()
 	//delete [] infoList;
 }
 
-FEZLynx::~FEZLynx()
+FEZLynxS4::~FEZLynxS4()
 {
     delete this->Extender;
     delete this->analogConverter;
 }
 
-void FEZLynx::mapSockets()
+void FEZLynxS4::mapSockets()
 {
 	Socket* socket = this->registerSocket(new Socket(1, Socket::Types::Y | Socket::Types::A));
 	socket->pins[3] = Pins::PD_4; //VIN3
@@ -225,38 +225,38 @@ void FEZLynx::mapSockets()
     socket->pins[9] = Pins::P6_2;
 }
 
-void FEZLynx::panic(unsigned char error, unsigned char specificError)
+void FEZLynxS4::panic(unsigned char error, unsigned char specificError)
 {
 	std::cout <<  std::hex << (int)error << " " << (int)specificError << std::endl;
 
 	throw error;
 }
 
-void FEZLynx::print(const char* toPrint)
+void FEZLynxS4::print(const char* toPrint)
 {
 	std::cout << toPrint << std::endl;
 }
 
-void FEZLynx::print(int toPrint) {
+void FEZLynxS4::print(int toPrint) {
 	std::cout << toPrint << std::endl;
 }
 
-void FEZLynx::print(double toPrint)
+void FEZLynxS4::print(double toPrint)
 {
 	std::cout << toPrint << std::endl;
 }
 
-CPUPin FEZLynx::getExtenderPin(CPUPin pinNumber)
+CPUPin FEZLynxS4::getExtenderPin(CPUPin pinNumber)
 {
     return (((FTDI_CHANNEL(pinNumber) - 4) << 4) | (FTDI_PIN(pinNumber) - 1));
 }
 
-bool FEZLynx::isVirtual(GHI::CPUPin pinNumber)
+bool FEZLynxS4::isVirtual(GHI::CPUPin pinNumber)
 {
 	return FTDI_CHANNEL(pinNumber) > 3;
 }
 
-void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode)
+void FEZLynxS4::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode)
 {
 	if(isVirtual(pinNumber))
 	{
@@ -295,7 +295,7 @@ void FEZLynx::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resistor
     }
 }
 
-bool FEZLynx::readDigital(GHI::CPUPin pinNumber)
+bool FEZLynxS4::readDigital(GHI::CPUPin pinNumber)
 {
 	if(isVirtual(pinNumber))
     {
@@ -329,7 +329,7 @@ bool FEZLynx::readDigital(GHI::CPUPin pinNumber)
     return (result & (1 << (FTDI_PIN(pinNumber) - 1))) > 0 ? true : false;
 }
 
-void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value)
+void FEZLynxS4::writeDigital(GHI::CPUPin pinNumber, bool value)
 {
 	if(isVirtual(pinNumber))
 	{
@@ -366,7 +366,7 @@ void FEZLynx::writeDigital(GHI::CPUPin pinNumber, bool value)
     }
 }
 
-double FEZLynx::readAnalog(GHI::CPUPin pinNumber)
+double FEZLynxS4::readAnalog(GHI::CPUPin pinNumber)
 {
 	unsigned char channel = 0x00;
 
@@ -376,7 +376,7 @@ double FEZLynx::readAnalog(GHI::CPUPin pinNumber)
 		case Pins::PA_3: channel = 2; break;
 		case Pins::PD_4: channel = 3; break;
 		case Pins::PD_5: channel = 4; break;
-		case FEZLynx::ANALOG_5: channel = 5; break;
+		case FEZLynxS4::ANALOG_5: channel = 5; break;
 
 		default: this->panic(Exceptions::ERR_READ_ANALOG_NOT_SUPPORTED);
 	}
@@ -394,38 +394,38 @@ double FEZLynx::readAnalog(GHI::CPUPin pinNumber)
 	return (double)read / 255.0 * 3.3;
 }
 
-double FEZLynx::readAnalogProportion(CPUPin pinNumber)
+double FEZLynxS4::readAnalogProportion(CPUPin pinNumber)
 {
 	return this->readAnalog(pinNumber) / 3.3;
 }
 
-void FEZLynx::writeAnalog(GHI::CPUPin pinNumber, double voltage)
+void FEZLynxS4::writeAnalog(GHI::CPUPin pinNumber, double voltage)
 {
 	this->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED);
 }
 
-void FEZLynx::writeAnalogProportion(CPUPin pinNumber, double proportion)
+void FEZLynxS4::writeAnalogProportion(CPUPin pinNumber, double proportion)
 {
 	this->writeAnalog(pinNumber, proportion * 3.3);
 }
 
-void FEZLynx::setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency)
+void FEZLynxS4::setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency)
 {
 	this->panic(Exceptions::ERR_PWM_NOT_SUPPORTED);
 }
 
-Interfaces::SerialDevice* FEZLynx::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin)
+Interfaces::SerialDevice* FEZLynxS4::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin)
 {
     for (SerialDevice* current = (SerialDevice*)this->serialDevices.startV(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.nextV())
         if (current->tx == txPin && current->rx == rxPin)
             return current;
 
-    SerialDevice* bus = new FEZLynx::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits, this->m_devices[3]);
+    SerialDevice* bus = new FEZLynxS4::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits, this->m_devices[3]);
     this->serialDevices.addV(bus);
     return bus;
 }
 
-Interfaces::SPIBus* FEZLynx::getSPIBus(CPUPin miso, CPUPin mosi, CPUPin sck)
+Interfaces::SPIBus* FEZLynxS4::getSPIBus(CPUPin miso, CPUPin mosi, CPUPin sck)
 {
 	for (SPIBus* current = (SPIBus*)this->spiBusses.startV(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.nextV())
         if (current->mosi == mosi && current->miso == miso && current->sck == sck)
@@ -436,7 +436,7 @@ Interfaces::SPIBus* FEZLynx::getSPIBus(CPUPin miso, CPUPin mosi, CPUPin sck)
     return bus;
 }
 
-Interfaces::I2CBus* FEZLynx::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hardwareI2C)
+Interfaces::I2CBus* FEZLynxS4::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hardwareI2C)
 {
     for (I2CBus* current = (I2CBus*)this->i2cBusses.startV(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.nextV())
         if (current->scl == sclPin && current->sda == sdaPin)
@@ -466,11 +466,11 @@ Interfaces::I2CBus* FEZLynx::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hardwa
 
 int main()
 {
-	FEZLynx board;
+	FEZLynxS4 board;
 
     Modules::Button btn(3);
     Modules::DisplayN18 display(4);
-    //Interfaces::AnalogInput input(FEZLynx::Pins::Analog_01);
+    //Interfaces::AnalogInput input(FEZLynxS4::Pins::Analog_01);
 
     bool buttonPressed = false;
 
