@@ -23,33 +23,27 @@ namespace GHI {
 	namespace Modules {
 		using namespace GHI::Interfaces;
 
-		class ButtonS6 : public Module {
-			DigitalInput* buttons[6];
-			DigitalOutput* led;
-
-			bool ledState;
+		class ButtonS7 : public Module {
+			DigitalInput* buttons[7];
 
 			public:
 				typedef unsigned char Button;
 
 				class Buttons {
 					public:
-						static const Button LEFT = 1;
-						static const Button RIGHT = 5;
-						static const Button UP = 3;
-						static const Button DOWN = 4;
-						static const Button LEFT_ARROW = 2;
-						static const Button RIGHT_ARROW = 6;
+						static const Button ENTER = 3;
+						static const Button BACK = 4;
+						static const Button LEFT = 5;
+						static const Button UP = 6;
+						static const Button DOWN = 7;
+						static const Button RIGHT = 8;
+						static const Button FORWARD = 9;
 				};
 
-				ButtonS6(unsigned char socketNumber);
-				~ButtonS6();
+				ButtonS7(unsigned char socketNumber);
+				~ButtonS7();
 
 				bool isPressed(Button buttonNumber);
-				void turnLEDOn();
-				void turnLEDOff();
-				void toggleLED();
-				bool isLEDOn();
 		};
 	}
 }

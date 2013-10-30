@@ -85,7 +85,7 @@
     <ClInclude Include="ALFAT\ALFAT.h" />
     <ClInclude Include="Barometer\Barometer.h" />
     <ClInclude Include="Breakout\Breakout.h" />
-    <ClInclude Include="ButtonS6\ButtonS6.h" />
+    <ClInclude Include="ButtonS7\ButtonS7.h" />
     <ClInclude Include="Button\Button.h" />
     <ClInclude Include="ColorSense\ColorSense.h" />
     <ClInclude Include="Compass\Compass.h" />
@@ -157,7 +157,7 @@
     <ClCompile Include="ALFAT\ALFAT.cpp" />
     <ClCompile Include="Barometer\Barometer.cpp" />
     <ClCompile Include="Breakout\Breakout.cpp" />
-    <ClCompile Include="ButtonS6\ButtonS6.cpp" />
+    <ClCompile Include="ButtonS7\ButtonS7.cpp" />
     <ClCompile Include="Button\Button.cpp" />
     <ClCompile Include="ColorSense\ColorSense.cpp" />
     <ClCompile Include="Compass\Compass.cpp" />

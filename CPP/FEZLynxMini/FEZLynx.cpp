@@ -459,42 +459,50 @@ Interfaces::I2CBus* FEZLynx::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hardwa
 }
 
 #include "../LEDStrip/LEDStrip.h"
-#include "../ButtonS6/ButtonS6.h"
+#include "../ButtonS7/ButtonS7.h"
 #include "../Button/Button.h"
 #include "../DisplayN18/DisplayN18.h"
 #include "../FLASH/FLASH.h"
+#include <iostream>
+using namespace std;
 
 int main()
 {
 	FEZLynx board;
 
-    Modules::Button btn(3);
-    Modules::DisplayN18 display(4);
+    //Modules::Button btn(3);
+	Modules::ButtonS7 btn(1);
+    //Modules::DisplayN18 display(4);
     //Interfaces::AnalogInput input(FEZLynx::Pins::Analog_01);
 
     bool buttonPressed = false;
 
 	while(true)
 	{
+		for (Modules::ButtonS7::Button i = 3; i <= 9; i++)
+		if (btn.isPressed(i))
+			cout << (int)i << " ";
+		cout << endl;
+
         //std::cout << input.read() << std::endl;
 
-        if(btn.isPressed())
-        {
-            if(!buttonPressed)
-            {
-                buttonPressed = true;
-                display.fillRect(5, 5, 118, 150, 0xF81F);
-
-                std::cout << "Pressed" << std::endl;
-            }
-        }
-        else if(buttonPressed)
-        {
-            buttonPressed = false;
-			display.fillRect(0, 0, 128, 160, 0x0000);
-
-            std::cout << "Released" << std::endl;
-        }
+        //if(btn.isPressed())
+        //{
+        //    if(!buttonPressed)
+        //    {
+        //        buttonPressed = true;
+        //        display.fillRect(5, 5, 118, 150, 0xF81F);
+		//
+        //        std::cout << "Pressed" << std::endl;
+        //    }
+        //}
+        //else if(buttonPressed)
+        //{
+        //    buttonPressed = false;
+		//	display.fillRect(0, 0, 128, 160, 0x0000);
+		//
+        //    std::cout << "Released" << std::endl;
+        //}
 	}
 
 	return 0;
