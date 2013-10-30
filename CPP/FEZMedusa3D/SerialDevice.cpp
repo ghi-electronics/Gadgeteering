@@ -22,32 +22,32 @@ using namespace GHI;
 using namespace GHI::Interfaces;
 using namespace GHI::Mainboards;
 
-FEZAthena::SerialDevice::SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) : Interfaces::SerialDevice(tx, rx, baudRate, parity, stopBits, dataBits) {
+FEZMedusa3D::SerialDevice::SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) : Interfaces::SerialDevice(tx, rx, baudRate, parity, stopBits, dataBits) {
 
 }
 
-FEZAthena::SerialDevice::~SerialDevice() {
+FEZMedusa3D::SerialDevice::~SerialDevice() {
 
 }
 
-void FEZAthena::SerialDevice::open() {
+void FEZMedusa3D::SerialDevice::open() {
 	Serial.begin(this->baudRate);
 }
 
-void FEZAthena::SerialDevice::close() {
+void FEZMedusa3D::SerialDevice::close() {
 	Serial.end();
 }
 
-void FEZAthena::SerialDevice::write(const unsigned char* buffer, unsigned int count) {
+void FEZMedusa3D::SerialDevice::write(const unsigned char* buffer, unsigned int count) {
 	Serial.write(buffer, count);
 	Serial.flush();
 }
 
-unsigned int FEZAthena::SerialDevice::read(unsigned char* buffer, unsigned int count) {
+unsigned int FEZMedusa3D::SerialDevice::read(unsigned char* buffer, unsigned int count) {
 	return Serial.readBytes(reinterpret_cast<char*>(buffer), count);
 }
 
 
-unsigned int FEZAthena::SerialDevice::available() {
+unsigned int FEZMedusa3D::SerialDevice::available() {
 	return Serial.available();
 }
