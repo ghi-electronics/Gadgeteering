@@ -22,6 +22,7 @@ using namespace Mainboards;
 FEZLynxS4::I2CBus::I2CBus(CPUPin sdaPin, CPUPin sclPin, FTDI_Device *device) : Interfaces::I2CBus(sdaPin, sclPin)
 {
     this->m_device = device;
+    this->m_bytesToSend = 0;
 }
 
 FEZLynxS4::I2CBus::~I2CBus()
@@ -30,11 +31,16 @@ FEZLynxS4::I2CBus::~I2CBus()
 
 void FEZLynxS4::I2CBus::sendStopCondition()
 {
-    char* buffer = new char[30];
+    char* buffer = new char[1024];
     DWORD sent = 0, read = 0, timeout = 0, dwNumBytesToSend = 0;
     FT_STATUS status;
 
 	DWORD dwCount;
+
+    buffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output
+    buffer[dwNumBytesToSend++] = '\x00'; //Set SDA low, SCL high, WP disabled by SK at bit „1‟, DO, GPIOL0 at bit „0‟
+    buffer[dwNumBytesToSend++] = '\x13'; //Set SK,DO,GPIOL0 pins as output with bit „1‟, other pins as input with bit „0‟
+
 	for(dwCount=0; dwCount<4; dwCount++) // Repeat commands to ensure the minimum period of the stop setup time ie 600ns is achieved
 	{
 		buffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output
@@ -46,42 +52,29 @@ void FEZLynxS4::I2CBus::sendStopCondition()
 		buffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output
 		buffer[dwNumBytesToSend++] = '\x03'; //Set SDA, SCL high, WP disabled by SK, DO at bit „1‟, GPIOL0 at bit „0‟
 		buffer[dwNumBytesToSend++] = '\x13'; //Set SK,DO,GPIOL0 pins as output with bit „1‟, other pins as input with bit „0‟
-	}
-
-	//Tristate the SCL, SDA pins
-	buffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output
-	buffer[dwNumBytesToSend++] = '\x00'; //Set WP disabled by GPIOL0 at bit „0‟
-	buffer[dwNumBytesToSend++] = '\x10'; //Set GPIOL0 pins as output with bit „1‟, SK, DO and other pins as input with bit „0‟
-
-	buffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output
-	buffer[dwNumBytesToSend++] = '\x01'; //Set SDA low, SCL high, WP disabled by SK at bit „1‟, DO, GPIOL0 at bit „0‟
-	buffer[dwNumBytesToSend++] = '\x13'; //Set SK,DO,GPIOL0 pins as output with bit „1‟, other pins as input with bit „0‟
-	
-	buffer[dwNumBytesToSend++] = '\x80';//Command to set directions of lower 8 pins and force value on bits set as output
-	buffer[dwNumBytesToSend++] = '\x03'; //Set SDA, SCL high, WP disabled by SK, DO at bit „1‟, GPIOL0 at bit „0‟
-	buffer[dwNumBytesToSend++] = '\x13'; //Set SK,DO,GPIOL0 pins as output with bit „1‟, other pins as input with bit „0‟
-	
-	//Tristate the SCL, SDA pins
-	buffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output
-	buffer[dwNumBytesToSend++] = '\x00'; //Set WP disabled by GPIOL0 at bit „0‟
-	buffer[dwNumBytesToSend++] = '\x10'; //Set GPIOL0 pins as output with bit „1‟, SK, DO and other pins as input with bit „0‟
+    }
+    //for(dwCount=0; dwCount<4; dwCount++) // Repeat commands to ensure the minimum period of the stop hold time ie 600ns is achieved
+    //{
+        buffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output
+        buffer[dwNumBytesToSend++] = '\x00'; //Set SDA, SCL low, WP disabled by SK, DO at bit „1‟, GPIOL0 at bit „0‟
+        buffer[dwNumBytesToSend++] = '\x13'; //Set SK,DO,GPIOL0 pins as output with bit „1‟, other pins as input with bit „0‟
+    //}
 
 	status = FT_Write(this->m_device->GetHandle(), buffer, dwNumBytesToSend, &sent); //Send off the commands
-	dwNumBytesToSend = 0; //Clear output buffer
+    dwNumBytesToSend = 0; //Clear output buffer
 
-	//delete [] buffer;
+    delete [] buffer;
 
 	return;
 }
 
 bool FEZLynxS4::I2CBus::sendStartCondition(unsigned char address)
 {
-    char* buffer = new char[30];
+    char* buffer = new char[1024];
 
-    DWORD sent = 0, read = 0, timeout = 0, dwNumBytesToSend = 0;
+    DWORD sent = 0, read = 0, timeout = 0, dwNumBytesToSend = 0, dwCount = 0;
     FT_STATUS status;
 
-	DWORD dwCount;
 	for(dwCount=0; dwCount < 4; dwCount++) // Repeat commands to ensure the minimum period of the start hold time ie 600ns is achieved
 	{
 		buffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output
@@ -93,60 +86,126 @@ bool FEZLynxS4::I2CBus::sendStartCondition(unsigned char address)
 		buffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output
 		buffer[dwNumBytesToSend++] = '\x01'; //Set SDA low, SCL high, WP disabled by SK at bit „1‟, DO, GPIOL0 at bit „0‟
 		buffer[dwNumBytesToSend++] = '\x13'; //Set SK,DO,GPIOL0 pins as output with bit „1‟, other pins as input with bit „0‟
-	}
-	
-	buffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output
-	buffer[dwNumBytesToSend++] = '\x01'; //Set SDA low, SCL high, WP disabled by SK at bit „1‟, DO, GPIOL0 at bit „0‟
-	buffer[dwNumBytesToSend++] = '\x13'; //Set SK,DO,GPIOL0 pins as output with bit „1‟, other pins as input with bit „0‟
-	
-	buffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output
-	buffer[dwNumBytesToSend++] = '\x00'; //Set SDA, SCL low, WP disabled by SK, DO, GPIOL0 at bit „0‟
-	buffer[dwNumBytesToSend++] = '\x13'; //Set SK,DO,GPIOL0 pins as output with bit „1‟, other pins as input with bit „0‟
-	
-	buffer[dwNumBytesToSend++] = 0x11;
-	buffer[dwNumBytesToSend++] = 0;
-	buffer[dwNumBytesToSend++] = 0;
-	buffer[dwNumBytesToSend++] = address;
-	
-	buffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output
-	buffer[dwNumBytesToSend++] = '\x00'; //Set SDA, SCL low, WP disabled by SK, DO, GPIOL0 at bit „0‟
-	buffer[dwNumBytesToSend++] = '\x10'; //Set SK,DO,GPIOL0 pins as output with bit „1‟, other pins as input with bit „0‟
+    }
+   // for(dwCount=0; dwCount<4; dwCount++) // Repeat commands to ensure the minimum period of the stop hold time ie 600ns is achieved
+    //{
+        buffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output
+        buffer[dwNumBytesToSend++] = '\x00'; //Set SDA, SCL low, WP disabled by SK, DO at bit „1‟, GPIOL0 at bit „0‟
+        buffer[dwNumBytesToSend++] = '\x13'; //Set SK,DO,GPIOL0 pins as output with bit „1‟, other pins as input with bit „0‟
+    //}
 
-	status = FT_Write(this->m_device->GetHandle(), buffer, dwNumBytesToSend, &sent); //Send off the commands
-	dwNumBytesToSend = 0; //Clear output buffer
+    status = FT_Write(this->m_device->GetHandle(), buffer, dwNumBytesToSend, &sent); //Send off the commands
+    dwNumBytesToSend = 0; //Clear output buffer
+
+    delete [] buffer;
+
+    return true;
+}
+
+bool FEZLynxS4::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data) {
+    unsigned char* writeBuffer = new unsigned char[1024];
+    DWORD sent = 0, timeout = 0, dwNumBytesToSend = 0;
+    FT_STATUS status;
+
+    if(sendStart)
+        this->sendStartCondition(data);
+
+    writeBuffer[dwNumBytesToSend++] = 0x11;
+    writeBuffer[dwNumBytesToSend++] = 0x00;
+    writeBuffer[dwNumBytesToSend++] = 0x00;
+    writeBuffer[dwNumBytesToSend++] = data;
+
+    writeBuffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output
+    writeBuffer[dwNumBytesToSend++] = '\x00'; //Set SDA, SCL low, WP disabled by SK, DO, GPIOL0 at bit „0‟
+    writeBuffer[dwNumBytesToSend++] = '\x10'; //Set SK,DO,GPIOL0 pins as output with bit „1‟, other pins as input with bit „0‟
+
+    status |= FT_Write(this->m_device->GetHandle(), writeBuffer, dwNumBytesToSend, &sent);
+    dwNumBytesToSend = 0;
 
     while(!(this->m_device->GetValue() & FTDI_PIN(this->scl)))
     {
-        if(++timeout > 100)
+        if(++timeout > 2000)
             mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR, 255);
     }
 
     bool nack = (this->m_device->GetValue() & FTDI_PIN(this->sda));
 
-    //delete [] buffer;
+    //Reset pin-states to ensure next transmit is correct
+    writeBuffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output
+    writeBuffer[dwNumBytesToSend++] = '\x00'; //Set SDA low, SCL high, WP disabled by SK at bit „1‟, DO, GPIOL0 at bit „0‟
+    writeBuffer[dwNumBytesToSend++] = '\x13'; //Set SK,DO,GPIOL0 pins as output with bit „1‟, other pins as input with bit „0‟
 
-    return !nack;
+    status = FT_Write(this->m_device->GetHandle(), writeBuffer, dwNumBytesToSend, &sent); //Send off the commands
+    dwNumBytesToSend = 0; //Clear output buffer
+
+    delete [] writeBuffer;
+
+    if(sendStop)
+        this->sendStopCondition();
+
+    return nack;
+}
+
+unsigned char FEZLynxS4::I2CBus::receive(bool sendAcknowledgeBit, bool sendStop)
+{
+    DWORD read = 0, available = 0, sent = 0, dwNumBytesToSend = 0;
+    unsigned char *buffer = new unsigned char[1024];
+
+    FT_STATUS status = FT_OK;
+
+    buffer[dwNumBytesToSend++] = 0x20;
+    buffer[dwNumBytesToSend++] = 0;
+    buffer[dwNumBytesToSend++] = 0;
+    buffer[dwNumBytesToSend++] = '\x80'; //Command to set directions of lower 8 pins and force value on bits set as output
+    buffer[dwNumBytesToSend++] = '\x00'; //Set SDA low, SCL high, WP disabled by SK at bit „1‟, DO, GPIOL0 at bit „0‟
+    buffer[dwNumBytesToSend++] = '\x10'; //Set SK,DO,GPIOL0 pins as output with bit „1‟, other pins as input with bit „0‟
+
+    status |= FT_Write(this->m_device->GetHandle(), buffer, dwNumBytesToSend, &sent);
+    dwNumBytesToSend = 0;
+
+    int timeout = 0;
+
+    do {
+        status |= FT_GetQueueStatus(this->m_device->GetHandle(), &available);
+        System::Sleep(1);
+        timeout++;
+    } while (available < 1 && timeout < 2000);
+
+    status |= FT_Read(this->m_device->GetHandle(), buffer, 1, &read);
+
+    if(sendStop)
+        this->sendStopCondition();
+
+    if((read != 1) || (status != FT_OK))
+        mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR, 254);
+
+    unsigned char result = buffer[0];
+
+    delete [] buffer;
+
+    return result;
 }
 
 unsigned int FEZLynxS4::I2CBus::write(const unsigned char *buffer, unsigned int count, unsigned char address, bool sendStop)
 {
     unsigned char* writeBuffer = new unsigned char[count + 3];
     DWORD sent = 0;
+    FT_STATUS status;
 
     this->sendStartCondition(address);
 
-    writeBuffer[0] = 0x11;
+    writeBuffer[0] = 0x10;
     writeBuffer[1] = (count - 1) & 0xFF;
     writeBuffer[2] = ((count - 1) >> 8) & 0xFF;
     for (int i = 0; i < count; i++)
         writeBuffer[i + 3] = buffer != NULL ? buffer[i] : 0x00;
 
-	FT_STATUS status = FT_Write(this->m_device->GetHandle(), writeBuffer, count + 3, &sent);
+    status |= FT_Write(this->m_device->GetHandle(), writeBuffer, count + 3, &sent);
 
     if(sendStop)
         this->sendStopCondition();
 
-    if((sent != count + 3) || (status != FT_OK))
+    if((sent != count) || (status != FT_OK))
         mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
 
 	return sent;
@@ -159,11 +218,9 @@ unsigned int FEZLynxS4::I2CBus::read(unsigned char *buffer, unsigned int count, 
 
     FT_STATUS status = FT_OK;
 
-    this->m_device->Purge();
-
     this->sendStartCondition(address);
 
-    obuffer[0] = 0x24;
+    obuffer[0] = 0x20;
     obuffer[1] = (count - 1) & 0xFF;
     obuffer[2] = ((count - 1) >> 8) & 0xFF;
 
@@ -190,57 +247,41 @@ unsigned int FEZLynxS4::I2CBus::read(unsigned char *buffer, unsigned int count, 
 
 bool FEZLynxS4::I2CBus::writeRead(const unsigned char *writeBuffer, unsigned int writeLength, unsigned char *readBuffer, unsigned int readLength, unsigned int *numWritten, unsigned int *numRead, unsigned char address)
 {
-    unsigned char* buffer = new unsigned char[writeLength + 3];
-    DWORD sent = 0, read = 0, available = 0;
-    FT_STATUS status = FT_OK;
+    *numWritten = 0;
+    *numRead = 0;
 
-    this->m_device->Open();
-    this->sendStartCondition(address);
+    unsigned int i = 0;
+    unsigned int write = 0;
+    unsigned int read = 0;
 
-    buffer[0] = 0x11;
-    buffer[1] = (writeLength - 1) & 0xFF;
-    buffer[2] = ((writeLength - 1) >> 8) & 0xFF;
-    for (int i = 0; i < writeLength; i++)
-        buffer[i + 3] = writeBuffer != NULL ? writeBuffer[i] : 0x00;
+    if (writeLength > 0) {
+        if (!this->transmit(true, false, address)) {
+            for (i = 0; i < writeLength - 1; i++) {
+                if (!this->transmit(false, false, writeBuffer[i])) {
+                    (write)++;
+                }
+            }
+        }
 
-    status |= FT_Write(this->m_device->GetHandle(), buffer, writeLength + 3, &sent);
+        if (!this->transmit(false, (readLength == 0), writeBuffer[i]))
+            write++;
 
+        *numWritten = write;
+    }
 
-    if (readLength > 0)
-    {
-        //this->m_device->Purge();
+    if (readLength > 0) {
+        if (!this->transmit(true, false, address | 1)) {
+            for (i = 0; i < readLength - 1; i++) {
+                readBuffer[i] = this->receive(true, false);
+                read++;
+            }
+        }
 
-        this->sendStartCondition(address | 1);
+        readBuffer[i] = this->receive(false, true);
+        read++;
+        *numRead = read;
+    }
 
-        buffer[0] = 0x20;
-        buffer[1] = (readLength - 1) & 0xFF;
-        buffer[2] = ((readLength - 1) >> 8) & 0xFF;
-
-        status |= FT_Write(this->m_device->GetHandle(), buffer, 3, &sent);
-
-        int timeout = 0;
-
-        do {
-            status |= FT_GetQueueStatus(this->m_device->GetHandle(), &available);
-            System::Sleep(1);
-
-            if(++timeout >= 2000)
-                mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
-
-        } while (available < readLength);
-
-        status |= FT_Read(this->m_device->GetHandle(), readBuffer, readLength, &read);
-
-        this->sendStopCondition();
-	}
-	else {
-		this->sendStopCondition();
-	}
-
-    delete [] buffer;
-
-    if((read != readLength) || (status != FT_OK))
-        mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
-
-	return true;
+    return (write + read) == (writeLength + readLength);
 }
+

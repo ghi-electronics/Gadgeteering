@@ -76,8 +76,16 @@ namespace GHI
             {
                 FTDI_Device *m_device;
 
+                unsigned char *OutputBuffer;
+                unsigned char *InputBuffer;
+
+                int m_bytesToSend;
+
                 bool sendStartCondition(unsigned char address);
                 void sendStopCondition();
+
+                bool transmit(bool sendStart, bool sendStop, unsigned char data);
+                unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
 
                 public:
                     I2CBus(CPUPin sdaPin, CPUPin sclPin, FTDI_Device *device);
