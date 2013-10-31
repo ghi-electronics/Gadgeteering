@@ -36,102 +36,103 @@ FEZMedusa3D::FEZMedusa3D() {
 	socket->pins[9] = 10;
 
 	socket = this->registerSocket(new Socket(2, Socket::Types::I | Socket::Types::P | Socket::Types::U | Socket::Types::Y | Socket::Types::X));
-	socket->pins[3] = 2;
+	socket->pins[3] = A8;
+	socket->pins[4] = A7;
+	socket->pins[5] = A6;
+	socket->pins[6] = 23;
+	socket->pins[7] = 5;
+	socket->pins[8] = 6;
+	socket->pins[9] = 7;
+
+	socket = this->registerSocket(new Socket(3, Socket::Types::A | Socket::Types::P | Socket::Types::Y));
+	socket->pins[3] = A11;
+	socket->pins[4] = A10;
+	socket->pins[5] = A9;
+	socket->pins[6] = 24;
+	socket->pins[7] = 2;
+	socket->pins[8] = 3;
+	socket->pins[9] = 4;
+
+	socket = this->registerSocket(new Socket(4, Socket::Types::I | Socket::Types::U | Socket::Types::X));
+	socket->pins[3] = 25;
 	socket->pins[4] = 1;
 	socket->pins[5] = 0;
-	socket->pins[6] = 4;
-	socket->pins[7] = 3;
-	socket->pins[8] = 5;
-	socket->pins[9] = 6;
+	socket->pins[6] = 26;
+	socket->pins[7] = -1;
+	socket->pins[8] = 20;
+	socket->pins[9] = 21;
 
-	socket = this->registerSocket(new Socket(3, Socket::Types::A | Socket::Types::I | Socket::Types::X));
-	socket->pins[3] = A0; //A0 = 14
-	socket->pins[4] = A1; //A1 = 15
-	socket->pins[5] = A2; //A2 = 16
-	socket->pins[6] = A3; //A3 = 17
-	socket->pins[8] = A4; //A4 = 18
-	socket->pins[9] = A5; //A5 = 19
+	socket = this->registerSocket(new Socket(5, Socket::Types::I | Socket::Types::U | Socket::Types::X));
+	socket->pins[3] = 27;
+	socket->pins[4] = 14;
+	socket->pins[5] = 15;
+	socket->pins[6] = 28;
+	socket->pins[7] = -1;
+	socket->pins[8] = 20;
+	socket->pins[9] = 21;
 
-	socket = this->registerSocket(new Socket(4, Socket::Types::I | Socket::Types::S | Socket::Types::Y | Socket::Types::X));
-	socket->pins[3] = 7;
-	socket->pins[4] = 8;
-	socket->pins[5] = 9;
-	socket->pins[6] = 10;
-	socket->pins[7] = 11;
-	socket->pins[8] = 12;
-	socket->pins[9] = 13;
+	socket = this->registerSocket(new Socket(6, Socket::Types::I | Socket::Types::U | Socket::Types::X));
+	socket->pins[3] = 39;
+	socket->pins[4] = 16;
+	socket->pins[5] = 17;
+	socket->pins[6] = 38;
+	socket->pins[7] = -1;
+	socket->pins[8] = 20;
+	socket->pins[9] = 21;
 
-	socket = this->registerSocket(new Socket(5, Socket::Types::I | Socket::Types::P | Socket::Types::U | Socket::Types::Y | Socket::Types::X));
-	socket->pins[3] = 2;
-	socket->pins[4] = 1;
-	socket->pins[5] = 0;
-	socket->pins[6] = 4;
-	socket->pins[7] = 3;
-	socket->pins[8] = 5;
-	socket->pins[9] = 6;
+	socket = this->registerSocket(new Socket(7, Socket::Types::I | Socket::Types::U | Socket::Types::X));
+	socket->pins[3] = 46;
+	socket->pins[4] = 18;
+	socket->pins[5] = 19;
+	socket->pins[6] = 47;
+	socket->pins[7] = -1;
+	socket->pins[8] = 20;
+	socket->pins[9] = 21;
 
-	socket = this->registerSocket(new Socket(6, Socket::Types::I | Socket::Types::S | Socket::Types::Y | Socket::Types::X));
-	socket->pins[3] = 7;
-	socket->pins[4] = 8;
-	socket->pins[5] = 9;
-	socket->pins[6] = 10;
-	socket->pins[7] = 11;
-	socket->pins[8] = 12;
-	socket->pins[9] = 13;
-
-	socket = this->registerSocket(new Socket(7, Socket::Types::I | Socket::Types::P | Socket::Types::U | Socket::Types::Y | Socket::Types::X));
-	socket->pins[3] = 2;
-	socket->pins[4] = 1;
-	socket->pins[5] = 0;
-	socket->pins[6] = 4;
-	socket->pins[7] = 3;
-	socket->pins[8] = 5;
-	socket->pins[9] = 6;
-
-	socket = this->registerSocket(new Socket(8, Socket::Types::I | Socket::Types::S | Socket::Types::Y | Socket::Types::X));
-	socket->pins[3] = 7;
-	socket->pins[4] = 8;
-	socket->pins[5] = 9;
-	socket->pins[6] = 10;
-	socket->pins[7] = 11;
-	socket->pins[8] = 12;
-	socket->pins[9] = 13;
+	socket = this->registerSocket(new Socket(8, Socket::Types::S | Socket::Types::C | Socket::Types::X));
+	socket->pins[3] = 44;
+	socket->pins[4] = 69;
+	socket->pins[5] = 68;
+	socket->pins[6] = 45;
+	socket->pins[7] = 75;
+	socket->pins[8] = 74;
+	socket->pins[9] = 76;
 
 	socket = this->registerSocket(new Socket(9, Socket::Types::S | Socket::Types::X));
 	socket->pins[3] = 41;
 	socket->pins[4] = 40;
 	socket->pins[5] = 43;
 	socket->pins[6] = 42;
-	socket->pins[7] = 3;
-	socket->pins[8] = 5;
-	socket->pins[9] = 6;
+	socket->pins[7] = 75;
+	socket->pins[8] = 74;
+	socket->pins[9] = 76;
 
-	socket = this->registerSocket(new Socket(10, Socket::Types::I | Socket::Types::S | Socket::Types::Y | Socket::Types::X));
-	socket->pins[3] = 7;
-	socket->pins[4] = 8;
-	socket->pins[5] = 9;
-	socket->pins[6] = 10;
+	socket = this->registerSocket(new Socket(10, Socket::Types::O | Socket::Types::Y));
+	socket->pins[3] = 33;
+	socket->pins[4] = 32;
+	socket->pins[5] = 67;
+	socket->pins[6] = 34;
+	socket->pins[7] = 36;
+	socket->pins[8] = 35;
+	socket->pins[9] = 37;
+
+	socket = this->registerSocket(new Socket(11, Socket::Types::O | Socket::Types::X));
+	socket->pins[3] = 31;
+	socket->pins[4] = 30;
+	socket->pins[5] = 66;
+	socket->pins[6] = -1;
+	socket->pins[7] = -1;
+	socket->pins[8] = -1;
+	socket->pins[9] = -1;
+
+	socket = this->registerSocket(new Socket(12, Socket::Types::I | Socket::Types::P | Socket::Types::U | Socket::Types::Y | Socket::Types::X));
+	socket->pins[3] = A1;
+	socket->pins[4] = A2;
+	socket->pins[5] = A0;
+	socket->pins[6] = 29;
 	socket->pins[7] = 11;
 	socket->pins[8] = 12;
 	socket->pins[9] = 13;
-
-	socket = this->registerSocket(new Socket(11, Socket::Types::I | Socket::Types::P | Socket::Types::U | Socket::Types::Y | Socket::Types::X));
-	socket->pins[3] = 2;
-	socket->pins[4] = 1;
-	socket->pins[5] = 0;
-	socket->pins[6] = 4;
-	socket->pins[7] = 3;
-	socket->pins[8] = 5;
-	socket->pins[9] = 6;
-
-	socket = this->registerSocket(new Socket(12, Socket::Types::I | Socket::Types::P | Socket::Types::U | Socket::Types::Y | Socket::Types::X));
-	socket->pins[3] = 2;
-	socket->pins[4] = 1;
-	socket->pins[5] = 0;
-	socket->pins[6] = 4;
-	socket->pins[7] = 3;
-	socket->pins[8] = 5;
-	socket->pins[9] = 6;
 }
 
 FEZMedusa3D::~FEZMedusa3D() {
