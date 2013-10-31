@@ -91,12 +91,11 @@ FEZLynxS4::FEZLynxS4()
     }
 
     this->mapSockets();
-    this->analogConverter = mainboard->getI2CBus(this->getSocket(0),
-                                                 Socket::Pins::Eight,
-                                                 Socket::Pins::Nine,
-                                                 true)->getI2CDevice(0x49);
-    this->Extender = new Modules::IO60P16(0);
-	//delete [] infoList;
+
+	Socket* i2cSocket = this->getSocket(0);
+
+	this->analogConverter = mainboard->getI2CBus(i2cSocket, Socket::Pins::Eight, Socket::Pins::Nine, true)->getI2CDevice(0x49);
+	this->Extender = new Modules::IO60P16(0, i2cSocket->pins[8], i2cSocket->pins[9]);
 }
 
 FEZLynxS4::~FEZLynxS4()
@@ -125,7 +124,7 @@ void FEZLynxS4::mapSockets()
 	socket->pins[8] = Pins::PB_1;
 	socket->pins[9] = Pins::PB_0;
 
-	socket = this->registerSocket(new Socket(0, Socket::Types::K | Socket::Types::I | Socket::Types::X | Socket::Types::U));
+	socket = this->registerSocket(new Socket(0, Socket::Types::I));
 	socket->pins[3] = Pins::PD_7;
 	socket->pins[4] = Pins::NotConnected;
 	socket->pins[5] = Pins::NotConnected;
@@ -134,7 +133,7 @@ void FEZLynxS4::mapSockets()
 	socket->pins[8] = Pins::PB_1;
 	socket->pins[9] = Pins::PB_0;
 
-	socket = this->registerSocket(new Socket(3, Socket::Types::S | Socket::Types::X));
+	socket = this->registerSocket(new Socket(3, Socket::Types::K | Socket::Types::I | Socket::Types::X | Socket::Types::U));
 	socket->pins[3] = Pins::PD_0;
 	socket->pins[4] = Pins::PC_0;
 	socket->pins[5] = Pins::PC_1;
@@ -459,16 +458,19 @@ Interfaces::I2CBus* FEZLynxS4::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hard
 }
 
 #include "../ALFAT/ALFAT.h"
+#include "../TouchL12/TouchL12.h"
 #include <iostream>
+
 using namespace std;
 
 int main()
 {
 	FEZLynxS4 board;
 
-    Modules::ALFAT fs(4);
+    Modules::TouchL12 touch(3);
 
-	cout << fs.isStoragePresent(Modules::ALFAT::Drives::SD) << endl;
+	while (true)
+		cout << touch.GetSliderPosition() << endl;
 
 	return 0;
 }

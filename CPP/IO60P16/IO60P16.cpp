@@ -20,11 +20,16 @@ using namespace GHI;
 using namespace GHI::Modules;
 using namespace GHI::Interfaces;
 
-IO60P16::IO60P16(unsigned char socketNumber) {
+IO60P16::IO60P16(unsigned char socketNumber, CPUPin sda, CPUPin scl) {
 	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::X);
 
-	this->io60Chip = socket->getI2CDevice(0x20);
+	if (sda == 0 || scl == 0) {
+		scl = socket->pins[4];
+		sda = socket->pins[5];
+		socket->ensureTypeIsSupported(Socket::Types::X);
+	}
+
+	this->io60Chip = mainboard->getI2CBus(sda, scl, false)->getI2CDevice(0x20);
 
 	for(int i = 0; i < 8; i++)
 	{

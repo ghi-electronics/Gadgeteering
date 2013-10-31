@@ -15,15 +15,13 @@ limitations under the License.
 */
 
 #include "../Gadgeteering/Gadgeteering.h"
-#include <SPI.h>
-
 #include "FEZMedusa3D.h"
 #include "Environment.h"
+#include <SPI.h>
 
 //#define SYSTEM_CLOCK 84000U /*KHz*/
 //#define GADGETEERING_SYSTEM_CLOCK 84000U /*KHz*/
 //#define GADGETEERING_EXTENDED_SPI
-
 using namespace GHI;
 using namespace GHI::Mainboards;
 using namespace GHI::Interfaces;

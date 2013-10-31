@@ -132,7 +132,6 @@ unsigned int FEZLynxS4::I2CBus::write(const unsigned char *buffer, unsigned int 
 {
     unsigned char* writeBuffer = new unsigned char[count + 3];
     DWORD sent = 0;
-    FT_STATUS status;
 
     this->sendStartCondition(address);
 
@@ -142,12 +141,12 @@ unsigned int FEZLynxS4::I2CBus::write(const unsigned char *buffer, unsigned int 
     for (int i = 0; i < count; i++)
         writeBuffer[i + 3] = buffer != NULL ? buffer[i] : 0x00;
 
-    status |= FT_Write(this->m_device->GetHandle(), writeBuffer, count + 3, &sent);
+	FT_STATUS status = FT_Write(this->m_device->GetHandle(), writeBuffer, count + 3, &sent);
 
     if(sendStop)
         this->sendStopCondition();
 
-    if((sent != count) || (status != FT_OK))
+    if((sent != count + 3) || (status != FT_OK))
         mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
 
 	return sent;
@@ -206,13 +205,12 @@ bool FEZLynxS4::I2CBus::writeRead(const unsigned char *writeBuffer, unsigned int
 
     status |= FT_Write(this->m_device->GetHandle(), buffer, writeLength + 3, &sent);
 
-    this->sendStopCondition();
 
     if (readLength > 0)
     {
         //this->m_device->Purge();
 
-        this->sendStartCondition(address | 1);
+        this->sendStartCondition(address);
 
         buffer[0] = 0x20;
         buffer[1] = (readLength - 1) & 0xFF;
@@ -234,7 +232,10 @@ bool FEZLynxS4::I2CBus::writeRead(const unsigned char *writeBuffer, unsigned int
         status |= FT_Read(this->m_device->GetHandle(), readBuffer, readLength, &read);
 
         this->sendStopCondition();
-    }
+	}
+	else {
+		this->sendStopCondition();
+	}
 
     delete [] buffer;
 
