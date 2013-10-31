@@ -148,7 +148,7 @@ void FEZLynxS4::mapSockets()
 	socket->pins[4] = Pins::PB_5;
 	socket->pins[5] = Pins::PB_6;
 	socket->pins[6] = Pins::PB_7;
-	socket->pins[7] = Pins::PB_1;
+	socket->pins[7] = Pins::PA_1;
 	socket->pins[8] = Pins::PA_2;
     socket->pins[9] = Pins::PA_0;
 
@@ -458,44 +458,17 @@ Interfaces::I2CBus* FEZLynxS4::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hard
     }
 }
 
-#include "../LEDStrip/LEDStrip.h"
-#include "../ButtonS6/ButtonS6.h"
-#include "../Button/Button.h"
-#include "../DisplayN18/DisplayN18.h"
-#include "../FLASH/FLASH.h"
+#include "../ALFAT/ALFAT.h"
+#include <iostream>
+using namespace std;
 
 int main()
 {
 	FEZLynxS4 board;
 
-    Modules::Button btn(3);
-    Modules::DisplayN18 display(4);
-    //Interfaces::AnalogInput input(FEZLynxS4::Pins::Analog_01);
+    Modules::ALFAT fs(4);
 
-    bool buttonPressed = false;
-
-	while(true)
-	{
-        //std::cout << input.read() << std::endl;
-
-        if(btn.isPressed())
-        {
-            if(!buttonPressed)
-            {
-                buttonPressed = true;
-                display.fillRect(5, 5, 118, 150, 0xF81F);
-
-                std::cout << "Pressed" << std::endl;
-            }
-        }
-        else if(buttonPressed)
-        {
-            buttonPressed = false;
-			display.fillRect(0, 0, 128, 160, 0x0000);
-
-            std::cout << "Released" << std::endl;
-        }
-	}
+	cout << fs.isStoragePresent(Modules::ALFAT::Drives::SD) << endl;
 
 	return 0;
 }

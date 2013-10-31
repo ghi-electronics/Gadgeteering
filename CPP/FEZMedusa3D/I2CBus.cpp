@@ -30,7 +30,7 @@ using namespace GHI::Mainboards;
 	#define I2C_DELAY() ;
 #endif
 
-FEZAthena::I2CBus::I2CBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
+FEZMedusa3D::I2CBus::I2CBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
 {
 #ifndef GADGETEERING_HARDWARE_I2C
 	this->start = false;
@@ -41,7 +41,7 @@ FEZAthena::I2CBus::I2CBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
 #endif
 }
 
-FEZAthena::I2CBus::~I2CBus() 
+FEZMedusa3D::I2CBus::~I2CBus() 
 {
 #ifdef GADGETEERING_HARDWARE_I2C
 	Wire.end();
@@ -49,27 +49,27 @@ FEZAthena::I2CBus::~I2CBus()
 }
 
 #ifndef GADGETEERING_HARDWARE_I2C
-void FEZAthena::I2CBus::clearSCL() {
+void FEZMedusa3D::I2CBus::clearSCL() {
 	mainboard->setIOMode(this->scl, IOStates::DIGITAL_OUTPUT);
 	mainboard->writeDigital(this->scl, false);
 }
 
-bool FEZAthena::I2CBus::readSCL() {
+bool FEZMedusa3D::I2CBus::readSCL() {
 	mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
 	return mainboard->readDigital(this->scl);
 }
 
-void FEZAthena::I2CBus::clearSDA() {
+void FEZMedusa3D::I2CBus::clearSDA() {
 	mainboard->setIOMode(this->sda, IOStates::DIGITAL_OUTPUT);
 	mainboard->writeDigital(this->sda, false);
 }
 
-bool FEZAthena::I2CBus::readSDA() {
+bool FEZMedusa3D::I2CBus::readSDA() {
 	mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
 	return mainboard->readDigital(this->sda);
 }
 
-bool FEZAthena::I2CBus::writeBit(bool bit) {
+bool FEZMedusa3D::I2CBus::writeBit(bool bit) {
     if (bit)
 		this->readSDA();
     else
@@ -90,7 +90,7 @@ bool FEZAthena::I2CBus::writeBit(bool bit) {
     return true;
 }
 
-bool FEZAthena::I2CBus::readBit() {
+bool FEZMedusa3D::I2CBus::readBit() {
     this->readSDA();
 	
     I2C_DELAY();
@@ -107,7 +107,7 @@ bool FEZAthena::I2CBus::readBit() {
     return bit;
 }
 
-bool FEZAthena::I2CBus::sendStartCondition() {
+bool FEZMedusa3D::I2CBus::sendStartCondition() {
 	if (this->start) {
 		this->readSDA();
 		I2C_DELAY();
@@ -130,7 +130,7 @@ bool FEZAthena::I2CBus::sendStartCondition() {
 	return true;
 }
 
-bool FEZAthena::I2CBus::sendStopCondition() {
+bool FEZMedusa3D::I2CBus::sendStopCondition() {
 	this->clearSDA();
 	I2C_DELAY();
 
@@ -147,7 +147,7 @@ bool FEZAthena::I2CBus::sendStopCondition() {
 	return true;
 }
 
-bool FEZAthena::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data) {
+bool FEZMedusa3D::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data) {
 	unsigned char bit;
 	bool nack;
 	
@@ -168,7 +168,7 @@ bool FEZAthena::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char da
      return nack;
 }
 
-unsigned char FEZAthena::I2CBus::receive(bool sendAcknowledgeBit, bool sendStopCondition) {
+unsigned char FEZMedusa3D::I2CBus::receive(bool sendAcknowledgeBit, bool sendStopCondition) {
 	unsigned char d = 0;
 	unsigned char bit = 0;
 
@@ -188,7 +188,7 @@ unsigned char FEZAthena::I2CBus::receive(bool sendAcknowledgeBit, bool sendStopC
 }
 #endif
 
-unsigned int FEZAthena::I2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop) 
+unsigned int FEZMedusa3D::I2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop) 
 {
 #ifndef GADGETEERING_HARDWARE_I2C
 	if (!count) 
@@ -215,7 +215,7 @@ unsigned int FEZAthena::I2CBus::write(const unsigned char* buffer, unsigned int 
 #endif
  }
 
-unsigned int FEZAthena::I2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop) 
+unsigned int FEZMedusa3D::I2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop) 
 {
 #ifndef GADGETEERING_HARDWARE_I2C
 	if (!count) 
@@ -248,7 +248,7 @@ unsigned int FEZAthena::I2CBus::read(unsigned char* buffer, unsigned int count, 
 #endif
 }
 
-bool FEZAthena::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address) {
+bool FEZMedusa3D::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address) {
 #ifndef GADGETEERING_HARDWARE_I2C
 	*numWritten = 0;
 	*numRead = 0;

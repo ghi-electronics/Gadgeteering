@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _FEZATHENA_H_
-#define _FEZATHENA_H_
+#ifndef _FEZMedusa3D_H_
+#define _FEZMedusa3D_H_
 
 #include "../Gadgeteering/Mainboard.hpp"
 #include "../Gadgeteering/Socket.hpp"
@@ -29,7 +29,7 @@ class SPIClass;
 
 namespace GHI {
 	namespace Mainboards {
-		class FEZAthena : public GHI::Mainboard {
+		class FEZMedusa3D : public GHI::Mainboard {
 
 			public:
 			class SPIBus : public GHI::Interfaces::SPIBus
@@ -87,8 +87,8 @@ namespace GHI {
 							virtual unsigned int read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
 							virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
 			};
-				FEZAthena();
-				virtual ~FEZAthena();
+				FEZMedusa3D();
+				virtual ~FEZMedusa3D();
 				
 				virtual void panic(unsigned char error, unsigned char specificError = 0);
 				virtual void print(const char* toPrint);

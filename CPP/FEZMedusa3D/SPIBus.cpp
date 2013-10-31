@@ -28,7 +28,7 @@ using namespace GHI;
 using namespace GHI::Mainboards;
 using namespace GHI::Interfaces;
 
-FEZAthena::SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : Interfaces::SPIBus(mosi, miso, sck)
+FEZMedusa3D::SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : Interfaces::SPIBus(mosi, miso, sck)
 {
 #ifndef GADGETEERING_EXTENDED_SPI
 	this->spi = new SPIClass();
@@ -38,7 +38,7 @@ FEZAthena::SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : Interfaces::SP
 #endif
 }
 
-FEZAthena::SPIBus::~SPIBus() {
+FEZMedusa3D::SPIBus::~SPIBus() {
 #ifndef GADGETEERING_EXTENDED_SPI
 	this->spi->end();
 	delete this->spi;
@@ -47,7 +47,7 @@ FEZAthena::SPIBus::~SPIBus() {
 #endif
 }
 
-void FEZAthena::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configuration) {
+void FEZMedusa3D::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configuration) {
 #ifndef GADGETEERING_EXTENDED_SPI
 	if (!configuration->clockIdleState && configuration->clockEdge)
 		this->spi->setDataMode(SPI_MODE0);
@@ -91,19 +91,19 @@ void FEZAthena::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configuration) 
 #endif
 }
 
-void FEZAthena::SPIBus::selectChip(GHI::Interfaces::SPIConfiguration* configuration)
+void FEZMedusa3D::SPIBus::selectChip(GHI::Interfaces::SPIConfiguration* configuration)
 {
 	mainboard->writeDigital(configuration->chipSelect, configuration->chipSelectActiveState);
 	System::Sleep(configuration->chipSelectSetupTime);
 }
 
-void FEZAthena::SPIBus::deselectChip(GHI::Interfaces::SPIConfiguration* configuration)
+void FEZMedusa3D::SPIBus::deselectChip(GHI::Interfaces::SPIConfiguration* configuration)
 {
 	System::Sleep(configuration->chipSelectHoldTime);
 	mainboard->writeDigital(configuration->chipSelect, !configuration->chipSelectActiveState);
 }
 
-void FEZAthena::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration, bool deselectAfter)
+void FEZMedusa3D::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration, bool deselectAfter)
 {
 	this->setup(configuration);
 	this->selectChip(configuration);

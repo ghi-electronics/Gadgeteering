@@ -24,7 +24,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -39,12 +39,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)\FEZLynx\include\windows;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)\FEZLynx\lib\windows\i386\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\FEZLynxS4\include\windows;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\FEZLynxS4\lib\windows\i386\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)\FEZLynx\include\windows;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)\FEZLynx\lib\windows\i386\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\FEZLynxS4\include\windows;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\FEZLynxS4\lib\windows\i386\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -86,7 +86,7 @@
     <ClInclude Include="ALFAT\ALFAT.h" />
     <ClInclude Include="Barometer\Barometer.h" />
     <ClInclude Include="Breakout\Breakout.h" />
-    <ClInclude Include="ButtonS6\ButtonS6.h" />
+    <ClInclude Include="ButtonS7\ButtonS7.h" />
     <ClInclude Include="Button\Button.h" />
     <ClInclude Include="ColorSense\ColorSense.h" />
     <ClInclude Include="Compass\Compass.h" />
@@ -95,6 +95,7 @@
     <ClInclude Include="DistanceUS3\DistanceUS3.h" />
     <ClInclude Include="Extender\Extender.h" />
     <ClInclude Include="FEZLynxS4\FEZLynxS4.h" />
+    <ClInclude Include="FEZLynxS4\include\FTDI_Device.h" />
     <ClInclude Include="FEZLynxS4\include\windows\FTD2XX.H" />
     <ClInclude Include="FEZLynxS4\include\windows\libMPSSE_i2c.h" />
     <ClInclude Include="FEZLynxS4\include\windows\libMPSSE_spi.h" />
@@ -158,7 +159,7 @@
     <ClCompile Include="ALFAT\ALFAT.cpp" />
     <ClCompile Include="Barometer\Barometer.cpp" />
     <ClCompile Include="Breakout\Breakout.cpp" />
-    <ClCompile Include="ButtonS6\ButtonS6.cpp" />
+    <ClCompile Include="ButtonS7\ButtonS7.cpp" />
     <ClCompile Include="Button\Button.cpp" />
     <ClCompile Include="ColorSense\ColorSense.cpp" />
     <ClCompile Include="Compass\Compass.cpp" />

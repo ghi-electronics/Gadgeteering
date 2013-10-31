@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _FEZMEDUSA_H_
-#define _FEZMEDUSA_H_
+#ifndef _FEZMEDUSAMINI_H_
+#define _FEZMEDUSAMINI_H_
 
 #include "../Gadgeteering/Mainboard.hpp"
 #include "../Gadgeteering/Socket.hpp"
