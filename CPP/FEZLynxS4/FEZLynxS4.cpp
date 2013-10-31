@@ -224,6 +224,10 @@ void FEZLynxS4::mapSockets()
     socket->pins[9] = Pins::P6_2;
 }
 
+void FEZLynxS4::setDebugLED(bool state) {
+	this->writeDigital(Pins::PA_3, state);
+}
+
 void FEZLynxS4::panic(unsigned char error, unsigned char specificError)
 {
 	std::cout <<  std::hex << (int)error << " " << (int)specificError << std::endl;
@@ -466,6 +470,11 @@ using namespace std;
 int main()
 {
 	FEZLynxS4 board;
+
+	board.setDebugLED(true);
+	System::Sleep(1000);
+	board.setDebugLED(false);
+
 
     Modules::TouchL12 touch(3);
 

@@ -210,7 +210,7 @@ bool FEZLynxS4::I2CBus::writeRead(const unsigned char *writeBuffer, unsigned int
     {
         //this->m_device->Purge();
 
-        this->sendStartCondition(address);
+        this->sendStartCondition(address | 1);
 
         buffer[0] = 0x20;
         buffer[1] = (readLength - 1) & 0xFF;

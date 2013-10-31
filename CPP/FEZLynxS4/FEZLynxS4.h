@@ -290,6 +290,8 @@ namespace GHI
 						static const CPUPin Analog_11 = 0x00;
                 };
 
+				virtual void setDebugLED(bool state);
+
 				virtual void panic(unsigned char error, unsigned char specificError = 0);
 				virtual void print(const char* toPrint);
 				virtual void print(int toPrint);

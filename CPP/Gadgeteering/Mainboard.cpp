@@ -36,6 +36,10 @@ Mainboard::~Mainboard() {
 		delete current;
 }
 
+void Mainboard::setDebugLED(bool state) {
+	mainboard->panic(Exceptions::ERR_NOT_IMPLEMENTED);
+}
+
 void Mainboard::panic(unsigned char error, unsigned char specificError) {
 	while (true)
 		;
