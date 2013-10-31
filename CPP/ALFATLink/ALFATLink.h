@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef ALFAT_H_
-#define _ALFAT_H_
+#ifndef _ALFATLINK_H_
+#define _ALFATLINK_H_
 
 #include "../Gadgeteering/Gadgeteering.h"
 
@@ -23,7 +23,7 @@ namespace GHI {
 	namespace Modules {
 		using namespace GHI::Interfaces;
 
-		class ALFAT : public Module {
+		class ALFATLink : public Module {
 			public:
 				typedef unsigned char Drive;
 				class Drives {
@@ -91,15 +91,15 @@ namespace GHI {
 
 					private:
 						char handle;
-						ALFAT* alfat;
+						ALFATLink* alfat;
 
-						File(ALFAT* parent, const char* path, Mode mode);
+						File(ALFATLink* parent, const char* path, Mode mode);
 
-						friend class ALFAT;
+						friend class ALFATLink;
 				};
 
-				ALFAT(unsigned char socketNumber);
-				~ALFAT();
+				ALFATLink(unsigned char socketNumber);
+				~ALFATLink();
 				
 				void reset();
 				ResponseCode mount(Drive which);

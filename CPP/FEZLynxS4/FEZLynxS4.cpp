@@ -461,7 +461,7 @@ Interfaces::I2CBus* FEZLynxS4::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hard
     }
 }
 
-#include "../ALFAT/ALFAT.h"
+#include "../ALFATLink/ALFATLink.h"
 #include "../TouchL12/TouchL12.h"
 #include <iostream>
 

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "ALFAT.h"
+#include "ALFATLink.h"
 #include "string.h"
 
 #define DECODE_HEX(c) ((c) <= '9' ? (c) - '0' : (c) - 'A' + 10)
@@ -25,7 +25,7 @@ using namespace GHI;
 using namespace GHI::Modules;
 using namespace GHI::Interfaces;
 
-ALFAT::ALFAT(unsigned char socketNumber) {
+ALFATLink::ALFATLink(unsigned char socketNumber) {
 	this->socket = mainboard->getSocket(socketNumber);
 	this->socket->ensureTypeIsSupported(Socket::Types::S);
 	
@@ -38,7 +38,7 @@ ALFAT::ALFAT(unsigned char socketNumber) {
 	this->reset();
 
 	this->spi = socket->getSPIDevice(new SPIConfiguration(false, 1, 1, false, true, 6000), Socket::Pins::Six);
-
+	return;
 	//To consume the startup banner
 	this->readFromDevice(NULL, 69);
 
@@ -51,13 +51,13 @@ ALFAT::ALFAT(unsigned char socketNumber) {
 	System::Sleep(1);
 }
 
-ALFAT::~ALFAT() {
+ALFATLink::~ALFATLink() {
 	delete this->busyPin;
 	delete this->resetPin;
 	delete this->handles;
 }
 
-void ALFAT::reset() {
+void ALFATLink::reset() {
 	this->resetPin->write(false);
 
 	DigitalOutput mode1(socket, Socket::Pins::Six, true);
@@ -70,7 +70,7 @@ void ALFAT::reset() {
 	System::Sleep(1000);
 }
 
-ALFAT::ResponseCode ALFAT::mount(Drive which) {
+ALFATLink::ResponseCode ALFATLink::mount(Drive which) {
 	this->drive = which;
 
 	switch (which) {
@@ -84,12 +84,12 @@ ALFAT::ResponseCode ALFAT::mount(Drive which) {
 	return this->readResponseCode();
 }
 
-void ALFAT::unmount() {
+void ALFATLink::unmount() {
 	this->generateHandles();
 	this->drive = -1;
 }
 
-void ALFAT::generateHandles() {
+void ALFATLink::generateHandles() {
 	if (this->handles)
 		delete this->handles;
 	
@@ -98,7 +98,7 @@ void ALFAT::generateHandles() {
         this->handles->push((void*)NIBBLE_TO_HEX(i));
 }
 
-bool ALFAT::isStoragePresent(ALFAT::Drive which) {
+bool ALFATLink::isStoragePresent(ALFATLink::Drive which) {
 	this->writeToDevice("J\n");
 	this->readResponseCode();
 
@@ -116,7 +116,7 @@ bool ALFAT::isStoragePresent(ALFAT::Drive which) {
 	return false;
 }
 
-bool ALFAT::isSDCardWriteProtected() {
+bool ALFATLink::isSDCardWriteProtected() {
 	this->writeToDevice("J\n");
 	this->readResponseCode();
 
@@ -127,7 +127,7 @@ bool ALFAT::isSDCardWriteProtected() {
 	return (HEX_TO_UCHAR(result + 1) & (1 << 1)) != 0;
 }
 
-ALFAT::ResponseCode ALFAT::getVersion(unsigned char* major, unsigned char* minor, unsigned char* revision) {
+ALFATLink::ResponseCode ALFATLink::getVersion(unsigned char* major, unsigned char* minor, unsigned char* revision) {
 	this->writeToDevice("V\n");
 
 	unsigned char result[7];
@@ -140,7 +140,7 @@ ALFAT::ResponseCode ALFAT::getVersion(unsigned char* major, unsigned char* minor
 	return this->readResponseCode();
 }
 
-ALFAT::ResponseCode ALFAT::format(ALFAT::Drive which) {
+ALFATLink::ResponseCode ALFATLink::format(ALFATLink::Drive which) {
 	switch (which) {
 		case Drives::SD: this->writeToDevice("Q CONFIRM FORMAT M:\n"); break;
 		case Drives::USB0: this->writeToDevice("Q CONFIRM FORMAT U0:\n"); break;
@@ -154,11 +154,11 @@ ALFAT::ResponseCode ALFAT::format(ALFAT::Drive which) {
 	return this->readResponseCode();
 }
 
-ALFAT::File* ALFAT::openFile(const char* path, ALFAT::File::Mode mode) {
-	return new ALFAT::File(this, path, mode);
+ALFATLink::File* ALFATLink::openFile(const char* path, ALFATLink::File::Mode mode) {
+	return new ALFATLink::File(this, path, mode);
 }
 
-void ALFAT::sendWriteHeader(unsigned int length) {
+void ALFATLink::sendWriteHeader(unsigned int length) {
 	unsigned char frame[3] = {0x01, length & 0xFF, (length >> 8) & 0xFF};
 	unsigned char read[3];
 
@@ -175,7 +175,7 @@ void ALFAT::sendWriteHeader(unsigned int length) {
 	}
 }
 
-void ALFAT::writeToDevice(const char* command, unsigned int length, bool sendHeader, bool deselectAtEnd) {
+void ALFATLink::writeToDevice(const char* command, unsigned int length, bool sendHeader, bool deselectAtEnd) {
 	if (length == 0)
 		length = strlen(command);
 
@@ -185,7 +185,7 @@ void ALFAT::writeToDevice(const char* command, unsigned int length, bool sendHea
 	this->spi->write(reinterpret_cast<const unsigned char*>(command), length, deselectAtEnd);
 }
 
-void ALFAT::readFromDevice(unsigned char* buffer, unsigned int count) {
+void ALFATLink::readFromDevice(unsigned char* buffer, unsigned int count) {
 	unsigned char readFrame[3] = { 0x02, 0x00, 0x00 };
 	unsigned char readResult[3];
 	unsigned int available = 0;
@@ -221,7 +221,7 @@ void ALFAT::readFromDevice(unsigned char* buffer, unsigned int count) {
 	} while (count > 0);
 }
 
-char ALFAT::getHandle() {
+char ALFATLink::getHandle() {
 	if (this->handles->getSize() == 0)
 		return -1;
 
@@ -230,11 +230,11 @@ char ALFAT::getHandle() {
     return (*handle & 0xFF);
 }
 
-void ALFAT::freeHandle(char handle) {
+void ALFATLink::freeHandle(char handle) {
     this->handles->push(&handle);
 }
 
-ALFAT::ResponseCode ALFAT::readResponseCode() {
+ALFATLink::ResponseCode ALFATLink::readResponseCode() {
 	System::SleepMicro(50);
 
 	unsigned char result[4];
@@ -243,12 +243,12 @@ ALFAT::ResponseCode ALFAT::readResponseCode() {
 	return (result[0] == '!' && result[3] == '\n') ? HEX_TO_UCHAR(result + 1) : ResponseCodes::INVALID_RESPONSE;
 }
 
-void ALFAT::intToHex(unsigned int source, unsigned char* destination) {
+void ALFATLink::intToHex(unsigned int source, unsigned char* destination) {
 	for (int i = 0; i < 8; i++)
 		destination[i] = NIBBLE_TO_HEX((source >> (4 * (7 - i))) & 0xF);
 }
 
-unsigned int ALFAT::hexToInt(const unsigned char* source) {
+unsigned int ALFATLink::hexToInt(const unsigned char* source) {
 	unsigned int result = 0;
 
 	for (int i = 0; i < 4; i++)
@@ -259,18 +259,18 @@ unsigned int ALFAT::hexToInt(const unsigned char* source) {
 
 
 
-ALFAT::File::File(ALFAT* parent, const char* path, ALFAT::File::Mode mode) : alfat(parent) {
+ALFATLink::File::File(ALFATLink* parent, const char* path, ALFATLink::File::Mode mode) : alfat(parent) {
 	this->handle = this->alfat->getHandle();
 
 	unsigned int pathLength = strlen(path);
 
-	if (this->alfat->drive == ALFAT::Drives::SD) {
+	if (this->alfat->drive == ALFATLink::Drives::SD) {
 		char command[7] = { 'O', ' ', this->handle, (char)mode, '>', 'M', ':' };
 		this->alfat->sendWriteHeader(7 + pathLength + 1);
 		this->alfat->writeToDevice(command, 7, false, false);
 	}
 	else {
-		char command[8] = { 'O', ' ', this->handle, (char)mode, '>', 'U', this->alfat->drive == ALFAT::Drives::USB0 ? '0' : '1', ':' };
+		char command[8] = { 'O', ' ', this->handle, (char)mode, '>', 'U', this->alfat->drive == ALFATLink::Drives::USB0 ? '0' : '1', ':' };
 		this->alfat->sendWriteHeader(8 + pathLength + 1);
 		this->alfat->writeToDevice(command, 8, false, false);
 	}
@@ -283,19 +283,19 @@ ALFAT::File::File(ALFAT* parent, const char* path, ALFAT::File::Mode mode) : alf
 	this->alfat->readResponseCode();
 }
 
-ALFAT::File::~File() {
+ALFATLink::File::~File() {
 	this->alfat->freeHandle(this->handle);
 }
 
-ALFAT::ResponseCode ALFAT::File::rename(const char* newName) {
+ALFATLink::ResponseCode ALFATLink::File::rename(const char* newName) {
 	return ResponseCodes::SUCCESS;
 }
 
-ALFAT::ResponseCode ALFAT::File::remove() {
+ALFATLink::ResponseCode ALFATLink::File::remove() {
 	return ResponseCodes::SUCCESS;
 }
 
-ALFAT::ResponseCode ALFAT::File::close() {
+ALFATLink::ResponseCode ALFATLink::File::close() {
 	unsigned char frame[4] = { 'C', ' ', this->handle, '\n' };
 
 	this->alfat->writeToDevice(reinterpret_cast<char*>(frame), 4);
@@ -303,7 +303,7 @@ ALFAT::ResponseCode ALFAT::File::close() {
 	return this->alfat->readResponseCode();
 }
 
-ALFAT::ResponseCode ALFAT::File::flush() {
+ALFATLink::ResponseCode ALFATLink::File::flush() {
 	unsigned char frame[4] = { 'F', ' ', this->handle, '\n' };
 
 	this->alfat->writeToDevice(reinterpret_cast<char*>(frame), 4);
@@ -311,11 +311,11 @@ ALFAT::ResponseCode ALFAT::File::flush() {
 	return this->alfat->readResponseCode();
 }
 
-ALFAT::ResponseCode ALFAT::File::seek(unsigned int position) {
+ALFATLink::ResponseCode ALFATLink::File::seek(unsigned int position) {
 	return ResponseCodes::SUCCESS;
 }
 
-ALFAT::ResponseCode ALFAT::File::write(const unsigned char* buffer, unsigned int count, unsigned int* actualWritten) {
+ALFATLink::ResponseCode ALFATLink::File::write(const unsigned char* buffer, unsigned int count, unsigned int* actualWritten) {
 	if (count == 0) {
 		if (actualWritten)
 			*actualWritten = 0;
@@ -323,7 +323,7 @@ ALFAT::ResponseCode ALFAT::File::write(const unsigned char* buffer, unsigned int
 	}
 
 	unsigned char frame[13] = { 'W', ' ', this->handle, '>', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, '\n' };
-	ALFAT::intToHex(count, frame + 4);
+	ALFATLink::intToHex(count, frame + 4);
 	
 	this->alfat->writeToDevice(reinterpret_cast<char*>(frame), 13);
 	
@@ -334,12 +334,12 @@ ALFAT::ResponseCode ALFAT::File::write(const unsigned char* buffer, unsigned int
 	unsigned char remainder[10];
 	this->alfat->readFromDevice(remainder, 10);
 	if (actualWritten)
-		*actualWritten = ALFAT::hexToInt(remainder + 1);
+		*actualWritten = ALFATLink::hexToInt(remainder + 1);
 
 	return this->alfat->readResponseCode();
 }
 
-ALFAT::ResponseCode ALFAT::File::read(unsigned char* buffer, unsigned int count, unsigned int* actualRead) {
+ALFATLink::ResponseCode ALFATLink::File::read(unsigned char* buffer, unsigned int count, unsigned int* actualRead) {
 	if (count == 0) {
 		if (actualRead)
 			*actualRead = 0;
@@ -347,7 +347,7 @@ ALFAT::ResponseCode ALFAT::File::read(unsigned char* buffer, unsigned int count,
 	}
 
 	unsigned char frame[14] = { 'R', ' ', this->handle, 0x00, '>', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, '\n' };
-	ALFAT::intToHex(count, frame + 5);
+	ALFATLink::intToHex(count, frame + 5);
 
 	this->alfat->writeToDevice(reinterpret_cast<char*>(frame), 14);
 
@@ -358,7 +358,7 @@ ALFAT::ResponseCode ALFAT::File::read(unsigned char* buffer, unsigned int count,
 	unsigned char remainder[10];
 	this->alfat->readFromDevice(remainder, 10);
 	if (actualRead)
-		*actualRead = ALFAT::hexToInt(remainder + 1);
+		*actualRead = ALFATLink::hexToInt(remainder + 1);
 
 	return this->alfat->readResponseCode();
 }
