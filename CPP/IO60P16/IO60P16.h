@@ -52,7 +52,7 @@ namespace GHI {
 			void changeResistor(unsigned char port, unsigned char mask, unsigned char newResistor);
 
 			public:
-				IO60P16(unsigned char socketNumber);
+				IO60P16(unsigned char socketNumber, CPUPin sda = 0, CPUPin scl = 0);
 				~IO60P16();
 			
 				void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode);

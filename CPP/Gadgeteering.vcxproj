@@ -83,7 +83,7 @@
   <ItemGroup>
     <ClInclude Include="Accelerometer\Accelerometer.h" />
     <ClInclude Include="AccelG248\AccelG248.h" />
-    <ClInclude Include="ALFAT\ALFAT.h" />
+    <ClInclude Include="ALFATLink\ALFATLink.h" />
     <ClInclude Include="Barometer\Barometer.h" />
     <ClInclude Include="Breakout\Breakout.h" />
     <ClInclude Include="ButtonS7\ButtonS7.h" />
@@ -156,7 +156,7 @@
   <ItemGroup>
     <ClCompile Include="Accelerometer\Accelerometer.cpp" />
     <ClCompile Include="AccelG248\AccelG248.cpp" />
-    <ClCompile Include="ALFAT\ALFAT.cpp" />
+    <ClCompile Include="ALFATLink\ALFATLink.cpp" />
     <ClCompile Include="Barometer\Barometer.cpp" />
     <ClCompile Include="Breakout\Breakout.cpp" />
     <ClCompile Include="ButtonS7\ButtonS7.cpp" />
