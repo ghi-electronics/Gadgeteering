@@ -190,7 +190,7 @@ unsigned int FEZLynxS4::I2CBus::write(const unsigned char *buffer, unsigned int 
 {
     unsigned char* writeBuffer = new unsigned char[count + 3];
     DWORD sent = 0;
-    FT_STATUS status;
+    FT_STATUS status = FT_OK;
 
     this->sendStartCondition(address);
 
@@ -205,7 +205,7 @@ unsigned int FEZLynxS4::I2CBus::write(const unsigned char *buffer, unsigned int 
     if(sendStop)
         this->sendStopCondition();
 
-    if((sent != count) || (status != FT_OK))
+    if((sent != count + 3) || (status != FT_OK))
         mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
 
 	return sent;

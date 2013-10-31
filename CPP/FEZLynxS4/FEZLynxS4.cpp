@@ -471,11 +471,6 @@ int main()
 {
 	FEZLynxS4 board;
 
-	board.setDebugLED(true);
-	System::Sleep(1000);
-	board.setDebugLED(false);
-
-
     Modules::TouchL12 touch(3);
 
 	while (true)
