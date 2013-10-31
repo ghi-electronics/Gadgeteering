@@ -203,6 +203,9 @@ bool FEZMedusa3D::readDigital(CPUPin pinNumber) {
 
 void FEZMedusa3D::writeDigital(CPUPin pinNumber, bool value) 
 {
+	if(pinNumber == 255)
+		return;
+
 	::digitalWrite(pinNumber, value ? HIGH : LOW);
 }
 
