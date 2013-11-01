@@ -169,11 +169,11 @@
     <ClCompile Include="Extender\Extender.cpp" />
     <ClCompile Include="FEZLynxS4\FEZLynxS4.cpp" />
     <ClCompile Include="FEZLynxS4\FTDI_Device.cpp" />
-    <ClCompile Include="FEZLynxS4\FEZLynxS4_I2CBus.cpp" />
-    <ClCompile Include="FEZLynxS4\FEZLynxS4_SerialDevice.cpp" />
-    <ClCompile Include="FEZLynxS4\FEZLynxS4_SoftwareI2CBus.cpp" />
-    <ClCompile Include="FEZLynxS4\FEZLynxS4_SPIBus.cpp" />
-    <ClCompile Include="FEZLynxS4\FEZLynxS4_System.cpp" />
+    <ClCompile Include="FEZLynxS4\s_I2CBus.cpp" />
+    <ClCompile Include="FEZLynxS4\s_SerialDevice.cpp" />
+    <ClCompile Include="FEZLynxS4\s_SoftwareI2CBus.cpp" />
+    <ClCompile Include="FEZLynxS4\s_SPIBus.cpp" />
+    <ClCompile Include="FEZLynxS4\s_System.cpp" />
     <ClCompile Include="FEZTive\FEZtive.cpp" />
     <ClCompile Include="FLASH\FLASH.cpp" />
     <ClCompile Include="FMRadio\FMRadio.cpp" />
