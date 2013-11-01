@@ -98,20 +98,18 @@ namespace GHI
 
             class SoftwareI2CBus : public GHI::Interfaces::I2CBus
             {
-                bool startSent;
+                bool start;
 
                 void clearSCL();
-                void releaseSCL();
                 bool readSCL();
                 void clearSDA();
-                void releaseSDA();
                 bool readSDA();
 
-                void writeBit(bool bit);
+                bool writeBit(bool bit);
                 bool readBit();
 
-                void sendStartCondition();
-                void sendStopCondition();
+                bool sendStartCondition();
+                bool sendStopCondition();
 
                 bool transmit(bool sendStart, bool sendStop, unsigned char data);
                 unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);

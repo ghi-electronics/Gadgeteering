@@ -94,7 +94,7 @@ FEZLynxS4::FEZLynxS4()
 
 	Socket* i2cSocket = this->getSocket(0);
 
-	this->analogConverter = mainboard->getI2CBus(i2cSocket, Socket::Pins::Eight, Socket::Pins::Nine, true)->getI2CDevice(0x49);
+	this->analogConverter = mainboard->getI2CBus(i2cSocket, Socket::Pins::Eight, Socket::Pins::Nine, false)->getI2CDevice(0x49);
 	this->Extender = new Modules::IO60P16(0, i2cSocket->pins[8], i2cSocket->pins[9]);
 }
 
@@ -459,22 +459,4 @@ Interfaces::I2CBus* FEZLynxS4::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hard
         this->i2cBusses.addV(bus);
         return bus;
     }
-}
-
-#include "../ALFATLink/ALFATLink.h"
-#include "../TouchL12/TouchL12.h"
-#include <iostream>
-
-using namespace std;
-
-int main()
-{
-	FEZLynxS4 board;
-
-    Modules::TouchL12 touch(3);
-
-	while (true)
-		cout << touch.GetSliderPosition() << endl;
-
-	return 0;
 }

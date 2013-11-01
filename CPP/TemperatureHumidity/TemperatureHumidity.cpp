@@ -26,6 +26,7 @@ TemperatureHumidity::TemperatureHumidity(unsigned char socketNumber) {
 	
     this->_data = new DigitalIO(socket, Socket::Pins::Three);
 	this->_sck = new DigitalOutput(socket, Socket::Pins::Four);
+	this->_data->setIOState(IOStates::DIGITAL_OUTPUT);
 	this->_data->setResistorMode(ResistorModes::PULL_UP);
 }
 
