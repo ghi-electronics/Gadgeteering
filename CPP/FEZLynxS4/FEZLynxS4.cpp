@@ -142,7 +142,7 @@ void FEZLynxS4::mapSockets()
 	socket->pins[8] = Pins::PB_1;
 	socket->pins[9] = Pins::PB_0;
 
-	socket = this->registerSocket(new Socket(4, Socket::Types::S | Socket::Types::X));
+	socket = this->registerSocket(new Socket(4, Socket::Types::S | Socket::Types::X | Socket::Types::Y));
 	socket->pins[3] = Pins::PB_4;
 	socket->pins[4] = Pins::PB_5;
 	socket->pins[5] = Pins::PB_6;
