@@ -420,7 +420,6 @@ void FTDI_Device::SetupChannel(FTDI_Configuration configuration)
     this->m_locked = true;
 
     status |= FT_ResetDevice(this->m_ftHandle);
-    std::cout << " \\--Purging channel..." << std::endl;
 
     if(this->m_mpsse)
     {
@@ -450,8 +449,6 @@ void FTDI_Device::SetupChannel(FTDI_Configuration configuration)
         FT_Purge(this->m_ftHandle, FT_PURGE_RX);
     }
 
-    std::cout << "  |-Setting channel configuration..." << std::endl;
-
     status |= FT_SetUSBParameters(this->m_ftHandle, 65536, 65535);
     status |= FT_SetChars(this->m_ftHandle, false, 0, false, 0);
     status |= FT_SetTimeouts(this->m_ftHandle, configuration.Timeout, configuration.Timeout);
@@ -467,7 +464,6 @@ void FTDI_Device::SetupChannel(FTDI_Configuration configuration)
         throw Exceptions::ERR_MAINBOARD_ERROR;
 
     System::Sleep(20);
-    std::cout << "  |-Setting channel pin states..." << std::endl;
 
     DWORD sent = 0;
 
@@ -486,8 +482,6 @@ void FTDI_Device::SetupChannel(FTDI_Configuration configuration)
         throw Exceptions::ERR_OUT_OF_SYNC;
 
 	System::Sleep(50);
-
-    std::cout << " /--Complete." << std::endl;
 
 	this->m_locked = false;
 	this->Close();
