@@ -1,0 +1,213 @@
+# depslib dependency file v1.0
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/DaisyLink.cpp
+	"DaisyLink.hpp"
+	"System.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/DaisyLink.hpp
+	"DaisyLinkCommandBus.hpp"
+	"Mainboard.hpp"
+	"Module.hpp"
+	"I2CBus.hpp"
+	"Interfaces.hpp"
+	"List.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/DaisyLinkCommandBus.hpp
+	"Mainboard.hpp"
+	"I2CBus.hpp"
+	"Interfaces.hpp"
+	"Types.hpp"
+
+1383621682 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Mainboard.hpp
+	"Socket.hpp"
+	"SPIBus.hpp"
+	"SerialDevice.hpp"
+	"I2CBus.hpp"
+	"List.hpp"
+	"Types.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Socket.hpp
+	"Types.hpp"
+
+1383621895 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Types.hpp
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/SPIBus.hpp
+	"Socket.hpp"
+	"SPIDevice.hpp"
+	"Interfaces.hpp"
+	"Types.hpp"
+	"List.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/SPIDevice.hpp
+	"Types.hpp"
+	"Socket.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Interfaces.hpp
+	"Socket.hpp"
+	"Mainboard.hpp"
+
+1383621618 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/List.hpp
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/SerialDevice.hpp
+	"Types.hpp"
+	"Socket.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/I2CBus.hpp
+	"Socket.hpp"
+	"I2CDevice.hpp"
+	"Interfaces.hpp"
+	"List.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/I2CDevice.hpp
+	"Types.hpp"
+	"Socket.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Module.hpp
+	"Mainboard.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/System.hpp
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/DaisyLinkCommandBus.cpp
+	"DaisyLinkCommandBus.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/I2CBus.cpp
+	"I2CBus.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/I2CDevice.cpp
+	"I2CDevice.hpp"
+	"I2CBus.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Interfaces.cpp
+	"Interfaces.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/List.cpp
+	"List.hpp"
+	"Types.hpp"
+
+1383621682 source:/home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Mainboard.cpp
+	"Mainboard.hpp"
+	"Module.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Module.cpp
+	"Module.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/SerialDevice.cpp
+	"SerialDevice.hpp"
+	"Mainboard.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Socket.cpp
+	"Socket.hpp"
+	"Mainboard.hpp"
+	"I2CBus.hpp"
+	"SPIBus.hpp"
+	"SerialDevice.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/SoftwareSerial.cpp
+	"SoftwareSerial.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/SoftwareSerial.hpp
+	"Interfaces.hpp"
+	"Types.hpp"
+	"System.hpp"
+	"SerialDevice.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/SPIBus.cpp
+	"SPIBus.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/SPIDevice.cpp
+	"SPIDevice.hpp"
+	"SPIBus.hpp"
+	"Interfaces.hpp"
+
+1383622206 source:/home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Types.cpp
+	"Types.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Accelerometer/Accelerometer.cpp
+	"Accelerometer.h"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Accelerometer/Accelerometer.h
+	"../Gadgeteering/Gadgeteering.h"
+	"../Gadgeteering/I2CDevice.hpp"
+	"../Gadgeteering/I2CBus.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Gadgeteering/Gadgeteering.h
+	"Socket.hpp"
+	"Interfaces.hpp"
+	"Mainboard.hpp"
+	"SerialDevice.hpp"
+	"I2CDevice.hpp"
+	"I2CBus.hpp"
+	"SPIDevice.hpp"
+	"SPIBus.hpp"
+	"System.hpp"
+	"List.hpp"
+	"Module.hpp"
+	"DaisyLink.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/AccelG248/AccelG248.cpp
+	"AccelG248.h"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/AccelG248/AccelG248.h
+	"../Gadgeteering/Gadgeteering.h"
+	"../Gadgeteering/I2CDevice.hpp"
+
+1383621682 source:/home/james/Repositories/GHI/gadgeteering/CPP/ALFATLink/ALFATLink.cpp
+	"ALFATLink.h"
+	"string.h"
+
+1383621682 /home/james/Repositories/GHI/gadgeteering/CPP/ALFATLink/ALFATLink.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Barometer/Barometer.cpp
+	"Barometer.h"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Barometer/Barometer.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Breakout/Breakout.cpp
+	"Breakout.h"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Breakout/Breakout.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Button/Button.cpp
+	"Button.h"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Button/Button.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1383621682 source:/home/james/Repositories/GHI/gadgeteering/CPP/ButtonS7/ButtonS7.cpp
+	"ButtonS7.h"
+
+1383621682 /home/james/Repositories/GHI/gadgeteering/CPP/ButtonS7/ButtonS7.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/CharDisplay/CharDisplay.cpp
+	"CharDisplay.h"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/CharDisplay/CharDisplay.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1383621682 source:/home/james/Repositories/GHI/gadgeteering/CPP/ColorSense/ColorSense.cpp
+	"ColorSense.h"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/ColorSense/ColorSense.h
+	"../Gadgeteering/Gadgeteering.h"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/Compass/Compass.cpp
+	"Compass.h"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/Compass/Compass.h
+	"../Gadgeteering/Mainboard.hpp"
+	"../Gadgeteering/Module.hpp"
+	"../Gadgeteering/Socket.hpp"
+	"../Gadgeteering/Types.hpp"
+	"../Gadgeteering/I2CDevice.hpp"
+	"../Gadgeteering/System.hpp"
+	<string.h>
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering/CPP/CurrentACS712/CurrentACS712.cpp
+	"CurrentACS712.h"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering/CPP/CurrentACS712/CurrentACS712.h
+	"../Gadgeteering/Gadgeteering.h"
+
