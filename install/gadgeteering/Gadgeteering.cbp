@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Gadgeteering" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/gadgeteering" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj/Debug/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-m64" />
+					<Add option="-fPIC" />
+					<Add option="-DLYNX" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Gadgeteering" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj/Release/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-m64" />
+					<Add option="-fPIC" />
+					<Add option="-DLYNX" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="../../CPP/ALFATLink/ALFATLink.cpp" />
+		<Unit filename="../../CPP/ALFATLink/ALFATLink.h" />
+		<Unit filename="../../CPP/AccelG248/AccelG248.cpp" />
+		<Unit filename="../../CPP/AccelG248/AccelG248.h" />
+		<Unit filename="../../CPP/Accelerometer/Accelerometer.cpp" />
+		<Unit filename="../../CPP/Accelerometer/Accelerometer.h" />
+		<Unit filename="../../CPP/Barometer/Barometer.cpp" />
+		<Unit filename="../../CPP/Barometer/Barometer.h" />
+		<Unit filename="../../CPP/Breakout/Breakout.cpp" />
+		<Unit filename="../../CPP/Breakout/Breakout.h" />
+		<Unit filename="../../CPP/Button/Button.cpp" />
+		<Unit filename="../../CPP/Button/Button.h" />
+		<Unit filename="../../CPP/ButtonS7/ButtonS7.cpp" />
+		<Unit filename="../../CPP/ButtonS7/ButtonS7.h" />
+		<Unit filename="../../CPP/CharDisplay/CharDisplay.cpp" />
+		<Unit filename="../../CPP/CharDisplay/CharDisplay.h" />
+		<Unit filename="../../CPP/ColorSense/ColorSense.cpp" />
+		<Unit filename="../../CPP/ColorSense/ColorSense.h" />
+		<Unit filename="../../CPP/Compass/Compass.cpp" />
+		<Unit filename="../../CPP/Compass/Compass.h" />
+		<Unit filename="../../CPP/CurrentACS712/CurrentACS712.cpp" />
+		<Unit filename="../../CPP/CurrentACS712/CurrentACS712.h" />
+		<Unit filename="../../CPP/DisplayN18/DisplayN18.cpp" />
+		<Unit filename="../../CPP/DisplayN18/DisplayN18.h" />
+		<Unit filename="../../CPP/DistanceUS3/DistanceUS3.cpp" />
+		<Unit filename="../../CPP/DistanceUS3/DistanceUS3.h" />
+		<Unit filename="../../CPP/Extender/Extender.cpp" />
+		<Unit filename="../../CPP/Extender/Extender.h" />
+		<Unit filename="../../CPP/FEZLynxS4/FEZLynxS4.cpp" />
+		<Unit filename="../../CPP/FEZLynxS4/FEZLynxS4.h" />
+		<Unit filename="../../CPP/FEZLynxS4/FTDI_Device.cpp" />
+		<Unit filename="../../CPP/FEZLynxS4/include/FTDI_Device.h" />
+		<Unit filename="../../CPP/FEZLynxS4/include/linux/WinTypes.h" />
+		<Unit filename="../../CPP/FEZLynxS4/include/linux/ftd2xx.h" />
+		<Unit filename="../../CPP/FEZLynxS4/include/linux/libMPSSE_i2c.h" />
+		<Unit filename="../../CPP/FEZLynxS4/include/linux/libMPSSE_spi.h" />
+		<Unit filename="../../CPP/FEZLynxS4/include/windows/FTD2XX.H" />
+		<Unit filename="../../CPP/FEZLynxS4/include/windows/libMPSSE_i2c.h" />
+		<Unit filename="../../CPP/FEZLynxS4/include/windows/libMPSSE_spi.h" />
+		<Unit filename="../../CPP/FEZLynxS4/s_I2CBus.cpp" />
+		<Unit filename="../../CPP/FEZLynxS4/s_SPIBus.cpp" />
+		<Unit filename="../../CPP/FEZLynxS4/s_SerialDevice.cpp" />
+		<Unit filename="../../CPP/FEZLynxS4/s_SoftwareI2CBus.cpp" />
+		<Unit filename="../../CPP/FEZLynxS4/s_System.cpp" />
+		<Unit filename="../../CPP/FEZTive/FEZtive.cpp" />
+		<Unit filename="../../CPP/FEZTive/FEZtive.h" />
+		<Unit filename="../../CPP/FLASH/FLASH.cpp" />
+		<Unit filename="../../CPP/FLASH/FLASH.h" />
+		<Unit filename="../../CPP/FMRadio/FMRadio.cpp" />
+		<Unit filename="../../CPP/FMRadio/FMRadio.h" />
+		<Unit filename="../../CPP/Gadgeteering/DaisyLink.cpp" />
+		<Unit filename="../../CPP/Gadgeteering/DaisyLink.hpp" />
+		<Unit filename="../../CPP/Gadgeteering/DaisyLinkCommandBus.cpp" />
+		<Unit filename="../../CPP/Gadgeteering/DaisyLinkCommandBus.hpp" />
+		<Unit filename="../../CPP/Gadgeteering/Gadgeteering.h" />
+		<Unit filename="../../CPP/Gadgeteering/I2CBus.cpp" />
+		<Unit filename="../../CPP/Gadgeteering/I2CBus.hpp" />
+		<Unit filename="../../CPP/Gadgeteering/I2CDevice.cpp" />
+		<Unit filename="../../CPP/Gadgeteering/I2CDevice.hpp" />
+		<Unit filename="../../CPP/Gadgeteering/Interfaces.cpp" />
+		<Unit filename="../../CPP/Gadgeteering/Interfaces.hpp" />
+		<Unit filename="../../CPP/Gadgeteering/List.cpp" />
+		<Unit filename="../../CPP/Gadgeteering/List.hpp" />
+		<Unit filename="../../CPP/Gadgeteering/Mainboard.cpp" />
+		<Unit filename="../../CPP/Gadgeteering/Mainboard.hpp" />
+		<Unit filename="../../CPP/Gadgeteering/Module.cpp" />
+		<Unit filename="../../CPP/Gadgeteering/Module.hpp" />
+		<Unit filename="../../CPP/Gadgeteering/SPIBus.cpp" />
+		<Unit filename="../../CPP/Gadgeteering/SPIBus.hpp" />
+		<Unit filename="../../CPP/Gadgeteering/SPIDevice.cpp" />
+		<Unit filename="../../CPP/Gadgeteering/SPIDevice.hpp" />
+		<Unit filename="../../CPP/Gadgeteering/SerialDevice.cpp" />
+		<Unit filename="../../CPP/Gadgeteering/SerialDevice.hpp" />
+		<Unit filename="../../CPP/Gadgeteering/Socket.cpp" />
+		<Unit filename="../../CPP/Gadgeteering/Socket.hpp" />
+		<Unit filename="../../CPP/Gadgeteering/SoftwareSerial.cpp" />
+		<Unit filename="../../CPP/Gadgeteering/SoftwareSerial.hpp" />
+		<Unit filename="../../CPP/Gadgeteering/System.hpp" />
+		<Unit filename="../../CPP/Gadgeteering/Types.cpp" />
+		<Unit filename="../../CPP/Gadgeteering/Types.hpp" />
+		<Unit filename="../../CPP/GasSense/GasSense.cpp" />
+		<Unit filename="../../CPP/GasSense/GasSense.h" />
+		<Unit filename="../../CPP/Gyroscope/Gyroscope.cpp" />
+		<Unit filename="../../CPP/Gyroscope/Gyroscope.hpp" />
+		<Unit filename="../../CPP/IO60P16/IO60P16.cpp" />
+		<Unit filename="../../CPP/IO60P16/IO60P16.h" />
+		<Unit filename="../../CPP/Joystick/Joystick.cpp" />
+		<Unit filename="../../CPP/Joystick/Joystick.h" />
+		<Unit filename="../../CPP/KeypadKP16/KeypadKP16.cpp" />
+		<Unit filename="../../CPP/KeypadKP16/KeypadKP16.h" />
+		<Unit filename="../../CPP/LED7C/LED7C.cpp" />
+		<Unit filename="../../CPP/LED7C/LED7C.h" />
+		<Unit filename="../../CPP/LED7R/LED7R.cpp" />
+		<Unit filename="../../CPP/LED7R/LED7R.h" />
+		<Unit filename="../../CPP/LEDMatrix/LEDMatrix.cpp" />
+		<Unit filename="../../CPP/LEDMatrix/LEDMatrix.h" />
+		<Unit filename="../../CPP/LEDStrip/LEDStrip.cpp" />
+		<Unit filename="../../CPP/LEDStrip/LEDStrip.h" />
+		<Unit filename="../../CPP/LightSensor/LightSensor.cpp" />
+		<Unit filename="../../CPP/LightSensor/LightSensor.h" />
+		<Unit filename="../../CPP/Load/Load.cpp" />
+		<Unit filename="../../CPP/Load/Load.h" />
+		<Unit filename="../../CPP/MaxO/MaxO.cpp" />
+		<Unit filename="../../CPP/MaxO/MaxO.h" />
+		<Unit filename="../../CPP/Moisture/Moisture.cpp" />
+		<Unit filename="../../CPP/Moisture/Moisture.h" />
+		<Unit filename="../../CPP/MotionSensor/MotionSensor.cpp" />
+		<Unit filename="../../CPP/MotionSensor/MotionSensor.h" />
+		<Unit filename="../../CPP/MotorDriverL298/MotorDriverL298.cpp" />
+		<Unit filename="../../CPP/MotorDriverL298/MotorDriverL298.h" />
+		<Unit filename="../../CPP/MultiColorLED/MultiColorLED.cpp" />
+		<Unit filename="../../CPP/MultiColorLED/MultiColorLED.h" />
+		<Unit filename="../../CPP/Potentiometer/Potentiometer.cpp" />
+		<Unit filename="../../CPP/Potentiometer/Potentiometer.h" />
+		<Unit filename="../../CPP/PulseCount/PulseCount.cpp" />
+		<Unit filename="../../CPP/PulseCount/PulseCount.h" />
+		<Unit filename="../../CPP/RS232/RS232.cpp" />
+		<Unit filename="../../CPP/RS232/RS232.h" />
+		<Unit filename="../../CPP/RelayX1/RelayX1.cpp" />
+		<Unit filename="../../CPP/RelayX1/RelayX1.h" />
+		<Unit filename="../../CPP/RelayX16/RelayX16.cpp" />
+		<Unit filename="../../CPP/RelayX16/RelayX16.h" />
+		<Unit filename="../../CPP/RotaryH1/RotaryH1.cpp" />
+		<Unit filename="../../CPP/RotaryH1/RotaryH1.h" />
+		<Unit filename="../../CPP/TemperatureHumidity/TemperatureHumidity.cpp" />
+		<Unit filename="../../CPP/TemperatureHumidity/TemperatureHumidity.h" />
+		<Unit filename="../../CPP/Thermocouple/Thermocouple.cpp" />
+		<Unit filename="../../CPP/Thermocouple/Thermocouple.h" />
+		<Unit filename="../../CPP/TouchC8/TouchC8.cpp" />
+		<Unit filename="../../CPP/TouchC8/TouchC8.h" />
+		<Unit filename="../../CPP/TouchL12/TouchL12.cpp" />
+		<Unit filename="../../CPP/TouchL12/TouchL12.h" />
+		<Unit filename="../../CPP/Tunes/Tunes.cpp" />
+		<Unit filename="../../CPP/Tunes/Tunes.h" />
+		<Unit filename="../../CPP/USBSerial/USBSerial.cpp" />
+		<Unit filename="../../CPP/USBSerial/USBSerial.h" />
+		<Unit filename="../../CPP/WiFiRN171/WiFiRN171.cpp" />
+		<Unit filename="../../CPP/WiFiRN171/WiFiRN171.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

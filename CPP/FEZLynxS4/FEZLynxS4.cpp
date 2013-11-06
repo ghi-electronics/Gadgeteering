@@ -47,39 +47,29 @@ FEZLynxS4::FEZLynxS4()
             config.BitMode = FTDI_Configuration::BIT_MODE_MPSSE;
             this->m_devices[0] = new FTDI_Device(0xFB, 0x00, true, i);
             channel = 0;
-
-            std::cout << "Found Channel A" << std::endl;
 		}
         else if(serialNumberBuffer[std::strlen(serialNumberBuffer) - 1] == 'B')
 		{
             config.BitMode = FTDI_Configuration::BIT_MODE_MPSSE;
             this->m_devices[1] = new FTDI_Device(0xFB, 0x00, true, i);
             channel = 1;
-
-            std::cout << "Found Channel B" << std::endl;
 		}
         else if(serialNumberBuffer[std::strlen(serialNumberBuffer) - 1] == 'C')
 		{
             config.BitMode = FTDI_Configuration::BIT_MODE_ASYNC_BITBANG;
             this->m_devices[2] = new FTDI_Device(0xFF, 0x00, false, i);
             channel = 2;
-
-            std::cout << "Found Channel C" << std::endl;
 		}
         else if(serialNumberBuffer[std::strlen(serialNumberBuffer) - 1] == 'D')
 		{
             config.BitMode = FTDI_Configuration::BIT_MODE_ASYNC_BITBANG;
             this->m_devices[3] = new FTDI_Device(0xFF, 0x00, false, i);
             channel = 3;
-
-            std::cout << "Found Channel D" << std::endl;
 		}
 
 		if(channel != 255)
         {
-            std::cout << "|--Setting up channel..." << std::endl;
             this->m_devices[channel]->SetupChannel(config);
-            std::cout << "|--Syncing channel..." << std::endl << std::endl;
             this->m_devices[channel]->BadCommandSync();
 
             devices++;
