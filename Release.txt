@@ -7,7 +7,6 @@ BETA 1 (v0.5.1)
 Changes:
 
 	*Reorganized repository structure from BETA preview release
-	*Renamed core interfaces to match those in NETMF Gadgeteer
 	*Initiated new code formatting standard
 		This change is noted due to the fact that it affects casing and word
 		separation of publicly accessible methods and members.
