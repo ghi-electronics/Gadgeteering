@@ -12,9 +12,3 @@ looks more like
       root
 	  core modules tests examples contributed tools
 	  
-we will be sharing scripts that will, as needed, re-organize the 
-repository on your installation to make development easier/conforming
-to the target boards and/or development platform. A first example
-of this will be a script (batch or sh) to  pull module source 
-(headers & code) into a directory structure for FEZ Medusa products
-to match assumptions made by the Arduino IDE.
