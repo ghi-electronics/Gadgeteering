@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Gadgeteering" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Gadgeteering" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-fPIC" />
+					<Add option="-DLYNX" />
+				</Compiler>
+				<Linker>
+					<Add library="/usr/local/lib/libftd2xx.so" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Gadgeteering" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="../../../core/DaisyLink.cpp" />
+		<Unit filename="../../../core/DaisyLink.hpp" />
+		<Unit filename="../../../core/DaisyLinkCommandBus.cpp" />
+		<Unit filename="../../../core/DaisyLinkCommandBus.hpp" />
+		<Unit filename="../../../core/Gadgeteering.h" />
+		<Unit filename="../../../core/I2CBus.cpp" />
+		<Unit filename="../../../core/I2CBus.hpp" />
+		<Unit filename="../../../core/I2CDevice.cpp" />
+		<Unit filename="../../../core/I2CDevice.hpp" />
+		<Unit filename="../../../core/Interfaces.cpp" />
+		<Unit filename="../../../core/Interfaces.hpp" />
+		<Unit filename="../../../core/Interfaces_proxy.hpp" />
+		<Unit filename="../../../core/List.cpp" />
+		<Unit filename="../../../core/List.hpp" />
+		<Unit filename="../../../core/Mainboard.cpp" />
+		<Unit filename="../../../core/Mainboard.hpp" />
+		<Unit filename="../../../core/Module.cpp" />
+		<Unit filename="../../../core/Module.hpp" />
+		<Unit filename="../../../core/SPIBus.cpp" />
+		<Unit filename="../../../core/SPIBus.hpp" />
+		<Unit filename="../../../core/SPIDevice.cpp" />
+		<Unit filename="../../../core/SPIDevice.hpp" />
+		<Unit filename="../../../core/SerialDevice.cpp" />
+		<Unit filename="../../../core/SerialDevice.hpp" />
+		<Unit filename="../../../core/Socket.cpp" />
+		<Unit filename="../../../core/Socket.hpp" />
+		<Unit filename="../../../core/SoftwareSerial.cpp" />
+		<Unit filename="../../../core/SoftwareSerial.hpp" />
+		<Unit filename="../../../core/System.hpp" />
+		<Unit filename="../../../core/System_proxy.hpp" />
+		<Unit filename="../../../core/Types.cpp" />
+		<Unit filename="../../../core/Types.hpp" />
+		<Unit filename="../../../mainboards/ghi/FEZLynxS4/FEZLynxS4.cpp" />
+		<Unit filename="../../../mainboards/ghi/FEZLynxS4/FEZLynxS4.h" />
+		<Unit filename="../../../mainboards/ghi/FEZLynxS4/FTDI_Device.cpp" />
+		<Unit filename="../../../mainboards/ghi/FEZLynxS4/include/FTDI_Device.h" />
+		<Unit filename="../../../mainboards/ghi/FEZLynxS4/include/linux/WinTypes.h" />
+		<Unit filename="../../../mainboards/ghi/FEZLynxS4/include/linux/ftd2xx.h" />
+		<Unit filename="../../../mainboards/ghi/FEZLynxS4/include/linux/libMPSSE_i2c.h" />
+		<Unit filename="../../../mainboards/ghi/FEZLynxS4/include/linux/libMPSSE_spi.h" />
+		<Unit filename="../../../mainboards/ghi/FEZLynxS4/include/windows/FTD2XX.H" />
+		<Unit filename="../../../mainboards/ghi/FEZLynxS4/include/windows/libMPSSE_i2c.h" />
+		<Unit filename="../../../mainboards/ghi/FEZLynxS4/include/windows/libMPSSE_spi.h" />
+		<Unit filename="../../../mainboards/ghi/FEZLynxS4/s_I2CBus.cpp" />
+		<Unit filename="../../../mainboards/ghi/FEZLynxS4/s_SPIBus.cpp" />
+		<Unit filename="../../../mainboards/ghi/FEZLynxS4/s_SerialDevice.cpp" />
+		<Unit filename="../../../mainboards/ghi/FEZLynxS4/s_SoftwareI2CBus.cpp" />
+		<Unit filename="../../../mainboards/ghi/FEZLynxS4/s_System.cpp" />
+		<Unit filename="../../../modules/ghi/ALFATLink/ALFATLink.cpp" />
+		<Unit filename="../../../modules/ghi/ALFATLink/ALFATLink.h" />
+		<Unit filename="../../../modules/ghi/AccelG248/AccelG248.cpp" />
+		<Unit filename="../../../modules/ghi/AccelG248/AccelG248.h" />
+		<Unit filename="../../../modules/ghi/Breakout/Breakout.cpp" />
+		<Unit filename="../../../modules/ghi/Breakout/Breakout.h" />
+		<Unit filename="../../../modules/ghi/Button/Button.cpp" />
+		<Unit filename="../../../modules/ghi/Button/Button.h" />
+		<Unit filename="../../../modules/ghi/ButtonS7/ButtonS7.cpp" />
+		<Unit filename="../../../modules/ghi/ButtonS7/ButtonS7.h" />
+		<Unit filename="../../../modules/ghi/CharDisplay/CharDisplay.cpp" />
+		<Unit filename="../../../modules/ghi/CharDisplay/CharDisplay.h" />
+		<Unit filename="../../../modules/ghi/ColorSense/ColorSense.cpp" />
+		<Unit filename="../../../modules/ghi/ColorSense/ColorSense.h" />
+		<Unit filename="../../../modules/ghi/CurrentACS712/CurrentACS712.cpp" />
+		<Unit filename="../../../modules/ghi/CurrentACS712/CurrentACS712.h" />
+		<Unit filename="../../../modules/ghi/DisplayN18/DisplayN18.cpp" />
+		<Unit filename="../../../modules/ghi/DisplayN18/DisplayN18.h" />
+		<Unit filename="../../../modules/ghi/DistanceUS3/DistanceUS3.cpp" />
+		<Unit filename="../../../modules/ghi/DistanceUS3/DistanceUS3.h" />
+		<Unit filename="../../../modules/ghi/Extender/Extender.cpp" />
+		<Unit filename="../../../modules/ghi/Extender/Extender.h" />
+		<Unit filename="../../../modules/ghi/FEZTive/FEZtive.cpp" />
+		<Unit filename="../../../modules/ghi/FEZTive/FEZtive.h" />
+		<Unit filename="../../../modules/ghi/FLASH/FLASH.cpp" />
+		<Unit filename="../../../modules/ghi/FLASH/FLASH.h" />
+		<Unit filename="../../../modules/ghi/FMRadio/FMRadio.cpp" />
+		<Unit filename="../../../modules/ghi/FMRadio/FMRadio.h" />
+		<Unit filename="../../../modules/ghi/GasSense/GasSense.cpp" />
+		<Unit filename="../../../modules/ghi/GasSense/GasSense.h" />
+		<Unit filename="../../../modules/ghi/IO60P16/IO60P16.cpp" />
+		<Unit filename="../../../modules/ghi/IO60P16/IO60P16.h" />
+		<Unit filename="../../../modules/ghi/Joystick/Joystick.cpp" />
+		<Unit filename="../../../modules/ghi/Joystick/Joystick.h" />
+		<Unit filename="../../../modules/ghi/KeypadKP16/KeypadKP16.cpp" />
+		<Unit filename="../../../modules/ghi/KeypadKP16/KeypadKP16.h" />
+		<Unit filename="../../../modules/ghi/LED7C/LED7C.cpp" />
+		<Unit filename="../../../modules/ghi/LED7C/LED7C.h" />
+		<Unit filename="../../../modules/ghi/LED7R/LED7R.cpp" />
+		<Unit filename="../../../modules/ghi/LED7R/LED7R.h" />
+		<Unit filename="../../../modules/ghi/LEDMatrix/LEDMatrix.cpp" />
+		<Unit filename="../../../modules/ghi/LEDMatrix/LEDMatrix.h" />
+		<Unit filename="../../../modules/ghi/LEDStrip/LEDStrip.cpp" />
+		<Unit filename="../../../modules/ghi/LEDStrip/LEDStrip.h" />
+		<Unit filename="../../../modules/ghi/LightSensor/LightSensor.cpp" />
+		<Unit filename="../../../modules/ghi/LightSensor/LightSensor.h" />
+		<Unit filename="../../../modules/ghi/Load/Load.cpp" />
+		<Unit filename="../../../modules/ghi/Load/Load.h" />
+		<Unit filename="../../../modules/ghi/MaxO/MaxO.cpp" />
+		<Unit filename="../../../modules/ghi/MaxO/MaxO.h" />
+		<Unit filename="../../../modules/ghi/Moisture/Moisture.cpp" />
+		<Unit filename="../../../modules/ghi/Moisture/Moisture.h" />
+		<Unit filename="../../../modules/ghi/MotionSensor/MotionSensor.cpp" />
+		<Unit filename="../../../modules/ghi/MotionSensor/MotionSensor.h" />
+		<Unit filename="../../../modules/ghi/MotorDriverL298/MotorDriverL298.cpp" />
+		<Unit filename="../../../modules/ghi/MotorDriverL298/MotorDriverL298.h" />
+		<Unit filename="../../../modules/ghi/MultiColorLED/MultiColorLED.cpp" />
+		<Unit filename="../../../modules/ghi/MultiColorLED/MultiColorLED.h" />
+		<Unit filename="../../../modules/ghi/Potentiometer/Potentiometer.cpp" />
+		<Unit filename="../../../modules/ghi/Potentiometer/Potentiometer.h" />
+		<Unit filename="../../../modules/ghi/RS232/RS232.cpp" />
+		<Unit filename="../../../modules/ghi/RS232/RS232.h" />
+		<Unit filename="../../../modules/ghi/RelayX1/RelayX1.cpp" />
+		<Unit filename="../../../modules/ghi/RelayX1/RelayX1.h" />
+		<Unit filename="../../../modules/ghi/RelayX16/RelayX16.cpp" />
+		<Unit filename="../../../modules/ghi/RelayX16/RelayX16.h" />
+		<Unit filename="../../../modules/ghi/Thermocouple/Thermocouple.cpp" />
+		<Unit filename="../../../modules/ghi/Thermocouple/Thermocouple.h" />
+		<Unit filename="../../../modules/ghi/Tunes/Tunes.cpp" />
+		<Unit filename="../../../modules/ghi/Tunes/Tunes.h" />
+		<Unit filename="../../../modules/ghi/USBSerial/USBSerial.cpp" />
+		<Unit filename="../../../modules/ghi/USBSerial/USBSerial.h" />
+		<Unit filename="../../../modules/ghi/WiFiRN171/WiFiRN171.cpp" />
+		<Unit filename="../../../modules/ghi/WiFiRN171/WiFiRN171.h" />
+		<Unit filename="../../../modules/seeed/Accelerometer/Accelerometer.cpp" />
+		<Unit filename="../../../modules/seeed/Accelerometer/Accelerometer.h" />
+		<Unit filename="../../../modules/seeed/Barometer/Barometer.cpp" />
+		<Unit filename="../../../modules/seeed/Barometer/Barometer.h" />
+		<Unit filename="../../../modules/seeed/Compass/Compass.cpp" />
+		<Unit filename="../../../modules/seeed/Compass/Compass.h" />
+		<Unit filename="../../../modules/seeed/Gyroscope/Gyroscope.cpp" />
+		<Unit filename="../../../modules/seeed/Gyroscope/Gyroscope.hpp" />
+		<Unit filename="../../../modules/seeed/TemperatureHumidity/TemperatureHumidity.cpp" />
+		<Unit filename="../../../modules/seeed/TemperatureHumidity/TemperatureHumidity.h" />
+		<Unit filename="../../../ports/swig/proxy/core/Interfaces_proxy.hpp" />
+		<Unit filename="../../../ports/swig/proxy/core/System_proxy.hpp" />
+		<Unit filename="../../../tests/buildtest.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

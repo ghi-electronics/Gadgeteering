@@ -1,0 +1,123 @@
+# depslib dependency file v1.0
+1382579474 source:/home/james/Repositories/GHI/gadgeteering_reorg/core/DaisyLink.cpp
+	"DaisyLink.hpp"
+	"System.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering_reorg/core/DaisyLink.hpp
+	"DaisyLinkCommandBus.hpp"
+	"Mainboard.hpp"
+	"Module.hpp"
+	"I2CBus.hpp"
+	"Interfaces.hpp"
+	"List.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering_reorg/core/DaisyLinkCommandBus.hpp
+	"Mainboard.hpp"
+	"I2CBus.hpp"
+	"Interfaces.hpp"
+	"Types.hpp"
+
+1383621682 /home/james/Repositories/GHI/gadgeteering_reorg/core/Mainboard.hpp
+	"Socket.hpp"
+	"SPIBus.hpp"
+	"SerialDevice.hpp"
+	"I2CBus.hpp"
+	"List.hpp"
+	"Types.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering_reorg/core/Socket.hpp
+	"Types.hpp"
+
+1383678404 /home/james/Repositories/GHI/gadgeteering_reorg/core/Types.hpp
+
+1382579474 /home/james/Repositories/GHI/gadgeteering_reorg/core/SPIBus.hpp
+	"Socket.hpp"
+	"SPIDevice.hpp"
+	"Interfaces.hpp"
+	"Types.hpp"
+	"List.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering_reorg/core/SPIDevice.hpp
+	"Types.hpp"
+	"Socket.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering_reorg/core/Interfaces.hpp
+	"Socket.hpp"
+	"Mainboard.hpp"
+
+1383621618 /home/james/Repositories/GHI/gadgeteering_reorg/core/List.hpp
+
+1382579474 /home/james/Repositories/GHI/gadgeteering_reorg/core/SerialDevice.hpp
+	"Types.hpp"
+	"Socket.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering_reorg/core/I2CBus.hpp
+	"Socket.hpp"
+	"I2CDevice.hpp"
+	"Interfaces.hpp"
+	"List.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering_reorg/core/I2CDevice.hpp
+	"Types.hpp"
+	"Socket.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering_reorg/core/Module.hpp
+	"Mainboard.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering_reorg/core/System.hpp
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering_reorg/core/DaisyLinkCommandBus.cpp
+	"DaisyLinkCommandBus.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering_reorg/core/I2CBus.cpp
+	"I2CBus.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering_reorg/core/I2CDevice.cpp
+	"I2CDevice.hpp"
+	"I2CBus.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering_reorg/core/Interfaces.cpp
+	"Interfaces.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering_reorg/core/List.cpp
+	"List.hpp"
+	"Types.hpp"
+
+1383621682 source:/home/james/Repositories/GHI/gadgeteering_reorg/core/Mainboard.cpp
+	"Mainboard.hpp"
+	"Module.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering_reorg/core/Module.cpp
+	"Module.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering_reorg/core/SerialDevice.cpp
+	"SerialDevice.hpp"
+	"Mainboard.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering_reorg/core/Socket.cpp
+	"Socket.hpp"
+	"Mainboard.hpp"
+	"I2CBus.hpp"
+	"SPIBus.hpp"
+	"SerialDevice.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering_reorg/core/SoftwareSerial.cpp
+	"SoftwareSerial.hpp"
+
+1382579474 /home/james/Repositories/GHI/gadgeteering_reorg/core/SoftwareSerial.hpp
+	"Interfaces.hpp"
+	"Types.hpp"
+	"System.hpp"
+	"SerialDevice.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering_reorg/core/SPIBus.cpp
+	"SPIBus.hpp"
+
+1382579474 source:/home/james/Repositories/GHI/gadgeteering_reorg/core/SPIDevice.cpp
+	"SPIDevice.hpp"
+	"SPIBus.hpp"
+	"Interfaces.hpp"
+
+1383678404 source:/home/james/Repositories/GHI/gadgeteering_reorg/core/Types.cpp
+	"Types.hpp"
+

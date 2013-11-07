@@ -1,0 +1,33 @@
+==============================
+Gadgeteering SDK Release Notes
+==============================
+BETA 1 (v0.5.1)
+==============================
+
+Changes:
+
+	*Reorganized repository structure from BETA preview release
+	*Renamed core interfaces to match those in NETMF Gadgeteer
+	*Initiated new code formatting standard
+		This change is noted due to the fact that it affects casing and word
+		separation of publicly accessible methods and members.
+
+Known Issues:
+	1) SPI on FEZ Lynx has consistency issues.
+	2) I2C on FEZ Lynx does not properly read.
+	3) Gadgeteering static library build fails with GCC on Windows, use MSVC2010.
+
+Bug fixes:
+
+
+
+==============================
+BETA Preview (v0.5.0)
+==============================
+
+Changes:
+	*Initial publication of Gadgeteering repository
+
+Known Issues:
+Bug Fixes:
+
