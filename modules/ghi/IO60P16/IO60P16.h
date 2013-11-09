@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _IO60P16_H_
 #define _IO60P16_H_
 
-#include "../../../core/Gadgeteering.h"
+#include <core/Gadgeteering.h>
 
 namespace GHI {
 	namespace Modules {

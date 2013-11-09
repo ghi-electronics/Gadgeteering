@@ -14,10 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <iostream>
-#include <cstring>
 
 #include "FEZLynxS4.h"
+
+#include <iostream>
+#include <cstring>
 
 using namespace GHI;
 using namespace GHI::Interfaces;

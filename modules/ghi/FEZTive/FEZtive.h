@@ -17,13 +17,13 @@ limitations under the License.
 #ifndef _FEZTIVE_H_
 #define _FEZTIVE_H_
 
-#include "../../../core/Interfaces.hpp"
-#include "../../../core/Mainboard.hpp"
-#include "../../../core/System.hpp"
-#include "../../../core/Types.hpp"
-#include "../../../core/Module.hpp"
-#include "../../../core/SPIDevice.hpp"
-#include "../../../core/System.hpp"
+#include <core/Interfaces.hpp>
+#include <core/Mainboard.hpp>
+#include <core/System.hpp>
+#include <core/Types.hpp>
+#include <core/Module.hpp>
+#include <core/SPIDevice.hpp>
+#include <core/System.hpp>
 
 #include <string.h>
 

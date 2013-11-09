@@ -17,11 +17,10 @@ limitations under the License.
 #ifndef _TOUCHC8_H_
 #define _TOUCHC8_H_
 
-//#include "../../../core/Gadgeteering.h"
-#include "../../../core/Interfaces.hpp"
-#include "../../../core/I2CDevice.hpp"
-#include "../../../core/Module.hpp"
-#include "../../../core/System.hpp"
+#include <core/Interfaces.hpp>
+#include <core/I2CDevice.hpp>
+#include <core/Module.hpp>
+#include <core/System.hpp>
 
 namespace GHI {
 	namespace Modules {

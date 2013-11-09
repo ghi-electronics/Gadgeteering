@@ -22,8 +22,7 @@ limitations under the License.
 
 #include <iostream>
 #include <stdlib.h>
-
-#include "../../../core/System.hpp"
+#include <core/System.hpp>
 
 using namespace GHI;
 using namespace std;

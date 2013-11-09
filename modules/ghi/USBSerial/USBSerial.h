@@ -17,10 +17,10 @@ limitations under the License.
 #ifndef _USBSERIAL_H_
 #define _USBSERIAL_H_
 
-#include "../../../core/Mainboard.hpp"
-#include "../../../core/Module.hpp"
-#include "../../../core/Socket.hpp"
-#include "../../../core/Types.hpp"
+#include <core/Mainboard.hpp>
+#include <core/Module.hpp>
+#include <core/Socket.hpp>
+#include <core/Types.hpp>
 
 #include <string.h>
 

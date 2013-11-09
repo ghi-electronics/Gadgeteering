@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "../../../core/Mainboard.hpp"
-#include "../../../core/Socket.hpp"
-#include "../../../core/SerialDevice.hpp"
-#include "../../../core/System.hpp"
-#include "../../../core/Types.hpp"
-#include "../../../core/Module.hpp"
+#include <core/Mainboard.hpp>
+#include <core/Socket.hpp>
+#include <core/SerialDevice.hpp>
+#include <core/System.hpp>
+#include <core/Types.hpp>
+#include <core/Module.hpp>
 
 #include <stdio.h>
 #include <string.h>

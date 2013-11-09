@@ -17,11 +17,11 @@ limitations under the License.
 #ifndef _DISTANCEUS3_H_
 #define _DISTANCEUS3_H_
 
-#include "../../../core/Interfaces.hpp"
-#include "../../../core/Mainboard.hpp"
-#include "../../../core/System.hpp"
-#include "../../../core/Types.hpp"
-#include "../../../core/Module.hpp"
+#include <core/Interfaces.hpp>
+#include <core/Mainboard.hpp>
+#include <core/System.hpp>
+#include <core/Types.hpp>
+#include <core/Module.hpp>
 
 namespace GHI
 {

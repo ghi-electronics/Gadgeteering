@@ -5,12 +5,12 @@
 	#include <Windows.h>
 	#include "windows/FTD2XX.H"
 #else
-	#include "linux/WinTypes.h"
-	#include "linux/ftd2xx.h"
+	#include <WinTypes.h>
+	#include <ftd2xx.h>
 #endif
 
-#include "../../../../core/System.hpp"
-#include "../../../../core/Types.hpp"
+#include <core/System.hpp>
+#include <core/Types.hpp>
 
 class FTDI_Configuration
 {

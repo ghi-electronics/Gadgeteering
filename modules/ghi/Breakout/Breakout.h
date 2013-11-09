@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _BREAKOUT_H_
 #define _BREAKOUT_H_
 
-#include "../../../core/Gadgeteering.h"
+#include <core/Gadgeteering.h>
 
 namespace GHI {
 	namespace Modules {
