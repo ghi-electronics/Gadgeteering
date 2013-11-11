@@ -3,10 +3,10 @@
 
 #ifdef _WIN32
 	#include <Windows.h>
-	#include "FTD2XX.H"
+	#include <FTD2XX.H>
 #else
-	#include "WinTypes.h"
-	#include "ftd2xx.h"
+	#include <WinTypes.h>
+	#include <ftd2xx.h>
 #endif
 
 #include <Core/System.hpp>
