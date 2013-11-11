@@ -3,14 +3,14 @@
 
 #ifdef _WIN32
 	#include <Windows.h>
-	#include "windows/FTD2XX.H"
+	#include "FTD2XX.H"
 #else
-	#include <WinTypes.h>
-	#include <ftd2xx.h>
+	#include "WinTypes.h"
+	#include "ftd2xx.h"
 #endif
 
-#include <core/System.hpp>
-#include <core/Types.hpp>
+#include <Core/System.hpp>
+#include <Core/Types.hpp>
 
 class FTDI_Configuration
 {

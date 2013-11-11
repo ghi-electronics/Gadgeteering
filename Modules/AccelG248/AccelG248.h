@@ -17,8 +17,8 @@ limitations under the License.
 #ifndef _ACCELG248_H_
 #define _ACCELG248_H_
 
-#include <core/Gadgeteering.h>
-#include <core/I2CDevice.hpp>
+#include <Core/Gadgeteering.h>
+#include <Core/I2CDevice.hpp>
 
 namespace GHI {
 	namespace Modules {

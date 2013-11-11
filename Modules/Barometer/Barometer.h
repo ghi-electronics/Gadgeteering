@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _BAROMETER_H_
 #define _BAROMETER_H_
 
-#include <core/Gadgeteering.h>
+#include <Core/Gadgeteering.h>
 
 namespace GHI {
 	namespace Modules {

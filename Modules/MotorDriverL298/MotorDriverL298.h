@@ -17,11 +17,11 @@ limitations under the License.
 #ifndef _MOTORL298_H_
 #define _MOTORL298_H_
 
-#include <core/Mainboard.hpp>
-#include <core/Interfaces.hpp>
-#include <core/System.hpp>
-#include <core/Types.hpp>
-#include <core/Module.hpp>
+#include <Core/Mainboard.hpp>
+#include <Core/Interfaces.hpp>
+#include <Core/System.hpp>
+#include <Core/Types.hpp>
+#include <Core/Module.hpp>
 
 namespace GHI
 {

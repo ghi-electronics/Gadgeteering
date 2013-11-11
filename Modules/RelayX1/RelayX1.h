@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <core/Interfaces.hpp>
-#include <core/Mainboard.hpp>
-#include <core/System.hpp>
-#include <core/Types.hpp>
-#include <core/Module.hpp>
+#include <Core/Interfaces.hpp>
+#include <Core/Mainboard.hpp>
+#include <Core/System.hpp>
+#include <Core/Types.hpp>
+#include <Core/Module.hpp>
 
 namespace GHI
 {

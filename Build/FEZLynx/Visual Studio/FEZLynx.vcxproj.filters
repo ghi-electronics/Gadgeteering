@@ -222,9 +222,6 @@
     <ClInclude Include="..\..\..\Core\Interfaces.hpp">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Core\Interfaces_proxy.hpp">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Core\List.hpp">
       <Filter>Core</Filter>
     </ClInclude>
@@ -235,9 +232,6 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Core\SerialDevice.hpp">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Core\System_proxy.hpp">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Core\System.hpp">

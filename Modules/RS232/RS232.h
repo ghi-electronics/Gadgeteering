@@ -17,10 +17,10 @@ limitations under the License.
 #ifndef _RS232_H_
 #define _RS232_H_
 
-#include <core/Mainboard.hpp>
-#include <core/Module.hpp>
-#include <core/Socket.hpp>
-#include <core/Types.hpp>
+#include <Core/Mainboard.hpp>
+#include <Core/Module.hpp>
+#include <Core/Socket.hpp>
+#include <Core/Types.hpp>
 
 #include <string.h>
 

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 #include "MultiColorLED.h"
-#include "../../../core/System.hpp"
+#include <Core/System.hpp>
 
 using namespace GHI;
 using namespace GHI::Modules;

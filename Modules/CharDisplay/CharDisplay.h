@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _CHARDISPLAY_H_
 #define _CHARDISPLAY_H_
 
-#include <core/Gadgeteering.h>
+#include <Core/Gadgeteering.h>
 
 namespace GHI {
 	namespace Modules {

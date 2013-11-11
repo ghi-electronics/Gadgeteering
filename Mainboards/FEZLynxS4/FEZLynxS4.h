@@ -17,17 +17,17 @@ limitations under the License.
 #ifndef _FEZLYNXS4_H_
 #define _FEZLYNXS4_H_
 
-#include <FTDI_Device.h>
+#include "FTDI_Device.h"
 
-#include <core/Mainboard.hpp>
-#include <core/Socket.hpp>
-#include <core/SerialDevice.hpp>
-#include <core/SPIDevice.hpp>
-#include <core/I2CBus.hpp>
-#include <core/Types.hpp>
-#include <core/System.hpp>
+#include <Core/Mainboard.hpp>
+#include <Core/Socket.hpp>
+#include <Core/SerialDevice.hpp>
+#include <Core/SPIDevice.hpp>
+#include <Core/I2CBus.hpp>
+#include <Core/Types.hpp>
+#include <Core/System.hpp>
 
-#include <modules/ghi/IO60P16/IO60P16.h>
+#include <Modules/IO60P16/IO60P16.h>
 
 #define FTDI_CHANNEL(pin) ((pin - 1) / 8)
 #define FTDI_PIN(pin) (((pin - 1) % 8) + 1)

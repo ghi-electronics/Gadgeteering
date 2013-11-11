@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 #include "LEDStrip.h"
-#include "../../../core/System.hpp"
+#include <Core/System.hpp>
 
 using namespace GHI;
 using namespace GHI::Modules;

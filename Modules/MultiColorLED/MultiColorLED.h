@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _MULTICOLORLED_H_
 #define _MULTICOLORLED_H_
 
-#include <core/Gadgeteering.h>
+#include <Core/Gadgeteering.h>
 
 //All times are in milliseconds
 

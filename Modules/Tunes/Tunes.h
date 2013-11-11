@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _TUNES_H_
 #define _TUNES_H_
 
-#include <core/Gadgeteering.h>
+#include <Core/Gadgeteering.h>
 
 namespace GHI {
 	namespace Modules {
