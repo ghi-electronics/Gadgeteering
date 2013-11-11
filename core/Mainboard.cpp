@@ -1,5 +1,5 @@
 /*
-Copyright 2013 GHI Electronics LLC
+Copyright 2013 Gadgeteering Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@ limitations under the License.
 #include "Mainboard.h"
 #include "Module.h"
 
-using namespace GHI;
-using namespace GHI::Interfaces;
+using namespace Gadgeteering;
+using namespace Gadgeteering::Interfaces;
 
 Mainboard::Mainboard() {
 	if (mainboard != NULL)
@@ -80,18 +80,18 @@ void Mainboard::writeAnalog(CPUPin pin, double voltage) { mainboard->panic(Excep
 void Mainboard::writeAnalogProportion(CPUPin pin, double voltage) { mainboard->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED); }
 void Mainboard::setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode) { mainboard->panic(Exceptions::ERR_SET_IO_NOT_SUPPORTED); }
 
-GHI::Interfaces::SerialDevice* Mainboard::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin) { mainboard->panic(Exceptions::ERR_SERIAL_NOT_SUPPORTED); return NULL; }
-GHI::Interfaces::SPIBus* Mainboard::getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin) { mainboard->panic(Exceptions::ERR_SPI_NOT_SUPPORTED); return NULL; }
-GHI::Interfaces::I2CBus* Mainboard::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hardwareI2C) { mainboard->panic(Exceptions::ERR_I2C_NOT_SUPPORTED); return NULL; }
+Gadgeteering::Interfaces::SerialDevice* Mainboard::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin) { mainboard->panic(Exceptions::ERR_SERIAL_NOT_SUPPORTED); return NULL; }
+Gadgeteering::Interfaces::SPIBus* Mainboard::getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin) { mainboard->panic(Exceptions::ERR_SPI_NOT_SUPPORTED); return NULL; }
+Gadgeteering::Interfaces::I2CBus* Mainboard::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hardwareI2C) { mainboard->panic(Exceptions::ERR_I2C_NOT_SUPPORTED); return NULL; }
 
-GHI::Interfaces::SerialDevice* Mainboard::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber) {
+Gadgeteering::Interfaces::SerialDevice* Mainboard::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber) {
 	return this->getSerialDevice(baudRate, parity, stopBits, dataBits, socket->pins[txPinNumber], socket->pins[rxPinNumber]);
 }
 
-GHI::Interfaces::SPIBus* Mainboard::getSPIBus(Socket* socket, Socket::Pin mosiPinNumber, Socket::Pin misoPinNumber, Socket::Pin sckPinNumber) {
+Gadgeteering::Interfaces::SPIBus* Mainboard::getSPIBus(Socket* socket, Socket::Pin mosiPinNumber, Socket::Pin misoPinNumber, Socket::Pin sckPinNumber) {
 	return this->getSPIBus(socket->pins[mosiPinNumber], socket->pins[misoPinNumber], socket->pins[sckPinNumber]);
 }
 
-GHI::Interfaces::I2CBus* Mainboard::getI2CBus(Socket* socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber, bool hardwareI2C) {
+Gadgeteering::Interfaces::I2CBus* Mainboard::getI2CBus(Socket* socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber, bool hardwareI2C) {
 	return this->getI2CBus(socket->pins[sdaPinNumber], socket->pins[sclPinNumber], hardwareI2C);
 }

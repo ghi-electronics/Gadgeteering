@@ -1,5 +1,5 @@
 /*
-Copyright 2013 GHI Electronics LLC
+Copyright 2013 Gadgeteering Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ limitations under the License.
 #include "List.h"
 #include "Types.h"
 
-namespace GHI {
+namespace Gadgeteering {
 	class Module;
 
 	class Mainboard
@@ -59,16 +59,16 @@ namespace GHI {
 			virtual void writeAnalogProportion(CPUPin pin, double voltage);
 			virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
 
-			virtual GHI::Interfaces::SPIBus* getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
-			virtual GHI::Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin);
-            virtual GHI::Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hardwareI2C = false);
+			virtual Gadgeteering::Interfaces::SPIBus* getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
+			virtual Gadgeteering::Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin);
+            virtual Gadgeteering::Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hardwareI2C = false);
 
-            virtual GHI::Interfaces::I2CBus* getI2CBus(Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine, bool hardwareI2C = false);
-			virtual GHI::Interfaces::SPIBus* getSPIBus(Socket* socket, Socket::Pin mosiPinNumber = Socket::Pins::Seven, Socket::Pin misoPinNumber = Socket::Pins::Eight, Socket::Pin sckPinNumber = Socket::Pins::Nine);
-			virtual GHI::Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber = Socket::Pins::Four, Socket::Pin rxPinNumber = Socket::Pins::Five);
+            virtual Gadgeteering::Interfaces::I2CBus* getI2CBus(Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine, bool hardwareI2C = false);
+			virtual Gadgeteering::Interfaces::SPIBus* getSPIBus(Socket* socket, Socket::Pin mosiPinNumber = Socket::Pins::Seven, Socket::Pin misoPinNumber = Socket::Pins::Eight, Socket::Pin sckPinNumber = Socket::Pins::Nine);
+			virtual Gadgeteering::Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber = Socket::Pins::Four, Socket::Pin rxPinNumber = Socket::Pins::Five);
 	};
 
-	extern GHI::Mainboard* mainboard;
+	extern Gadgeteering::Mainboard* mainboard;
 }
 
 #endif

@@ -1,6 +1,6 @@
 
 /*
-Copyright 2013 GHI Electronics LLC
+Copyright 2013 Gadgeteering Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ limitations under the License.
 #define NULL 0
 #endif
 
-namespace GHI {
+namespace Gadgeteering {
 	typedef unsigned char IOState;
 	typedef unsigned char ResistorMode;
 	typedef unsigned char CPUPin;

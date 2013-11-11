@@ -1,5 +1,5 @@
 /*
-Copyright 2013 GHI Electronics LLC
+Copyright 2013 Gadgeteering Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@ limitations under the License.
 
 #include "Breakout.h"
 
-using namespace GHI;
-using namespace GHI::Modules;
-using namespace GHI::Interfaces;
+using namespace Gadgeteering;
+using namespace Gadgeteering::Modules;
+using namespace Gadgeteering::Interfaces;
 
 Breakout::Breakout(unsigned char socketNumber) {
 	this->socket = mainboard->getSocket(socketNumber);

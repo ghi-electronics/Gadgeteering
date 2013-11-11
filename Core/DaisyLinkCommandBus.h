@@ -1,5 +1,5 @@
 /*
-Copyright 2013 GHI Electronics LLC
+Copyright 2013 Gadgeteering Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,11 +23,11 @@ limitations under the License.
 #include "Interfaces.h"
 #include "Types.h"
 
-namespace GHI
+namespace Gadgeteering
 {
 	namespace Interfaces
 	{
-		class DaisyLinkCommandBus : public GHI::Interfaces::I2CBus
+		class DaisyLinkCommandBus : public Gadgeteering::Interfaces::I2CBus
 		{
 			bool startSent;
                                                 
@@ -48,7 +48,7 @@ namespace GHI
 			unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
 
 			public:
-				DaisyLinkCommandBus(GHI::CPUPin sda, GHI::CPUPin scl);
+				DaisyLinkCommandBus(Gadgeteering::CPUPin sda, Gadgeteering::CPUPin scl);
 				virtual ~DaisyLinkCommandBus();
 
 				virtual unsigned int write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop = true);

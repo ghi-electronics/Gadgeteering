@@ -1,5 +1,5 @@
 /*
-Copyright 2013 GHI Electronics LLC
+Copyright 2013 Gadgeteering Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ limitations under the License.
 
 #include <string.h>
 
-using namespace GHI::Modules;
+using namespace Gadgeteering::Modules;
 
 
 const double Compass::sq2p1 = 2.414213562373095048802e0F;

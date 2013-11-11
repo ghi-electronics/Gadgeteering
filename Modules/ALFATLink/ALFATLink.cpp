@@ -1,5 +1,5 @@
 /*
-Copyright 2013 GHI Electronics LLC
+Copyright 2013 Gadgeteering Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@ limitations under the License.
 #define NIBBLE_TO_HEX(n) ((n) >= 10 ? (n) - 10 + 'A' : (n) + '0')
 #define HEX_TO_UCHAR(buffer) ((DECODE_HEX((buffer)[0]) << 8) + DECODE_HEX((buffer)[1]))
 
-using namespace GHI;
-using namespace GHI::Modules;
-using namespace GHI::Interfaces;
+using namespace Gadgeteering;
+using namespace Gadgeteering::Modules;
+using namespace Gadgeteering::Interfaces;
 
 ALFATLink::ALFATLink(unsigned char socketNumber) {
 	this->socket = mainboard->getSocket(socketNumber);

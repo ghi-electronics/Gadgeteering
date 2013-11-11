@@ -1,5 +1,5 @@
 /*
-Copyright 2013 GHI Electronics LLC
+Copyright 2013 Gadgeteering Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@ limitations under the License.
 #include "SerialDevice.h"
 #include "Mainboard.h"
 
-using namespace GHI;
-using namespace GHI::Interfaces;
+using namespace Gadgeteering;
+using namespace Gadgeteering::Interfaces;
 
 SerialDevice::SerialDevice(CPUPin txPin, CPUPin rxPin, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) : tx(tx), rx(rx) {
 	this->baudRate = baudRate;

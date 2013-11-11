@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2013 GHI Electronics LLC
+Copyright 2013 Gadgeteering Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,15 +20,15 @@ limitations under the License.
 #include <iostream>
 #include <cstring>
 
-using namespace GHI;
-using namespace GHI::Interfaces;
-using namespace GHI::Mainboards;
+using namespace Gadgeteering;
+using namespace Gadgeteering::Interfaces;
+using namespace Gadgeteering::Mainboards;
 
-Mainboard* GHI::mainboard = NULL;
+Mainboard* Gadgeteering::mainboard = NULL;
 
 FEZLynxS4::FEZLynxS4()
 {
-	GHI::mainboard = this;
+	Gadgeteering::mainboard = this;
 
     FT_STATUS status = FT_OK;
 	char serialNumberBuffer[64];
@@ -245,12 +245,12 @@ CPUPin FEZLynxS4::getExtenderPin(CPUPin pinNumber)
     return (((FTDI_CHANNEL(pinNumber) - 4) << 4) | (FTDI_PIN(pinNumber) - 1));
 }
 
-bool FEZLynxS4::isVirtual(GHI::CPUPin pinNumber)
+bool FEZLynxS4::isVirtual(Gadgeteering::CPUPin pinNumber)
 {
 	return FTDI_CHANNEL(pinNumber) > 3;
 }
 
-void FEZLynxS4::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode)
+void FEZLynxS4::setIOMode(Gadgeteering::CPUPin pinNumber, Gadgeteering::IOState state, Gadgeteering::ResistorMode resistorMode)
 {
 	if(isVirtual(pinNumber))
 	{
@@ -263,9 +263,9 @@ void FEZLynxS4::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resist
 		return;
     }
 
-    if(state == GHI::IOStates::DIGITAL_INPUT)
+    if(state == Gadgeteering::IOStates::DIGITAL_INPUT)
         this->m_devices[FTDI_CHANNEL(pinNumber)]->ClearDirection(FTDI_PIN(pinNumber));
-	else if(state == GHI::IOStates::DIGITAL_OUTPUT)
+	else if(state == Gadgeteering::IOStates::DIGITAL_OUTPUT)
         this->m_devices[FTDI_CHANNEL(pinNumber)]->SetDirection(FTDI_PIN(pinNumber));
 	else
 		mainboard->panic(Exceptions::ERR_IO_MODE_NOT_SUPPORTED);
@@ -289,7 +289,7 @@ void FEZLynxS4::setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::Resist
     }
 }
 
-bool FEZLynxS4::readDigital(GHI::CPUPin pinNumber)
+bool FEZLynxS4::readDigital(Gadgeteering::CPUPin pinNumber)
 {
 	if(isVirtual(pinNumber))
     {
@@ -323,7 +323,7 @@ bool FEZLynxS4::readDigital(GHI::CPUPin pinNumber)
     return (result & (1 << (FTDI_PIN(pinNumber) - 1))) > 0 ? true : false;
 }
 
-void FEZLynxS4::writeDigital(GHI::CPUPin pinNumber, bool value)
+void FEZLynxS4::writeDigital(Gadgeteering::CPUPin pinNumber, bool value)
 {
 	if(isVirtual(pinNumber))
 	{
@@ -360,7 +360,7 @@ void FEZLynxS4::writeDigital(GHI::CPUPin pinNumber, bool value)
     }
 }
 
-double FEZLynxS4::readAnalog(GHI::CPUPin pinNumber)
+double FEZLynxS4::readAnalog(Gadgeteering::CPUPin pinNumber)
 {
 	unsigned char channel = 0x00;
 
@@ -393,7 +393,7 @@ double FEZLynxS4::readAnalogProportion(CPUPin pinNumber)
 	return this->readAnalog(pinNumber) / 3.3;
 }
 
-void FEZLynxS4::writeAnalog(GHI::CPUPin pinNumber, double voltage)
+void FEZLynxS4::writeAnalog(Gadgeteering::CPUPin pinNumber, double voltage)
 {
 	this->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED);
 }
@@ -403,7 +403,7 @@ void FEZLynxS4::writeAnalogProportion(CPUPin pinNumber, double proportion)
 	this->writeAnalog(pinNumber, proportion * 3.3);
 }
 
-void FEZLynxS4::setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency)
+void FEZLynxS4::setPWM(Gadgeteering::CPUPin pinNumber, double dutyCycle, double frequency)
 {
 	this->panic(Exceptions::ERR_PWM_NOT_SUPPORTED);
 }
@@ -423,7 +423,7 @@ Interfaces::SPIBus* FEZLynxS4::getSPIBus(CPUPin miso, CPUPin mosi, CPUPin sck)
 {
 	for (SPIBus* current = (SPIBus*)this->spiBusses.startV(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.nextV())
         if (current->mosi == mosi && current->miso == miso && current->sck == sck)
-            return (GHI::Interfaces::SPIBus*)current;
+            return (Gadgeteering::Interfaces::SPIBus*)current;
 
     SPIBus* bus = new SPIBus(miso, mosi, sck, this->m_devices[0]); //this->channels[0].device);
     this->spiBusses.addV(bus);

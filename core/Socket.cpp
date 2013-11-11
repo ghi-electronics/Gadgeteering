@@ -1,5 +1,5 @@
 /*
-Copyright 2013 GHI Electronics LLC
+Copyright 2013 Gadgeteering Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ limitations under the License.
 #include "SPIBus.h"
 #include "SerialDevice.h"
 
-using namespace GHI;
-using namespace GHI::Interfaces;
+using namespace Gadgeteering;
+using namespace Gadgeteering::Interfaces;
 
 Socket::Socket(unsigned char number, Type type) : number(number), type(type) {
 	this->spiBus = NULL;

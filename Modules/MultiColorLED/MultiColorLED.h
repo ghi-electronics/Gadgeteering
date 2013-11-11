@@ -1,5 +1,5 @@
 /*
-Copyright 2013 GHI Electronics LLC
+Copyright 2013 Gadgeteering Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@ limitations under the License.
 
 //All times are in milliseconds
 
-namespace GHI {
+namespace Gadgeteering {
 	namespace Modules {
 
-		using namespace GHI::Interfaces;
+		using namespace Gadgeteering::Interfaces;
 
 		class MultiColorLED : public DaisyLinkModule {
 			typedef unsigned char Register;

@@ -1,5 +1,5 @@
 /*
-Copyright 2013 GHI Electronics LLC
+Copyright 2013 Gadgeteering Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,11 +26,11 @@ limitations under the License.
 #define FTDI_CHANNEL(pin) ((pin - 1) / 8)
 #define FTDI_PIN(pin) (((pin - 1) % 8) + 1)
 
-namespace GHI
+namespace Gadgeteering
 {
     namespace Mainboards
     {
-        class FEZLynxS4 : public GHI::Mainboard
+        class FEZLynxS4 : public Gadgeteering::Mainboard
         {
             static const unsigned short CLOCK_DIVISOR = 0x0055; //Value of clock divisor, SCL Frequency = 60/((1+0x0095)*2) (MHz) = 200khz
 			static const int ANALOG_2 = 0xAA;
@@ -40,7 +40,7 @@ namespace GHI
             Interfaces::I2CDevice* analogConverter;
             Modules::IO60P16* Extender;
 
-            class SerialDevice : public GHI::Interfaces::SerialDevice {
+            class SerialDevice : public Gadgeteering::Interfaces::SerialDevice {
                 FTDI_Device *m_device;
 
                 public:
@@ -54,7 +54,7 @@ namespace GHI
 					virtual unsigned int available();
             };
 
-            class SPIBus : public GHI::Interfaces::SPIBus
+            class SPIBus : public Gadgeteering::Interfaces::SPIBus
             {
                 FTDI_Device *m_device;
 
@@ -64,7 +64,7 @@ namespace GHI
 					SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin, FTDI_Device *device);
 					virtual ~SPIBus();
 
-                    virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration, bool deselectAfter);
+                    virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Gadgeteering::Interfaces::SPIConfiguration* configuration, bool deselectAfter);
             };
 
             class I2CBus : public Interfaces::I2CBus
@@ -91,7 +91,7 @@ namespace GHI
                     virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
             };
 
-            class SoftwareI2CBus : public GHI::Interfaces::I2CBus
+            class SoftwareI2CBus : public Gadgeteering::Interfaces::I2CBus
             {
                 bool start;
 
@@ -118,8 +118,8 @@ namespace GHI
                     virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
             };
 
-            bool isVirtual(GHI::CPUPin pinNumber);
-            GHI::CPUPin getExtenderPin(GHI::CPUPin pinNumber);
+            bool isVirtual(Gadgeteering::CPUPin pinNumber);
+            Gadgeteering::CPUPin getExtenderPin(Gadgeteering::CPUPin pinNumber);
 
 			void mapSockets();
 
@@ -298,14 +298,14 @@ namespace GHI
 				virtual void print(int toPrint);
 				virtual void print(double toPrint);
 
-                virtual void setPWM(GHI::CPUPin pinNumber, double dutyCycle, double frequency);
-                virtual bool readDigital(GHI::CPUPin pinNumber);
-                virtual void writeDigital(GHI::CPUPin pinNumber, bool value);
-                virtual double readAnalog(GHI::CPUPin pinNumber);
+                virtual void setPWM(Gadgeteering::CPUPin pinNumber, double dutyCycle, double frequency);
+                virtual bool readDigital(Gadgeteering::CPUPin pinNumber);
+                virtual void writeDigital(Gadgeteering::CPUPin pinNumber, bool value);
+                virtual double readAnalog(Gadgeteering::CPUPin pinNumber);
 				virtual double readAnalogProportion(CPUPin pin);
-                virtual void writeAnalog(GHI::CPUPin pinNumber, double voltage);
+                virtual void writeAnalog(Gadgeteering::CPUPin pinNumber, double voltage);
 				virtual void writeAnalogProportion(CPUPin pin, double proportion);
-                virtual void setIOMode(GHI::CPUPin pinNumber, GHI::IOState state, GHI::ResistorMode resistorMode = GHI::ResistorModes::FLOATING);
+                virtual void setIOMode(Gadgeteering::CPUPin pinNumber, Gadgeteering::IOState state, Gadgeteering::ResistorMode resistorMode = Gadgeteering::ResistorModes::FLOATING);
 
                 virtual Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin);
 				virtual Interfaces::SPIBus* getSPIBus(CPUPin miso, CPUPin mosi, CPUPin sck);

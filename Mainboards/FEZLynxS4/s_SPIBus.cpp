@@ -1,5 +1,5 @@
 /*
-Copyright 2013 GHI Electronics LLC
+Copyright 2013 Gadgeteering Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@ limitations under the License.
 
 #include "FEZLynxS4.h"
 
-using namespace GHI;
-using namespace GHI::Mainboards;
+using namespace Gadgeteering;
+using namespace Gadgeteering::Mainboards;
 
-FEZLynxS4::SPIBus::SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin, FTDI_Device *device) : GHI::Interfaces::SPIBus(mosiPin, misoPin, sckPin)
+FEZLynxS4::SPIBus::SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin, FTDI_Device *device) : Gadgeteering::Interfaces::SPIBus(mosiPin, misoPin, sckPin)
 {
     this->m_device = device;
 }
@@ -29,7 +29,7 @@ FEZLynxS4::SPIBus::~SPIBus()
 
 }
 
-void FEZLynxS4::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, GHI::Interfaces::SPIConfiguration* configuration, bool deselectAfter)
+void FEZLynxS4::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Gadgeteering::Interfaces::SPIConfiguration* configuration, bool deselectAfter)
 {
 	unsigned char* buffer = new unsigned char[count + 3];
     DWORD sent = 0, read = 0, available = 0;

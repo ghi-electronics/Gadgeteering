@@ -1,5 +1,5 @@
 /*
-Copyright 2013 GHI Electronics LLC
+Copyright 2013 Gadgeteering Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ limitations under the License.
 #include "SPIBus.h"
 #include "Interfaces.h"
 
-using namespace GHI;
-using namespace GHI::Interfaces;
+using namespace Gadgeteering;
+using namespace Gadgeteering::Interfaces;
 
 SPIConfiguration::SPIConfiguration(bool chipSelectActiveState, unsigned int chipSelectSetupTime, unsigned int chipSelectHoldTime, bool clockIdleState, bool clockEdge, unsigned int clockRate) {
 	this->chipSelectActiveState = chipSelectActiveState;
@@ -30,7 +30,7 @@ SPIConfiguration::SPIConfiguration(bool chipSelectActiveState, unsigned int chip
 	this->clockRate = clockRate;
 }
 
-SPIDevice::SPIDevice(SPIBus* spiBus, CPUPin chipSelectPin, GHI::Interfaces::SPIConfiguration* configuration) {
+SPIDevice::SPIDevice(SPIBus* spiBus, CPUPin chipSelectPin, Gadgeteering::Interfaces::SPIConfiguration* configuration) {
 	this->configuration = configuration;
 	this->chipSelect = chipSelectPin;
 	this->configuration->chipSelect = chipSelectPin;
@@ -38,7 +38,7 @@ SPIDevice::SPIDevice(SPIBus* spiBus, CPUPin chipSelectPin, GHI::Interfaces::SPIC
 	this->bus = spiBus;
 }
 
-SPIDevice::SPIDevice(SPIBus* spiBus, Socket* socket, Socket::Pin chipSelectPinNumber, GHI::Interfaces::SPIConfiguration* configuration) {
+SPIDevice::SPIDevice(SPIBus* spiBus, Socket* socket, Socket::Pin chipSelectPinNumber, Gadgeteering::Interfaces::SPIConfiguration* configuration) {
 	socket->ensureTypeIsSupported(Socket::Types::S);
 
 	this->configuration = configuration;

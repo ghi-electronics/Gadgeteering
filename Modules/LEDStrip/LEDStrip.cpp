@@ -1,5 +1,5 @@
 /*
-Copyright 2013 GHI Electronics LLC
+Copyright 2013 Gadgeteering Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@ limitations under the License.
 
 #include "LEDStrip.h"
 
-using namespace GHI;
-using namespace GHI::Modules;
-using namespace GHI::Interfaces;
+using namespace Gadgeteering;
+using namespace Gadgeteering::Modules;
+using namespace Gadgeteering::Interfaces;
 
 LEDStrip::LEDStrip(unsigned char socketNumber)
 {
@@ -79,7 +79,7 @@ void LEDStrip::animate(unsigned int switchTime, bool clockwise, bool turnOn, boo
 			else
 				this->turnOffLED(i);
 
-			GHI::System::Sleep(switchTime);
+			Gadgeteering::System::Sleep(switchTime);
 		}
 	}
 	else {
@@ -89,7 +89,7 @@ void LEDStrip::animate(unsigned int switchTime, bool clockwise, bool turnOn, boo
 			else
 				this->turnOffLED(i);
 
-			GHI::System::Sleep(switchTime);
+			Gadgeteering::System::Sleep(switchTime);
 		}
 	}
 }
