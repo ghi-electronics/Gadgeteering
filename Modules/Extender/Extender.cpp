@@ -1,0 +1,53 @@
+/*
+Copyright 2013 GHI Electronics LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+#include "Extender.h"
+
+using namespace GHI;
+using namespace GHI::Modules;
+using namespace GHI::Interfaces;
+
+Extender::Extender(unsigned char socketNumber) {
+	this->socket = mainboard->getSocket(socketNumber);
+}
+
+Extender::~Extender() {
+
+}
+				
+Interfaces::DigitalInput* Extender::SetupDigitalInput(Socket::Pin pin, ResistorMode resistorMode) {
+	return new Interfaces::DigitalInput(this->socket, pin, resistorMode);
+}
+
+Interfaces::DigitalOutput* Extender::SetupDigitalOutput(Socket::Pin pin, bool initialState) {
+	return new Interfaces::DigitalOutput(this->socket, pin, initialState);
+}
+
+Interfaces::DigitalIO* Extender::SetupDigitalIO(Socket::Pin pin) {
+	return new Interfaces::DigitalIO(this->socket, pin);
+}
+
+Interfaces::AnalogInput* Extender::SetupAnalogInput(Socket::Pin pin) {
+	return new Interfaces::AnalogInput(this->socket, pin);
+}
+
+Interfaces::AnalogOutput* Extender::SetupAnalogOutput(Socket::Pin pin) {
+	return new Interfaces::AnalogOutput(this->socket, pin);
+}
+
+Interfaces::PWMOutput* Extender::SetupPWMOutput(Socket::Pin pin) {
+	return new Interfaces::PWMOutput(this->socket, pin);
+}
