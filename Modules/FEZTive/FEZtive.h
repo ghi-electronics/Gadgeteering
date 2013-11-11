@@ -17,15 +17,7 @@ limitations under the License.
 #ifndef _FEZTIVE_H_
 #define _FEZTIVE_H_
 
-#include <Core/Interfaces.hpp>
-#include <Core/Mainboard.hpp>
-#include <Core/System.hpp>
-#include <Core/Types.hpp>
-#include <Core/Module.hpp>
-#include <Core/SPIDevice.hpp>
-#include <Core/System.hpp>
-
-#include <string.h>
+#include <Core/Gadgeteering.h>
 
 namespace GHI
 {

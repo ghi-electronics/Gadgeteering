@@ -9,8 +9,7 @@
 	#include <ftd2xx.h>
 #endif
 
-#include <Core/System.hpp>
-#include <Core/Types.hpp>
+#include <Core/Gadgeteering.h>
 
 class FTDI_Configuration
 {

@@ -16,6 +16,8 @@ limitations under the License.
 
 #include "USBSerial.h"
 
+#include <string.h>
+
 namespace GHI
 {
 	namespace Modules

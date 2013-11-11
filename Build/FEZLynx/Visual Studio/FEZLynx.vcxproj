@@ -29,7 +29,6 @@
     <ClCompile Include="..\..\..\Core\Module.cpp" />
     <ClCompile Include="..\..\..\Core\SerialDevice.cpp" />
     <ClCompile Include="..\..\..\Core\Socket.cpp" />
-    <ClCompile Include="..\..\..\Core\SoftwareSerial.cpp" />
     <ClCompile Include="..\..\..\Core\SPIBus.cpp" />
     <ClCompile Include="..\..\..\Core\SPIDevice.cpp" />
     <ClCompile Include="..\..\..\Core\Types.cpp" />
@@ -88,22 +87,21 @@
     <ClCompile Include="..\..\..\Modules\WiFiRN171\WiFiRN171.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Core\DaisyLink.hpp" />
-    <ClInclude Include="..\..\..\Core\DaisyLinkCommandBus.hpp" />
+    <ClInclude Include="..\..\..\Core\DaisyLink.h" />
+    <ClInclude Include="..\..\..\Core\DaisyLinkCommandBus.h" />
     <ClInclude Include="..\..\..\Core\Gadgeteering.h" />
-    <ClInclude Include="..\..\..\Core\I2CBus.hpp" />
-    <ClInclude Include="..\..\..\Core\I2CDevice.hpp" />
-    <ClInclude Include="..\..\..\Core\Interfaces.hpp" />
-    <ClInclude Include="..\..\..\Core\List.hpp" />
-    <ClInclude Include="..\..\..\Core\Mainboard.hpp" />
-    <ClInclude Include="..\..\..\Core\Module.hpp" />
-    <ClInclude Include="..\..\..\Core\SerialDevice.hpp" />
-    <ClInclude Include="..\..\..\Core\Socket.hpp" />
-    <ClInclude Include="..\..\..\Core\SoftwareSerial.hpp" />
-    <ClInclude Include="..\..\..\Core\SPIBus.hpp" />
-    <ClInclude Include="..\..\..\Core\SPIDevice.hpp" />
-    <ClInclude Include="..\..\..\Core\System.hpp" />
-    <ClInclude Include="..\..\..\Core\Types.hpp" />
+    <ClInclude Include="..\..\..\Core\I2CBus.h" />
+    <ClInclude Include="..\..\..\Core\I2CDevice.h" />
+    <ClInclude Include="..\..\..\Core\Interfaces.h" />
+    <ClInclude Include="..\..\..\Core\List.h" />
+    <ClInclude Include="..\..\..\Core\Mainboard.h" />
+    <ClInclude Include="..\..\..\Core\Module.h" />
+    <ClInclude Include="..\..\..\Core\SerialDevice.h" />
+    <ClInclude Include="..\..\..\Core\Socket.h" />
+    <ClInclude Include="..\..\..\Core\SPIBus.h" />
+    <ClInclude Include="..\..\..\Core\SPIDevice.h" />
+    <ClInclude Include="..\..\..\Core\System.h" />
+    <ClInclude Include="..\..\..\Core\Types.h" />
     <ClInclude Include="..\..\..\Mainboards\FEZLynxS4\FEZLynxS4.h" />
     <ClInclude Include="..\..\..\Mainboards\FEZLynxS4\FTDI_Device.h" />
     <ClInclude Include="..\..\..\Modules\Accelerometer\Accelerometer.h" />

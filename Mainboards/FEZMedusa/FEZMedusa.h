@@ -17,8 +17,8 @@ limitations under the License.
 #ifndef _FEZMEDUSA_H_
 #define _FEZMEDUSA_H_
 
-#include "../FEZMedusaMini/FEZMedusaMini.h"
-#include "../IO60P16/IO60P16.h"
+#include <Core/Gadgeteering.h>
+#include <Modules/IO60P16/IO60P16.h>
 
 namespace GHI {
 	namespace Mainboards {

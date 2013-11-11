@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _MODULE_
 #define _MODULE_
 
-#include "Mainboard.hpp"
+#include "Mainboard.h"
 
 namespace GHI
 {

@@ -16,6 +16,8 @@ limitations under the License.
 
 #include "Compass.h"
 
+#include <string.h>
+
 using namespace GHI::Modules;
 
 

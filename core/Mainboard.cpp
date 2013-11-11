@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "Mainboard.hpp"
-#include "Module.hpp"
+#include "Mainboard.h"
+#include "Module.h"
 
 using namespace GHI;
 using namespace GHI::Interfaces;

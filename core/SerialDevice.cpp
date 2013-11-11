@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "SerialDevice.hpp"
-#include "Mainboard.hpp"
+#include "SerialDevice.h"
+#include "Mainboard.h"
 
 using namespace GHI;
 using namespace GHI::Interfaces;

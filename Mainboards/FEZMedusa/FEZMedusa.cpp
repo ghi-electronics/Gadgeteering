@@ -16,11 +16,6 @@ limitations under the License.
 
 #include "Arduino.h"
 #include "../IO60P16/IO60P16.cpp"
-#include "../FEZMedusaMini/FEZMedusaMini.cpp"
-#include "../FEZMedusaMini/I2CBus.cpp"
-#include "../FEZMedusaMini/SPIBus.cpp"
-#include "../FEZMedusaMini/SerialDevice.cpp"
-#include "../FEZMedusaMini/System.cpp"
 #include "FEZMedusa.h"
 
 using namespace GHI;

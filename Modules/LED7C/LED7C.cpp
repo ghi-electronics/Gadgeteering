@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 #include "LED7C.h"
-#include <Core/System.hpp>
 
 using namespace GHI;
 using namespace GHI::Modules;

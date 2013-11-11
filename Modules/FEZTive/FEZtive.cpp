@@ -16,6 +16,8 @@ limitations under the License.
 
 #include "FEZtive.h"
 
+#include <string.h>
+
 using namespace GHI;
 using namespace GHI::Modules;
 

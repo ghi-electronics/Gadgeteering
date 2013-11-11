@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "SPIDevice.hpp"
-#include "SPIBus.hpp"
-#include "Interfaces.hpp"
+#include "SPIDevice.h"
+#include "SPIBus.h"
+#include "Interfaces.h"
 
 using namespace GHI;
 using namespace GHI::Interfaces;

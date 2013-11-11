@@ -19,13 +19,7 @@ limitations under the License.
 
 #include "FTDI_Device.h"
 
-#include <Core/Mainboard.hpp>
-#include <Core/Socket.hpp>
-#include <Core/SerialDevice.hpp>
-#include <Core/SPIDevice.hpp>
-#include <Core/I2CBus.hpp>
-#include <Core/Types.hpp>
-#include <Core/System.hpp>
+#include <Core/Gadgeteering.h>
 
 #include <Modules/IO60P16/IO60P16.h>
 

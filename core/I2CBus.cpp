@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "I2CBus.hpp"
+#include "I2CBus.h"
 
 using namespace GHI;
 using namespace GHI::Interfaces;

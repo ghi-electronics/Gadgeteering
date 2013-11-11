@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 #include "ALFATLink.h"
+
 #include "string.h"
 
 #define DECODE_HEX(c) ((c) <= '9' ? (c) - '0' : (c) - 'A' + 10)

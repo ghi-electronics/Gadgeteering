@@ -17,11 +17,7 @@ limitations under the License.
 #ifndef _GYROSCOPE_HPP_
 #define _GYROSCOPE_HPP_
 
-#include <Core/Mainboard.hpp>
-#include <Core/Module.hpp>
-#include <Core/Socket.hpp>
-#include <Core/Interfaces.hpp>
-#include <Core/I2CDevice.hpp>
+#include <Core/Gadgeteering.h>
 
 namespace GHI
 {

@@ -14,28 +14,35 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <Core/Gadgeteering.h>
+#ifndef _SPIBUS_H_
+#define _SPIBUS_H_
+
+#include "Socket.h"
+#include "SPIDevice.h"
+#include "Interfaces.h"
+#include "Types.h"
+#include "List.h"
 
 namespace GHI
 {
-	namespace Modules
+	namespace Interfaces
 	{
-		class WiFiRN171 : protected Module
+		class SPIBus
 		{
-			private:
-				bool DeviceReady;
-				Interfaces::SerialDevice *serial;
-
-				void CommandModeStart();
-				void CommandModeExit();
-				void CommandModeWrite(const char* command);
+			List spiDevices;
 
 			public:
-				WiFiRN171(int socket, int baud = 9600);
+				const CPUPin mosi;
+				const CPUPin miso;
+				const CPUPin sck;
 
-				void CreateAccessPoint(const char *SSID);
-				void EnableStaticIP(const char *IP, const char *Gateway, const char *Netmask);
-				void EnableDHCP();
+				SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
+				virtual ~SPIBus();
+
+				SPIDevice* getSPIDevice(CPUPin chipSelectPin, SPIConfiguration* configuration);
+
+				virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, SPIConfiguration* configuration, bool deselectAfter);
 		};
 	}
 }
+#endif

@@ -17,12 +17,7 @@ limitations under the License.
 #ifndef _RS232_H_
 #define _RS232_H_
 
-#include <Core/Mainboard.hpp>
-#include <Core/Module.hpp>
-#include <Core/Socket.hpp>
-#include <Core/Types.hpp>
-
-#include <string.h>
+#include <Core/Gadgeteering.h>
 
 namespace GHI
 {

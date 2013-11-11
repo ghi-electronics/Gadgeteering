@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "Socket.hpp"
-#include "Mainboard.hpp"
-#include "I2CBus.hpp"
-#include "SPIBus.hpp"
-#include "SerialDevice.hpp"
+#include "Socket.h"
+#include "Mainboard.h"
+#include "I2CBus.h"
+#include "SPIBus.h"
+#include "SerialDevice.h"
 
 using namespace GHI;
 using namespace GHI::Interfaces;

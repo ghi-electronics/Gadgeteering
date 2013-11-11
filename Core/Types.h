@@ -1,3 +1,4 @@
+
 /*
 Copyright 2013 GHI Electronics LLC
 
@@ -28,12 +29,6 @@ namespace GHI {
 
 	namespace Exceptions
 	{
-		/*struct Exception
-		{
-			char ErrorCode;
-			char *Message;
-		};*/
-
 		static const unsigned char ERR_ONLY_ONE_MAINBOARD = 0;
 		static const unsigned char ERR_SPI_NOT_SUPPORTED = 1;
 		static const unsigned char ERR_PWM_NOT_SUPPORTED = 2;

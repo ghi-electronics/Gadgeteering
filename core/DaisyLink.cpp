@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "DaisyLink.hpp"
-#include "System.hpp"
+#include "DaisyLink.h"
+#include "System.h"
 
 using namespace GHI;
 using namespace GHI::Interfaces;

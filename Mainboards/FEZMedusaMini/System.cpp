@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "../Gadgeteering/System.hpp"
 #include "Arduino.h"
 
 void GHI::System::Sleep(unsigned long time)

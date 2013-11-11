@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "SPIBus.hpp"
+#include "SPIBus.h"
 
 using namespace GHI;
 using namespace GHI::Interfaces;

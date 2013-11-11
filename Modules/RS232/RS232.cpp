@@ -16,6 +16,8 @@ limitations under the License.
 
 #include "RS232.h"
 
+#include <string.h>
+
 namespace GHI
 {
 	namespace Modules

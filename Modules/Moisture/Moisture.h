@@ -14,11 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <Core/Mainboard.hpp>
-#include <Core/Interfaces.hpp>
-#include <Core/System.hpp>
-#include <Core/Types.hpp>
-#include <Core/Module.hpp>
+#include <Core/Gadgeteering.h>
 
 namespace GHI
 {

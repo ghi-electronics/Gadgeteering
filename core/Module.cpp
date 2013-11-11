@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "Module.hpp"
+#include "Module.h"
 
 using namespace GHI;
 

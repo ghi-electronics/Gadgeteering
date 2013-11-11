@@ -14,28 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <Core/Gadgeteering.h>
+#ifndef _SYSTEM_H_
+#define _SYSTEM_H_
 
 namespace GHI
 {
-	namespace Modules
-	{
-		class WiFiRN171 : protected Module
-		{
-			private:
-				bool DeviceReady;
-				Interfaces::SerialDevice *serial;
+	namespace System
+    {
+        namespace Pins {
+            class Analog;
+        }
 
-				void CommandModeStart();
-				void CommandModeExit();
-				void CommandModeWrite(const char* command);
+        namespace InterfaceChannels {
+            class SPI;
+            class I2C;
+            class Serial;
+        }
 
-			public:
-				WiFiRN171(int socket, int baud = 9600);
-
-				void CreateAccessPoint(const char *SSID);
-				void EnableStaticIP(const char *IP, const char *Gateway, const char *Netmask);
-				void EnableDHCP();
-		};
+		void Sleep(unsigned long time);
+		void SleepMicro(unsigned long time);
+		unsigned long TimeElapsed();
+		unsigned long CyclesToMicroseconds(unsigned long val);
+		int RandomNumber(int low = 0, int high = 65535);
+		void RandomNumberSeed(int seed);
 	}
 }
+
+#endif

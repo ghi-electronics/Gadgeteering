@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "../Gadgeteering/SerialDevice.hpp"
 #include "FEZMedusaMini.h"
 #include "Arduino.h"
 

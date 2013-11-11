@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,13 +16,17 @@ limitations under the License.
 
 #include "WiFiRN171.h"
 
+
+#include <stdio.h>
+#include <string.h>
+
 using namespace std;
 
 namespace GHI
 {
 	namespace Modules
 	{
-		WiFiRN171::WiFiRN171(int socket, int baud) 
+		WiFiRN171::WiFiRN171(int socket, int baud)
 		{
 			serial = mainboard->getSerialDevice(baud, 0, 1, 8, mainboard->getSocket(socket), 7, 9);
 		}
@@ -51,7 +55,7 @@ namespace GHI
 
 			unsigned long timeout = System::TimeElapsed() + 250;
 
-			while(timeout > System::TimeElapsed())
+			while (timeout > System::TimeElapsed())
 			{
 
 			}
