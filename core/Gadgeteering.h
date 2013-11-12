@@ -20,5 +20,6 @@ limitations under the License.
 #include "Interfaces.h"
 #include "Mainboard.h"
 #include "Socket.h"
+#include "SoftwareI2C.h"
 #include "System.h"
 #include "Types.h"
