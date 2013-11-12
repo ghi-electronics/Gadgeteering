@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _FEZLYNXS4_H_
 #define _FEZLYNXS4_H_
 
-#include "FTDI_Device.h"
+#include "FTDIDriver.h"
 
 #include <Core/Gadgeteering.h>
 
@@ -36,15 +36,16 @@ namespace Gadgeteering
 			static const int ANALOG_2 = 0xAA;
 			static const int ANALOG_5 = 0xAB;
 
-            FTDI_Device *m_devices[4];
+            ftdi_channel channels[4];
             Interfaces::I2CDevice* analogConverter;
             Modules::IO60P16* Extender;
 
             class SerialDevice : public Gadgeteering::Interfaces::SerialDevice {
-                FTDI_Device *m_device;
+				ftdi_channel& channel;
+				ftdi_channel::serial_config config;
 
                 public:
-                    SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, FTDI_Device *device);
+					SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, ftdi_channel& channel);
                     virtual ~SerialDevice();
 
                     virtual void open();
@@ -56,12 +57,11 @@ namespace Gadgeteering
 
             class SPIBus : public Gadgeteering::Interfaces::SPIBus
             {
-                FTDI_Device *m_device;
-
-                Interfaces::DigitalInput* MISO;
+				ftdi_channel& channel;
+				ftdi_channel::spi_config config;
 
 				public:
-					SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin, FTDI_Device *device);
+					SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin, ftdi_channel& channel);
 					virtual ~SPIBus();
 
                     virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Gadgeteering::Interfaces::SPIConfiguration* configuration, bool deselectAfter);
@@ -69,53 +69,14 @@ namespace Gadgeteering
 
             class I2CBus : public Interfaces::I2CBus
             {
-                FTDI_Device *m_device;
-
-                unsigned char *OutputBuffer;
-                unsigned char *InputBuffer;
-
-                int m_bytesToSend;
-
-                bool sendStartCondition(unsigned char address);
-                void sendStopCondition();
-
-                bool transmit(bool sendStart, bool sendStop, unsigned char data);
-                unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
+				ftdi_channel& channel;
 
                 public:
-                    I2CBus(CPUPin sdaPin, CPUPin sclPin, FTDI_Device *device);
+					I2CBus(CPUPin sdaPin, CPUPin sclPin, ftdi_channel& channel);
                     virtual ~I2CBus();
 
-                    virtual unsigned int write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop = true);
-                    virtual unsigned int read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop = true);
-                    virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
-            };
-
-            class SoftwareI2CBus : public Gadgeteering::Interfaces::I2CBus
-            {
-                bool start;
-
-                void clearSCL();
-                bool readSCL();
-                void clearSDA();
-                bool readSDA();
-
-                bool writeBit(bool bit);
-                bool readBit();
-
-                bool sendStartCondition();
-                bool sendStopCondition();
-
-                bool transmit(bool sendStart, bool sendStop, unsigned char data);
-                unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
-
-                public:
-                    SoftwareI2CBus(CPUPin sda, CPUPin scl);
-                    virtual ~SoftwareI2CBus();
-
-                    virtual unsigned int write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
-                    virtual unsigned int read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
-                    virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
+					virtual bool write(const unsigned char* buffer, unsigned int count, bool sendStart = true, bool sendStop = true);
+					virtual bool read(unsigned char* buffer, unsigned int count, bool sendStart = true, bool sendStop = true);
             };
 
             bool isVirtual(Gadgeteering::CPUPin pinNumber);
@@ -125,7 +86,7 @@ namespace Gadgeteering
 
             public:
                 FEZLynxS4();
-				~FEZLynxS4();
+				virtual ~FEZLynxS4();
 
                 class Pins
                 {
@@ -309,7 +270,7 @@ namespace Gadgeteering
 
                 virtual Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin);
 				virtual Interfaces::SPIBus* getSPIBus(CPUPin miso, CPUPin mosi, CPUPin sck);
-                virtual Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hardwareI2C);
+                virtual Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin);
         };
     }
 }

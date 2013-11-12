@@ -29,16 +29,32 @@ I2CDevice::~I2CDevice() {
 
 }
 
-unsigned int I2CDevice::write(const unsigned char* buffer, unsigned int count, bool sendStop) {
-	return this->bus->write(buffer, count, this->address, sendStop);
+unsigned int I2CDevice::write(const unsigned char* buffer, unsigned int count, bool sendStop)
+{
+	this->bus->write(&this->address, 1, true, false);
+	return this->bus->write(buffer, count, false, sendStop);
 }
 
-unsigned int I2CDevice::read(unsigned char* buffer, unsigned int count, bool sendStop) {
-	return this->bus->read(buffer, count, this->address, sendStop);
+unsigned int I2CDevice::read(unsigned char* buffer, unsigned int count, bool sendStop)
+{
+	this->bus->write(&this->address, 1 | 1, true, false);
+	return this->bus->read(buffer, count, false, sendStop);
 }
 
-bool I2CDevice::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead) {
-	return this->bus->writeRead(writeBuffer, writeLength, readBuffer, readLength, numWritten, numRead, this->address);
+bool I2CDevice::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead)
+{
+	bool w = true, r = true;
+
+	this->bus->write(&this->address, 1, true, false);
+	w = this->bus->write(writeBuffer, writeLength, false, readLength == 0);
+	if (readLength)
+	{
+		this->address |= 1;
+		this->bus->write(&this->address, 1, true, false);
+		r = this->bus->read(readBuffer, readLength, false, true);
+		this->address &= ~1;
+	}
+	return w && r;
 }
 				
 bool I2CDevice::writeRegister(unsigned char address, unsigned char value) {

@@ -19,9 +19,33 @@ limitations under the License.
 using namespace Gadgeteering;
 using namespace Gadgeteering::Mainboards;
 
-FEZLynxS4::SerialDevice::SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, FTDI_Device *device) : Interfaces::SerialDevice(tx, rx, baudRate, parity, stopBits, dataBits)
+FEZLynxS4::SerialDevice::SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, ftdi_channel& channel) : channel(channel), Interfaces::SerialDevice(tx, rx, baudRate, parity, stopBits, dataBits)
 {
-    this->m_device = device;
+	this->config.baud_rate = baudRate;
+
+	switch (parity)
+	{
+		case SerialDevice::Parity::EVEN: this->config.parity = FT_PARITY_EVEN;
+		case SerialDevice::Parity::ODD: this->config.parity = FT_PARITY_ODD;
+		case SerialDevice::Parity::MARK: this->config.parity = FT_PARITY_MARK;
+		case SerialDevice::Parity::SPACE: this->config.parity = FT_PARITY_SPACE;
+		case SerialDevice::Parity::NONE: this->config.parity = FT_PARITY_NONE;
+		default: mainboard->panic(Exceptions::ERR_SERIAL_NOT_SUPPORTED, 0);
+	}
+
+	switch (stopBits)
+	{
+		case SerialDevice::StopBits::ONE: this->config.stop_bits = FT_STOP_BITS_1;
+		case SerialDevice::StopBits::TWO: this->config.stop_bits = FT_STOP_BITS_2;
+		default: mainboard->panic(Exceptions::ERR_SERIAL_NOT_SUPPORTED, 1);
+	}
+
+	switch (dataBits)
+	{
+		case 7: this->config.data_bits = FT_BITS_7;
+		case 8: this->config.data_bits = FT_BITS_8;
+		default: mainboard->panic(Exceptions::ERR_SERIAL_NOT_SUPPORTED, 2);
+	}
 }
 
 FEZLynxS4::SerialDevice::~SerialDevice()
@@ -31,53 +55,25 @@ FEZLynxS4::SerialDevice::~SerialDevice()
 
 void FEZLynxS4::SerialDevice::open()
 {
-    this->m_device->SetBitMode(FTDI_Configuration::BIT_MODE_SERIAL);
-    this->m_device->SetBaudRate(this->baudRate);
-    this->m_device->Open();
+	this->channel.set_mode(ftdi_channel::modes::SERIAL);
 }
 
 void FEZLynxS4::SerialDevice::close()
 {
-    this->m_device->Close();
+
 }
 
 void FEZLynxS4::SerialDevice::write(const unsigned char* buffer, unsigned int count)
 {
-    DWORD sent = 0;
-
-    if(FT_Write(this->m_device->GetHandle(), const_cast<unsigned char*>(buffer), count, &sent) != FT_OK || sent != count)
-        mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
+	this->channel.serial_write(buffer, count, this->config);
 }
 
 unsigned int FEZLynxS4::SerialDevice::read(unsigned char* buffer, unsigned int count)
 {
-    DWORD available, read;
-    int timeout = 0;
-    FT_STATUS status = FT_OK;
-
-	do {
-        status |= FT_GetQueueStatus(this->m_device->GetHandle(), &available);
-        System::Sleep(1);
-        timeout++;
-	} while (available < count && timeout < 2000);
-
-    if(timeout >= 499 || status != FT_OK)
-        mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
-
-    status = FT_Read(this->m_device->GetHandle(), buffer, count, &read);
-
-    if(read != count || status != FT_OK)
-        mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
-
-    return read;
+	return this->channel.serial_read(buffer, count, this->config);
 }
 
 unsigned int FEZLynxS4::SerialDevice::available()
 {
-    DWORD available = 0;
-
-	if(FT_GetQueueStatus(this->m_device->GetHandle(), &available) != FT_OK)
-        mainboard->panic(Exceptions::ERR_MAINBOARD_ERROR);
-
-	return available;
+	return this->channel.serial_available();
 }

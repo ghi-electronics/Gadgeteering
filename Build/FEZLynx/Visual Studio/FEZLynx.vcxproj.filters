@@ -43,16 +43,10 @@
     <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\FEZLynxS4.cpp">
       <Filter>Mainboards</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\FTDI_Device.cpp">
-      <Filter>Mainboards</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\s_System.cpp">
       <Filter>Mainboards</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\s_SPIBus.cpp">
-      <Filter>Mainboards</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\s_SoftwareI2CBus.cpp">
       <Filter>Mainboards</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\s_SerialDevice.cpp">
@@ -199,15 +193,15 @@
     <ClCompile Include="..\..\..\Modules\WiFiRN171\WiFiRN171.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\FTDIDriver.cpp">
+      <Filter>Mainboards</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Core\Gadgeteering.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Mainboards\FEZLynxS4\FEZLynxS4.h">
-      <Filter>Mainboards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Mainboards\FEZLynxS4\FTDI_Device.h">
       <Filter>Mainboards</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\Accelerometer\Accelerometer.h">
@@ -389,6 +383,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Core\DaisyLink.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Mainboards\FEZLynxS4\FTDIDriver.h">
+      <Filter>Mainboards</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

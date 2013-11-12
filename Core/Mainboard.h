@@ -25,8 +25,6 @@ limitations under the License.
 #include "Types.h"
 
 namespace Gadgeteering {
-	class Module;
-
 	class Mainboard
 	{
 		protected:

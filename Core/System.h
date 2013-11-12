@@ -21,20 +21,12 @@ namespace Gadgeteering
 {
 	namespace System
     {
-        namespace Pins {
-            class Analog;
-        }
-
-        namespace InterfaceChannels {
-            class SPI;
-            class I2C;
-            class Serial;
-        }
-
 		void Sleep(unsigned long time);
 		void SleepMicro(unsigned long time);
+
 		unsigned long TimeElapsed();
 		unsigned long CyclesToMicroseconds(unsigned long val);
+
 		int RandomNumber(int low = 0, int high = 65535);
 		void RandomNumberSeed(int seed);
 	}

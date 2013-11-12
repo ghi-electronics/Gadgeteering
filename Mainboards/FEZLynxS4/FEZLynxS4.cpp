@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 #include "FEZLynxS4.h"
 
 #include <iostream>
@@ -26,60 +25,19 @@ using namespace Gadgeteering::Mainboards;
 
 Mainboard* Gadgeteering::mainboard = NULL;
 
-FEZLynxS4::FEZLynxS4()
+FEZLynxS4::FEZLynxS4() : Mainboard()
 {
+	this->channels[0].open("A");
+	this->channels[1].open("B");
+	this->channels[2].open("C");
+	this->channels[3].open("D");
+
+	this->channels[0].set_mode(ftdi_channel::modes::MPSSE);
+	this->channels[1].set_mode(ftdi_channel::modes::MPSSE);
+	this->channels[2].set_mode(ftdi_channel::modes::BITBANG);
+	this->channels[3].set_mode(ftdi_channel::modes::BITBANG);
+
 	Gadgeteering::mainboard = this;
-
-    FT_STATUS status = FT_OK;
-	char serialNumberBuffer[64];
-    unsigned char channel = 255;
-    int devices = 0;
-
-    FTDI_Configuration config;
-    config.Latency = 1;
-
-	for(int i = 0; devices < 4; i++)
-	{
-        status = FT_ListDevices((PVOID)i, &serialNumberBuffer, FT_LIST_BY_INDEX | FT_OPEN_BY_SERIAL_NUMBER);
-
-		//Sort devices by the serial number to ensure proper channel is selected
-        if(serialNumberBuffer[std::strlen(serialNumberBuffer) - 1] == 'A')
-		{
-            config.BitMode = FTDI_Configuration::BIT_MODE_MPSSE;
-            this->m_devices[0] = new FTDI_Device(0xFB, 0x00, true, i);
-            channel = 0;
-		}
-        else if(serialNumberBuffer[std::strlen(serialNumberBuffer) - 1] == 'B')
-		{
-            config.BitMode = FTDI_Configuration::BIT_MODE_MPSSE;
-            this->m_devices[1] = new FTDI_Device(0xFB, 0x00, true, i);
-            channel = 1;
-		}
-        else if(serialNumberBuffer[std::strlen(serialNumberBuffer) - 1] == 'C')
-		{
-            config.BitMode = FTDI_Configuration::BIT_MODE_ASYNC_BITBANG;
-            this->m_devices[2] = new FTDI_Device(0xFF, 0x00, false, i);
-            channel = 2;
-		}
-        else if(serialNumberBuffer[std::strlen(serialNumberBuffer) - 1] == 'D')
-		{
-            config.BitMode = FTDI_Configuration::BIT_MODE_ASYNC_BITBANG;
-            this->m_devices[3] = new FTDI_Device(0xFF, 0x00, false, i);
-            channel = 3;
-		}
-
-		if(channel != 255)
-        {
-            this->m_devices[channel]->SetupChannel(config);
-            this->m_devices[channel]->BadCommandSync();
-
-            devices++;
-            channel = 255;
-
-            if(channel == 1 || channel == 0)
-                this->m_devices[channel]->Open();
-		}
-    }
 
     this->mapSockets();
 
@@ -263,30 +221,7 @@ void FEZLynxS4::setIOMode(Gadgeteering::CPUPin pinNumber, Gadgeteering::IOState 
 		return;
     }
 
-    if(state == Gadgeteering::IOStates::DIGITAL_INPUT)
-        this->m_devices[FTDI_CHANNEL(pinNumber)]->ClearDirection(FTDI_PIN(pinNumber));
-	else if(state == Gadgeteering::IOStates::DIGITAL_OUTPUT)
-        this->m_devices[FTDI_CHANNEL(pinNumber)]->SetDirection(FTDI_PIN(pinNumber));
-	else
-		mainboard->panic(Exceptions::ERR_IO_MODE_NOT_SUPPORTED);
-
-    if(FTDI_CHANNEL(pinNumber) == 0 || FTDI_CHANNEL(pinNumber) == 1)
-	{
-		this->m_devices[FTDI_CHANNEL(pinNumber)]->Open();
-        this->m_devices[FTDI_CHANNEL(pinNumber)]->SetPinState();
-	}
-    else
-    {
-        this->m_devices[0]->Pause();
-        this->m_devices[1]->Pause();
-
-        this->m_devices[FTDI_CHANNEL(pinNumber)]->Open();
-        this->m_devices[FTDI_CHANNEL(pinNumber)]->SetPinState();
-        this->m_devices[FTDI_CHANNEL(pinNumber)]->Close();
-
-        this->m_devices[0]->Resume();
-        this->m_devices[1]->Resume();
-    }
+	this->channels[FTDI_CHANNEL(pinNumber)].set_pin_direction(FTDI_PIN(pinNumber), state == IOStates::DIGITAL_INPUT ? ftdi_channel::pin_directions::INPUT : ftdi_channel::pin_directions::OUTPUT);
 }
 
 bool FEZLynxS4::readDigital(Gadgeteering::CPUPin pinNumber)
@@ -300,27 +235,7 @@ bool FEZLynxS4::readDigital(Gadgeteering::CPUPin pinNumber)
         return Extender->readDigital(extendedPin);
     }
 
-    unsigned char result = 0x00;
-
-    if(FTDI_CHANNEL(pinNumber) == 0 || FTDI_CHANNEL(pinNumber) == 1)
-	{
-		this->m_devices[FTDI_CHANNEL(pinNumber)]->Open();
-        result = this->m_devices[FTDI_CHANNEL(pinNumber)]->GetValue();
-	}
-    else
-    {
-        this->m_devices[0]->Pause();
-        this->m_devices[1]->Pause();
-
-        this->m_devices[FTDI_CHANNEL(pinNumber)]->Open();
-        result = this->m_devices[FTDI_CHANNEL(pinNumber)]->GetValue();
-        this->m_devices[FTDI_CHANNEL(pinNumber)]->Close();
-
-        this->m_devices[0]->Resume();
-        this->m_devices[1]->Resume();
-    }
-
-    return (result & (1 << (FTDI_PIN(pinNumber) - 1))) > 0 ? true : false;
+	return this->channels[FTDI_CHANNEL(pinNumber)].get_pin_state(FTDI_PIN(pinNumber));
 }
 
 void FEZLynxS4::writeDigital(Gadgeteering::CPUPin pinNumber, bool value)
@@ -336,28 +251,7 @@ void FEZLynxS4::writeDigital(Gadgeteering::CPUPin pinNumber, bool value)
 		return;
     }
 
-    if(value)
-        this->m_devices[FTDI_CHANNEL(pinNumber)]->SetValue(FTDI_PIN(pinNumber));
-    else
-        this->m_devices[FTDI_CHANNEL(pinNumber)]->ClearValue(FTDI_PIN(pinNumber));
-
-    if(FTDI_CHANNEL(pinNumber) == 0 || FTDI_CHANNEL(pinNumber) == 1)
-	{
-		this->m_devices[FTDI_CHANNEL(pinNumber)]->Open();
-        this->m_devices[FTDI_CHANNEL(pinNumber)]->SetPinState();
-	}
-    else
-    {
-        this->m_devices[0]->Pause();
-        this->m_devices[1]->Pause();
-
-        this->m_devices[FTDI_CHANNEL(pinNumber)]->Open();
-        this->m_devices[FTDI_CHANNEL(pinNumber)]->SetPinState();
-        this->m_devices[FTDI_CHANNEL(pinNumber)]->Close();
-
-        this->m_devices[0]->Resume();
-        this->m_devices[1]->Resume();
-    }
+	return this->channels[FTDI_CHANNEL(pinNumber)].set_pin_state(FTDI_PIN(pinNumber), value);
 }
 
 double FEZLynxS4::readAnalog(Gadgeteering::CPUPin pinNumber)
@@ -414,7 +308,7 @@ Interfaces::SerialDevice* FEZLynxS4::getSerialDevice(unsigned int baudRate, unsi
         if (current->tx == txPin && current->rx == rxPin)
             return current;
 
-    SerialDevice* bus = new FEZLynxS4::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits, this->m_devices[3]);
+	SerialDevice* bus = new FEZLynxS4::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits, this->channels[3]);
     this->serialDevices.addV(bus);
     return bus;
 }
@@ -425,29 +319,19 @@ Interfaces::SPIBus* FEZLynxS4::getSPIBus(CPUPin miso, CPUPin mosi, CPUPin sck)
         if (current->mosi == mosi && current->miso == miso && current->sck == sck)
             return (Gadgeteering::Interfaces::SPIBus*)current;
 
-    SPIBus* bus = new SPIBus(miso, mosi, sck, this->m_devices[0]); //this->channels[0].device);
+    SPIBus* bus = new SPIBus(miso, mosi, sck, this->channels[0]);
     this->spiBusses.addV(bus);
     return bus;
 }
 
-Interfaces::I2CBus* FEZLynxS4::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hardwareI2C)
+Interfaces::I2CBus* FEZLynxS4::getI2CBus(CPUPin sdaPin, CPUPin sclPin)
 {
     for (I2CBus* current = (I2CBus*)this->i2cBusses.startV(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.nextV())
         if (current->scl == sclPin && current->sda == sdaPin)
             return current;
 
-    if(!hardwareI2C)
-    {
-        SoftwareI2CBus *bus = new SoftwareI2CBus(sdaPin, sclPin); //this->channels[1].device);
+		I2CBus *bus = new I2CBus(sdaPin, sclPin, this->channels[1]); 
 
         this->i2cBusses.addV(bus);
         return bus;
-    }
-    else
-    {
-        I2CBus *bus = new I2CBus(sdaPin, sclPin, this->m_devices[1]); //this->channels[1].device);
-
-        this->i2cBusses.addV(bus);
-        return bus;
-    }
 }

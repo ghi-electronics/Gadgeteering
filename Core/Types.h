@@ -1,4 +1,3 @@
-
 /*
 Copyright 2013 Gadgeteering Electronics LLC
 
@@ -27,6 +26,39 @@ namespace Gadgeteering {
 	typedef unsigned char ResistorMode;
 	typedef unsigned char CPUPin;
 
+	struct IOStates {
+		static const IOState DIGITAL_OUTPUT = 0;
+		static const IOState DIGITAL_INPUT = 1;
+		static const IOState ANALOG_OUTPUT = 2;
+		static const IOState ANALOG_INPUT = 3;
+		static const IOState PWM_OUTPUT = 4;
+	};
+
+	struct ResistorModes{
+		static const ResistorMode PULL_UP = 0;
+		static const ResistorMode PULL_DOWN = 1;
+		static const ResistorMode FLOATING = 2;
+	};
+
+	struct Color
+	{
+		unsigned char red;
+		unsigned char green;
+		unsigned char blue;
+
+		Color();
+		Color(unsigned char r, unsigned char g, unsigned char b);
+
+		void Set(unsigned char r, unsigned char g, unsigned char b);
+		void Set(Color color);
+		
+		static const Color RED;
+		static const Color GREEN;
+		static const Color BLUE;
+		static const Color WHITE;
+		static const Color BLACK;
+	};
+
 	namespace Exceptions
 	{
 		static const unsigned char ERR_ONLY_ONE_MAINBOARD = 0;
@@ -50,44 +82,6 @@ namespace Gadgeteering {
 		static const unsigned char ERR_I2C_NOT_SUPPORTED = 18;
 		static const unsigned char ERR_MAINBOARD_ERROR = 19;
 	}
-
-	//We didn't use enums because their members are hoisted into and pollute
-	//the parent scope, and Arduino doesn't have C++11 enum class yet.
-	
-	class IOStates {
-		public:
-			static const unsigned char DIGITAL_OUTPUT = 0;
-			static const unsigned char DIGITAL_INPUT = 1;
-			static const unsigned char ANALOG_OUTPUT = 2;
-			static const unsigned char ANALOG_INPUT = 3;
-			static const unsigned char PWM_OUTPUT = 4;
-	};
-
-	class ResistorModes {
-		public:
-			static const ResistorMode PULL_UP = 0;
-			static const ResistorMode PULL_DOWN = 1;
-			static const ResistorMode FLOATING = 2;
-	};
-
-	struct Color
-	{
-		unsigned char red;
-		unsigned char green;
-		unsigned char blue;
-
-		Color();
-		Color(unsigned char r, unsigned char g, unsigned char b);
-		void Set(unsigned char r, unsigned char g, unsigned char b);
-		void Set(Color color);
-		
-		static const Color RED;
-		static const Color GREEN;
-		static const Color BLUE;
-		static const Color WHITE;
-		static const Color BLACK;
-	};
-
 }
 
 #endif

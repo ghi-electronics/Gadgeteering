@@ -46,7 +46,6 @@ namespace Gadgeteering {
 
 				class StopBits {
 					public:
-						static const unsigned char NONE = 0;
 						static const unsigned char ONE = 1;
 						static const unsigned char ONE_POINT_FIVE = 2;
 						static const unsigned char TWO = 3;

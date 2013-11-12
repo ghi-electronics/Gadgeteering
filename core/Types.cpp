@@ -44,8 +44,8 @@ void Color::Set(Color color)
 	this->Set(color.red, color.green, color.blue);
 }
 		
-const Color Color::RED(0xFF, 0, 0);
-const Color Color::GREEN(0, 0xFF, 0);
-const Color Color::BLUE(0, 0, 0xFF);
+const Color Color::RED(0xFF, 0x00, 0x00);
+const Color Color::GREEN(0x00, 0xFF, 0x00);
+const Color Color::BLUE(0x00, 0x00, 0xFF);
 const Color Color::WHITE(0xFF, 0xFF, 0xFF);
-const Color Color::BLACK(0, 0, 0);
+const Color Color::BLACK(0x00, 0x00, 0x00);

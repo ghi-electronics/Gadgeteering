@@ -38,10 +38,9 @@ namespace Gadgeteering
 				virtual ~I2CBus();
 
 				I2CDevice* getI2CDevice(unsigned char address);
-					
-				virtual unsigned int write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop = true);
-				virtual unsigned int read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop = true);
-				virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
+
+				virtual bool write(const unsigned char* buffer, unsigned int count, bool sendStart = true, bool sendStop = true);
+				virtual bool read(unsigned char* buffer, unsigned int count, bool sendStart = true, bool sendStop = true);
 		};
 	}
 }

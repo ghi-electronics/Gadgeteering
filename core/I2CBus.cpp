@@ -35,20 +35,15 @@ I2CDevice* I2CBus::getI2CDevice(unsigned char address) {
 	return device;
 }
 					
-unsigned int I2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop) {
+bool I2CBus::write(const unsigned char* buffer, unsigned int count, bool sendStart, bool sendStop)
+{
 	mainboard->panic(Exceptions::ERR_I2C_NOT_SUPPORTED, 0);
 
 	return 0;
 }
 
-unsigned int I2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop) {
+bool I2CBus::read(unsigned char* buffer, unsigned int count, bool sendStart, bool sendStop) {
 	mainboard->panic(Exceptions::ERR_I2C_NOT_SUPPORTED, 1);
-
-	return 0;
-}
-
-bool I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address) {
-	mainboard->panic(Exceptions::ERR_I2C_NOT_SUPPORTED, 2);
 
 	return 0;
 }
