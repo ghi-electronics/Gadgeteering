@@ -1,5 +1,5 @@
 /*
-Copyright 2013 Gadgeteering Electronics LLC
+Copyright 2013 GHI Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,14 +17,19 @@ limitations under the License.
 #include "Socket.h"
 #include "System.h"
 
-using namespace Gadgeteering;
+using namespace gadgeteering;
 
-Socket::Socket(unsigned char number, Type type) : number(number), type(type) {
+socket::socket(unsigned char number, type type) 
+{
+	this->type_mask = type;
+	this->number = number;
+
 	for (unsigned char i = 0; i < 10; i++)
-		this->pins[i] = Socket::Pins::Unconnected;
+		this->pins[i] = socket::pins::UNCONNECTED;
 }
 
-void Socket::ensureTypeIsSupported(Type type) {
-	if ((this->type & type) == 0)
-		System::panic(Exceptions::ERR_SOCKET_NOT_HAVE_TYPE);
+void socket::ensure_type(type type) 
+{
+	if ((this->type_mask & type) == 0)
+		system::panic(Exceptions::ERR_SOCKET_NOT_HAVE_TYPE);
 }

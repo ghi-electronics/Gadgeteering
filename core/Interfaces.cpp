@@ -1,11 +1,11 @@
 /*
-Copyright 2013 Gadgeteering Electronics LLC
+Copyright 2013 GHI Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,142 +18,163 @@ limitations under the License.
 #include "Mainboard.h"
 #include "System.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::interfaces;
 
-DigitalOutput::DigitalOutput(Socket& socket, Socket::Pin pinNumber, bool initialState) {
-	if (pinNumber < 3 || pinNumber > 9)
-		System::panic(Exceptions::ERR_PIN_OUT_OF_RANGE);
-	
-	this->cpuPin = socket.pins[pinNumber];
-	
-	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_OUTPUT, ResistorModes::FLOATING);
-
-	this->write(initialState);
-}
-
-void DigitalOutput::write(bool value) {
-	mainboard->writeDigital(this->cpuPin, value);
-}
-
-DigitalInput::DigitalInput(Socket& socket, Socket::Pin pinNumber, ResistorMode resistorMode) {
-	if (pinNumber < 3 || pinNumber > 9)
-		System::panic(Exceptions::ERR_PIN_OUT_OF_RANGE);
-	
-	this->cpuPin = socket.pins[pinNumber];
-	this->setResistorMode(resistorMode);
-}
-
-bool DigitalInput::read() {
-	return mainboard->readDigital(this->cpuPin);
-}
-
-void DigitalInput::setResistorMode(ResistorMode resistorMode) {
-	this->resistorMode = resistorMode;
-	mainboard->setIOMode(this->cpuPin, IOStates::DIGITAL_INPUT, resistorMode);
-}
-
-ResistorMode DigitalInput::getResistorMode() {
-	return this->resistorMode;
-}
-
-DigitalIO::DigitalIO(Socket& socket, Socket::Pin pinNumber) {
-	if (pinNumber < 3 || pinNumber > 9)
-		System::panic(Exceptions::ERR_PIN_OUT_OF_RANGE);
-
-	this->cpuPin = socket.pins[pinNumber];
-	this->resistorMode = static_cast<ResistorMode>(0xFF);
-	this->ioState = static_cast<IOState>(0xFF);
-}
-
-void DigitalIO::write(bool value) {
-	this->setIOState(IOStates::DIGITAL_OUTPUT);
-	mainboard->writeDigital(this->cpuPin, value);
-}
-
-bool DigitalIO::read() {
-	this->setIOState(IOStates::DIGITAL_INPUT);
-	return mainboard->readDigital(this->cpuPin);
-}
-
-void DigitalIO::setIOState(IOState state) {
-	if (this->ioState == state)
-		return;
-	
-	this->ioState = state;
-	mainboard->setIOMode(this->cpuPin, this->ioState, this->resistorMode);
-}
-
-void DigitalIO::setResistorMode(ResistorMode mode) {
-	if (this->resistorMode == mode)
-		return;
-	
-	this->resistorMode = mode;
-	mainboard->setIOMode(this->cpuPin, this->ioState, this->resistorMode);
-}
-
-ResistorMode DigitalIO::getResistorMode() {
-	return this->resistorMode;
-}
-
-IOState DigitalIO::getIOState() {
-	return this->ioState;
-}
-
-AnalogInput::AnalogInput(Socket& socket, Socket::Pin pinNumber) {
-	if (pinNumber < 3 || pinNumber > 9)
-		System::panic(Exceptions::ERR_PIN_OUT_OF_RANGE);
-
-	this->cpuPin = socket.pins[pinNumber];
-}
-
-double AnalogInput::read() {
-	return this->readProportion() * mainboard->max_analog_voltage;
-}
-
-double AnalogInput::readProportion() {
-	return mainboard->readAnalog(this->cpuPin);
-}
-
-AnalogOutput::AnalogOutput(Socket& socket, Socket::Pin pinNumber) {
-	if (pinNumber < 3 || pinNumber > 9)
-		System::panic(Exceptions::ERR_PIN_OUT_OF_RANGE);
-
-	this->cpuPin = socket.pins[pinNumber];
-}
-
-void AnalogOutput::write(double value)
+digital_output::digital_output(socket& socket, socket::pin pin_number, bool initial_state)
 {
-	this->writeProportion(value / mainboard->max_analog_voltage);
+	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
+		system::panic(Exceptions::ERR_PIN_UNCONNECTED);
+
+	this->pin = socket.pins[pin_number];
+
+	mainboard->set_io_mode(this->pin, io_modes::DIGITAL_OUTPUT, resistor_modes::FLOATING);
+
+	this->write(initial_state);
 }
 
-void AnalogOutput::writeProportion(double value)
+void digital_output::write(bool value)
 {
-	mainboard->writeAnalog(this->cpuPin, value);
+	mainboard->write_digital(this->pin, value);
 }
 
-PWMOutput::PWMOutput(Socket& socket, Socket::Pin pinNumber) {
-	if (pinNumber < 3 || pinNumber > 9)
-		System::panic(Exceptions::ERR_PIN_OUT_OF_RANGE);
+digital_input::digital_input(socket& socket, socket::pin pin_number, resistor_mode new_resistor_mode)
+{
+	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
+		system::panic(Exceptions::ERR_PIN_UNCONNECTED);
 
-	this->cpuPin = socket.pins[pinNumber];
-		
-	mainboard->setIOMode(this->cpuPin, IOStates::PWM_OUTPUT, ResistorModes::FLOATING);
+	this->pin = socket.pins[pin_number];
+	this->set_resistor_mode(new_resistor_mode);
+}
+
+bool digital_input::read()
+{
+	return mainboard->read_digital(this->pin);
+}
+
+void digital_input::set_resistor_mode(resistor_mode new_resistor_mode)
+{
+	this->current_resistor_mode = new_resistor_mode;
+	mainboard->set_io_mode(this->pin, io_modes::DIGITAL_INPUT, new_resistor_mode);
+}
+
+resistor_mode digital_input::get_resistor_mode()
+{
+	return this->current_resistor_mode;
+}
+
+digital_io::digital_io(socket& socket, socket::pin pin_number)
+{
+	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
+		system::panic(Exceptions::ERR_PIN_UNCONNECTED);
+
+	this->pin = socket.pins[pin_number];
+	this->current_resistor_mode = resistor_modes::NONE;
+	this->current_io_state = io_modes::NONE;
+}
+
+void digital_io::write(bool value)
+{
+	this->set_io_mode(io_modes::DIGITAL_OUTPUT);
+	mainboard->write_digital(this->pin, value);
+}
+
+bool digital_io::read()
+{
+	this->set_io_mode(io_modes::DIGITAL_INPUT);
+	return mainboard->read_digital(this->pin);
+}
+
+void digital_io::set_io_mode(io_mode new_io_mode)
+{
+	if (this->current_io_state == new_io_mode)
+		return;
+
+	this->current_io_state = new_io_mode;
+	mainboard->set_io_mode(this->pin, this->current_io_state, this->current_resistor_mode);
+}
+
+void digital_io::set_resistor_mode(resistor_mode new_resistor_mode)
+{
+	if (this->current_resistor_mode == new_resistor_mode)
+		return;
+
+	this->current_resistor_mode = new_resistor_mode;
+	mainboard->set_io_mode(this->pin, this->current_io_state, this->current_resistor_mode);
+}
+
+resistor_mode digital_io::get_resistor_mode()
+{
+	return this->current_resistor_mode;
+}
+
+io_mode digital_io::get_io_mode()
+{
+	return this->current_io_state;
+}
+
+analog_input::analog_input(socket& socket, socket::pin pin_number)
+{
+	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
+		system::panic(Exceptions::ERR_PIN_UNCONNECTED);
+
+	this->pin = socket.pins[pin_number];
+}
+
+double analog_input::read()
+{
+	return this->read_proportion() * mainboard->max_analog_voltage;
+}
+
+double analog_input::read_proportion()
+{
+	return mainboard->read_analog(this->pin);
+}
+
+analog_output::analog_output(socket& socket, socket::pin pin_number)
+{
+	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
+		system::panic(Exceptions::ERR_PIN_UNCONNECTED);
+
+	this->pin = socket.pins[pin_number];
+}
+
+void analog_output::write(double value)
+{
+	this->write_proportion(value / mainboard->max_analog_voltage);
+}
+
+void analog_output::write_proportion(double value)
+{
+	mainboard->write_analog(this->pin, value);
+}
+
+pwm_output::pwm_output(socket& socket, socket::pin pin_number)
+{
+	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
+		system::panic(Exceptions::ERR_PIN_UNCONNECTED);
+
+	this->pin = socket.pins[pin_number];
+
+	mainboard->set_io_mode(this->pin, io_modes::PWM_OUTPUT, resistor_modes::FLOATING);
 
 	this->set(0, 0);
 }
 
-void PWMOutput::set(double frequency, double dutyCycle) {
-	this->dutyCycle = dutyCycle;
+void pwm_output::set(double frequency, double duty_cycle)
+{
+	this->duty_cycle = duty_cycle;
 	this->frequency = frequency;
 
-	mainboard->setPWM(this->cpuPin, this->frequency, this->dutyCycle);
+	mainboard->set_pwm(this->pin, this->frequency, this->duty_cycle);
 }
 
-void PWMOutput::setFrequency(double frequency) {
-	this->set(frequency, this->dutyCycle);
+void pwm_output::set_frequency(double frequency)
+{
+	this->set(frequency, this->duty_cycle);
 }
 
-void PWMOutput::setDutyCycle(double dutyCycle) {
-	this->set(this->frequency, dutyCycle);
+void pwm_output::set_duty_cycle(double duty_cycle)
+{
+	this->set(this->frequency, duty_cycle);
 }

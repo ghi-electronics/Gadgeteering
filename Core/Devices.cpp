@@ -1,5 +1,5 @@
 /*
-Copyright 2013 Gadgeteering Electronics LLC
+Copyright 2013 GHI Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,132 +17,141 @@ limitations under the License.
 #include "Devices.h"
 #include "Mainboard.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Devices;
+using namespace gadgeteering;
+using namespace gadgeteering::devices;
 
-i2c::i2c(Socket& socket, unsigned char address)
+i2c::i2c(socket& socket, unsigned char address)
 {
-	socket.ensureTypeIsSupported(Socket::Types::I);
+	socket.ensure_type(socket::types::I);
 
-	this->module = socket.i2c_port;
+	this->channel = socket.i2c;
 	this->w_address = address << 1;
 	this->r_address = (address << 1) | 1;
 }
 
-bool i2c::write(const unsigned char* buffer, unsigned int count, bool sendStart, bool sendStop)
+bool i2c::write(const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
 {
-	mainboard->i2c_write(this->module, &this->w_address, 1, sendStart, false);
-	return mainboard->i2c_write(this->module, buffer, count, false, sendStop);
+	mainboard->i2c_write(this->channel, &this->w_address, 1, send_start, false);
+	return mainboard->i2c_write(this->channel, buffer, length, false, send_stop);
 }
 
-bool i2c::read(unsigned char* buffer, unsigned int count, bool sendStart, bool sendStop)
+bool i2c::read(unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
 {
-	mainboard->i2c_write(this->module, &this->r_address, 1, sendStart, false);
-	return mainboard->i2c_read(this->module, buffer, count, false, sendStop);
+	mainboard->i2c_write(this->channel, &this->r_address, 1, send_start, false);
+	return mainboard->i2c_read(this->channel, buffer, length, false, send_stop);
 }
 
-bool i2c::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength)
+bool i2c::write_read(const unsigned char* write_buffer, unsigned int write_length, unsigned char* read_buffer, unsigned int read_length)
 {
 	bool w = true, r = true;
 
-	w = this->write(writeBuffer, writeLength, true, readLength == 0);
+	w = this->write(write_buffer, write_length, true, read_length == 0);
 
-	if (readLength != 0)
-		r = this->read(readBuffer, readLength, true, true);
+	if (read_length != 0)
+		r = this->read(read_buffer, read_length, true, true);
 	
 	return w && r;
 }
 
-bool i2c::writeRegister(unsigned char address, unsigned char value)
+bool i2c::write_register(unsigned char address, unsigned char value)
 {
 	unsigned char data[2] = { address, value };
 	return this->write(data, 2);
 }
 
-bool i2c::writeRegisters(unsigned char startAddress, unsigned char* values, unsigned int count)
+bool i2c::write_registers(unsigned char start_address, unsigned char* values, unsigned int length)
 {
-	unsigned char* data = new unsigned char[count + 1];
-	data[0] = startAddress;
-	for (unsigned int i = 0; i < count; i++)
+	unsigned char* data = new unsigned char[length + 1];
+	data[0] = start_address;
+	for (unsigned int i = 0; i < length; i++)
 		data[i + 1] = values[i];
 
-	bool result = this->write(data, count + 1);
+	bool result = this->write(data, length + 1);
 	delete[] data;
 	return result;
 }
 
-unsigned char i2c::readRegister(unsigned char address)
+unsigned char i2c::read_register(unsigned char address)
 {
 	unsigned char value;
-	this->writeRead(&address, 1, &value, 1);
+	this->write_read(&address, 1, &value, 1);
 	return value;
 }
 
-bool i2c::readRegisters(unsigned char startAddress, unsigned char* values, unsigned int count)
+bool i2c::read_registers(unsigned char start_address, unsigned char* values, unsigned int length)
 {
-	return this->writeRead(&startAddress, 1, values, count);
+	return this->write_read(&start_address, 1, values, length);
 }
 
-spi::spi(Socket& socket, Socket& chipselect_socket, Socket::Pin chipselect_pin, SPIConfiguration configuration)
+spi::spi(socket& socket, spi_configuration configuration)
 {
-	socket.ensureTypeIsSupported(Socket::Types::S);
+	socket.ensure_type(socket::types::S);
 
 	this->config = configuration;
-	this->module = socket.spi_port;
+	this->channel = socket.spi;
 }
 
-unsigned char spi::writeReadByte(unsigned char toSend, bool deselectChip) 
+spi::spi(socket& spi_socket, spi_configuration configuration, socket& cs_socket, socket::pin cs_pin_number)
+{
+	spi_socket.ensure_type(socket::types::S);
+
+	this->config = configuration;
+	this->channel = spi_socket.spi;
+	this->config.chip_select = cs_socket.pins[cs_pin_number];
+}
+
+unsigned char spi::write_read_byte(unsigned char value, bool deselect_after) 
 { 
 	unsigned char received;
-	this->writeAndRead(&toSend, &received, 1, deselectChip);
+	this->write_read(&value, &received, 1, deselect_after);
 	return received;
 }
 
-void spi::writeAndRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, bool deselectChip) 
+void spi::write_read(const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int length, bool deselect_after) 
 {
-	mainboard->spi_read_write(this->module, sendBuffer, receiveBuffer, count, this->config, deselectChip);
+	mainboard->spi_read_write(this->channel, write_buffer, read_buffer, length, this->config, deselect_after);
 }
 
-void spi::writeThenRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip) 
+void spi::write_then_read(const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int write_length, unsigned int read_length, bool deselect_after) 
 {
-	this->writeAndRead(sendBuffer, NULL, sendCount, false);
-	this->writeAndRead(NULL, receiveBuffer, receiveCount, deselectChip);
+	this->write_read(write_buffer, NULL, write_length, false);
+	this->write_read(NULL, read_buffer, read_length, deselect_after);
 }
 
-void spi::write(const unsigned char* buffer, unsigned int count, bool deselectChip) 
+void spi::write(const unsigned char* buffer, unsigned int length, bool deselect_after) 
 {
-	this->writeAndRead(buffer, NULL, count, deselectChip);
+	this->write_read(buffer, NULL, length, deselect_after);
 }
 
-void spi::read(unsigned char* buffer, unsigned int count, bool deselectChip) 
+void spi::read(unsigned char* buffer, unsigned int length, bool deselect_after) 
 {
-	this->writeAndRead(NULL, buffer, count, deselectChip);
+	this->write_read(NULL, buffer, length, deselect_after);
 }
 
-serial::serial(Socket& socket, serial_configuration configuration)
+serial::serial(socket& socket, serial_configuration configuration)
 {
-	socket.ensureTypeIsSupported(Socket::Types::U);
+	socket.ensure_type(socket::types::U);
 
 	this->config = configuration;
-	this->module = socket.serial_port;
+	this->channel = socket.serial;
 }
 
-void serial::write(const unsigned char* buffer, unsigned int count) 
+void serial::write(const unsigned char* buffer, unsigned int length) 
 {
-	mainboard->serial_write(this->module, buffer, count, this->config);
+	mainboard->serial_write(this->channel, buffer, length, this->config);
 }
 
-void serial::write(const char* buffer, unsigned int count) 
+void serial::write(const char* buffer, unsigned int length) 
 { 
-	this->write(reinterpret_cast<const unsigned char*>(buffer), count); 
+	this->write(reinterpret_cast<const unsigned char*>(buffer), length); 
 }
 
-unsigned int serial::read(unsigned char* buffer, unsigned int count) 
+unsigned int serial::read(unsigned char* buffer, unsigned int length) 
 { 
-	return mainboard->serial_read(this->module, buffer, count, this->config);
+	return mainboard->serial_read(this->channel, buffer, length, this->config);
 }
 
 unsigned int serial::available() 
 { 
-	return mainboard->serial_available(this->module);
+	return mainboard->serial_available(this->channel);
 }

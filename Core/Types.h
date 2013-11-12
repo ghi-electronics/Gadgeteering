@@ -1,5 +1,5 @@
 /*
-Copyright 2013 Gadgeteering Electronics LLC
+Copyright 2013 GHI Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,138 +14,143 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _TYPES_H_
-#define _TYPES_H_
+#pragma once
 
 #ifndef NULL
 #define NULL 0
 #endif
 
-namespace Gadgeteering {
-	typedef unsigned char IOState;
-	typedef unsigned char ResistorMode;
-	typedef unsigned char CPUPin;
-	typedef unsigned char spi_module;
-	typedef unsigned char i2c_module;
-	typedef unsigned char serial_module;
-	typedef unsigned char serial_parity;
-	typedef unsigned char serial_stop_bit;
+namespace gadgeteering 
+{
+	typedef unsigned char io_mode;
+	typedef unsigned char resistor_mode;
 
-	struct IOStates {
-		static const IOState DIGITAL_OUTPUT = 0;
-		static const IOState DIGITAL_INPUT = 1;
-		static const IOState ANALOG_OUTPUT = 2;
-		static const IOState ANALOG_INPUT = 3;
-		static const IOState PWM_OUTPUT = 4;
-	};
+	typedef unsigned char cpu_pin;
 
-	struct ResistorModes{
-		static const ResistorMode PULL_UP = 0;
-		static const ResistorMode PULL_DOWN = 1;
-		static const ResistorMode FLOATING = 2;
-	};
+	typedef unsigned char spi_channel;
+	typedef unsigned char i2c_channel;
+	typedef unsigned char serial_channel;
 
-	struct spi_modules
+
+	struct io_modes 
 	{
-		static const spi_module SPI1 = 1;
-		static const spi_module SPI2 = 2;
-		static const spi_module SPI3 = 3;
-		static const spi_module SPI4 = 4;
-		static const spi_module SPI5 = 5;
-		static const spi_module None = 0;
+		static const io_mode DIGITAL_OUTPUT = 0;
+		static const io_mode DIGITAL_INPUT = 1;
+		static const io_mode ANALOG_OUTPUT = 2;
+		static const io_mode ANALOG_INPUT = 3;
+		static const io_mode PWM_OUTPUT = 4;
+		static const io_mode NONE = 5;
 	};
 
-	struct i2c_modules
+	struct resistor_modes 
 	{
-		static const i2c_module I2C1 = 1;
-		static const i2c_module I2C2 = 2;
-		static const i2c_module I2C3 = 3;
-		static const i2c_module I2C4 = 4;
-		static const i2c_module I2C5 = 5;
-		static const i2c_module None = 0;
+		static const resistor_mode PULL_UP = 0;
+		static const resistor_mode PULL_DOWN = 1;
+		static const resistor_mode FLOATING = 2;
+		static const resistor_mode NONE = 3;
 	};
 
-	struct serial_modules
+	struct spi_channels
 	{
-		static const serial_module Serial1 = 1;
-		static const serial_module Serial2 = 2;
-		static const serial_module Serial3 = 3;
-		static const serial_module Serial4 = 4;
-		static const serial_module Serial5 = 5;
-		static const serial_module None = 0;
+		static const spi_channel SPI_1 = 1;
+		static const spi_channel SPI_2 = 2;
+		static const spi_channel SPI_3 = 3;
+		static const spi_channel SPI_4 = 4;
+		static const spi_channel SPI_5 = 5;
+		static const spi_channel NONE = 0;
 	};
 
-	struct Color
+	struct i2c_channels
+	{
+		static const i2c_channel I2C_1 = 1;
+		static const i2c_channel I2C_2 = 2;
+		static const i2c_channel I2C_3 = 3;
+		static const i2c_channel I2C_4 = 4;
+		static const i2c_channel I2C_5 = 5;
+		static const i2c_channel NONE = 0;
+	};
+
+	struct serial_channels
+	{
+		static const serial_channel SERIAL_1 = 1;
+		static const serial_channel SERIAL_2 = 2;
+		static const serial_channel SERIAL_3 = 3;
+		static const serial_channel SERIAL_4 = 4;
+		static const serial_channel SERIAL_5 = 5;
+		static const serial_channel NONE = 0;
+	};
+
+	struct color
 	{
 		unsigned char red;
 		unsigned char green;
 		unsigned char blue;
 
-		Color();
-		Color(unsigned char r, unsigned char g, unsigned char b);
+		color();
+		color(unsigned char r, unsigned char g, unsigned char b);
 
-		void Set(unsigned char r, unsigned char g, unsigned char b);
-		void Set(Color color);
-		
-		static const Color RED;
-		static const Color GREEN;
-		static const Color BLUE;
-		static const Color WHITE;
-		static const Color BLACK;
+		static const color RED;
+		static const color GREEN;
+		static const color BLUE;
+		static const color WHITE;
+		static const color BLACK;
 	};
 
-	struct SPIConfiguration
+	struct spi_configuration
 	{
 		//The pin SPIBus will toggle for the transaction
-		CPUPin chipSelect;
+		cpu_pin chip_select;
 
 		//Whether or not the chip select pin is high when the chip is selected.
-		bool chipSelectActiveState;
+		bool cs_active_state;
 
 		//The amount of time (in milliseconds) that will elapse between when the device is selected and when the clock data transmission will start.
-		unsigned int chipSelectSetupTime;
+		unsigned int cs_setup_time;
 
 		//The amount of time (in milliseconds) that the chip-select port must remain in the active state before the device is unselected.
-		unsigned int chipSelectHoldTime;
+		unsigned int cs_hold_time;
 
 		//Whether or not the clock is high when the device is idle. True is high, false is low.
-		bool clockIdleState;
+		bool clock_idle_state;
 
 		//The sampling clock edge. True if sampled on the rising edge, false on the falling edge.
-		bool clockEdge;
+		bool clock_edge;
 
 		//Gets the clock rate, in KHz.
-		unsigned int clockRate;
+		unsigned int clock_rate;
 
-		SPIConfiguration();
-		SPIConfiguration(bool chipSelectActiveState, unsigned int chipSelectSetupTime, unsigned int chipSelectHoldTime, bool clockIdleState, bool clockEdge, unsigned int clockRate);
+		spi_configuration();
+		spi_configuration(bool cs_active_state, unsigned int cs_setup_time, unsigned int cs_hold_time, bool clock_idle_state, bool clock_edge, unsigned int clock_rate);
 	};
 
 	struct serial_configuration
 	{
+		typedef unsigned char partity;
+		typedef unsigned char stop_bit;
+
 		unsigned int baud_rate;
-		unsigned char parity;
-		unsigned char stop_bits;
+		partity parity;
+		stop_bit stop_bits;
 		unsigned char data_bits;
 
+		struct parities
+		{
+			static const partity EVEN = 0;
+			static const partity ODD = 1;
+			static const partity MARK = 2;
+			static const partity SPACE = 3;
+			static const partity NONE = 4;
+		};
+
+		struct stop_bits
+		{
+			static const stop_bit ONE = 1;
+			static const stop_bit ONE_POINT_FIVE = 2;
+			static const stop_bit TWO = 3;
+		};
+
 		serial_configuration();
-		serial_configuration(unsigned int baud_rate, serial_parity parity, serial_stop_bit stop_bits, unsigned char data_bits);
-	};
-
-	class serial_parities
-	{
-		static const serial_parity EVEN = 0;
-		static const serial_parity ODD = 1;
-		static const serial_parity MARK = 2;
-		static const serial_parity SPACE = 3;
-		static const serial_parity NONE = 4;
-	};
-
-	class serial_stop_bits
-	{
-		static const serial_stop_bit ONE = 1;
-		static const serial_stop_bit ONE_POINT_FIVE = 2;
-		static const serial_stop_bit TWO = 3;
+		serial_configuration(unsigned int baud_rate, partity parity, stop_bit stop_bits, unsigned char data_bits);
 	};
 
 	namespace Exceptions
@@ -170,7 +175,6 @@ namespace Gadgeteering {
 		static const unsigned char ERR_OUT_OF_SYNC = 17;
 		static const unsigned char ERR_I2C_NOT_SUPPORTED = 18;
 		static const unsigned char ERR_MAINBOARD_ERROR = 19;
+		static const unsigned char ERR_PIN_UNCONNECTED = 20;
 	}
 }
-
-#endif

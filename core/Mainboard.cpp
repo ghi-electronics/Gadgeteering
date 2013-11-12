@@ -1,5 +1,5 @@
 /*
-Copyright 2013 Gadgeteering Electronics LLC
+Copyright 2013 GHI Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,14 +17,14 @@ limitations under the License.
 #include "Mainboard.h"
 #include "System.h"
 
-using namespace Gadgeteering;
+using namespace gadgeteering;
 
-Mainboard::Mainboard(double max_analog_voltage) : max_analog_voltage(max_analog_voltage)
+base_mainboard::base_mainboard(double max_analog_voltage) : max_analog_voltage(max_analog_voltage)
 {
 	if (mainboard != NULL)
-		System::panic(Exceptions::ERR_ONLY_ONE_MAINBOARD);
+		system::panic(Exceptions::ERR_ONLY_ONE_MAINBOARD);
 }
 
-Mainboard::~Mainboard() {
+base_mainboard::~base_mainboard() {
 
 }

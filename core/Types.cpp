@@ -1,5 +1,5 @@
 /*
-Copyright 2013 Gadgeteering Electronics LLC
+Copyright 2013 GHI Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,22 +16,22 @@ limitations under the License.
 
 #include "Types.h"
 
-using namespace Gadgeteering;
+using namespace gadgeteering;
 
-SPIConfiguration::SPIConfiguration()
+spi_configuration::spi_configuration()
 {
 
 }
 
 
-SPIConfiguration::SPIConfiguration(bool chipSelectActiveState, unsigned int chipSelectSetupTime, unsigned int chipSelectHoldTime, bool clockIdleState, bool clockEdge, unsigned int clockRate)
+spi_configuration::spi_configuration(bool cs_active_state, unsigned int cs_setup_time, unsigned int cs_hold_time, bool clock_idle_state, bool clock_edge, unsigned int clock_rate)
 {
-	this->chipSelectActiveState = chipSelectActiveState;
-	this->chipSelectSetupTime = chipSelectSetupTime;
-	this->chipSelectHoldTime = chipSelectHoldTime;
-	this->clockIdleState = clockIdleState;
-	this->clockEdge = clockEdge;
-	this->clockRate = clockRate;
+	this->cs_active_state = cs_active_state;
+	this->cs_setup_time = cs_setup_time;
+	this->cs_hold_time = cs_hold_time;
+	this->clock_idle_state = clock_idle_state;
+	this->clock_edge = clock_edge;
+	this->clock_rate = clock_rate;
 }
 
 serial_configuration::serial_configuration()
@@ -39,7 +39,7 @@ serial_configuration::serial_configuration()
 
 }
 
-serial_configuration::serial_configuration(unsigned int baud_rate, serial_parity parity, serial_stop_bit stop_bits, unsigned char data_bits)
+serial_configuration::serial_configuration(unsigned int baud_rate, serial_configuration::partity parity, serial_configuration::stop_bit stop_bits, unsigned char data_bits)
 {
 	this->baud_rate = baud_rate;
 	this->parity = parity;
@@ -47,34 +47,22 @@ serial_configuration::serial_configuration(unsigned int baud_rate, serial_parity
 	this->data_bits = data_bits;
 }
 
-Color::Color()
+color::color()
 {
 	this->red = 0x00;
 	this->green = 0x00;
 	this->blue = 0x00;
 }
 
-Color::Color(unsigned char r, unsigned char g, unsigned char b)
+color::color(unsigned char r, unsigned char g, unsigned char b)
 {
 	this->red = r;
 	this->green = g;
 	this->blue = b;
-}
-
-void Color::Set(unsigned char r, unsigned char g, unsigned char b)
-{
-	this->red = r;
-	this->green = g;
-	this->blue = b;
-}
-
-void Color::Set(Color color)
-{
-	this->Set(color.red, color.green, color.blue);
 }
 		
-const Color Color::RED(0xFF, 0x00, 0x00);
-const Color Color::GREEN(0x00, 0xFF, 0x00);
-const Color Color::BLUE(0x00, 0x00, 0xFF);
-const Color Color::WHITE(0xFF, 0xFF, 0xFF);
-const Color Color::BLACK(0x00, 0x00, 0x00);
+const color color::RED(0xFF, 0x00, 0x00);
+const color color::GREEN(0x00, 0xFF, 0x00);
+const color color::BLUE(0x00, 0x00, 0xFF);
+const color color::WHITE(0xFF, 0xFF, 0xFF);
+const color color::BLACK(0x00, 0x00, 0x00);

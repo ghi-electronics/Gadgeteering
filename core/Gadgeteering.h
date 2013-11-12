@@ -14,15 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _GADGETEERING_H_
-#define _GADGETEERING_H_
+#pragma once
 
 #include "Devices.h"
 #include "Interfaces.h"
 #include "Mainboard.h"
-#include "List.h"
 #include "Socket.h"
 #include "System.h"
 #include "Types.h"
-
-#endif

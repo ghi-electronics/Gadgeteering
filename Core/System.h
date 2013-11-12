@@ -1,5 +1,5 @@
 /*
-Copyright 2013 Gadgeteering Electronics LLC
+Copyright 2013 GHI Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,27 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _SYSTEM_H_
-#define _SYSTEM_H_
+#pragma once
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace System
+	namespace system
     {
-		void Sleep(unsigned long time);
-		void SleepMicro(unsigned long time);
+		void sleep(unsigned long time);
+		void sleep_micro(unsigned long time);
 
-		unsigned long TimeElapsed();
-		unsigned long CyclesToMicroseconds(unsigned long val);
+		unsigned long time_elapsed();
 
-		int RandomNumber(int low = 0, int high = 65535);
-		void RandomNumberSeed(int seed);
+		int random_number(int low, int high);
+		void random_seed(int seed);
 
-		void panic(unsigned char error, unsigned char specificError = 0);
-		void print(const char* toPrint);
-		void print(int toPrint);
-		void print(double toPrint);
+		void panic(unsigned char error, unsigned char specific_error = 0);
+		void print(const char* data);
+		void print(int data);
+		void print(double data);
 	}
 }
-
-#endif

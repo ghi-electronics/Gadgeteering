@@ -1,5 +1,5 @@
 /*
-Copyright 2013 Gadgeteering Electronics LLC
+Copyright 2013 GHI Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,86 +14,88 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _INTERFACES_H_
-#define _INTERFACES_H_
+#pragma once
 
 #include "Socket.h"
 #include "Types.h"
 
-namespace Gadgeteering {
-	namespace Interfaces {
-		class DigitalOutput {
-			CPUPin cpuPin;
+namespace gadgeteering 
+{
+	namespace interfaces 
+	{
+		class digital_output 
+		{
+			cpu_pin pin;
 
 			public:
-				DigitalOutput(Socket& socket, Socket::Pin pinNumber, bool initialState = false);
+				digital_output(socket& socket, socket::pin pin_number, bool initial_state = false);
 
 				void write(bool value);
 		};
 
-		class DigitalInput {
-			CPUPin cpuPin;
-			ResistorMode resistorMode;
+		class digital_input {
+			cpu_pin pin;
+			resistor_mode current_resistor_mode;
 
 			public:
-				DigitalInput(Socket& socket, Socket::Pin pinNumber, ResistorMode resistorMode = ResistorModes::FLOATING);
+				digital_input(socket& socket, socket::pin pin_number, resistor_mode initial_resistor_mode = resistor_modes::FLOATING);
 
 				bool read();
-				void setResistorMode(ResistorMode resistorMode);
-				ResistorMode getResistorMode();
+
+				void set_resistor_mode(resistor_mode new_resistor_mode);
+				resistor_mode get_resistor_mode();
 		};
 
-		class DigitalIO {
-			CPUPin cpuPin;
-			IOState ioState;
-			ResistorMode resistorMode;
+		class digital_io {
+			cpu_pin pin;
+			io_mode current_io_state;
+			resistor_mode current_resistor_mode;
 	
 			public:
-				DigitalIO(Socket& socket, Socket::Pin pinNumber);
+				digital_io(socket& socket, socket::pin pin_number);
 
 				void write(bool value);
 				bool read();
-				void setIOState(IOState state);
-				void setResistorMode(ResistorMode resistorMode);
 
-				IOState getIOState();
-				ResistorMode getResistorMode();
+				void set_io_mode(io_mode new_io_mode);
+				io_mode get_io_mode();
+
+				void set_resistor_mode(resistor_mode new_resistor_mode);
+				resistor_mode get_resistor_mode();
 		};
 
-		class AnalogInput {
-			CPUPin cpuPin;
+		class analog_input {
+			cpu_pin pin;
 
 			public:
-				AnalogInput(Socket& socket, Socket::Pin pinNumber);
+				analog_input(socket& socket, socket::pin pin_number);
 				
 				double read();
-				double readProportion();
+				double read_proportion();
 		};
 
-		class AnalogOutput {
-			CPUPin cpuPin;
+		class analog_output {
+			cpu_pin pin;
 
 			public:
-				AnalogOutput(Socket& socket, Socket::Pin pinNumber);
+				analog_output(socket& socket, socket::pin pin_number);
 				
 				void write(double value);
-				void writeProportion(double value);
+				void write_proportion(double value);
 		};
 
-		class PWMOutput {
-			CPUPin cpuPin;
+		class pwm_output {
+			cpu_pin pin;
 
 			double frequency;
-			double dutyCycle;
+			double duty_cycle;
 
 			public:
-				PWMOutput(Socket& socket, Socket::Pin pinNumber);
+				pwm_output(socket& socket, socket::pin pin_number);
 
-				void set(double frequency, double dutyCycle);
-				void setFrequency(double frequency);
-				void setDutyCycle(double dutyCycle);
+				void set(double frequency, double duty_cycle);
+				void set_frequency(double frequency);
+				void set_duty_cycle(double duty_cycle);
 		};
 	}
 }
-
-#endif 

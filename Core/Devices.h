@@ -1,5 +1,5 @@
 /*
-Copyright 2013 Gadgeteering Electronics LLC
+Copyright 2013 GHI Electronics LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,72 +14,70 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _SPI_H_
-#define _SPI_H_
+#pragma once
 
 #include "Types.h"
 #include "Socket.h"
 
-namespace Gadgeteering {
-	namespace Devices {
+namespace gadgeteering {
+	namespace devices {
 		class i2c
 		{
 			unsigned char w_address;
 			unsigned char r_address;
-			i2c_module module;
+			i2c_channel channel;
 
 			public:
-				i2c(Socket& socket, unsigned char address);
+				i2c(socket& socket, unsigned char address);
 
-				bool write(const unsigned char* buffer, unsigned int count, bool sendStart = true, bool sendStop = true);
-				bool read(unsigned char* buffer, unsigned int count, bool sendStart = true, bool sendStop = true);
+				bool write(const unsigned char* buffer, unsigned int length, bool send_start = true, bool send_stop = true);
+				bool read(unsigned char* buffer, unsigned int length, bool send_start = true, bool send_stop = true);
 
-				bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength);
+				bool write_read(const unsigned char* write_buffer, unsigned int write_length, unsigned char* read_buffer, unsigned int read_length);
 
-				bool writeRegister(unsigned char address, unsigned char value);
-				bool writeRegisters(unsigned char startAddress, unsigned char* values, unsigned int count);
-				unsigned char readRegister(unsigned char address);
-				bool readRegisters(unsigned char startAddress, unsigned char* values, unsigned int count);
+				bool write_register(unsigned char address, unsigned char value);
+				bool write_registers(unsigned char start_address, unsigned char* values, unsigned int length);
+				unsigned char read_register(unsigned char address);
+				bool read_registers(unsigned char start_address, unsigned char* values, unsigned int length);
 		};
 
 		class spi
 		{
-			SPIConfiguration config;
-			spi_module module;
+			spi_configuration config;
+			spi_channel channel;
 
 			public:
-				spi(Socket& socket, Socket& chipselect_socket, Socket::Pin chipselect_pin, SPIConfiguration configuration);
+				spi(socket& socket, spi_configuration configuration);
+				spi(socket& spi_socket, spi_configuration configuration, socket& cs_socket, socket::pin cs_pin_number);
 
-				//Clocks in one char and clocks out one char at the same time. If deselectChip is true, the CS line is set to logic low after the transmission, otherwise it remains logic high.
-				unsigned char writeReadByte(unsigned char toSend, bool deselectChip = true);
+				//Clocks in one char and clocks out one char at the same time. If deselect_after is true, the CS line is set to logic low after the transmission, otherwise it remains logic high.
+				unsigned char write_read_byte(unsigned char value, bool deselect_after = true);
 
-				//Clocks count bytes in and out at the same time to and from the receive and send buffer respectively.
-				void writeAndRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, bool deselectChip = true);
+				//Clocks length bytes in and out at the same time to and from the receive and send buffer respectively.
+				void write_read(const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int length, bool deselect_after = true);
 
-				//Clocks sendCount bytes from sendBuffer out while ignoring the received bytes and then clocks receiveCount bytes into the receiveBuffer while clocking 0's out.
-				void writeThenRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int sendCount, unsigned int receiveCount, bool deselectChip = true);
+				//Clocks write_length bytes from write_buffer out while ignoring the received bytes and then clocks read_length bytes into the read_buffer while clocking 0's out.
+				void write_then_read(const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int write_length, unsigned int read_length, bool deselect_after = true);
 
-				//Clocks count bytes out from the buffer while ignoring the bytes clocked in.
-				void write(const unsigned char* buffer, unsigned int count, bool deselectChip = true);
+				//Clocks length bytes out from the buffer while ignoring the bytes clocked in.
+				void write(const unsigned char* buffer, unsigned int length, bool deselect_after = true);
 
-				//Clocks count bytes in while clocking 0's out.
-				void read(unsigned char* buffer, unsigned int count, bool deselectChip = true);
+				//Clocks length bytes in while clocking 0's out.
+				void read(unsigned char* buffer, unsigned int length, bool deselect_after = true);
 		};
 
 		class serial
 		{
 			serial_configuration config;
-			serial_module module;
+			serial_channel channel;
 
 			public:
-				serial(Socket& socket, serial_configuration configuration);
+				serial(socket& socket, serial_configuration configuration);
 
-				void write(const unsigned char* buffer, unsigned int count);
-				void write(const char* buffer, unsigned int count);
-				unsigned int read(unsigned char* buffer, unsigned int count);
+				void write(const unsigned char* buffer, unsigned int length);
+				void write(const char* buffer, unsigned int length);
+				unsigned int read(unsigned char* buffer, unsigned int length);
 				unsigned int available();
 		};
 	}
 }
-
-#endif
