@@ -15,83 +15,16 @@ limitations under the License.
 */
 
 #include "Mainboard.h"
-#include "Module.h"
+#include "System.h"
 
 using namespace Gadgeteering;
-using namespace Gadgeteering::Interfaces;
 
-Mainboard::Mainboard() {
+Mainboard::Mainboard(double max_analog_voltage) : max_analog_voltage(max_analog_voltage)
+{
 	if (mainboard != NULL)
-		mainboard->panic(Exceptions::ERR_ONLY_ONE_MAINBOARD);
+		System::panic(Exceptions::ERR_ONLY_ONE_MAINBOARD);
 }
 
 Mainboard::~Mainboard() {
-	for (Socket* current = (Socket*)this->sockets.startV(); !this->sockets.ended(); current = (Socket*)this->sockets.nextV())
-		delete current;
-	for (I2CBus* current = (I2CBus*)this->i2cBusses.startV(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.nextV())
-		delete current;
-	for (SPIBus* current = (SPIBus*)this->spiBusses.startV(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.nextV())
-		delete current;
-	for (SerialDevice* current = (SerialDevice*)this->serialDevices.startV(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.nextV())
-		delete current;
-}
 
-void Mainboard::setDebugLED(bool state) {
-	mainboard->panic(Exceptions::ERR_NOT_IMPLEMENTED);
-}
-
-void Mainboard::panic(unsigned char error, unsigned char specificError) {
-	while (true)
-		;
-}
-
-void Mainboard::print(const char* toPrint) {
-	mainboard->panic(Exceptions::ERR_NOT_IMPLEMENTED);
-}
-
-void Mainboard::print(int toPrint) {
-	mainboard->panic(Exceptions::ERR_NOT_IMPLEMENTED);
-}
-
-void Mainboard::print(double toPrint) {
-	mainboard->panic(Exceptions::ERR_NOT_IMPLEMENTED);
-}
-
-Socket* Mainboard::registerSocket(Socket* socket) {
-	this->sockets.addV(socket);
-
-	return socket;
-}
-
-Socket* Mainboard::getSocket(unsigned char number) {
-	for (Socket* current = (Socket*)this->sockets.startV(); !this->sockets.ended(); current = (Socket*)this->sockets.nextV())
-		if (current->number == number)
-			return current;
-
-	return NULL;
-}
-
-void Mainboard::setPWM(CPUPin pin, double dutyCycle, double frequency) { mainboard->panic(Exceptions::ERR_PWM_NOT_SUPPORTED); }
-bool Mainboard::readDigital(CPUPin pin) { mainboard->panic(Exceptions::ERR_READ_DIGITAL_NOT_SUPPORTED); return false; }
-void Mainboard::writeDigital(CPUPin pin, bool value) { mainboard->panic(Exceptions::ERR_WRITE_DIGITAL_NOT_SUPPORTED); }
-double Mainboard::readAnalog(CPUPin pin) { mainboard->panic(Exceptions::ERR_READ_ANALOG_NOT_SUPPORTED); return 0.0; }
-double Mainboard::readAnalogProportion(CPUPin pin) { mainboard->panic(Exceptions::ERR_READ_ANALOG_NOT_SUPPORTED); return 0.0; }
-void Mainboard::writeAnalog(CPUPin pin, double voltage) { mainboard->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED); }
-void Mainboard::writeAnalogProportion(CPUPin pin, double voltage) { mainboard->panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED); }
-void Mainboard::setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode) { mainboard->panic(Exceptions::ERR_SET_IO_NOT_SUPPORTED); }
-
-Gadgeteering::Interfaces::SerialDevice* Mainboard::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin) { mainboard->panic(Exceptions::ERR_SERIAL_NOT_SUPPORTED); return NULL; }
-Gadgeteering::Interfaces::SPIBus* Mainboard::getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin) { mainboard->panic(Exceptions::ERR_SPI_NOT_SUPPORTED); return NULL; }
-Gadgeteering::Interfaces::I2CBus* Mainboard::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hardwareI2C) { mainboard->panic(Exceptions::ERR_I2C_NOT_SUPPORTED); return NULL; }
-
-Gadgeteering::Interfaces::SerialDevice* Mainboard::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber, Socket::Pin rxPinNumber) {
-	return this->getSerialDevice(baudRate, parity, stopBits, dataBits, socket->pins[txPinNumber], socket->pins[rxPinNumber]);
-}
-
-Gadgeteering::Interfaces::SPIBus* Mainboard::getSPIBus(Socket* socket, Socket::Pin mosiPinNumber, Socket::Pin misoPinNumber, Socket::Pin sckPinNumber) {
-	return this->getSPIBus(socket->pins[mosiPinNumber], socket->pins[misoPinNumber], socket->pins[sckPinNumber]);
-}
-
-Gadgeteering::Interfaces::I2CBus* Mainboard::getI2CBus(Socket* socket, Socket::Pin sdaPinNumber, Socket::Pin sclPinNumber, bool hardwareI2C) {
-	return this->getI2CBus(socket->pins[sdaPinNumber], socket->pins[sclPinNumber], hardwareI2C);
 }

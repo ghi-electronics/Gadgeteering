@@ -29,6 +29,11 @@ namespace Gadgeteering
 
 		int RandomNumber(int low = 0, int high = 65535);
 		void RandomNumberSeed(int seed);
+
+		void panic(unsigned char error, unsigned char specificError = 0);
+		void print(const char* toPrint);
+		void print(int toPrint);
+		void print(double toPrint);
 	}
 }
 

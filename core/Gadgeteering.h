@@ -17,17 +17,12 @@ limitations under the License.
 #ifndef _GADGETEERING_H_
 #define _GADGETEERING_H_
 
-#include "Socket.h"
+#include "Devices.h"
 #include "Interfaces.h"
 #include "Mainboard.h"
-#include "SerialDevice.h"
-#include "I2CDevice.h"
-#include "I2CBus.h"
-#include "SPIDevice.h"
-#include "SPIBus.h"
-#include "System.h"
 #include "List.h"
-#include "Module.h"
-#include "DaisyLink.h"
+#include "Socket.h"
+#include "System.h"
+#include "Types.h"
 
 #endif

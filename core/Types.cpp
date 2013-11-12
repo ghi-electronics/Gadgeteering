@@ -18,6 +18,35 @@ limitations under the License.
 
 using namespace Gadgeteering;
 
+SPIConfiguration::SPIConfiguration()
+{
+
+}
+
+
+SPIConfiguration::SPIConfiguration(bool chipSelectActiveState, unsigned int chipSelectSetupTime, unsigned int chipSelectHoldTime, bool clockIdleState, bool clockEdge, unsigned int clockRate)
+{
+	this->chipSelectActiveState = chipSelectActiveState;
+	this->chipSelectSetupTime = chipSelectSetupTime;
+	this->chipSelectHoldTime = chipSelectHoldTime;
+	this->clockIdleState = clockIdleState;
+	this->clockEdge = clockEdge;
+	this->clockRate = clockRate;
+}
+
+serial_configuration::serial_configuration()
+{
+
+}
+
+serial_configuration::serial_configuration(unsigned int baud_rate, serial_parity parity, serial_stop_bit stop_bits, unsigned char data_bits)
+{
+	this->baud_rate = baud_rate;
+	this->parity = parity;
+	this->stop_bits = stop_bits;
+	this->data_bits = data_bits;
+}
+
 Color::Color()
 {
 	this->red = 0x00;

@@ -18,55 +18,38 @@ limitations under the License.
 #define _MAINBOARD_H_
 
 #include "Socket.h"
-#include "SPIBus.h"
-#include "SerialDevice.h"
-#include "I2CBus.h"
-#include "List.h"
 #include "Types.h"
 
 namespace Gadgeteering {
 	class Mainboard
 	{
 		protected:
-			List sockets;
-			List spiBusses;
-			List i2cBusses;
-			List serialDevices;
-
-			Mainboard();
+			Mainboard(double max_analog_voltage);
 			virtual ~Mainboard();
 
-			Socket* registerSocket(Socket* socket);
-
 		public:
-			Socket* getSocket(unsigned char number);
+			const double max_analog_voltage;
 
-			virtual void setDebugLED(bool state);
+			virtual const Socket& getSocket(unsigned char number) = 0;
 
-			virtual void panic(unsigned char error, unsigned char specificError = 0);
-			virtual void print(const char* toPrint);
-			virtual void print(int toPrint);
-			virtual void print(double toPrint);
+			virtual void setDebugLED(bool state) = 0;
 
-			virtual void setPWM(CPUPin pin, double dutyCycle, double frequency);
-			virtual bool readDigital(CPUPin pin);
-			virtual void writeDigital(CPUPin pin, bool value);
-			virtual double readAnalog(CPUPin pin);
-			virtual double readAnalogProportion(CPUPin pin);
-			virtual void writeAnalog(CPUPin pin, double voltage);
-			virtual void writeAnalogProportion(CPUPin pin, double voltage);
-			virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
+			virtual void setPWM(CPUPin pin, double dutyCycle, double frequency) = 0;
+			virtual bool readDigital(CPUPin pin) = 0;
+			virtual void writeDigital(CPUPin pin, bool value) = 0;
+			virtual double readAnalog(CPUPin pin) = 0;
+			virtual void writeAnalog(CPUPin pin, double voltage) = 0;
+			virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode) = 0;
 
-			virtual Gadgeteering::Interfaces::SPIBus* getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
-			virtual Gadgeteering::Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin);
-            virtual Gadgeteering::Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hardwareI2C = false);
-
-            virtual Gadgeteering::Interfaces::I2CBus* getI2CBus(Socket* socket, Socket::Pin sdaPinNumber = Socket::Pins::Eight, Socket::Pin sclPinNumber = Socket::Pins::Nine, bool hardwareI2C = false);
-			virtual Gadgeteering::Interfaces::SPIBus* getSPIBus(Socket* socket, Socket::Pin mosiPinNumber = Socket::Pins::Seven, Socket::Pin misoPinNumber = Socket::Pins::Eight, Socket::Pin sckPinNumber = Socket::Pins::Nine);
-			virtual Gadgeteering::Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, Socket* socket, Socket::Pin txPinNumber = Socket::Pins::Four, Socket::Pin rxPinNumber = Socket::Pins::Five);
+			virtual void spi_read_write(spi_module module, const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int count, SPIConfiguration& config, bool deselect_after) = 0;
+			virtual bool i2c_write(i2c_module module, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop) = 0;
+			virtual bool i2c_read(i2c_module module, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop) = 0;
+			virtual unsigned int serial_write(serial_module  module, const unsigned char* buffer, unsigned int count, serial_configuration& config) = 0;
+			virtual unsigned int serial_read(serial_module  module, unsigned char* buffer, unsigned int count, serial_configuration& config) = 0;
+			virtual unsigned int serial_available(serial_module module);
 	};
 
-	extern Gadgeteering::Mainboard* mainboard;
+	extern Mainboard* mainboard;
 }
 
 #endif

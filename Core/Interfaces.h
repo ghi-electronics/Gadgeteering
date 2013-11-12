@@ -18,7 +18,7 @@ limitations under the License.
 #define _INTERFACES_H_
 
 #include "Socket.h"
-#include "Mainboard.h"
+#include "Types.h"
 
 namespace Gadgeteering {
 	namespace Interfaces {
@@ -26,9 +26,7 @@ namespace Gadgeteering {
 			CPUPin cpuPin;
 
 			public:
-				DigitalOutput(Socket* socket, Socket::Pin pinNumber, bool initialState = false);
-				DigitalOutput(CPUPin pin, bool initialState = false);
-				~DigitalOutput();
+				DigitalOutput(Socket& socket, Socket::Pin pinNumber, bool initialState = false);
 
 				void write(bool value);
 		};
@@ -38,9 +36,7 @@ namespace Gadgeteering {
 			ResistorMode resistorMode;
 
 			public:
-				DigitalInput(Socket* socket, Socket::Pin pinNumber, ResistorMode resistorMode = ResistorModes::FLOATING);
-				DigitalInput(CPUPin pin, ResistorMode resistorMode = ResistorModes::FLOATING);
-				~DigitalInput();
+				DigitalInput(Socket& socket, Socket::Pin pinNumber, ResistorMode resistorMode = ResistorModes::FLOATING);
 
 				bool read();
 				void setResistorMode(ResistorMode resistorMode);
@@ -53,9 +49,7 @@ namespace Gadgeteering {
 			ResistorMode resistorMode;
 	
 			public:
-				DigitalIO(Socket* socket, Socket::Pin pinNumber);
-				DigitalIO(CPUPin pin);
-				~DigitalIO();
+				DigitalIO(Socket& socket, Socket::Pin pinNumber);
 
 				void write(bool value);
 				bool read();
@@ -70,9 +64,7 @@ namespace Gadgeteering {
 			CPUPin cpuPin;
 
 			public:
-				AnalogInput(Socket* socket, Socket::Pin pinNumber);
-				AnalogInput(CPUPin pin);
-				~AnalogInput();
+				AnalogInput(Socket& socket, Socket::Pin pinNumber);
 				
 				double read();
 				double readProportion();
@@ -82,9 +74,7 @@ namespace Gadgeteering {
 			CPUPin cpuPin;
 
 			public:
-				AnalogOutput(Socket* socket, Socket::Pin pinNumber);
-				AnalogOutput(CPUPin pin);
-				~AnalogOutput();
+				AnalogOutput(Socket& socket, Socket::Pin pinNumber);
 				
 				void write(double value);
 				void writeProportion(double value);
@@ -97,9 +87,7 @@ namespace Gadgeteering {
 			double dutyCycle;
 
 			public:
-				PWMOutput(Socket* socket, Socket::Pin pinNumber);
-				PWMOutput(CPUPin pin);
-				~PWMOutput();
+				PWMOutput(Socket& socket, Socket::Pin pinNumber);
 
 				void set(double frequency, double dutyCycle);
 				void setFrequency(double frequency);
