@@ -27,18 +27,48 @@ i2c::i2c(socket& socket, unsigned char address)
 	this->channel = socket.i2c;
 	this->w_address = address << 1;
 	this->r_address = (address << 1) | 1;
+	this->soft_i2c = NULL;
+}
+
+i2c::i2c(cpu_pin sda, cpu_pin scl, unsigned char address)
+{
+	this->w_address = address << 1;
+	this->r_address = (address << 1) | 1;
+	this->soft_i2c = new software_i2c(sda, scl);
+}
+
+i2c::~i2c()
+{
+	if (this->soft_i2c)
+		delete this->soft_i2c;
 }
 
 bool i2c::write(const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
 {
-	mainboard->i2c_write(this->channel, &this->w_address, 1, send_start, false);
-	return mainboard->i2c_write(this->channel, buffer, length, false, send_stop);
+	if (this->soft_i2c != NULL)
+	{
+		mainboard->i2c_write(this->channel, &this->w_address, 1, send_start, false);
+		return mainboard->i2c_write(this->channel, buffer, length, false, send_stop);
+	}
+	else
+	{
+		this->soft_i2c->write(&this->w_address, 1, send_start, false);
+		return this->soft_i2c->write(buffer, length, false, send_stop);
+	}
 }
 
 bool i2c::read(unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
 {
-	mainboard->i2c_write(this->channel, &this->r_address, 1, send_start, false);
-	return mainboard->i2c_read(this->channel, buffer, length, false, send_stop);
+	if (this->soft_i2c != NULL)
+	{
+		mainboard->i2c_write(this->channel, &this->r_address, 1, send_start, false);
+		return mainboard->i2c_read(this->channel, buffer, length, false, send_stop);
+	}
+	else
+	{
+		this->soft_i2c->write(&this->r_address, 1, send_start, false);
+		return this->soft_i2c->read(buffer, length, false, send_stop);
+	}
 }
 
 bool i2c::write_read(const unsigned char* write_buffer, unsigned int write_length, unsigned char* read_buffer, unsigned int read_length)

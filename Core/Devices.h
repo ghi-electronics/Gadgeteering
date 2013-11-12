@@ -18,6 +18,7 @@ limitations under the License.
 
 #include "Types.h"
 #include "Socket.h"
+#include "SoftwareI2C.h"
 
 namespace gadgeteering {
 	namespace devices {
@@ -26,9 +27,12 @@ namespace gadgeteering {
 			unsigned char w_address;
 			unsigned char r_address;
 			i2c_channel channel;
+			software_i2c* soft_i2c;
 
 			public:
 				i2c(socket& socket, unsigned char address);
+				i2c(cpu_pin sda, cpu_pin scl, unsigned char address);
+				~i2c();
 
 				bool write(const unsigned char* buffer, unsigned int length, bool send_start = true, bool send_stop = true);
 				bool read(unsigned char* buffer, unsigned int length, bool send_start = true, bool send_stop = true);

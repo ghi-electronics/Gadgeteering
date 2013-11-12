@@ -21,16 +21,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Core\DaisyLink.cpp" />
     <ClCompile Include="..\..\..\Core\DaisyLinkCommandBus.cpp" />
-    <ClCompile Include="..\..\..\Core\I2CBus.cpp" />
-    <ClCompile Include="..\..\..\Core\I2CDevice.cpp" />
+    <ClCompile Include="..\..\..\Core\Devices.cpp" />
     <ClCompile Include="..\..\..\Core\Interfaces.cpp" />
-    <ClCompile Include="..\..\..\Core\List.cpp" />
     <ClCompile Include="..\..\..\Core\Mainboard.cpp" />
-    <ClCompile Include="..\..\..\Core\Module.cpp" />
-    <ClCompile Include="..\..\..\Core\SerialDevice.cpp" />
     <ClCompile Include="..\..\..\Core\Socket.cpp" />
-    <ClCompile Include="..\..\..\Core\SPIBus.cpp" />
-    <ClCompile Include="..\..\..\Core\SPIDevice.cpp" />
+    <ClCompile Include="..\..\..\Core\SoftwareI2C.cpp" />
     <ClCompile Include="..\..\..\Core\Types.cpp" />
     <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\FEZLynxS4.cpp" />
     <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\FTDIDriver.cpp" />
@@ -88,17 +83,12 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Core\DaisyLink.h" />
     <ClInclude Include="..\..\..\Core\DaisyLinkCommandBus.h" />
+    <ClInclude Include="..\..\..\Core\Devices.h" />
     <ClInclude Include="..\..\..\Core\Gadgeteering.h" />
-    <ClInclude Include="..\..\..\Core\I2CBus.h" />
-    <ClInclude Include="..\..\..\Core\I2CDevice.h" />
     <ClInclude Include="..\..\..\Core\Interfaces.h" />
-    <ClInclude Include="..\..\..\Core\List.h" />
     <ClInclude Include="..\..\..\Core\Mainboard.h" />
-    <ClInclude Include="..\..\..\Core\Module.h" />
-    <ClInclude Include="..\..\..\Core\SerialDevice.h" />
     <ClInclude Include="..\..\..\Core\Socket.h" />
-    <ClInclude Include="..\..\..\Core\SPIBus.h" />
-    <ClInclude Include="..\..\..\Core\SPIDevice.h" />
+    <ClInclude Include="..\..\..\Core\SoftwareI2C.h" />
     <ClInclude Include="..\..\..\Core\System.h" />
     <ClInclude Include="..\..\..\Core\Types.h" />
     <ClInclude Include="..\..\..\Mainboards\FEZLynxS4\FEZLynxS4.h" />

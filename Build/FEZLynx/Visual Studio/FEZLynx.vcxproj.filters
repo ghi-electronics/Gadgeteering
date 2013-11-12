@@ -7,34 +7,13 @@
     <ClCompile Include="..\..\..\Core\DaisyLinkCommandBus.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Core\I2CBus.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Core\Interfaces.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Core\I2CDevice.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Core\List.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Core\Mainboard.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Core\Module.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Core\Socket.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Core\SerialDevice.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Core\SPIDevice.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Core\SPIBus.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Core\Types.cpp">
@@ -196,6 +175,12 @@
     <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\FTDIDriver.cpp">
       <Filter>Mainboards</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Core\SoftwareI2C.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\Devices.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Core\Gadgeteering.h">
@@ -345,37 +330,16 @@
     <ClInclude Include="..\..\..\Core\Types.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Core\SPIDevice.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Core\System.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Core\SPIBus.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Core\Socket.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Core\SerialDevice.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Core\Module.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Core\Mainboard.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Core\List.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Core\Interfaces.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Core\I2CDevice.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Core\I2CBus.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Core\DaisyLinkCommandBus.h">
@@ -386,6 +350,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Mainboards\FEZLynxS4\FTDIDriver.h">
       <Filter>Mainboards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\SoftwareI2C.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Devices.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

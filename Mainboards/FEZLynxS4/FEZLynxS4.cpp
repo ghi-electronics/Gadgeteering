@@ -179,7 +179,7 @@ void FEZLynxS4::setDebugLED(bool state) {
 
 void FEZLynxS4::panic(unsigned char error, unsigned char specificError)
 {
-	std::cout <<  std::hex << (int)error << " " << (int)specificError << std::endl;
+	std::cout << (int)error << " " << (int)specificError << std::endl;
 
 	throw error;
 }
