@@ -47,10 +47,11 @@ namespace gadgeteering {
 
 		class spi
 		{
-			spi_configuration config;
 			spi_channel channel;
 
 			public:
+				spi_configuration config;
+
 				spi(spi_channel channel, spi_configuration configuration);
 				spi(spi_channel channel, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number);
 
@@ -72,10 +73,11 @@ namespace gadgeteering {
 
 		class serial
 		{
-			serial_configuration config;
 			serial_channel channel;
 
 			public:
+				serial_configuration config;
+				
 				serial(serial_channel channel, serial_configuration configuration);
 
 				void write(const unsigned char* buffer, unsigned int length);
