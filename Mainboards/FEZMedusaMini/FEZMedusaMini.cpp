@@ -14,169 +14,335 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "Arduino.h"
 #include "FEZMedusaMini.h"
 
-using namespace GHI;
-using namespace GHI::Interfaces;
-using namespace GHI::Mainboards;
+#include <Arduino.h>
 
-Mainboard* GHI::mainboard = NULL;
+using namespace gadgeteering;
+using namespace gadgeteering::mainboards;
 
-FEZMedusaMini::FEZMedusaMini() 
+base_mainboard* gadgeteering::mainboard = NULL;
+
+fez_medusa_mini::fez_medusa_mini() : base_mainboard(3.3)
 {
 	mainboard = this;
-	
-	Socket* socket = this->registerSocket(new Socket(1, Socket::Types::I | Socket::Types::S | Socket::Types::Y | Socket::Types::X));
-	socket->pins[3] = 7;
-	socket->pins[4] = 8;
-	socket->pins[5] = 9;
-	socket->pins[6] = 10;
-	socket->pins[7] = 11;
-	socket->pins[8] = 12;
-	socket->pins[9] = 13;
 
-	socket = this->registerSocket(new Socket(2, Socket::Types::I | Socket::Types::P | Socket::Types::U | Socket::Types::Y | Socket::Types::X));
-	socket->pins[3] = 2;
-	socket->pins[4] = 1;
-	socket->pins[5] = 0;
-	socket->pins[6] = 4;
-	socket->pins[7] = 3;
-	socket->pins[8] = 5;
-	socket->pins[9] = 6;
+	this->serial_began = false;
+	this->spi_began = false;
 
-	socket = this->registerSocket(new Socket(3, Socket::Types::A | Socket::Types::I | Socket::Types::X));
-	socket->pins[3] = A0; //A0 = 14
-	socket->pins[4] = A1; //A1 = 15
-	socket->pins[5] = A2; //A2 = 16
-	socket->pins[6] = A3; //A3 = 17
-	socket->pins[8] = A4; //A4 = 18
-	socket->pins[9] = A5; //A5 = 19
+	this->create_sockets();
+
+	this->i2c0 = new software_i2c(fez_medusa_mini::pins::IO12, fez_medusa_mini::pins::IO13);
+	this->i2c1 = new software_i2c(fez_medusa_mini::pins::IO5, fez_medusa_mini::pins::IO6);
+	this->i2c2 = new software_i2c(fez_medusa_mini::pins::AD4, fez_medusa_mini::pins::AD5);
 }
 
-FEZMedusaMini::~FEZMedusaMini() 
+fez_medusa_mini::~fez_medusa_mini() 
 {
-
+	delete this->i2c0;
+	delete this->i2c1;
+	delete this->i2c2;
 }
-				
-void FEZMedusaMini::panic(unsigned char error, unsigned char specificError) 
+
+void fez_medusa_mini::create_sockets()
 {
-	Serial.begin(9600);
-	while (true) {
-		Serial.print((int)error);
-		Serial.print("-");
-		Serial.println((int)specificError);
+	socket s1(1, socket::types::I | socket::types::S | socket::types::Y | socket::types::X);
+	s1.pins[3] = fez_medusa_mini::pins::IO7;
+	s1.pins[4] = fez_medusa_mini::pins::IO8;
+	s1.pins[5] = fez_medusa_mini::pins::IO9;
+	s1.pins[6] = fez_medusa_mini::pins::IO10;
+	s1.pins[7] = fez_medusa_mini::pins::IO11;
+	s1.pins[8] = fez_medusa_mini::pins::IO12;
+	s1.pins[9] = fez_medusa_mini::pins::IO13;
+
+	s1.i2c = i2c_channels::I2C_0;
+	s1.spi = spi_channels::SPI_0;
+
+	this->sockets[1] = s1;
+
+	socket s2(1, socket::types::I | socket::types::P | socket::types::U | socket::types::Y | socket::types::X);
+	s2.pins[3] = fez_medusa_mini::pins::IO2;
+	s2.pins[4] = fez_medusa_mini::pins::IO1;
+	s2.pins[5] = fez_medusa_mini::pins::IO0;
+	s2.pins[6] = fez_medusa_mini::pins::IO4;
+	s2.pins[7] = fez_medusa_mini::pins::IO3;
+	s2.pins[8] = fez_medusa_mini::pins::IO5;
+	s2.pins[9] = fez_medusa_mini::pins::IO6;
+
+	s2.i2c = i2c_channels::I2C_1;
+	s2.serial = serial_channels::SERIAL_0;
+
+	s2.pwm7 = pwm_channels::PWM_0;
+	s2.pwm8 = pwm_channels::PWM_1;
+	s2.pwm9 = pwm_channels::PWM_2;
+
+	this->sockets[2] = s2;
+
+	socket s3(1, socket::types::A | socket::types::I | socket::types::X);
+	s3.pins[3] = fez_medusa_mini::pins::AD0;
+	s3.pins[4] = fez_medusa_mini::pins::AD1;
+	s3.pins[5] = fez_medusa_mini::pins::AD2;
+	s3.pins[6] = fez_medusa_mini::pins::AD3;
+	s3.pins[8] = fez_medusa_mini::pins::AD4;
+	s3.pins[9] = fez_medusa_mini::pins::AD5;
+
+	s3.i2c = i2c_channels::I2C_2;
+
+	s3.analog3 = analog_channels::ANALOG_0;
+	s3.analog4 = analog_channels::ANALOG_1;
+	s3.analog5 = analog_channels::ANALOG_2;
+
+	this->sockets[3] = s3;
+}
+
+const socket& fez_medusa_mini::get_socket(unsigned char number)
+{
+	if (number == 0 || number > 4)
+		system::panic(error_codes::INVALID_SOCKET);
+
+	return this->sockets[number];
+}
+
+void fez_medusa_mini::set_debug_led(bool state)
+{
+	system::panic(error_codes::NOT_IMPLEMENTED);
+}
+
+void fez_medusa_mini::set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_resistor_mode) 
+{
+	if (new_io_mode == io_modes::DIGITAL_INPUT)
+		pinMode(pin, new_resistor_mode == resistor_modes::PULL_UP ? INPUT_PULLUP : INPUT);
+	else if ((new_io_mode == io_modes::DIGITAL_OUTPUT) || (new_io_mode == io_modes::PWM_OUTPUT))
+		pinMode(pin, OUTPUT);
+}
+
+void fez_medusa_mini::write_digital(cpu_pin pin, bool value)
+{
+	if (pin == socket::pins::UNCONNECTED)
+		system::panic(error_codes::PIN_INVALID);
+
+	::digitalWrite(pin, value ? HIGH : LOW);
+}
+
+bool fez_medusa_mini::read_digital(cpu_pin pin) 
+{
+	if (pin == socket::pins::UNCONNECTED)
+		system::panic(error_codes::PIN_INVALID);
+
+	return ::digitalRead(pin) == HIGH;
+}
+
+void fez_medusa_mini::write_analog(analog_channel channel, double voltage)
+{
+	system::panic(error_codes::NOT_IMPLEMENTED);
+}
+double fez_medusa_mini::read_analog(analog_channel channel)
+{
+	switch (channel)
+	{
+		case analog_channels::ANALOG_0: return ::analogRead(pins::AD0) / 1024.0; break;
+		case analog_channels::ANALOG_1: return ::analogRead(pins::AD1) / 1024.0; break;
+		case analog_channels::ANALOG_2: return ::analogRead(pins::AD2) / 1024.0; break;
+		default: system::panic(error_codes::CHANNEL_INVALID); return 0.0;
 	}
 }
-				
-void FEZMedusaMini::print(const char* toPrint) 
+
+void fez_medusa_mini::set_pwm(pwm_channel channel, double duty_cycle, double frequency)
 {
-	Serial.begin(9600);
-	Serial.print(toPrint);
-}
-				
-void FEZMedusaMini::print(int toPrint) 
-{
-	Serial.begin(9600);
-	Serial.print(toPrint);
-}
-				
-void FEZMedusaMini::print(double toPrint) 
-{
-	Serial.begin(9600);
-	Serial.print(toPrint);
+	switch (channel)
+	{
+		case pwm_channels::PWM_0: return ::analogWrite(pins::IO3, static_cast<int>(duty_cycle * 255.0)); break;
+		case pwm_channels::PWM_1: return ::analogWrite(pins::IO5, static_cast<int>(duty_cycle * 255.0)); break;
+		case pwm_channels::PWM_2: return ::analogWrite(pins::IO6, static_cast<int>(duty_cycle * 255.0)); break;
+		default: system::panic(error_codes::CHANNEL_INVALID);
+	}
 }
 
-void FEZMedusaMini::setIOMode(CPUPin pinNumber, IOState state, ResistorMode resistorMode) 
+void fez_medusa_mini::set_pwm(cpu_pin pin, double duty_cycle, double frequency, double duration)
 {
-	if (state == IOStates::DIGITAL_INPUT)
-		pinMode(pinNumber, resistorMode == ResistorModes::PULL_UP ? INPUT_PULLUP : INPUT);
-	else if ((state == IOStates::DIGITAL_OUTPUT) || (state == IOStates::PWM_OUTPUT))
-		pinMode(pinNumber, OUTPUT);
-}
+	if (pin == socket::pins::UNCONNECTED)
+		system::panic(error_codes::PIN_INVALID);
 
-void FEZMedusaMini::setPWM(CPUPin pinNumber, double dutyCycle, double frequency) {
-	::analogWrite(pinNumber, static_cast<int>(dutyCycle * 255.0));
-}
-
-void FEZMedusaMini::setPWM(CPUPin pinNumber, double frequency, double dutyCycle, double duration)
-{
-	if (frequency <= 0 || dutyCycle < 0 || dutyCycle > 1)
+	if (frequency <= 0 || duty_cycle < 0 || duty_cycle > 1)
 		return;
 
-	double periodUS = 1000000 / frequency;
-	unsigned long sleepHigh = (unsigned long)(periodUS * dutyCycle);
-	unsigned long sleepLow = (unsigned long)(periodUS * (1 - dutyCycle));
-	unsigned long endTime = System::TimeElapsed() + (unsigned long)(duration * 1000);
-	
-	::pinMode(pinNumber, OUTPUT);
-	do {
-		::digitalWrite(pinNumber, HIGH);
-		::delayMicroseconds(sleepHigh * 1.59);
-		::digitalWrite(pinNumber, LOW);
-		::delayMicroseconds(sleepLow * 1.59);
-	} while (endTime > System::TimeElapsed());
+	double period = 1000000 / frequency;
+	unsigned long sleep_high = (unsigned long)(period * duty_cycle);
+	unsigned long sleep_low = (unsigned long)(period * (1 - duty_cycle));
+	unsigned long end = system::time_elapsed() + (unsigned long)(duration * 1000);
+
+	::pinMode(pin, OUTPUT);
+	do
+	{
+		::digitalWrite(pin, HIGH);
+		system::sleep_micro(sleep_high);
+		::digitalWrite(pin, LOW);
+		system::sleep_micro(sleep_low);
+	} while (end > system::time_elapsed());
 }
 
-bool FEZMedusaMini::readDigital(CPUPin pinNumber) 
+void fez_medusa_mini::spi_read_write(spi_channel channel, const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int count, spi_configuration& config, bool deselect_after)
 {
-	return ::digitalRead(pinNumber) == HIGH;
+	if (channel != spi_channels::SPI_0)
+		system::panic(error_codes::CHANNEL_INVALID);
+
+	if (!config.clock_idle_state && config.clock_edge)
+		SPI.setDataMode(SPI_MODE0);
+	else if (!config.clock_idle_state && !config.clock_edge)
+		SPI.setDataMode(SPI_MODE1);
+	else if (config.clock_idle_state && !config.clock_edge)
+		SPI.setDataMode(SPI_MODE2);
+	else if (config.clock_idle_state && config.clock_edge)
+		SPI.setDataMode(SPI_MODE3);
+
+	unsigned int div = 12000 / config.clock_rate;
+	if (div <= 2)
+		SPI.setClockDivider(SPI_CLOCK_DIV2);
+	else if (div <= 4)
+		SPI.setClockDivider(SPI_CLOCK_DIV4);
+	else if (div <= 8)
+		SPI.setClockDivider(SPI_CLOCK_DIV8);
+	else if (div <= 16)
+		SPI.setClockDivider(SPI_CLOCK_DIV16);
+	else if (div <= 32)
+		SPI.setClockDivider(SPI_CLOCK_DIV32);
+	else if (div <= 64)
+		SPI.setClockDivider(SPI_CLOCK_DIV64);
+	else if (div <= 128)
+		SPI.setClockDivider(SPI_CLOCK_DIV128);
+
+	mainboard->write_digital(config.chip_select, config.cs_active_state);
+	if (config.cs_setup_time != 0)
+		system::sleep(config.cs_setup_time);
+
+	if (write_buffer && read_buffer)
+	{
+		for (unsigned int i = 0; i < count; i++)
+			read_buffer[i] = SPI.transfer(write_buffer[i]);
+	}
+	else if (!write_buffer && read_buffer)
+	{
+		for (unsigned int i = 0; i < count; i++)
+			read_buffer[i] = SPI.transfer(0x00);
+	}
+	else if (write_buffer && !read_buffer)
+	{
+		for (unsigned int i = 0; i < count; i++)
+			SPI.transfer(write_buffer[i]);
+	}
+
+	if (deselect_after)
+	{
+		if (config.cs_hold_time != 0)
+			system::sleep(config.cs_hold_time);
+
+		mainboard->write_digital(config.chip_select, !config.cs_active_state);
+	}
 }
 
-void FEZMedusaMini::writeDigital(CPUPin pinNumber, bool value) 
+bool fez_medusa_mini::i2c_write(i2c_channel channel, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
 {
-	::digitalWrite(pinNumber, value ? HIGH : LOW);
+	switch (channel)
+	{
+		case i2c_channels::I2C_0: return this->i2c0->write(buffer, length, send_start, send_stop);
+		case i2c_channels::I2C_1: return this->i2c1->write(buffer, length, send_start, send_stop);
+		case i2c_channels::I2C_2: return this->i2c2->write(buffer, length, send_start, send_stop);
+		default: system::panic(error_codes::CHANNEL_INVALID); return false;
+	}
 }
 
-double FEZMedusaMini::readAnalog(CPUPin pinNumber) 
+bool fez_medusa_mini::i2c_read(i2c_channel channel, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
 {
-	return static_cast<double>(::analogRead(pinNumber)) / 1024 * 3.3;
+	switch (channel)
+	{
+		case i2c_channels::I2C_0: return this->i2c0->read(buffer, length, send_start, send_stop);
+		case i2c_channels::I2C_1: return this->i2c1->read(buffer, length, send_start, send_stop);
+		case i2c_channels::I2C_2: return this->i2c2->read(buffer, length, send_start, send_stop);
+		default: system::panic(error_codes::CHANNEL_INVALID); return false;
+	}
 }
 
-double FEZMedusaMini::readAnalogProportion(CPUPin pinNumber) 
+unsigned int fez_medusa_mini::serial_write(serial_channel  channel, const unsigned char* buffer, unsigned int count, serial_configuration& config)
 {
-	return this->readAnalog(pinNumber) / 3.3;
+	if (channel != serial_channels::SERIAL_0)
+		system::panic(error_codes::CHANNEL_INVALID);
+
+	if (!this->serial_began)
+	{
+		Serial.begin(config.baud_rate);
+		this->serial_began = true;
+	}
+
+	return Serial.write(buffer, count);
 }
 
-void FEZMedusaMini::writeAnalog(CPUPin pinNumber, double voltage) 
+unsigned int fez_medusa_mini::serial_read(serial_channel  channel, unsigned char* buffer, unsigned int count, serial_configuration& config)
 {
-	::analogWrite(pinNumber, voltage * (1024 / 3.3));
+	if (channel != serial_channels::SERIAL_0)
+		system::panic(error_codes::CHANNEL_INVALID);
+
+	return Serial.readBytes(reinterpret_cast<char*>(buffer), count);
 }
 
-void FEZMedusaMini::writeAnalogProportion(CPUPin pinNumber, double proportion) 
+unsigned int fez_medusa_mini::serial_available(serial_channel channel)
 {
-	this->writeAnalog(pinNumber, proportion * 3.3);
+	if (channel != serial_channels::SERIAL_0)
+		system::panic(error_codes::CHANNEL_INVALID);
+
+	return Serial.available();
 }
 
-Interfaces::SPIBus* FEZMedusaMini::getSPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) 
+void system::sleep(unsigned long milliseconds)
 {
-	for (SPIBus* current = (SPIBus*)this->spiBusses.startV(); !this->spiBusses.ended(); current = (SPIBus*)this->spiBusses.nextV())
-        if (current->mosi == mosi && current->miso == miso && current->sck == sck)
-            return (GHI::Interfaces::SPIBus*)current;
-
-	SPIBus* bus = new FEZMedusaMini::SPIBus(mosi, miso, sck);
-	this->spiBusses.addV(bus);
-	return bus;
+	delay(milliseconds);
 }
 
-Interfaces::SerialDevice* FEZMedusaMini::getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin) 
+void system::sleep_micro(unsigned long microseconds)
 {
-    for (SerialDevice* current = (SerialDevice*)this->serialDevices.startV(); !this->serialDevices.ended(); current = (SerialDevice*)this->serialDevices.nextV())
-        if (current->tx == txPin && current->rx == rxPin)
-            return current;
-
-	SerialDevice* bus = new FEZMedusaMini::SerialDevice(txPin, rxPin, baudRate, parity, stopBits, dataBits);
-	this->serialDevices.addV(bus);
-	return bus;
+	delayMicroseconds(static_cast<unsigned int>(microseconds * 1.59));
 }
 
-Interfaces::I2CBus* FEZMedusaMini::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hardwareI2C) 
+unsigned long system::time_elapsed()
 {
-    for (I2CBus* current = (I2CBus*)this->i2cBusses.startV(); !this->i2cBusses.ended(); current = (I2CBus*)this->i2cBusses.nextV())
-        if (current->scl == sclPin && current->sda == sdaPin)
-            return current;
-		
-	FEZMedusaMini::I2CBus* bus = new FEZMedusaMini::I2CBus(sdaPin, sclPin);
-	this->i2cBusses.addV(bus);
-	return bus;
+	return micros();
+}
+
+int system::random_number(int low, int max)
+{
+	return random(low, max);
+}
+
+void system::random_seed(int seed)
+{
+	randomSeed(seed);
+}
+
+void system::panic(unsigned char error, unsigned char specific_error)
+{
+	Serial.begin(9600);
+	while (true)
+	{
+		Serial.print("ERROR: ");
+		Serial.print((int)error);
+		Serial.print("-");
+		Serial.println((int)specific_error);
+	}
+}
+
+void system::print(const char* data)
+{
+	Serial.begin(9600);
+	Serial.print(data);
+}
+
+void system::print(int data)
+{
+	Serial.begin(9600);
+	Serial.print(data);
+}
+
+void system::print(double data)
+{
+	Serial.begin(9600);
+	Serial.print(data);
 }

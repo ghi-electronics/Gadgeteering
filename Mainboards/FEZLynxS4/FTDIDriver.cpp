@@ -106,7 +106,7 @@ void ftdi_channel::sync_mpsse()
 	status |= FT_Write(this->handle, this->buffer, 1, &sent);
 	for (int x = 0; x < 25; x++)
 	{
-		Sleep(10);
+		system::sleep(10);
 
 		status |= FT_GetQueueStatus(this->handle, &to_read);
 		status |= FT_Read(this->handle, this->buffer, to_read, &read);
@@ -226,7 +226,7 @@ void ftdi_channel::spi_read_write(const unsigned char* write_buffer, unsigned ch
 
 	mainboard->write_digital(config.chip_select, config.cs_active_state);
 	if (config.cs_setup_time != 0)
-		Sleep(config.cs_setup_time);
+		system::sleep(config.cs_setup_time);
 
 	status |= FT_Write(handle, this->buffer, count + 3, &sent);
 	sent -= 3;
@@ -242,12 +242,12 @@ void ftdi_channel::spi_read_write(const unsigned char* write_buffer, unsigned ch
 	if (deselect_after)
 	{
 		if (config.cs_hold_time != 0)
-			Sleep(config.cs_hold_time);
+			system::sleep(config.cs_hold_time);
 
 		mainboard->write_digital(config.chip_select, !config.cs_active_state);
 	}
 
-	this->set_pin_direction(1, io_modes::DIGITAL_OUTPUT, config.clock_idle_state);
+	this->set_pin_direction(ftdi_channel::DO_PIN, io_modes::DIGITAL_OUTPUT, config.clock_idle_state);
 }
 
 bool ftdi_channel::i2c_read(unsigned char* buffer, DWORD length, bool send_start, bool send_stop)

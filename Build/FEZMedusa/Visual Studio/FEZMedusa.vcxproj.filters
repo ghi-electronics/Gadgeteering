@@ -184,18 +184,6 @@
     <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\FEZMedusaMini.cpp">
       <Filter>Mainboards\FEZMedusaMini</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\I2CBus.cpp">
-      <Filter>Mainboards\FEZMedusaMini</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\SerialDevice.cpp">
-      <Filter>Mainboards\FEZMedusaMini</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\SPIBus.cpp">
-      <Filter>Mainboards\FEZMedusaMini</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\System.cpp">
-      <Filter>Mainboards\FEZMedusaMini</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Core\Gadgeteering.h">

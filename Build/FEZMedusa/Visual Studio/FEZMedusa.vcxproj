@@ -33,10 +33,6 @@
     <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D\SPIBus.cpp" />
     <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D\System.cpp" />
     <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\FEZMedusaMini.cpp" />
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\I2CBus.cpp" />
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\SerialDevice.cpp" />
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\SPIBus.cpp" />
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\System.cpp" />
     <ClCompile Include="..\..\..\Mainboards\FEZMedusa\FEZMedusa.cpp" />
     <ClCompile Include="..\..\..\Modules\Accelerometer\Accelerometer.cpp" />
     <ClCompile Include="..\..\..\Modules\AccelG248\AccelG248.cpp" />

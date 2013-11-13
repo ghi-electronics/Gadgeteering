@@ -14,96 +14,71 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _FEZMEDUSAMINI_H_
-#define _FEZMEDUSAMINI_H_
+#pragma once
 
 #include <Core/Gadgeteering.h>
 
-class SPIClass;
+namespace gadgeteering {
+	namespace mainboards {
+		class fez_medusa_mini : public base_mainboard {
+			void create_sockets();
 
-namespace GHI {
-	namespace Mainboards {
-		class FEZMedusaMini : public GHI::Mainboard {
+			socket sockets[11];
+			bool serial_began;
+			bool spi_began;
 
-			class SPIBus : public GHI::Interfaces::SPIBus
-			{
-				SPIClass* spi;
-				void setup(GHI::Interfaces::SPIConfiguration* configuration);
-				void selectChip(GHI::Interfaces::SPIConfiguration* configuration);
-				void deselectChip(GHI::Interfaces::SPIConfiguration* configuration);
-
-				public:
-					SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck);
-					virtual ~SPIBus();
-					
-					virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration, bool deselectAfter = false);
-			};
-
-			class SerialDevice : public GHI::Interfaces::SerialDevice {
-				public:
-					SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits);
-					virtual ~SerialDevice();
-		
-					virtual void open();
-					virtual void close();
-					virtual void write(const unsigned char* buffer, unsigned int count);
-					virtual unsigned int read(unsigned char* buffer, unsigned int count);
-					virtual unsigned int available();
-			};
-	
-			class I2CBus : public GHI::Interfaces::I2CBus
-            {
-				bool start;
-
-				void clearSCL();
-				bool readSCL();
-				void clearSDA();
-				bool readSDA();
-
-				bool writeBit(bool bit);
-				bool readBit();
-
-				bool sendStartCondition();
-				bool sendStopCondition();                       
-
-				bool transmit(bool sendStart, bool sendStop, unsigned char data);
-				unsigned char receive(bool sendAcknowledgeBit, bool sendStopCondition);
-
-				public:
-					I2CBus(CPUPin sda, CPUPin scl);
-					virtual ~I2CBus();
-                                                        
-					virtual unsigned int write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
-					virtual unsigned int read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop);
-					virtual bool writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address);
-            };
+			software_i2c* i2c0;
+			software_i2c* i2c1;
+			software_i2c* i2c2;
 
 			public:
-				FEZMedusaMini();
-				virtual ~FEZMedusaMini();
-				
-				virtual void panic(unsigned char error, unsigned char specificError = 0);
-				virtual void print(const char* toPrint);
-				virtual void print(int toPrint);
-				virtual void print(double toPrint);
-				
-				void setPWM(CPUPin pinNumber, double frequency, double dutyCycle, double duration); //Works only on socket 2.
-				virtual void setPWM(CPUPin pin, double dutyCycle, double frequency);
-				virtual bool readDigital(CPUPin pin);
-				virtual void writeDigital(CPUPin pin, bool value);
-				virtual double readAnalog(CPUPin pin);
-				virtual double readAnalogProportion(CPUPin pin);
-				virtual void writeAnalog(CPUPin pin, double voltage);
-				virtual void writeAnalogProportion(CPUPin pin, double proportion);
-				virtual void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode = ResistorModes::FLOATING);
-		
-				virtual Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin);
-				virtual Interfaces::SPIBus* getSPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin);
-				virtual Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool hardwareI2C);
+				struct pins
+				{
+					static const cpu_pin IO0 = 0;
+					static const cpu_pin IO1 = 1;
+					static const cpu_pin IO2 = 2;
+					static const cpu_pin IO3 = 3;
+					static const cpu_pin IO4 = 4;
+					static const cpu_pin IO5 = 5;
+					static const cpu_pin IO6 = 6;
+					static const cpu_pin IO7 = 7;
+					static const cpu_pin IO8 = 8;
+					static const cpu_pin IO9 = 9;
+					static const cpu_pin IO10 = 10;
+					static const cpu_pin IO11 = 11;
+					static const cpu_pin IO12 = 12;
+					static const cpu_pin IO13 = 13;
+					static const cpu_pin AD0 = 14;
+					static const cpu_pin AD1 = 15;
+					static const cpu_pin AD2 = 16;
+					static const cpu_pin AD3 = 17;
+					static const cpu_pin AD4 = 18;
+					static const cpu_pin AD5 = 19;
+				};
+
+				fez_medusa_mini();
+				virtual ~fez_medusa_mini();
+
+				virtual const socket& get_socket(unsigned char number);
+
+				virtual void set_debug_led(bool state);
+
+				virtual void set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_resistor_mode);
+				virtual void write_digital(cpu_pin pin, bool value);
+				virtual bool read_digital(cpu_pin pin);
+				virtual void write_analog(analog_channel channel, double voltage);
+				virtual double read_analog(analog_channel channel);
+				virtual void set_pwm(pwm_channel channel, double duty_cycle, double frequency);
+
+				void set_pwm(cpu_pin pin, double duty_cycle, double frequency, double duration); //socket 2 only
+
+				virtual void spi_read_write(spi_channel channel, const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int count, spi_configuration& config, bool deselect_after);
+				virtual bool i2c_write(i2c_channel channel, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);
+				virtual bool i2c_read(i2c_channel channel, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);
+				virtual unsigned int serial_write(serial_channel  channel, const unsigned char* buffer, unsigned int count, serial_configuration& config);
+				virtual unsigned int serial_read(serial_channel  channel, unsigned char* buffer, unsigned int count, serial_configuration& config);
+				virtual unsigned int serial_available(serial_channel channel);
 		};
 
 	}
 }
-
-
-#endif
