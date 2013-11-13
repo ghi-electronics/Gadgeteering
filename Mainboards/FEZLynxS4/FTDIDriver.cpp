@@ -18,6 +18,8 @@ limitations under the License.
 
 #include <cstring>
 
+using namespace gadgeteering;
+
 ftdi_channel::ftdi_channel()
 {
 	this->current_pin_direction = 0x00;
@@ -120,12 +122,12 @@ void ftdi_channel::sync_mpsse()
 	throw "Couldn't sync to MPSSE.";
 }
 
-void ftdi_channel::set_pin_direction(unsigned char pin, pin_direction mode, bool output_state)
+void ftdi_channel::set_pin_direction(unsigned char pin, io_mode mode, bool output_state)
 {
 	FT_STATUS status = FT_OK;
 	DWORD sent = 0;
 
-	if (mode == pin_directions::OUTPUT)
+	if (mode == io_modes::DIGITAL_OUTPUT)
 		this->current_pin_direction |= (1 << pin);
 	else
 		this->current_pin_direction &= ~(1 << pin);
@@ -193,7 +195,7 @@ bool ftdi_channel::get_pin_state(unsigned char pin)
 	return (this->current_pin_state & (1 << pin)) != 0;
 }
 
-void ftdi_channel::spi_read_write(const unsigned char* write_buffer, unsigned char* read_buffer, DWORD count, DWORD* sent, DWORD* received, spi_config config, bool deselect_after)
+void ftdi_channel::spi_read_write(const unsigned char* write_buffer, unsigned char* read_buffer, DWORD count, DWORD* sent, DWORD* received, spi_configuration& config, bool deselect_after)
 {
 	if (count > ftdi_channel::MAX_BUFFER_SIZE - 3)
 	{
@@ -211,9 +213,9 @@ void ftdi_channel::spi_read_write(const unsigned char* write_buffer, unsigned ch
 	this->buffer[1] = ftdi_channel::MPSSE_SET_DIVISOR; this->buffer[2] = divisor & 0xFF; this->buffer[3] = (divisor >> 8) & 0xFF;
 	status |= FT_Write(handle, this->buffer, 4, sent);
 
-	this->set_pin_direction(ftdi_channel::CLOCK_PIN, ftdi_channel::pin_directions::OUTPUT, false);
-	this->set_pin_direction(ftdi_channel::DO_PIN, ftdi_channel::pin_directions::OUTPUT, config.clock_idle_state);
-	this->set_pin_direction(ftdi_channel::DI_PIN, ftdi_channel::pin_directions::INPUT);
+	this->set_pin_direction(ftdi_channel::CLOCK_PIN, io_modes::DIGITAL_OUTPUT, false);
+	this->set_pin_direction(ftdi_channel::DO_PIN, io_modes::DIGITAL_OUTPUT, config.clock_idle_state);
+	this->set_pin_direction(ftdi_channel::DI_PIN, io_modes::DIGITAL_INPUT);
 
 	this->buffer[0] = config.clock_edge ? ftdi_channel::MPSSE_CLOCK_BYTES_IN_OUT_MSB_RISE_FALL : ftdi_channel::MPSSE_CLOCK_BYTES_IN_OUT_MSB_FALL_RISE;
 
@@ -223,7 +225,7 @@ void ftdi_channel::spi_read_write(const unsigned char* write_buffer, unsigned ch
 	this->buffer[1] = (count - 1) & 0xFF;
 	this->buffer[2] = ((count - 1) >> 8) & 0xFF;
 
-	Gadgeteering::mainboard->writeDigital(config.cs_pin, config.cs_active_state);
+	mainboard->write_digital(config.chip_select, config.cs_active_state);
 	if (config.cs_setup_time != 0)
 		Sleep(config.cs_setup_time);
 
@@ -243,10 +245,10 @@ void ftdi_channel::spi_read_write(const unsigned char* write_buffer, unsigned ch
 		if (config.cs_hold_time != 0)
 			Sleep(config.cs_hold_time);
 
-		Gadgeteering::mainboard->writeDigital(config.cs_pin, !config.cs_active_state);
+		mainboard->write_digital(config.chip_select, !config.cs_active_state);
 	}
 
-	this->set_pin_direction(1, ftdi_channel::pin_directions::OUTPUT, config.clock_idle_state);
+	this->set_pin_direction(1, io_modes::DIGITAL_OUTPUT, config.clock_idle_state);
 }
 
 bool ftdi_channel::i2c_read(unsigned char* buffer, DWORD length, bool send_start, bool send_stop)
@@ -297,7 +299,7 @@ bool ftdi_channel::i2c_write(const unsigned char* buffer, DWORD length, bool sen
 
 void ftdi_channel::i2c_wait_for_scl()
 {
-	this->set_pin_direction(ftdi_channel::CLOCK_PIN, ftdi_channel::pin_directions::INPUT);
+	this->set_pin_direction(ftdi_channel::CLOCK_PIN, io_modes::DIGITAL_INPUT);
 	while (!this->get_pin_state(ftdi_channel::CLOCK_PIN))
 		;
 }
@@ -306,28 +308,28 @@ void ftdi_channel::i2c_start()
 {
 	if (this->i2c_started)
 	{
-		this->set_pin_direction(ftdi_channel::DO_PIN, ftdi_channel::pin_directions::INPUT);
+		this->set_pin_direction(ftdi_channel::DO_PIN, io_modes::DIGITAL_INPUT);
 
 		this->i2c_wait_for_scl();
 	}
 
-	this->set_pin_direction(ftdi_channel::DO_PIN, ftdi_channel::pin_directions::INPUT);
+	this->set_pin_direction(ftdi_channel::DO_PIN, io_modes::DIGITAL_INPUT);
 
-	this->set_pin_direction(ftdi_channel::DO_PIN, ftdi_channel::pin_directions::OUTPUT, false);
+	this->set_pin_direction(ftdi_channel::DO_PIN, io_modes::DIGITAL_OUTPUT, false);
 
-	this->set_pin_direction(ftdi_channel::CLOCK_PIN, ftdi_channel::pin_directions::OUTPUT, false);
+	this->set_pin_direction(ftdi_channel::CLOCK_PIN, io_modes::DIGITAL_OUTPUT, false);
 
 	this->i2c_started = true;
 }
 
 void ftdi_channel::i2c_stop()
 {
-	this->set_pin_direction(ftdi_channel::DO_PIN, ftdi_channel::pin_directions::OUTPUT, false);
-	this->set_pin_direction(ftdi_channel::CLOCK_PIN, ftdi_channel::pin_directions::OUTPUT, false);
+	this->set_pin_direction(ftdi_channel::DO_PIN, io_modes::DIGITAL_OUTPUT, false);
+	this->set_pin_direction(ftdi_channel::CLOCK_PIN, io_modes::DIGITAL_OUTPUT, false);
 
 	this->i2c_wait_for_scl();
 
-	this->set_pin_direction(ftdi_channel::DO_PIN, ftdi_channel::pin_directions::INPUT);
+	this->set_pin_direction(ftdi_channel::DO_PIN, io_modes::DIGITAL_INPUT);
 
 	this->i2c_started = false;
 }
@@ -337,19 +339,19 @@ bool ftdi_channel::i2c_write_byte(BYTE data)
 	DWORD sent = 0, read = 0;
 	FT_STATUS status = FT_OK;
 
-	this->set_pin_direction(ftdi_channel::DO_PIN, ftdi_channel::pin_directions::OUTPUT, false);
+	this->set_pin_direction(ftdi_channel::DO_PIN, io_modes::DIGITAL_OUTPUT, false);
 
 	this->buffer[0] = ftdi_channel::MPSSE_CLOCK_BYTES_OUT_MSB_RISE; this->buffer[1] = 0x00; this->buffer[2] = 0x00; this->buffer[3] = data;
 
 	status = FT_Write(this->handle, this->buffer, 4, &sent);
 
-	this->set_pin_direction(ftdi_channel::DO_PIN, ftdi_channel::pin_directions::INPUT);
+	this->set_pin_direction(ftdi_channel::DO_PIN, io_modes::DIGITAL_INPUT);
 
 	this->i2c_wait_for_scl();
 
 	this->get_pin_state(ftdi_channel::DO_PIN);
 
-	this->set_pin_direction(ftdi_channel::CLOCK_PIN, ftdi_channel::pin_directions::OUTPUT, false);
+	this->set_pin_direction(ftdi_channel::CLOCK_PIN, io_modes::DIGITAL_OUTPUT, false);
 
 	return true;
 }
@@ -366,18 +368,18 @@ BYTE ftdi_channel::i2c_read_byte()
 
 	status = FT_Read(this->handle, &read_in, 1, &read);
 
-	this->set_pin_direction(ftdi_channel::DO_PIN, ftdi_channel::pin_directions::INPUT);
+	this->set_pin_direction(ftdi_channel::DO_PIN, io_modes::DIGITAL_INPUT);
 
 	this->i2c_wait_for_scl();
 
 	this->get_pin_state(ftdi_channel::DO_PIN);
 
-	this->set_pin_direction(ftdi_channel::CLOCK_PIN, ftdi_channel::pin_directions::OUTPUT, false);
+	this->set_pin_direction(ftdi_channel::CLOCK_PIN, io_modes::DIGITAL_OUTPUT, false);
 
 	return read_in;
 }
 
-DWORD ftdi_channel::serial_write(const unsigned char* buffer, DWORD count, serial_config config)
+DWORD ftdi_channel::serial_write(const unsigned char* buffer, DWORD count, serial_configuration& config)
 {
 	this->set_mode(ftdi_channel::modes::SERIAL);
 
@@ -393,7 +395,7 @@ DWORD ftdi_channel::serial_write(const unsigned char* buffer, DWORD count, seria
 	return sent;
 }
 
-DWORD ftdi_channel::serial_read(unsigned char* buffer, DWORD count, serial_config config)
+DWORD ftdi_channel::serial_read(unsigned char* buffer, DWORD count, serial_configuration& config)
 {
 	this->set_mode(ftdi_channel::modes::SERIAL);
 

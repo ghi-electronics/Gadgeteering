@@ -20,8 +20,8 @@ namespace gadgeteering
 {
 	namespace system
     {
-		void sleep(unsigned long time);
-		void sleep_micro(unsigned long time);
+		void sleep(unsigned long milliseconds);
+		void sleep_micro(unsigned long microseconds);
 
 		unsigned long time_elapsed();
 
@@ -29,6 +29,7 @@ namespace gadgeteering
 		void random_seed(int seed);
 
 		void panic(unsigned char error, unsigned char specific_error = 0);
+
 		void print(const char* data);
 		void print(int data);
 		void print(double data);

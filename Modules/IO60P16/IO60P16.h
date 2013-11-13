@@ -19,9 +19,10 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		class IO60P16 : public Module {
+namespace gadgeteering {
+	namespace modules {
+		class io60p16
+		{
 			unsigned char outputPorts[8];
 			unsigned char pinDirections[8];
 			unsigned char pwms[8];
@@ -45,20 +46,18 @@ namespace Gadgeteering {
 
 			static const unsigned char CLOCK_SOURCE = 0x3;
 
-			Interfaces::I2CDevice* io60Chip;
+			devices::i2c* io60Chip;
 
-			unsigned char getPort(CPUPin pin);
-			unsigned char getMask(CPUPin pin);
 			void changeResistor(unsigned char port, unsigned char mask, unsigned char newResistor);
 
 			public:
-				IO60P16(unsigned char socketNumber, CPUPin sda = 0, CPUPin scl = 0);
-				~IO60P16();
+				io60p16(unsigned char socketNumber);
+				~io60p16();
 
-				void setIOMode(CPUPin pin, IOState state, ResistorMode resistorMode);
-				void setPWM(CPUPin pin, double frequency, double dutyCycle);
-				bool readDigital(CPUPin pin);
-				void writeDigital(CPUPin pin, bool value);
+				void set_io_mode(unsigned char port, unsigned char pin, io_mode new_io_mode, resistor_mode new_resistor_mode);
+				void set_pwm(unsigned char port, unsigned char pin, double duty_cycle, double frequency);
+				bool read_digital(unsigned char port, unsigned char pin);
+				void write_digital(unsigned char port, unsigned char pin, bool value);
 		};
 	}
 }

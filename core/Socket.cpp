@@ -19,6 +19,11 @@ limitations under the License.
 
 using namespace gadgeteering;
 
+socket::socket()
+{
+
+}
+
 socket::socket(unsigned char number, type type) 
 {
 	this->type_mask = type;
@@ -28,7 +33,7 @@ socket::socket(unsigned char number, type type)
 		this->pins[i] = socket::pins::UNCONNECTED;
 }
 
-void socket::ensure_type(type type) 
+void socket::ensure_type(type type) const
 {
 	if ((this->type_mask & type) == 0)
 		system::panic(Exceptions::ERR_SOCKET_NOT_HAVE_TYPE);

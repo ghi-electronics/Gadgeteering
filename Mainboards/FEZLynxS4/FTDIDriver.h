@@ -16,7 +16,10 @@ limitations under the License.
 
 #pragma once
 
+#include <Core/Gadgeteering.h>
+
 #ifdef _WIN32
+	#define WIN32_LEAN_AND_MEAN
 	#include <Windows.h>
 	#include <FTD2XX.H>
 #else
@@ -24,44 +27,16 @@ limitations under the License.
 	#include <ftd2xx.h>
 #endif
 
-#include <Core/Gadgeteering.h>
-
 class ftdi_channel
 {
 	public:
 		typedef UCHAR mode;
-		typedef UCHAR pin_direction;
 
 		struct modes
 		{
 			static const mode BITBANG = 0x01;
 			static const mode MPSSE = 0x02;
 			static const mode SERIAL = 0x03;
-		};
-
-		struct pin_directions
-		{
-			static const pin_direction OUTPUT = 0;
-			static const pin_direction INPUT = 1;
-		};
-
-		struct serial_config
-		{
-			UCHAR parity;
-			UCHAR stop_bits;
-			UCHAR data_bits;
-			ULONG baud_rate;
-		};
-
-		struct spi_config
-		{
-			Gadgeteering::CPUPin cs_pin;
-			bool cs_active_state;
-			ULONG cs_setup_time;
-			ULONG cs_hold_time;
-			bool clock_idle_state;
-			bool clock_edge;
-			ULONG clock_rate;
 		};
 
 		ftdi_channel();
@@ -71,15 +46,15 @@ class ftdi_channel
 
 		bool set_mode(mode mode);
 
-		void set_pin_direction(unsigned char pin, pin_direction mode, bool output_state = false);
+		void set_pin_direction(unsigned char pin, gadgeteering::io_mode mode, bool output_state = false);
 		void set_pin_state(unsigned char pin, bool state);
 		bool get_pin_state(unsigned char pin);
 
-		void spi_read_write(const unsigned char* write_buffer, unsigned char* read_buffer, DWORD count, DWORD* sent, DWORD* received, spi_config config, bool deselect_after = true);
+		void spi_read_write(const unsigned char* write_buffer, unsigned char* read_buffer, DWORD count, DWORD* sent, DWORD* received, gadgeteering::spi_configuration& config, bool deselect_after = true);
 		bool i2c_write(const unsigned char* buffer, DWORD length, bool send_start = true, bool send_stop = true);
 		bool i2c_read(unsigned char* buffer, DWORD length, bool send_start = true, bool send_stop = true);
-		DWORD serial_write(const unsigned char* buffer, DWORD count, serial_config config);
-		DWORD serial_read(unsigned char* buffer, DWORD count, serial_config config);
+		DWORD serial_write(const unsigned char* buffer, DWORD count, gadgeteering::serial_configuration& config);
+		DWORD serial_read(unsigned char* buffer, DWORD count, gadgeteering::serial_configuration& config);
 		DWORD serial_available();
 
 	private:
@@ -129,7 +104,7 @@ class ftdi_channel
 		bool i2c_started;
 		FT_HANDLE handle;
 		BYTE buffer[ftdi_channel::MAX_BUFFER_SIZE];
-		mode current_mode;
+		gadgeteering::io_mode current_mode;
 		BYTE current_pin_state;
 		BYTE current_pin_direction;
 };

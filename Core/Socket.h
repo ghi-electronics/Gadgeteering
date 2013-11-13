@@ -65,9 +65,13 @@ namespace gadgeteering {
 		spi_channel spi;
 		i2c_channel i2c;
 		serial_channel serial;
+		analog_channel analog1;
+		analog_channel analog2;
+		analog_channel analog3;
 
+		socket();
 		socket(unsigned char number, type type);
 
-		void ensure_type(type type);
+		void ensure_type(type type) const;
 	};
 }

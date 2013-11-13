@@ -30,6 +30,7 @@ namespace gadgeteering
 	typedef unsigned char spi_channel;
 	typedef unsigned char i2c_channel;
 	typedef unsigned char serial_channel;
+	typedef unsigned char analog_channel;
 
 
 	struct io_modes 
@@ -176,5 +177,6 @@ namespace gadgeteering
 		static const unsigned char ERR_I2C_NOT_SUPPORTED = 18;
 		static const unsigned char ERR_MAINBOARD_ERROR = 19;
 		static const unsigned char ERR_PIN_UNCONNECTED = 20;
+		static const unsigned char ERR_PIN_INVALID = 21;
 	}
 }

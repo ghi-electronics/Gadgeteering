@@ -65,7 +65,7 @@ namespace gadgeteering
 		};
 
 		class analog_input {
-			cpu_pin pin;
+			analog_channel channel;
 
 			public:
 				analog_input(socket& socket, socket::pin pin_number);
@@ -75,7 +75,7 @@ namespace gadgeteering
 		};
 
 		class analog_output {
-			cpu_pin pin;
+			analog_channel channel;
 
 			public:
 				analog_output(socket& socket, socket::pin pin_number);

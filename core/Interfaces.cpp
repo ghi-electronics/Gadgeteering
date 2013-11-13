@@ -115,10 +115,13 @@ io_mode digital_io::get_io_mode()
 
 analog_input::analog_input(socket& socket, socket::pin pin_number)
 {
-	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
-		system::panic(Exceptions::ERR_PIN_UNCONNECTED);
-
-	this->pin = socket.pins[pin_number];
+	switch (pin_number)
+	{
+		case socket::pins::THREE: this->channel = socket.analog1;
+		case socket::pins::FOUR: this->channel = socket.analog2;
+		case socket::pins::FIVE: this->channel = socket.analog3;
+		default: system::panic(Exceptions::ERR_PIN_INVALID);
+	}
 }
 
 double analog_input::read()
@@ -128,15 +131,18 @@ double analog_input::read()
 
 double analog_input::read_proportion()
 {
-	return mainboard->read_analog(this->pin);
+	return mainboard->read_analog(this->channel);
 }
 
 analog_output::analog_output(socket& socket, socket::pin pin_number)
 {
-	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
-		system::panic(Exceptions::ERR_PIN_UNCONNECTED);
-
-	this->pin = socket.pins[pin_number];
+	switch (pin_number)
+	{
+		case socket::pins::THREE: this->channel = socket.analog1;
+		case socket::pins::FOUR: this->channel = socket.analog2;
+		case socket::pins::FIVE: this->channel = socket.analog3;
+		default: system::panic(Exceptions::ERR_PIN_INVALID);
+	}
 }
 
 void analog_output::write(double value)
@@ -146,7 +152,7 @@ void analog_output::write(double value)
 
 void analog_output::write_proportion(double value)
 {
-	mainboard->write_analog(this->pin, value);
+	mainboard->write_analog(this->channel, value);
 }
 
 pwm_output::pwm_output(socket& socket, socket::pin pin_number)

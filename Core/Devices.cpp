@@ -20,7 +20,7 @@ limitations under the License.
 using namespace gadgeteering;
 using namespace gadgeteering::devices;
 
-i2c::i2c(socket& socket, unsigned char address)
+i2c::i2c(const socket& socket, unsigned char address)
 {
 	socket.ensure_type(socket::types::I);
 
@@ -45,7 +45,7 @@ i2c::~i2c()
 
 bool i2c::write(const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
 {
-	if (this->soft_i2c != NULL)
+	if (this->soft_i2c == NULL)
 	{
 		mainboard->i2c_write(this->channel, &this->w_address, 1, send_start, false);
 		return mainboard->i2c_write(this->channel, buffer, length, false, send_stop);
@@ -59,7 +59,7 @@ bool i2c::write(const unsigned char* buffer, unsigned int length, bool send_star
 
 bool i2c::read(unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
 {
-	if (this->soft_i2c != NULL)
+	if (this->soft_i2c == NULL)
 	{
 		mainboard->i2c_write(this->channel, &this->r_address, 1, send_start, false);
 		return mainboard->i2c_read(this->channel, buffer, length, false, send_stop);
@@ -113,7 +113,7 @@ bool i2c::read_registers(unsigned char start_address, unsigned char* values, uns
 	return this->write_read(&start_address, 1, values, length);
 }
 
-spi::spi(socket& socket, spi_configuration configuration)
+spi::spi(const socket& socket, spi_configuration configuration)
 {
 	socket.ensure_type(socket::types::S);
 
@@ -121,7 +121,7 @@ spi::spi(socket& socket, spi_configuration configuration)
 	this->channel = socket.spi;
 }
 
-spi::spi(socket& spi_socket, spi_configuration configuration, socket& cs_socket, socket::pin cs_pin_number)
+spi::spi(const socket& spi_socket, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number)
 {
 	spi_socket.ensure_type(socket::types::S);
 
@@ -158,7 +158,7 @@ void spi::read(unsigned char* buffer, unsigned int length, bool deselect_after)
 	this->write_read(NULL, buffer, length, deselect_after);
 }
 
-serial::serial(socket& socket, serial_configuration configuration)
+serial::serial(const socket& socket, serial_configuration configuration)
 {
 	socket.ensure_type(socket::types::U);
 

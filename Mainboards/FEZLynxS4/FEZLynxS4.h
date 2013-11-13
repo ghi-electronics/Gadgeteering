@@ -14,265 +14,163 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _FEZLYNXS4_H_
-#define _FEZLYNXS4_H_
+#pragma once
+
+#include <map>
+
+#include <Core/Gadgeteering.h>
+#include <Modules/IO60P16/IO60P16.h>
 
 #include "FTDIDriver.h"
 
-#include <Core/Gadgeteering.h>
-
-#include <Modules/IO60P16/IO60P16.h>
-
-#define FTDI_CHANNEL(pin) ((pin - 1) / 8)
-#define FTDI_PIN(pin) (((pin - 1) % 8) + 1)
-
-namespace Gadgeteering
+namespace gadgeteering
 {
-    namespace Mainboards
+    namespace mainboards
     {
-        class FEZLynxS4 : public Gadgeteering::Mainboard
+        class fez_lynx_s4: public base_mainboard
         {
-            static const unsigned short CLOCK_DIVISOR = 0x0055; //Value of clock divisor, SCL Frequency = 60/((1+0x0095)*2) (MHz) = 200khz
-			static const int ANALOG_2 = 0xAA;
-			static const int ANALOG_5 = 0xAB;
-
+			std::map<unsigned char, socket> sockets;
+			std::map<analog_channel, cpu_pin> analog_channel_to_pin_map;
             ftdi_channel channels[4];
-            Interfaces::I2CDevice* analogConverter;
-            Modules::IO60P16* Extender;
+           
+			modules::io60p16* extender;
+			devices::i2c* extender_analog_converter;
+			devices::i2c* analog_converter;
 
-            class SerialDevice : public Gadgeteering::Interfaces::SerialDevice {
-				ftdi_channel& channel;
-				ftdi_channel::serial_config config;
-
-                public:
-					SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, ftdi_channel& channel);
-                    virtual ~SerialDevice();
-
-                    virtual void open();
-                    virtual void close();
-                    virtual void write(const unsigned char* buffer, unsigned int count);
-                    virtual unsigned int read(unsigned char* buffer, unsigned int count);
-					virtual unsigned int available();
-            };
-
-            class SPIBus : public Gadgeteering::Interfaces::SPIBus
-            {
-				ftdi_channel& channel;
-				ftdi_channel::spi_config config;
-
-				public:
-					SPIBus(CPUPin mosiPin, CPUPin misoPin, CPUPin sckPin, ftdi_channel& channel);
-					virtual ~SPIBus();
-
-                    virtual void writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Gadgeteering::Interfaces::SPIConfiguration* configuration, bool deselectAfter);
-            };
-
-            class I2CBus : public Interfaces::I2CBus
-            {
-				ftdi_channel& channel;
-
-                public:
-					I2CBus(CPUPin sdaPin, CPUPin sclPin, ftdi_channel& channel);
-                    virtual ~I2CBus();
-
-					virtual bool write(const unsigned char* buffer, unsigned int count, bool sendStart = true, bool sendStop = true);
-					virtual bool read(unsigned char* buffer, unsigned int count, bool sendStart = true, bool sendStop = true);
-            };
-
-            bool isVirtual(Gadgeteering::CPUPin pinNumber);
-            Gadgeteering::CPUPin getExtenderPin(Gadgeteering::CPUPin pinNumber);
-
-			void mapSockets();
+			void create_sockets();
 
             public:
-                FEZLynxS4();
-				virtual ~FEZLynxS4();
-
-                class Pins
+                struct pins
                 {
-					public:
-						static const CPUPin NotConnected = -1;
+					static const cpu_pin P0_0 = 16 * 0 + 0 + 128;
+					static const cpu_pin P0_1 = 16 * 0 + 1 + 128;
+					static const cpu_pin P0_2 = 16 * 0 + 2 + 128;
+					static const cpu_pin P0_3 = 16 * 0 + 3 + 128;
+					static const cpu_pin P0_4 = 16 * 0 + 4 + 128;
+					static const cpu_pin P0_5 = 16 * 0 + 5 + 128;
+					static const cpu_pin P0_6 = 16 * 0 + 6 + 128;
+					static const cpu_pin P0_7 = 16 * 0 + 7 + 128;
 
-						///////////////////////////////
-						// Extender Chip Pins Port 0 //
-						///////////////////////////////
-						static const CPUPin P0_0 = ((8 * 4) + 1);
-						static const CPUPin P0_1 = ((8 * 4) + 2);
-						static const CPUPin P0_2 = ((8 * 4) + 3);
-						static const CPUPin P0_3 = ((8 * 4) + 4);
-						static const CPUPin P0_4 = ((8 * 4) + 5);
-						static const CPUPin P0_5 = ((8 * 4) + 6);
-						static const CPUPin P0_6 = ((8 * 4) + 7);
-						static const CPUPin P0_7 = ((8 * 4) + 8);
+					static const cpu_pin P1_0 = 16 * 1 + 0 + 128;
+					static const cpu_pin P1_1 = 16 * 1 + 1 + 128;
+					static const cpu_pin P1_2 = 16 * 1 + 2 + 128;
+					static const cpu_pin P1_3 = 16 * 1 + 3 + 128;
+					static const cpu_pin P1_4 = 16 * 1 + 4 + 128;
+					static const cpu_pin P1_5 = 16 * 1 + 5 + 128;
+					static const cpu_pin P1_6 = 16 * 1 + 6 + 128;
+					static const cpu_pin P1_7 = 16 * 1 + 7 + 128;
 
-						///////////////////////////////
-						// Extender Chip Pins Port 1 //
-						///////////////////////////////
-						static const CPUPin P1_0 = ((8 * 5) + 1);
-						static const CPUPin P1_1 = ((8 * 5) + 2);
-						static const CPUPin P1_2 = ((8 * 5) + 3);
-						static const CPUPin P1_3 = ((8 * 5) + 4);
-						static const CPUPin P1_4 = ((8 * 5) + 5);
-						static const CPUPin P1_5 = ((8 * 5) + 6);
-						static const CPUPin P1_6 = ((8 * 5) + 7);
-						static const CPUPin P1_7 = ((8 * 5) + 8);
+					static const cpu_pin P2_0 = 16 * 2 + 0 + 128;
+					static const cpu_pin P2_1 = 16 * 2 + 1 + 128;
+					static const cpu_pin P2_2 = 16 * 2 + 2 + 128;
+					static const cpu_pin P2_3 = 16 * 2 + 3 + 128;
+					static const cpu_pin P2_4 = 16 * 2 + 4 + 128;
+					static const cpu_pin P2_5 = 16 * 2 + 5 + 128;
+					static const cpu_pin P2_6 = 16 * 2 + 6 + 128;
+					static const cpu_pin P2_7 = 16 * 2 + 7 + 128;
 
-						///////////////////////////////
-						// Extender Chip Pins Port 2 //
-						///////////////////////////////
-						static const CPUPin P2_0 = ((8 * 6) + 1);
-						static const CPUPin P2_1 = ((8 * 6) + 2);
-						static const CPUPin P2_2 = ((8 * 6) + 3);
-						static const CPUPin P2_3 = ((8 * 6) + 4);
-						static const CPUPin P2_4 = ((8 * 6) + 5);
-						static const CPUPin P2_5 = ((8 * 6) + 6);
-						static const CPUPin P2_6 = ((8 * 6) + 7);
-						static const CPUPin P2_7 = ((8 * 6) + 8);
+					static const cpu_pin P3_0 = 16 * 3 + 0 + 128;
+					static const cpu_pin P3_1 = 16 * 3 + 1 + 128;
+					static const cpu_pin P3_2 = 16 * 3 + 2 + 128;
+					static const cpu_pin P3_3 = 16 * 3 + 3 + 128;
+					static const cpu_pin P3_4 = 16 * 3 + 4 + 128;
+					static const cpu_pin P3_5 = 16 * 3 + 5 + 128;
+					static const cpu_pin P3_6 = 16 * 3 + 6 + 128;
+					static const cpu_pin P3_7 = 16 * 3 + 7 + 128;
 
-						///////////////////////////////
-						// Extender Chip Pins Port 3 //
-						///////////////////////////////
-						static const CPUPin P3_0 = ((8 * 7) + 1);
-						static const CPUPin P3_1 = ((8 * 7) + 2);
-						static const CPUPin P3_2 = ((8 * 7) + 3);
-						static const CPUPin P3_3 = ((8 * 7) + 4);
-						static const CPUPin P3_4 = ((8 * 7) + 5);
-						static const CPUPin P3_5 = ((8 * 7) + 6);
-						static const CPUPin P3_6 = ((8 * 7) + 7);
-						static const CPUPin P3_7 = ((8 * 7) + 8);
+					static const cpu_pin P4_0 = 16 * 4 + 0 + 128;
+					static const cpu_pin P4_1 = 16 * 4 + 1 + 128;
+					static const cpu_pin P4_2 = 16 * 4 + 2 + 128;
+					static const cpu_pin P4_3 = 16 * 4 + 3 + 128;
+					static const cpu_pin P4_4 = 16 * 4 + 4 + 128;
+					static const cpu_pin P4_5 = 16 * 4 + 5 + 128;
+					static const cpu_pin P4_6 = 16 * 4 + 6 + 128;
+					static const cpu_pin P4_7 = 16 * 4 + 7 + 128;
 
-						///////////////////////////////
-						// Extender Chip Pins Port 4 //
-						///////////////////////////////
-						static const CPUPin P4_0 = ((8 * 8) + 1);
-						static const CPUPin P4_1 = ((8 * 8) + 2);
-						static const CPUPin P4_2 = ((8 * 8) + 3);
-						static const CPUPin P4_3 = ((8 * 8) + 4);
-						static const CPUPin P4_4 = ((8 * 8) + 5);
-						static const CPUPin P4_5 = ((8 * 8) + 6);
-						static const CPUPin P4_6 = ((8 * 8) + 7);
-						static const CPUPin P4_7 = ((8 * 8) + 8);
+					static const cpu_pin P5_0 = 16 * 5 + 0 + 128;
+					static const cpu_pin P5_1 = 16 * 5 + 1 + 128;
+					static const cpu_pin P5_2 = 16 * 5 + 2 + 128;
+					static const cpu_pin P5_3 = 16 * 5 + 3 + 128;
+					static const cpu_pin P5_4 = 16 * 5 + 4 + 128;
+					static const cpu_pin P5_5 = 16 * 5 + 5 + 128;
+					static const cpu_pin P5_6 = 16 * 5 + 6 + 128;
+					static const cpu_pin P5_7 = 16 * 5 + 7 + 128;
 
-						///////////////////////////////
-						// Extender Chip Pins Port 5 //
-						///////////////////////////////
-						static const CPUPin P5_0 = ((8 * 9) + 1);
-						static const CPUPin P5_1 = ((8 * 9) + 2);
-						static const CPUPin P5_2 = ((8 * 9) + 3);
-						static const CPUPin P5_3 = ((8 * 9) + 4);
-						static const CPUPin P5_4 = ((8 * 9) + 5);
-						static const CPUPin P5_5 = ((8 * 9) + 6);
-						static const CPUPin P5_6 = ((8 * 9) + 7);
-						static const CPUPin P5_7 = ((8 * 9) + 8);
+					static const cpu_pin P6_0 = 16 * 6 + 0 + 128;
+					static const cpu_pin P6_1 = 16 * 6 + 1 + 128;
+					static const cpu_pin P6_2 = 16 * 6 + 2 + 128;
+					static const cpu_pin P6_3 = 16 * 6 + 3 + 128;
+					static const cpu_pin P6_4 = 16 * 6 + 4 + 128;
+					static const cpu_pin P6_5 = 16 * 6 + 5 + 128;
+					static const cpu_pin P6_6 = 16 * 6 + 6 + 128;
+					static const cpu_pin P6_7 = 16 * 6 + 7 + 128;
 
-						///////////////////////////////
-						// Extender Chip Pins Port 6 //
-						///////////////////////////////
-						static const CPUPin P6_0 = ((8 * 10) + 1);
-						static const CPUPin P6_1 = ((8 * 10) + 2);
-						static const CPUPin P6_2 = ((8 * 10) + 3);
-						static const CPUPin P6_3 = ((8 * 10) + 4);
-						static const CPUPin P6_4 = ((8 * 10) + 5);
-						static const CPUPin P6_5 = ((8 * 10) + 6);
-						static const CPUPin P6_6 = ((8 * 10) + 7);
-						static const CPUPin P6_7 = ((8 * 10) + 8);
+					static const cpu_pin P7_0 = 16 * 7 + 0 + 128;
+					static const cpu_pin P7_1 = 16 * 7 + 1 + 128;
+					static const cpu_pin P7_2 = 16 * 7 + 2 + 128;
+					static const cpu_pin P7_3 = 16 * 7 + 3 + 128;
+					static const cpu_pin P7_4 = 16 * 7 + 4 + 128;
+					static const cpu_pin P7_5 = 16 * 7 + 5 + 128;
+					static const cpu_pin P7_6 = 16 * 7 + 6 + 128;
+					static const cpu_pin P7_7 = 16 * 7 + 7 + 128;
 
-						///////////////////////////////
-						// Extender Chip Pins Port 7 //
-						///////////////////////////////
-						static const CPUPin P7_0 = ((8 * 11) + 1);
-						static const CPUPin P7_1 = ((8 * 11) + 2);
-						static const CPUPin P7_2 = ((8 * 11) + 3);
-						static const CPUPin P7_3 = ((8 * 11) + 4);
-						static const CPUPin P7_4 = ((8 * 11) + 5);
-						static const CPUPin P7_5 = ((8 * 11) + 6);
-						static const CPUPin P7_6 = ((8 * 11) + 7);
-						static const CPUPin P7_7 = ((8 * 11) + 8);
+					static const cpu_pin AD0 = 16 * 0 + 0;
+					static const cpu_pin AD1 = 16 * 0 + 1;
+					static const cpu_pin AD2 = 16 * 0 + 2;
+					static const cpu_pin AD3 = 16 * 0 + 3;
+					static const cpu_pin AD4 = 16 * 0 + 4;
+					static const cpu_pin AD5 = 16 * 0 + 5;
+					static const cpu_pin AD6 = 16 * 0 + 6;
+					static const cpu_pin AD7 = 16 * 0 + 7;
 
-						///////////////////////////////
-						//    Standard Pins Port A   //
-						///////////////////////////////
-						static const CPUPin PA_0 = ((8 * 0) + 1);
-						static const CPUPin PA_1 = ((8 * 0) + 2);
-						static const CPUPin PA_2 = ((8 * 0) + 3);
-						static const CPUPin PA_3 = ((8 * 0) + 4);
-						static const CPUPin PA_4 = ((8 * 0) + 5);
-						static const CPUPin PA_5 = ((8 * 0) + 6);
-						static const CPUPin PA_6 = ((8 * 0) + 7);
-						static const CPUPin PA_7 = ((8 * 0) + 8);
+					static const cpu_pin BD0 = 16 * 1 + 0;
+					static const cpu_pin BD1 = 16 * 1 + 1;
+					static const cpu_pin BD2 = 16 * 1 + 2;
+					static const cpu_pin BD3 = 16 * 1 + 3;
+					static const cpu_pin BD4 = 16 * 1 + 4;
+					static const cpu_pin BD5 = 16 * 1 + 5;
+					static const cpu_pin BD6 = 16 * 1 + 6;
+					static const cpu_pin BD7 = 16 * 1 + 7;
 
-						///////////////////////////////
-						//    Standard Pins Port B   //
-						///////////////////////////////
-						static const CPUPin PB_0 = ((8 * 1) + 1);
-						static const CPUPin PB_1 = ((8 * 1) + 2);
-						static const CPUPin PB_2 = ((8 * 1) + 3);
-						static const CPUPin PB_3 = ((8 * 1) + 4);
-						static const CPUPin PB_4 = ((8 * 1) + 5);
-						static const CPUPin PB_5 = ((8 * 1) + 6);
-						static const CPUPin PB_6 = ((8 * 1) + 7);
-						static const CPUPin PB_7 = ((8 * 1) + 8);
+					static const cpu_pin CD0 = 16 * 2 + 0;
+					static const cpu_pin CD1 = 16 * 2 + 1;
+					static const cpu_pin CD2 = 16 * 2 + 2;
+					static const cpu_pin CD3 = 16 * 2 + 3;
+					static const cpu_pin CD4 = 16 * 2 + 4;
+					static const cpu_pin CD5 = 16 * 2 + 5;
+					static const cpu_pin CD6 = 16 * 2 + 6;
+					static const cpu_pin CD7 = 16 * 2 + 7;
 
-						///////////////////////////////
-						//    Standard Pins Port C   //
-						///////////////////////////////
-						static const CPUPin PC_0 = ((8 * 2) + 1);
-						static const CPUPin PC_1 = ((8 * 2) + 2);
-						static const CPUPin PC_2 = ((8 * 2) + 3);
-						static const CPUPin PC_3 = ((8 * 2) + 4);
-						static const CPUPin PC_4 = ((8 * 2) + 5);
-						static const CPUPin PC_5 = ((8 * 2) + 6);
-						static const CPUPin PC_6 = ((8 * 2) + 7);
-						static const CPUPin PC_7 = ((8 * 2) + 8);
+					static const cpu_pin DD0 = 16 * 3 + 0;
+					static const cpu_pin DD1 = 16 * 3 + 1;
+					static const cpu_pin DD2 = 16 * 3 + 2;
+					static const cpu_pin DD3 = 16 * 3 + 3;
+					static const cpu_pin DD4 = 16 * 3 + 4;
+					static const cpu_pin DD5 = 16 * 3 + 5;
+					static const cpu_pin DD6 = 16 * 3 + 6;
+					static const cpu_pin DD7 = 16 * 3 + 7;
+				};
+				
+				fez_lynx_s4();
+				virtual ~fez_lynx_s4();
 
-						///////////////////////////////
-						//    Standard Pins Port D   //
-						///////////////////////////////
-						static const CPUPin PD_0 = ((8 * 3) + 1);
-						static const CPUPin PD_1 = ((8 * 3) + 2);
-						static const CPUPin PD_2 = ((8 * 3) + 3);
-						static const CPUPin PD_3 = ((8 * 3) + 4);
-						static const CPUPin PD_4 = ((8 * 3) + 5);
-						static const CPUPin PD_5 = ((8 * 3) + 6);
-						static const CPUPin PD_6 = ((8 * 3) + 7);
-						static const CPUPin PD_7 = ((8 * 3) + 8);
+				virtual const socket& get_socket(unsigned char number);
 
-						static const CPUPin Analog_01 = PD_1;
-						static const CPUPin Analog_02 = PD_2;
-						static const CPUPin Analog_03 = PA_3;
-						static const CPUPin Analog_04 = PD_4;
-						static const CPUPin Analog_05 = PD_5;
-						static const CPUPin Analog_06 = PA_4;
+				virtual void set_debug_led(bool state);
 
-						//Analog Ports on HubAP5
-						static const CPUPin Analog_07 = PD_1;
-						static const CPUPin Analog_08 = 0x00;
-						static const CPUPin Analog_09 = 0x00;
-						static const CPUPin Analog_10 = 0x00;
-						static const CPUPin Analog_11 = 0x00;
-                };
+				virtual void set_pwm(cpu_pin pin, double duty_cycle, double frequency);
+				virtual bool read_digital(cpu_pin pin);
+				virtual void write_digital(cpu_pin pin, bool value);
+				virtual double read_analog(analog_channel channel);
+				virtual void write_analog(analog_channel channel, double voltage);
+				virtual void set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_resistor_mode);
 
-				virtual void setDebugLED(bool state);
-
-				virtual void panic(unsigned char error, unsigned char specificError = 0);
-				virtual void print(const char* toPrint);
-				virtual void print(int toPrint);
-				virtual void print(double toPrint);
-
-                virtual void setPWM(Gadgeteering::CPUPin pinNumber, double dutyCycle, double frequency);
-                virtual bool readDigital(Gadgeteering::CPUPin pinNumber);
-                virtual void writeDigital(Gadgeteering::CPUPin pinNumber, bool value);
-                virtual double readAnalog(Gadgeteering::CPUPin pinNumber);
-				virtual double readAnalogProportion(CPUPin pin);
-                virtual void writeAnalog(Gadgeteering::CPUPin pinNumber, double voltage);
-				virtual void writeAnalogProportion(CPUPin pin, double proportion);
-                virtual void setIOMode(Gadgeteering::CPUPin pinNumber, Gadgeteering::IOState state, Gadgeteering::ResistorMode resistorMode = Gadgeteering::ResistorModes::FLOATING);
-
-                virtual Interfaces::SerialDevice* getSerialDevice(unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits, CPUPin txPin, CPUPin rxPin);
-				virtual Interfaces::SPIBus* getSPIBus(CPUPin miso, CPUPin mosi, CPUPin sck);
-                virtual Interfaces::I2CBus* getI2CBus(CPUPin sdaPin, CPUPin sclPin);
+				virtual void spi_read_write(spi_channel channel, const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int count, spi_configuration& config, bool deselect_after);
+				virtual bool i2c_write(i2c_channel channel, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);
+				virtual bool i2c_read(i2c_channel channel, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);
+				virtual unsigned int serial_write(serial_channel  channel, const unsigned char* buffer, unsigned int count, serial_configuration& config);
+				virtual unsigned int serial_read(serial_channel  channel, unsigned char* buffer, unsigned int count, serial_configuration& config);
+				virtual unsigned int serial_available(serial_channel channel);
         };
     }
 }
-
-#endif
