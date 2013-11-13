@@ -36,5 +36,5 @@ socket::socket(unsigned char number, type type)
 void socket::ensure_type(type type) const
 {
 	if ((this->type_mask & type) == 0)
-		system::panic(Exceptions::ERR_SOCKET_NOT_HAVE_TYPE);
+		system::panic(error_codes::SOCKET_NOT_HAVE_TYPE);
 }

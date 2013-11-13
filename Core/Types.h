@@ -25,6 +25,8 @@ namespace gadgeteering
 	typedef unsigned char io_mode;
 	typedef unsigned char resistor_mode;
 
+	typedef unsigned char error_code;
+
 	typedef unsigned char cpu_pin;
 
 	typedef unsigned char spi_channel;
@@ -154,29 +156,29 @@ namespace gadgeteering
 		serial_configuration(unsigned int baud_rate, partity parity, stop_bit stop_bits, unsigned char data_bits);
 	};
 
-	namespace Exceptions
+	namespace error_codes
 	{
-		static const unsigned char ERR_ONLY_ONE_MAINBOARD = 0;
-		static const unsigned char ERR_SPI_NOT_SUPPORTED = 1;
-		static const unsigned char ERR_PWM_NOT_SUPPORTED = 2;
-		static const unsigned char ERR_READ_DIGITAL_NOT_SUPPORTED = 3;
-		static const unsigned char ERR_WRITE_DIGITAL_NOT_SUPPORTED = 4;
-		static const unsigned char ERR_READ_ANALOG_NOT_SUPPORTED = 5;
-		static const unsigned char ERR_WRITE_ANALOG_NOT_SUPPORTED = 6;
-		static const unsigned char ERR_SET_IO_NOT_SUPPORTED = 7;
-		static const unsigned char ERR_SOCKET_NOT_HAVE_TYPE = 8;
-		static const unsigned char ERR_INVALID_SOCKET = 9;
-		static const unsigned char ERR_PIN_OUT_OF_RANGE = 10;
-		static const unsigned char ERR_PIN_RESERVED = 11;
-		static const unsigned char ERR_SERIAL_NOT_SUPPORTED = 12;
-		static const unsigned char ERR_MODULE_ERROR = 13;
-		static const unsigned char ERR_IO_MODE_NOT_SUPPORTED = 14;
-		static const unsigned char ERR_PORT_OUT_OF_RANGE = 15;
-		static const unsigned char ERR_NOT_IMPLEMENTED = 16;
-		static const unsigned char ERR_OUT_OF_SYNC = 17;
-		static const unsigned char ERR_I2C_NOT_SUPPORTED = 18;
-		static const unsigned char ERR_MAINBOARD_ERROR = 19;
-		static const unsigned char ERR_PIN_UNCONNECTED = 20;
-		static const unsigned char ERR_PIN_INVALID = 21;
+		static const error_code ONLY_ONE_MAINBOARD = 0;
+		static const error_code SPI_NOT_SUPPORTED = 1;
+		static const error_code PWM_NOT_SUPPORTED = 2;
+		static const error_code READ_DIGITAL_NOT_SUPPORTED = 3;
+		static const error_code WRITE_DIGITAL_NOT_SUPPORTED = 4;
+		static const error_code READ_ANALOG_NOT_SUPPORTED = 5;
+		static const error_code WRITE_ANALOG_NOT_SUPPORTED = 6;
+		static const error_code SET_IO_NOT_SUPPORTED = 7;
+		static const error_code SOCKET_NOT_HAVE_TYPE = 8;
+		static const error_code INVALID_SOCKET = 9;
+		static const error_code PIN_OUT_OF_RANGE = 10;
+		static const error_code PIN_RESERVED = 11;
+		static const error_code SERIAL_NOT_SUPPORTED = 12;
+		static const error_code MODULE_ERROR = 13;
+		static const error_code IO_MODE_NOT_SUPPORTED = 14;
+		static const error_code PORT_OUT_OF_RANGE = 15;
+		static const error_code NOT_IMPLEMENTED = 16;
+		static const error_code OUT_OF_SYNC = 17;
+		static const error_code I2C_NOT_SUPPORTED = 18;
+		static const error_code MAINBOARD_ERROR = 19;
+		static const error_code PIN_UNCONNECTED = 20;
+		static const error_code PIN_INVALID = 21;
 	}
 }

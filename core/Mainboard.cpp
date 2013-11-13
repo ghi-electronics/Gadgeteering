@@ -22,7 +22,7 @@ using namespace gadgeteering;
 base_mainboard::base_mainboard(double max_analog_voltage) : max_analog_voltage(max_analog_voltage)
 {
 	if (mainboard != NULL)
-		system::panic(Exceptions::ERR_ONLY_ONE_MAINBOARD);
+		system::panic(error_codes::ONLY_ONE_MAINBOARD);
 }
 
 base_mainboard::~base_mainboard() {

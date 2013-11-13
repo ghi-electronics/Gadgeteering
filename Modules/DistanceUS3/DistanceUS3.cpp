@@ -57,7 +57,7 @@ namespace Gadgeteering
 
                     if (errorCount > AcceptableErrorRate)
                     {
-						mainboard->panic(Exceptions::ERR_MODULE_ERROR);
+						mainboard->panic(error_codes::MODULE_ERROR);
                     }
                 }
 

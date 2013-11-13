@@ -28,7 +28,7 @@ namespace gadgeteering
 		int random_number(int low, int high);
 		void random_seed(int seed);
 
-		void panic(unsigned char error, unsigned char specific_error = 0);
+		void panic(error_code error, unsigned char specific_error = 0);
 
 		void print(const char* data);
 		void print(int data);

@@ -47,7 +47,7 @@ ALFATLink::ALFATLink(unsigned char socketNumber) {
 	
 	//Success code is sent after the startup banner
 	if (this->readResponseCode() != ResponseCodes::SUCCESS)
-		mainboard->panic(Exceptions::ERR_MODULE_ERROR, 0);
+		mainboard->panic(error_codes::MODULE_ERROR, 0);
 
 	System::Sleep(1);
 }

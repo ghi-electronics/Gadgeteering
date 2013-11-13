@@ -54,7 +54,7 @@ void MaxO::SetNumBoards(int boards)
     }
     else
     {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
+        mainboard->panic(error_codes::MODULE_ERROR);
     }
 }
 
@@ -67,7 +67,7 @@ void MaxO::Clear()
 {
     if (!reSized)
     {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
+        mainboard->panic(error_codes::MODULE_ERROR);
     }
 
     Enable->write(true);
@@ -88,12 +88,12 @@ void MaxO::WriteArray(unsigned char* arr, unsigned int arrLength)
 {
     if (!reSized)
     {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
+        mainboard->panic(error_codes::MODULE_ERROR);
     }
 
     if (arrLength != this->length)
     {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
+        mainboard->panic(error_codes::MODULE_ERROR);
     }
 
     Enable->write(true);
@@ -117,7 +117,7 @@ void MaxO::WritePin(int _board, int _pin, bool _value)
 {
     if (!reSized)
     {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
+        mainboard->panic(error_codes::MODULE_ERROR);
     }
 
     // check to see if the pin is inside our range
@@ -125,7 +125,7 @@ void MaxO::WritePin(int _board, int _pin, bool _value)
     int position = ((_board - 1) * 4) + _pin;
 
     if (length > (int)this->length)
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
+        mainboard->panic(error_codes::MODULE_ERROR);
 
     // make a "dummy" to turn our pin on or off
     unsigned char* dummy = new unsigned char[this->length];
@@ -153,7 +153,7 @@ unsigned char* MaxO::Read()
 {
     if (!reSized)
     {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
+        mainboard->panic(error_codes::MODULE_ERROR);
     }
 
     return data;
@@ -163,7 +163,7 @@ void MaxO::EnableOutputs()
 {
     if (!reSized)
     {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
+        mainboard->panic(error_codes::MODULE_ERROR);
     }
 
     Enable->write(false);
@@ -173,7 +173,7 @@ void MaxO::DisableOutputs()
 {
     if (!reSized)
     {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
+        mainboard->panic(error_codes::MODULE_ERROR);
     }
 
     Enable->write(true);

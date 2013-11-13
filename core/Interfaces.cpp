@@ -24,7 +24,7 @@ using namespace gadgeteering::interfaces;
 digital_output::digital_output(socket& socket, socket::pin pin_number, bool initial_state)
 {
 	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
-		system::panic(Exceptions::ERR_PIN_UNCONNECTED);
+		system::panic(error_codes::PIN_UNCONNECTED);
 
 	this->pin = socket.pins[pin_number];
 
@@ -41,7 +41,7 @@ void digital_output::write(bool value)
 digital_input::digital_input(socket& socket, socket::pin pin_number, resistor_mode new_resistor_mode)
 {
 	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
-		system::panic(Exceptions::ERR_PIN_UNCONNECTED);
+		system::panic(error_codes::PIN_UNCONNECTED);
 
 	this->pin = socket.pins[pin_number];
 	this->set_resistor_mode(new_resistor_mode);
@@ -66,7 +66,7 @@ resistor_mode digital_input::get_resistor_mode()
 digital_io::digital_io(socket& socket, socket::pin pin_number)
 {
 	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
-		system::panic(Exceptions::ERR_PIN_UNCONNECTED);
+		system::panic(error_codes::PIN_UNCONNECTED);
 
 	this->pin = socket.pins[pin_number];
 	this->current_resistor_mode = resistor_modes::NONE;
@@ -120,7 +120,7 @@ analog_input::analog_input(socket& socket, socket::pin pin_number)
 		case socket::pins::THREE: this->channel = socket.analog1;
 		case socket::pins::FOUR: this->channel = socket.analog2;
 		case socket::pins::FIVE: this->channel = socket.analog3;
-		default: system::panic(Exceptions::ERR_PIN_INVALID);
+		default: system::panic(error_codes::PIN_INVALID);
 	}
 }
 
@@ -141,7 +141,7 @@ analog_output::analog_output(socket& socket, socket::pin pin_number)
 		case socket::pins::THREE: this->channel = socket.analog1;
 		case socket::pins::FOUR: this->channel = socket.analog2;
 		case socket::pins::FIVE: this->channel = socket.analog3;
-		default: system::panic(Exceptions::ERR_PIN_INVALID);
+		default: system::panic(error_codes::PIN_INVALID);
 	}
 }
 
@@ -158,7 +158,7 @@ void analog_output::write_proportion(double value)
 pwm_output::pwm_output(socket& socket, socket::pin pin_number)
 {
 	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
-		system::panic(Exceptions::ERR_PIN_UNCONNECTED);
+		system::panic(error_codes::PIN_UNCONNECTED);
 
 	this->pin = socket.pins[pin_number];
 

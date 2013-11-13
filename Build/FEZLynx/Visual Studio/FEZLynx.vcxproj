@@ -29,10 +29,6 @@
     <ClCompile Include="..\..\..\Core\Types.cpp" />
     <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\FEZLynxS4.cpp" />
     <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\FTDIDriver.cpp" />
-    <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\s_I2CBus.cpp" />
-    <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\s_SerialDevice.cpp" />
-    <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\s_SPIBus.cpp" />
-    <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\s_System.cpp" />
     <ClCompile Include="..\..\..\Modules\Accelerometer\Accelerometer.cpp" />
     <ClCompile Include="..\..\..\Modules\AccelG248\AccelG248.cpp" />
     <ClCompile Include="..\..\..\Modules\ALFATLink\ALFATLink.cpp" />

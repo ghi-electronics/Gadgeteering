@@ -35,7 +35,7 @@ ButtonS7::~ButtonS7() {
 
 bool ButtonS7::isPressed(Button buttonNumber) {
 	if (buttonNumber > 9 || buttonNumber < 3)
-		mainboard->panic(Exceptions::ERR_MODULE_ERROR, 1);
+		mainboard->panic(error_codes::MODULE_ERROR, 1);
 
 	return !this->buttons[buttonNumber - 3]->read();
 }

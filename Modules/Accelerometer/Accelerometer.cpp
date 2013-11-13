@@ -73,7 +73,7 @@ double Accelerometer::ConvertDataToG(int data)
         case Ranges::FourG: return ((double)data / 128) * 4;
 		case Ranges::EightG: return ((double)data / 128) * 8;
     }
-	mainboard->panic(Exceptions::ERR_MODULE_ERROR);
+	mainboard->panic(error_codes::MODULE_ERROR);
 	return 0;
 }
 

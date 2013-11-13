@@ -120,7 +120,7 @@ unsigned int TemperatureHumidity::SHT_MeasureTemperature() {
 
     //TEMP
     if (ack) 
-		mainboard->panic(Exceptions::ERR_MODULE_ERROR);
+		mainboard->panic(error_codes::MODULE_ERROR);
 
     //It will take up to 80ms to read. Sensor will
     // pull DATA line low when ready

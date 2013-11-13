@@ -22,18 +22,6 @@
     <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\FEZLynxS4.cpp">
       <Filter>Mainboards</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\s_System.cpp">
-      <Filter>Mainboards</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\s_SPIBus.cpp">
-      <Filter>Mainboards</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\s_SerialDevice.cpp">
-      <Filter>Mainboards</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\s_I2CBus.cpp">
-      <Filter>Mainboards</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Modules\Accelerometer\Accelerometer.cpp">
       <Filter>Modules</Filter>
     </ClCompile>

@@ -60,7 +60,7 @@ void FLASH::GetIdentification(unsigned char received[4]) {
 
     if ((received[1] == 0xFF && received[2] == 0xFF && received[3] == 0xFF) || (received[1] == 0 && received[2] == 0 && received[3] == 0))
     {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR, 1);
+        mainboard->panic(error_codes::MODULE_ERROR, 1);
     }
 
     statusLED->write(false);
@@ -98,7 +98,7 @@ void FLASH::EraseChip() {
 bool FLASH::EraseBlock(unsigned int block, unsigned int number) {
     if ((block + number) * FLASH::BLOCK_SIZE > MAX_ADDRESS)
     {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR, 2);
+        mainboard->panic(error_codes::MODULE_ERROR, 2);
     }
          
     int address = block * FLASH::BLOCK_SIZE;
@@ -133,7 +133,7 @@ bool FLASH::EraseBlock(unsigned int block, unsigned int number) {
 bool FLASH::EraseSector(unsigned int sector, unsigned int number) {
 	if ((sector + number) * FLASH::SECTOR_SIZE > MAX_ADDRESS)
     {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR, 3);
+        mainboard->panic(error_codes::MODULE_ERROR, 3);
     }
 
     int address = sector * FLASH::SECTOR_SIZE;
@@ -168,7 +168,7 @@ bool FLASH::EraseSector(unsigned int sector, unsigned int number) {
 bool FLASH::WriteData(unsigned long address, const unsigned char* data, unsigned int length) {
     if (length + address > MAX_ADDRESS)
     {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR, 4);
+        mainboard->panic(error_codes::MODULE_ERROR, 4);
     }
            
     int block = length / FLASH::PAGE_SIZE;
@@ -235,7 +235,7 @@ bool FLASH::WriteData(unsigned long address, const unsigned char* data, unsigned
 bool FLASH::ReadData(unsigned long address, unsigned char* data, unsigned int length) {
     if (length + address > MAX_ADDRESS)
     {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR, 5);
+        mainboard->panic(error_codes::MODULE_ERROR, 5);
     }
 
     statusLED->write(true);
@@ -260,7 +260,7 @@ bool FLASH::ReadData(unsigned long address, unsigned char* data, unsigned int le
 bool FLASH::ReadData_FastMode(unsigned long address, unsigned char* data, unsigned int length) {
     if (length + address > MAX_ADDRESS)
     {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR, 6);
+        mainboard->panic(error_codes::MODULE_ERROR, 6);
     }
 
     statusLED->write(true);

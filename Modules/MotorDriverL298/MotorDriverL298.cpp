@@ -54,7 +54,7 @@ namespace Gadgeteering
         {
             // Make sure the speed is within an acceptable range.
             if (_newSpeed > 100 || _newSpeed < -100)
-				mainboard->panic(Exceptions::ERR_MODULE_ERROR, 0x01);
+				mainboard->panic(error_codes::MODULE_ERROR, 0x01);
 
             //////////////////////////////////////////////////////////////////////////////////
             // Motor1

@@ -277,7 +277,7 @@ void fez_lynx_s4::create_sockets()
 const socket& fez_lynx_s4::get_socket(unsigned char number)
 {
 	if (this->sockets.count(number) == 0)
-		system::panic(Exceptions::ERR_INVALID_SOCKET);
+		system::panic(error_codes::INVALID_SOCKET);
 	
 	return this->sockets[number];
 }
@@ -325,7 +325,7 @@ bool fez_lynx_s4::read_digital(cpu_pin pin)
 
 void fez_lynx_s4::write_analog(analog_channel channel, double voltage)
 {
-	system::panic(Exceptions::ERR_WRITE_ANALOG_NOT_SUPPORTED);
+	system::panic(error_codes::WRITE_ANALOG_NOT_SUPPORTED);
 }
 
 double fez_lynx_s4::read_analog(analog_channel channel)
@@ -362,7 +362,7 @@ void fez_lynx_s4::set_pwm(cpu_pin pin, double duty_cycle, double frequency)
 	}
 	else
 	{
-		system::panic(Exceptions::ERR_PWM_NOT_SUPPORTED);
+		system::panic(error_codes::PWM_NOT_SUPPORTED);
 	}
 }
 
@@ -447,11 +447,11 @@ void system::random_seed(int seed)
 	srand(seed);
 }
 
-void system::panic(unsigned char error, unsigned char specific_error)
+void system::panic(error_code error, unsigned char specific_error)
 {
-	std::cout << (int)error << " " << (int)specific_error << std::endl;
+	std::cout << "ERROR: " << (int)error << "-" << (int)specific_error << std::endl;
 
-	throw error;
+	throw exception();
 }
 
 void system::print(const char* data)
