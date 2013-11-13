@@ -447,7 +447,7 @@ void system::random_seed(int seed)
 	srand(seed);
 }
 
-void system::panic(error_code error, unsigned char specific_error)
+void system::panic(error_number error, unsigned char specific_error)
 {
 	std::cout << "ERROR: " << (int)error << "-" << (int)specific_error << std::endl;
 

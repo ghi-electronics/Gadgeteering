@@ -25,7 +25,7 @@ namespace gadgeteering
 	typedef unsigned char io_mode;
 	typedef unsigned char resistor_mode;
 
-	typedef unsigned char error_code;
+	typedef unsigned char error_number;
 
 	typedef unsigned char cpu_pin;
 
@@ -158,27 +158,27 @@ namespace gadgeteering
 
 	namespace error_codes
 	{
-		static const error_code ONLY_ONE_MAINBOARD = 0;
-		static const error_code SPI_NOT_SUPPORTED = 1;
-		static const error_code PWM_NOT_SUPPORTED = 2;
-		static const error_code READ_DIGITAL_NOT_SUPPORTED = 3;
-		static const error_code WRITE_DIGITAL_NOT_SUPPORTED = 4;
-		static const error_code READ_ANALOG_NOT_SUPPORTED = 5;
-		static const error_code WRITE_ANALOG_NOT_SUPPORTED = 6;
-		static const error_code SET_IO_NOT_SUPPORTED = 7;
-		static const error_code SOCKET_NOT_HAVE_TYPE = 8;
-		static const error_code INVALID_SOCKET = 9;
-		static const error_code PIN_OUT_OF_RANGE = 10;
-		static const error_code PIN_RESERVED = 11;
-		static const error_code SERIAL_NOT_SUPPORTED = 12;
-		static const error_code MODULE_ERROR = 13;
-		static const error_code IO_MODE_NOT_SUPPORTED = 14;
-		static const error_code PORT_OUT_OF_RANGE = 15;
-		static const error_code NOT_IMPLEMENTED = 16;
-		static const error_code OUT_OF_SYNC = 17;
-		static const error_code I2C_NOT_SUPPORTED = 18;
-		static const error_code MAINBOARD_ERROR = 19;
-		static const error_code PIN_UNCONNECTED = 20;
-		static const error_code PIN_INVALID = 21;
+		static const error_number ONLY_ONE_MAINBOARD = 0;
+		static const error_number SPI_NOT_SUPPORTED = 1;
+		static const error_number PWM_NOT_SUPPORTED = 2;
+		static const error_number READ_DIGITAL_NOT_SUPPORTED = 3;
+		static const error_number WRITE_DIGITAL_NOT_SUPPORTED = 4;
+		static const error_number READ_ANALOG_NOT_SUPPORTED = 5;
+		static const error_number WRITE_ANALOG_NOT_SUPPORTED = 6;
+		static const error_number SET_IO_NOT_SUPPORTED = 7;
+		static const error_number SOCKET_NOT_HAVE_TYPE = 8;
+		static const error_number INVALID_SOCKET = 9;
+		static const error_number PIN_OUT_OF_RANGE = 10;
+		static const error_number PIN_RESERVED = 11;
+		static const error_number SERIAL_NOT_SUPPORTED = 12;
+		static const error_number MODULE_ERROR = 13;
+		static const error_number IO_MODE_NOT_SUPPORTED = 14;
+		static const error_number PORT_OUT_OF_RANGE = 15;
+		static const error_number NOT_IMPLEMENTED = 16;
+		static const error_number OUT_OF_SYNC = 17;
+		static const error_number I2C_NOT_SUPPORTED = 18;
+		static const error_number MAINBOARD_ERROR = 19;
+		static const error_number PIN_UNCONNECTED = 20;
+		static const error_number PIN_INVALID = 21;
 	}
 }
