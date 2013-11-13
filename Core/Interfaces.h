@@ -85,13 +85,13 @@ namespace gadgeteering
 		};
 
 		class pwm_output {
-			cpu_pin pin;
+			pwm_channel channel;
 
 			double frequency;
 			double duty_cycle;
 
 			public:
-				pwm_output(const socket& socket, socket::pin pin_number);
+				pwm_output(pwm_channel channel);
 
 				void set(double frequency, double duty_cycle);
 				void set_frequency(double frequency);

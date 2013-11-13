@@ -62,12 +62,18 @@ namespace gadgeteering {
 		unsigned char number;
 		type type_mask;
 		cpu_pin pins[11];
+
 		spi_channel spi;
 		i2c_channel i2c;
 		serial_channel serial;
-		analog_channel analog1;
-		analog_channel analog2;
+
 		analog_channel analog3;
+		analog_channel analog4;
+		analog_channel analog5;
+
+		pwm_channel pwm7;
+		pwm_channel pwm8;
+		pwm_channel pwm9;
 
 		socket();
 		socket(unsigned char number, type type);

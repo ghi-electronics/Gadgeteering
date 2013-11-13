@@ -115,6 +115,9 @@ io_mode digital_io::get_io_mode()
 
 analog_input::analog_input(analog_channel channel)
 {
+	if (channel = analog_channels::NONE)
+		system::panic(error_codes::CHANNEL_INVALID);
+
 	this->channel = channel;
 }
 
@@ -130,6 +133,9 @@ double analog_input::read_proportion()
 
 analog_output::analog_output(analog_channel channel)
 {
+	if (channel = analog_channels::NONE)
+		system::panic(error_codes::CHANNEL_INVALID);
+
 	this->channel = channel;
 }
 
@@ -143,14 +149,12 @@ void analog_output::write_proportion(double value)
 	mainboard->write_analog(this->channel, value);
 }
 
-pwm_output::pwm_output(const socket& socket, socket::pin pin_number)
+pwm_output::pwm_output(pwm_channel channel)
 {
-	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
-		system::panic(error_codes::PIN_UNCONNECTED);
+	if (channel = pwm_channels::NONE)
+		system::panic(error_codes::CHANNEL_INVALID);
 
-	this->pin = socket.pins[pin_number];
-
-	mainboard->set_io_mode(this->pin, io_modes::PWM_OUTPUT, resistor_modes::FLOATING);
+	this->channel = channel;
 
 	this->set(0, 0);
 }
@@ -160,7 +164,7 @@ void pwm_output::set(double frequency, double duty_cycle)
 	this->duty_cycle = duty_cycle;
 	this->frequency = frequency;
 
-	mainboard->set_pwm(this->pin, this->frequency, this->duty_cycle);
+	mainboard->set_pwm(this->channel, this->frequency, this->duty_cycle);
 }
 
 void pwm_output::set_frequency(double frequency)

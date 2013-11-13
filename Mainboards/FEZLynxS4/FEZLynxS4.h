@@ -30,7 +30,8 @@ namespace gadgeteering
         class fez_lynx_s4: public base_mainboard
         {
 			std::map<unsigned char, socket> sockets;
-			std::map<analog_channel, cpu_pin> analog_channel_to_pin_map;
+			std::map<analog_channel, std::pair<cpu_pin, unsigned char>> analog_channel_to_pin_map;
+			std::map<analog_channel, cpu_pin> pwm_channel_to_pin_map;
             ftdi_channel channels[4];
            
 			bool extender_present;
@@ -159,12 +160,12 @@ namespace gadgeteering
 
 				virtual void set_debug_led(bool state);
 
-				virtual void set_pwm(cpu_pin pin, double duty_cycle, double frequency);
-				virtual bool read_digital(cpu_pin pin);
-				virtual void write_digital(cpu_pin pin, bool value);
-				virtual double read_analog(analog_channel channel);
-				virtual void write_analog(analog_channel channel, double voltage);
 				virtual void set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_resistor_mode);
+				virtual void write_digital(cpu_pin pin, bool value);
+				virtual bool read_digital(cpu_pin pin);
+				virtual void write_analog(analog_channel channel, double voltage);
+				virtual double read_analog(analog_channel channel);
+				virtual void set_pwm(pwm_channel channel, double duty_cycle, double frequency);
 
 				virtual void spi_read_write(spi_channel channel, const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int count, spi_configuration& config, bool deselect_after);
 				virtual bool i2c_write(i2c_channel channel, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);

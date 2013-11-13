@@ -26,7 +26,7 @@ io60p16::io60p16(unsigned char socketNumber) {
 	//s.ensure_type(socket::types::X);
 	//fix once hubap5 driver is done
 
-	this->io60Chip = new devices::i2c(s, 0x20);
+	this->io60Chip = new devices::i2c(s.i2c, 0x20);
 
 	for(int i = 0; i < 8; i++)
 	{

@@ -20,11 +20,9 @@ limitations under the License.
 using namespace gadgeteering;
 using namespace gadgeteering::devices;
 
-i2c::i2c(const socket& socket, unsigned char address)
+i2c::i2c(i2c_channel channel, unsigned char address)
 {
-	socket.ensure_type(socket::types::I);
-
-	this->channel = socket.i2c;
+	this->channel = channel;
 	this->w_address = address << 1;
 	this->r_address = (address << 1) | 1;
 	this->soft_i2c = NULL;
@@ -113,20 +111,16 @@ bool i2c::read_registers(unsigned char start_address, unsigned char* values, uns
 	return this->write_read(&start_address, 1, values, length);
 }
 
-spi::spi(const socket& socket, spi_configuration configuration)
+spi::spi(i2c_channel channel, spi_configuration configuration)
 {
-	socket.ensure_type(socket::types::S);
-
 	this->config = configuration;
-	this->channel = socket.spi;
+	this->channel = channel;
 }
 
-spi::spi(const socket& spi_socket, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number)
+spi::spi(i2c_channel channel, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number)
 {
-	spi_socket.ensure_type(socket::types::S);
-
 	this->config = configuration;
-	this->channel = spi_socket.spi;
+	this->channel = channel;
 	this->config.chip_select = cs_socket.pins[cs_pin_number];
 }
 
@@ -158,12 +152,10 @@ void spi::read(unsigned char* buffer, unsigned int length, bool deselect_after)
 	this->write_read(NULL, buffer, length, deselect_after);
 }
 
-serial::serial(const socket& socket, serial_configuration configuration)
+serial::serial(serial_channel channel, serial_configuration configuration)
 {
-	socket.ensure_type(socket::types::U);
-
 	this->config = configuration;
-	this->channel = socket.serial;
+	this->channel = channel;
 }
 
 void serial::write(const unsigned char* buffer, unsigned int length) 

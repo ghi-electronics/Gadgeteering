@@ -29,6 +29,18 @@ socket::socket(unsigned char number, type type)
 	this->type_mask = type;
 	this->number = number;
 
+	this->analog3 = analog_channels::NONE;
+	this->analog4 = analog_channels::NONE;
+	this->analog5 = analog_channels::NONE;
+
+	this->pwm7 = pwm_channels::NONE;
+	this->pwm8 = pwm_channels::NONE;
+	this->pwm9 = pwm_channels::NONE;
+
+	this->spi = spi_channels::NONE;
+	this->i2c = i2c_channels::NONE;
+	this->serial = serial_channels::NONE;
+
 	for (unsigned char i = 1; i <= 10; i++)
 		this->pins[i] = socket::pins::UNCONNECTED;
 }

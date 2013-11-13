@@ -25,62 +25,102 @@ namespace gadgeteering
 	typedef unsigned char io_mode;
 	typedef unsigned char resistor_mode;
 
-	typedef unsigned char error_number;
-
-	typedef unsigned char cpu_pin;
-
 	typedef unsigned char spi_channel;
 	typedef unsigned char i2c_channel;
 	typedef unsigned char serial_channel;
 	typedef unsigned char analog_channel;
+	typedef unsigned char pwm_channel;
 
+	typedef unsigned char error_number;
+
+	typedef unsigned char cpu_pin;
 
 	struct io_modes 
 	{
-		static const io_mode DIGITAL_OUTPUT = 0;
-		static const io_mode DIGITAL_INPUT = 1;
-		static const io_mode ANALOG_OUTPUT = 2;
-		static const io_mode ANALOG_INPUT = 3;
-		static const io_mode PWM_OUTPUT = 4;
-		static const io_mode NONE = 5;
+		static const io_mode NONE = 0;
+		static const io_mode DIGITAL_OUTPUT = 1;
+		static const io_mode DIGITAL_INPUT = 2;
+		static const io_mode PWM_OUTPUT = 5;
 	};
 
 	struct resistor_modes 
 	{
-		static const resistor_mode PULL_UP = 0;
-		static const resistor_mode PULL_DOWN = 1;
-		static const resistor_mode FLOATING = 2;
-		static const resistor_mode NONE = 3;
+		static const resistor_mode NONE = 0;
+		static const resistor_mode PULL_UP = 1;
+		static const resistor_mode PULL_DOWN = 2;
+		static const resistor_mode FLOATING = 3;
 	};
 
 	struct spi_channels
 	{
+		static const spi_channel SPI_0 = 0;
 		static const spi_channel SPI_1 = 1;
 		static const spi_channel SPI_2 = 2;
 		static const spi_channel SPI_3 = 3;
 		static const spi_channel SPI_4 = 4;
 		static const spi_channel SPI_5 = 5;
-		static const spi_channel NONE = 0;
+		static const serial_channel NONE = 0xFF;
 	};
 
 	struct i2c_channels
 	{
+		static const i2c_channel I2C_0 = 0;
 		static const i2c_channel I2C_1 = 1;
 		static const i2c_channel I2C_2 = 2;
 		static const i2c_channel I2C_3 = 3;
 		static const i2c_channel I2C_4 = 4;
 		static const i2c_channel I2C_5 = 5;
-		static const i2c_channel NONE = 0;
+		static const serial_channel NONE = 0xFF;
 	};
 
 	struct serial_channels
 	{
+		static const serial_channel SERIAL_0 = 0;
 		static const serial_channel SERIAL_1 = 1;
 		static const serial_channel SERIAL_2 = 2;
 		static const serial_channel SERIAL_3 = 3;
 		static const serial_channel SERIAL_4 = 4;
 		static const serial_channel SERIAL_5 = 5;
-		static const serial_channel NONE = 0;
+		static const serial_channel NONE = 0xFF;
+	};
+
+	struct analog_channels
+	{
+		static const analog_channel ANALOG_0 = 0;
+		static const analog_channel ANALOG_1 = 1;
+		static const analog_channel ANALOG_2 = 2;
+		static const analog_channel ANALOG_3 = 3;
+		static const analog_channel ANALOG_4 = 4;
+		static const analog_channel ANALOG_5 = 5;
+		static const analog_channel ANALOG_6 = 6;
+		static const analog_channel ANALOG_7 = 7;
+		static const analog_channel ANALOG_8 = 8;
+		static const analog_channel ANALOG_9 = 9;
+		static const analog_channel ANALOG_10 = 10;
+		static const analog_channel ANALOG_11 = 11;
+		static const analog_channel ANALOG_12 = 12;
+		static const analog_channel NONE = 0xFF;
+	};
+
+	struct pwm_channels
+	{
+		static const pwm_channel PWM_0 = 0;
+		static const pwm_channel PWM_1 = 1;
+		static const pwm_channel PWM_2 = 2;
+		static const pwm_channel PWM_3 = 3;
+		static const pwm_channel PWM_4 = 4;
+		static const pwm_channel PWM_5 = 5;
+		static const pwm_channel PWM_6 = 6;
+		static const pwm_channel PWM_7 = 7;
+		static const pwm_channel PWM_8 = 8;
+		static const pwm_channel PWM_9 = 9;
+		static const pwm_channel PWM_10 = 10;
+		static const pwm_channel PWM_11 = 11;
+		static const pwm_channel PWM_12 = 12;
+		static const pwm_channel PWM_13 = 13;
+		static const pwm_channel PWM_14 = 14;
+		static const pwm_channel PWM_15 = 15;
+		static const pwm_channel NONE = 0xFF;
 	};
 
 	struct color
@@ -180,5 +220,6 @@ namespace gadgeteering
 		static const error_number MAINBOARD_ERROR = 19;
 		static const error_number PIN_UNCONNECTED = 20;
 		static const error_number PIN_INVALID = 21;
+		static const error_number CHANNEL_INVALID = 22;
 	}
 }
