@@ -14,37 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _LEDSTRIP_H_
-#define _LEDSTRIP_H_
+#pragma once
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-
-		using namespace Gadgeteering::Interfaces;
-
-		class LEDStrip : public Module {
+namespace gadgeteering {
+	namespace modules {
+		class led_strip
+		{
 			static const unsigned char LEDS = 7;
 
-			Socket* socket;
-			DigitalOutput* ports[LEDStrip::LEDS];
+			interfaces::digital_output* ports[led_strip::LEDS];
 
 			public:
-				LEDStrip(unsigned char socketNumber);
-				virtual ~LEDStrip();
+				led_strip(unsigned char socketNumber);
+				~led_strip();
 
-				void turnOnLED(unsigned char led, bool onlyLED = false);
-				void turnOffLED(unsigned char led);
+				void turn_on_led(unsigned char led, bool only_led = false);
+				void turn_off_led(unsigned char led);
 
-				void turnAllOn();
-				void turnAllOff();
+				void turn_all_on();
+				void turn_all_off();
 
 				void set(unsigned char led, bool state);
 
-				void animate(unsigned int switchTime, bool clockwise, bool turnOn, bool remainOn = true);
+				void animate(unsigned int switch_time, bool clockwise, bool turn_on, bool remain_on = true);
 		};
 	}
 }
-
-#endif

@@ -29,7 +29,7 @@ socket::socket(unsigned char number, type type)
 	this->type_mask = type;
 	this->number = number;
 
-	for (unsigned char i = 0; i < 10; i++)
+	for (unsigned char i = 1; i <= 10; i++)
 		this->pins[i] = socket::pins::UNCONNECTED;
 }
 

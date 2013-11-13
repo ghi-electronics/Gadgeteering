@@ -25,7 +25,7 @@ namespace gadgeteering {
 
 		struct pins
 		{
-			static const pin UNCONNECTED = 0;
+			static const pin UNCONNECTED = 0xFF;
 			static const pin THREE = 3;
 			static const pin FOUR = 4;
 			static const pin FIVE = 5;
@@ -61,7 +61,7 @@ namespace gadgeteering {
 
 		unsigned char number;
 		type type_mask;
-		cpu_pin pins[10];
+		cpu_pin pins[11];
 		spi_channel spi;
 		i2c_channel i2c;
 		serial_channel serial;

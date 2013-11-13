@@ -28,7 +28,7 @@ namespace gadgeteering
 			cpu_pin pin;
 
 			public:
-				digital_output(socket& socket, socket::pin pin_number, bool initial_state = false);
+				digital_output(const socket& socket, socket::pin pin_number, bool initial_state = false);
 
 				void write(bool value);
 		};
@@ -38,7 +38,7 @@ namespace gadgeteering
 			resistor_mode current_resistor_mode;
 
 			public:
-				digital_input(socket& socket, socket::pin pin_number, resistor_mode initial_resistor_mode = resistor_modes::FLOATING);
+				digital_input(const socket& socket, socket::pin pin_number, resistor_mode initial_resistor_mode = resistor_modes::FLOATING);
 
 				bool read();
 
@@ -52,7 +52,7 @@ namespace gadgeteering
 			resistor_mode current_resistor_mode;
 	
 			public:
-				digital_io(socket& socket, socket::pin pin_number);
+				digital_io(const socket& socket, socket::pin pin_number);
 
 				void write(bool value);
 				bool read();
@@ -68,7 +68,7 @@ namespace gadgeteering
 			analog_channel channel;
 
 			public:
-				analog_input(socket& socket, socket::pin pin_number);
+				analog_input(const socket& socket, socket::pin pin_number);
 				
 				double read();
 				double read_proportion();
@@ -78,7 +78,7 @@ namespace gadgeteering
 			analog_channel channel;
 
 			public:
-				analog_output(socket& socket, socket::pin pin_number);
+				analog_output(const socket& socket, socket::pin pin_number);
 				
 				void write(double value);
 				void write_proportion(double value);
@@ -91,7 +91,7 @@ namespace gadgeteering
 			double duty_cycle;
 
 			public:
-				pwm_output(socket& socket, socket::pin pin_number);
+				pwm_output(const socket& socket, socket::pin pin_number);
 
 				void set(double frequency, double duty_cycle);
 				void set_frequency(double frequency);

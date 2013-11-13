@@ -23,7 +23,8 @@ using namespace gadgeteering::interfaces;
 io60p16::io60p16(unsigned char socketNumber) {
 	const socket& s = mainboard->get_socket(socketNumber);
 
-	s.ensure_type(socket::types::X);
+	//s.ensure_type(socket::types::X);
+	//fix once hubap5 driver is done
 
 	this->io60Chip = new devices::i2c(s, 0x20);
 

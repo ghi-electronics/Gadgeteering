@@ -21,7 +21,7 @@ limitations under the License.
 using namespace gadgeteering;
 using namespace gadgeteering::interfaces;
 
-digital_output::digital_output(socket& socket, socket::pin pin_number, bool initial_state)
+digital_output::digital_output(const socket& socket, socket::pin pin_number, bool initial_state)
 {
 	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
 		system::panic(error_codes::PIN_UNCONNECTED);
@@ -38,7 +38,7 @@ void digital_output::write(bool value)
 	mainboard->write_digital(this->pin, value);
 }
 
-digital_input::digital_input(socket& socket, socket::pin pin_number, resistor_mode new_resistor_mode)
+digital_input::digital_input(const socket& socket, socket::pin pin_number, resistor_mode new_resistor_mode)
 {
 	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
 		system::panic(error_codes::PIN_UNCONNECTED);
@@ -63,7 +63,7 @@ resistor_mode digital_input::get_resistor_mode()
 	return this->current_resistor_mode;
 }
 
-digital_io::digital_io(socket& socket, socket::pin pin_number)
+digital_io::digital_io(const socket& socket, socket::pin pin_number)
 {
 	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
 		system::panic(error_codes::PIN_UNCONNECTED);
@@ -113,7 +113,7 @@ io_mode digital_io::get_io_mode()
 	return this->current_io_state;
 }
 
-analog_input::analog_input(socket& socket, socket::pin pin_number)
+analog_input::analog_input(const socket& socket, socket::pin pin_number)
 {
 	switch (pin_number)
 	{
@@ -134,7 +134,7 @@ double analog_input::read_proportion()
 	return mainboard->read_analog(this->channel);
 }
 
-analog_output::analog_output(socket& socket, socket::pin pin_number)
+analog_output::analog_output(const socket& socket, socket::pin pin_number)
 {
 	switch (pin_number)
 	{
@@ -155,7 +155,7 @@ void analog_output::write_proportion(double value)
 	mainboard->write_analog(this->channel, value);
 }
 
-pwm_output::pwm_output(socket& socket, socket::pin pin_number)
+pwm_output::pwm_output(const socket& socket, socket::pin pin_number)
 {
 	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
 		system::panic(error_codes::PIN_UNCONNECTED);

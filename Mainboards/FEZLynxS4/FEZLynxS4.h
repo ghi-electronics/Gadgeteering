@@ -152,7 +152,7 @@ namespace gadgeteering
 					static const cpu_pin DD7 = 16 * 3 + 7;
 				};
 				
-				fez_lynx_s4(bool extender_present);
+				fez_lynx_s4(bool extender_present = false);
 				virtual ~fez_lynx_s4();
 
 				virtual const socket& get_socket(unsigned char number);

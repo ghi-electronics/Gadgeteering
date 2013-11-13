@@ -16,80 +16,83 @@ limitations under the License.
 
 #include "LEDStrip.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-LEDStrip::LEDStrip(unsigned char socketNumber)
+led_strip::led_strip(unsigned char socket_number)
 {
-	this->socket = mainboard->getSocket(socketNumber);
-	this->socket->ensureTypeIsSupported(Socket::Types::Y);
+	const socket& s = mainboard->get_socket(socket_number);
+	s.ensure_type(socket::types::Y);
 
-	for (unsigned char i = 0; i < LEDStrip::LEDS; i++)
-		this->ports[i] = new DigitalOutput(this->socket, i + 3, false);
+	for (unsigned char i = 0; i < led_strip::LEDS; i++)
+		this->ports[i] = new digital_output(s, i + 3, false);
 }
 
-LEDStrip::~LEDStrip()
+led_strip::~led_strip()
 {
-	for (unsigned char i = 0; i < LEDStrip::LEDS; i++)
+	for (unsigned char i = 0; i < led_strip::LEDS; i++)
 		delete this->ports[i];
 }
 
-void LEDStrip::turnOnLED(unsigned char led, bool onlyLED) {
+void led_strip::turn_on_led(unsigned char led, bool only_led)
+{
 	if (led < 1 || led > 7)
-		mainboard->panic(error_codes::MODULE_ERROR);
+		system::panic(error_codes::MODULE_ERROR);
 
-	if (onlyLED)
-		this->turnAllOff();
+	if (only_led)
+		this->turn_all_off();
 
 	this->ports[led - 1]->write(true);
 }
 
-void LEDStrip::turnOffLED(unsigned char led) {
+void led_strip::turn_off_led(unsigned char led)
+{
 	if (led < 1 || led > 7)
-		mainboard->panic(error_codes::MODULE_ERROR);
+		system::panic(error_codes::MODULE_ERROR);
 
 	this->ports[led - 1]->write(false);
 }
 
-void LEDStrip::turnAllOn() {
-	for (unsigned char i = 0; i < LEDStrip::LEDS; i++)
+void led_strip::turn_all_on()
+{
+	for (unsigned char i = 0; i < led_strip::LEDS; i++)
 		this->ports[i]->write(true);
 }
 
-void LEDStrip::turnAllOff() {
-	for (unsigned char i = 0; i < LEDStrip::LEDS; i++)
+void led_strip::turn_all_off()
+{
+	for (unsigned char i = 0; i < led_strip::LEDS; i++)
 		this->ports[i]->write(false);
 }
 
-void LEDStrip::set(unsigned char led, bool state) {
+void led_strip::set(unsigned char led, bool state) {
 	if (led < 1 || led > 7)
-		mainboard->panic(error_codes::MODULE_ERROR);
+		system::panic(error_codes::MODULE_ERROR);
 
 	this->ports[led - 1]->write(state);
 }
 
-void LEDStrip::animate(unsigned int switchTime, bool clockwise, bool turnOn, bool remainOn) {
-	int length = 7;
-
+void led_strip::animate(unsigned int switch_time, bool clockwise, bool turn_on, bool remain_on)
+{
 	if (clockwise) {
 		for (int i = 1; i <= 7; i++) {
-			if (turnOn)
-				this->turnOnLED(i, !remainOn);
+			if (turn_on)
+				this->turn_on_led(i, !remain_on);
 			else
-				this->turnOffLED(i);
+				this->turn_off_led(i);
 
-			Gadgeteering::System::Sleep(switchTime);
+			system::sleep(switch_time);
 		}
 	}
 	else {
 		for (int i = 7; i >= 1; i--) {
-			if (turnOn)
-				this->turnOnLED(i, !remainOn);
+			if (turn_on)
+				this->turn_on_led(i, !remain_on);
 			else
-				this->turnOffLED(i);
+				this->turn_off_led(i);
 
-			Gadgeteering::System::Sleep(switchTime);
+			system::sleep(switch_time);
 		}
 	}
 }

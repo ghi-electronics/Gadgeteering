@@ -37,11 +37,11 @@ using namespace gadgeteering::modules;
 base_mainboard* gadgeteering::mainboard = NULL;
 
 #define FTDI_CHANNEL(cpu_pin_number) ((cpu_pin_number & 0x70) >> 4)
-#define FTDI_PIN(cpu_pin_number) (cpu_pin_number & 0xFF)
+#define FTDI_PIN(cpu_pin_number) (cpu_pin_number & 0x0F)
 
 #define IS_EXTENDER_PIN(cpu_pin_number) ((cpu_pin_number & 0x80) != 0x00)
 #define EXTENDER_PORT(cpu_pin_number) ((cpu_pin_number & 0x70) >> 4)
-#define EXTENDER_PIN(cpu_pin_number) (cpu_pin_number & 0xFF)
+#define EXTENDER_PIN(cpu_pin_number) (cpu_pin_number & 0x0F)
 
 #define IS_EXTENDER_ANALOG(channel) ((channel & 0x80) != 0x00)
 #define EXTENDER_ANALOG(channel) (channel & ~0x80)
