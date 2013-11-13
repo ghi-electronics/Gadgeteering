@@ -33,6 +33,7 @@ namespace gadgeteering
 			std::map<analog_channel, cpu_pin> analog_channel_to_pin_map;
             ftdi_channel channels[4];
            
+			bool extender_present;
 			modules::io60p16* extender;
 			devices::i2c* extender_analog_converter;
 			devices::i2c* analog_converter;
@@ -151,7 +152,7 @@ namespace gadgeteering
 					static const cpu_pin DD7 = 16 * 3 + 7;
 				};
 				
-				fez_lynx_s4();
+				fez_lynx_s4(bool extender_present);
 				virtual ~fez_lynx_s4();
 
 				virtual const socket& get_socket(unsigned char number);

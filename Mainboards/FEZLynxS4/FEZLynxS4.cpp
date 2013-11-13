@@ -46,8 +46,10 @@ base_mainboard* gadgeteering::mainboard = NULL;
 #define IS_EXTENDER_ANALOG(channel) ((channel & 0x80) != 0x00)
 #define EXTENDER_ANALOG(channel) (channel & ~0x80)
 
-fez_lynx_s4::fez_lynx_s4() : base_mainboard(3.3)
+fez_lynx_s4::fez_lynx_s4(bool extender_present) : base_mainboard(3.3)
 {
+	this->extender_present = extender_present;
+
 	this->channels[0].open("A");
 	this->channels[1].open("B");
 	this->channels[2].open("C");
@@ -62,26 +64,28 @@ fez_lynx_s4::fez_lynx_s4() : base_mainboard(3.3)
 
 	this->create_sockets();
 
-	this->extender = new io60p16(0);
+	if (this->extender_present)
+	{
+		this->extender = new io60p16(0);
+		this->extender_analog_converter = new devices::i2c(mainboard->get_socket(0), 0x48);
+	}
+
+	this->analog_converter = new devices::i2c(mainboard->get_socket(0), 0x49);
 }
 
 fez_lynx_s4::~fez_lynx_s4()
 {
-	delete this->extender;
+	if (this->extender_present)
+	{
+		delete this->extender;
+		delete this->extender_analog_converter;
+	}
+
+	delete this->analog_converter;
 }
 
 void fez_lynx_s4::create_sockets()
 {
-	socket s0(0, socket::types::I);
-	s0.pins[3] = fez_lynx_s4::pins::DD7;
-	s0.pins[8] = fez_lynx_s4::pins::BD1;
-	s0.pins[9] = fez_lynx_s4::pins::BD0;
-
-	s0.i2c = 2;
-
-	this->sockets[0] = s0;
-
-
 	socket s1(1, socket::types::Y | socket::types::A);
 	s1.pins[3] = fez_lynx_s4::pins::DD4;
 	s1.pins[4] = fez_lynx_s4::pins::DD5;
@@ -151,111 +155,123 @@ void fez_lynx_s4::create_sockets()
 
 	this->sockets[4] = s4;
 
+	if (this->extender_present)
+	{
+		socket s0(0, socket::types::I);
+		s0.pins[3] = fez_lynx_s4::pins::DD7;
+		s0.pins[8] = fez_lynx_s4::pins::BD1;
+		s0.pins[9] = fez_lynx_s4::pins::BD0;
 
-	socket s11(11, socket::types::Y | socket::types::A);
-	s11.pins[3] = fez_lynx_s4::pins::P5_0;
-	s11.pins[4] = fez_lynx_s4::pins::P5_1;
-	s11.pins[5] = fez_lynx_s4::pins::P5_2;
-	s11.pins[6] = fez_lynx_s4::pins::P5_3;
-	s11.pins[7] = fez_lynx_s4::pins::P5_4;
-	s11.pins[8] = fez_lynx_s4::pins::P5_5;
-	s11.pins[9] = fez_lynx_s4::pins::P5_6;
+		s0.i2c = 2;
 
-	s11.analog1 = 0 + 128;
-	s11.analog2 = 1 + 128;
-	s11.analog3 = 2 + 128;
-
-	this->analog_channel_to_pin_map[s11.analog1] = s11.pins[3];
-	this->analog_channel_to_pin_map[s11.analog2] = s11.pins[5];
-	this->analog_channel_to_pin_map[s11.analog3] = s11.pins[4];
-
-	this->sockets[11] = s11;
+		this->sockets[0] = s0;
 
 
-	socket s12(12, socket::types::Y | socket::types::A);
-	s12.pins[3] = fez_lynx_s4::pins::P4_0;
-	s12.pins[4] = fez_lynx_s4::pins::P4_1;
-	s12.pins[5] = fez_lynx_s4::pins::P4_2;
-	s12.pins[6] = fez_lynx_s4::pins::P4_3;
-	s12.pins[7] = fez_lynx_s4::pins::P4_4;
-	s12.pins[8] = fez_lynx_s4::pins::P4_5;
-	s12.pins[9] = fez_lynx_s4::pins::P4_6;
+		socket s11(11, socket::types::Y | socket::types::A);
+		s11.pins[3] = fez_lynx_s4::pins::P5_0;
+		s11.pins[4] = fez_lynx_s4::pins::P5_1;
+		s11.pins[5] = fez_lynx_s4::pins::P5_2;
+		s11.pins[6] = fez_lynx_s4::pins::P5_3;
+		s11.pins[7] = fez_lynx_s4::pins::P5_4;
+		s11.pins[8] = fez_lynx_s4::pins::P5_5;
+		s11.pins[9] = fez_lynx_s4::pins::P5_6;
 
-	s12.analog1 = 3 + 128;
-	s12.analog2 = 4 + 128;
-	s12.analog3 = 5 + 128;
+		s11.analog1 = 0 + 128;
+		s11.analog2 = 1 + 128;
+		s11.analog3 = 2 + 128;
 
-	this->analog_channel_to_pin_map[s12.analog1] = s12.pins[3];
-	this->analog_channel_to_pin_map[s12.analog2] = s12.pins[5];
-	this->analog_channel_to_pin_map[s12.analog3] = s12.pins[4];
+		this->analog_channel_to_pin_map[s11.analog1] = s11.pins[3];
+		this->analog_channel_to_pin_map[s11.analog2] = s11.pins[5];
+		this->analog_channel_to_pin_map[s11.analog3] = s11.pins[4];
 
-	this->sockets[12] = s12;
-
-
-	socket s13(13, socket::types::Y | socket::types::X);
-	s13.pins[3] = fez_lynx_s4::pins::P3_0;
-	s13.pins[4] = fez_lynx_s4::pins::P3_1;
-	s13.pins[5] = fez_lynx_s4::pins::P3_2;
-	s13.pins[6] = fez_lynx_s4::pins::P3_3;
-	s13.pins[7] = fez_lynx_s4::pins::P3_4;
-	s13.pins[8] = fez_lynx_s4::pins::P3_5;
-	s13.pins[9] = fez_lynx_s4::pins::P3_6;
-	this->sockets[13] = s13;
+		this->sockets[11] = s11;
 
 
-	socket s14(14, socket::types::Y | socket::types::P | socket::types::X);
-	s14.pins[3] = fez_lynx_s4::pins::P2_0;
-	s14.pins[4] = fez_lynx_s4::pins::P2_1;
-	s14.pins[5] = fez_lynx_s4::pins::P2_2;
-	s14.pins[6] = fez_lynx_s4::pins::P2_3;
-	s14.pins[7] = fez_lynx_s4::pins::P7_4;
-	s14.pins[8] = fez_lynx_s4::pins::P7_5;
-	s14.pins[9] = fez_lynx_s4::pins::P7_6;
-	this->sockets[14] = s14;
+		socket s12(12, socket::types::Y | socket::types::A);
+		s12.pins[3] = fez_lynx_s4::pins::P4_0;
+		s12.pins[4] = fez_lynx_s4::pins::P4_1;
+		s12.pins[5] = fez_lynx_s4::pins::P4_2;
+		s12.pins[6] = fez_lynx_s4::pins::P4_3;
+		s12.pins[7] = fez_lynx_s4::pins::P4_4;
+		s12.pins[8] = fez_lynx_s4::pins::P4_5;
+		s12.pins[9] = fez_lynx_s4::pins::P4_6;
+
+		s12.analog1 = 3 + 128;
+		s12.analog2 = 4 + 128;
+		s12.analog3 = 5 + 128;
+
+		this->analog_channel_to_pin_map[s12.analog1] = s12.pins[3];
+		this->analog_channel_to_pin_map[s12.analog2] = s12.pins[5];
+		this->analog_channel_to_pin_map[s12.analog3] = s12.pins[4];
+
+		this->sockets[12] = s12;
 
 
-	socket s15(15, socket::types::Y | socket::types::P | socket::types::X);
-	s15.pins[3] = fez_lynx_s4::pins::P1_4;
-	s15.pins[4] = fez_lynx_s4::pins::P1_5;
-	s15.pins[5] = fez_lynx_s4::pins::P1_6;
-	s15.pins[6] = fez_lynx_s4::pins::P1_7;
-	s15.pins[7] = fez_lynx_s4::pins::P7_1;
-	s15.pins[8] = fez_lynx_s4::pins::P7_2;
-	s15.pins[9] = fez_lynx_s4::pins::P7_3;
-	this->sockets[15] = s15;
+		socket s13(13, socket::types::Y | socket::types::X);
+		s13.pins[3] = fez_lynx_s4::pins::P3_0;
+		s13.pins[4] = fez_lynx_s4::pins::P3_1;
+		s13.pins[5] = fez_lynx_s4::pins::P3_2;
+		s13.pins[6] = fez_lynx_s4::pins::P3_3;
+		s13.pins[7] = fez_lynx_s4::pins::P3_4;
+		s13.pins[8] = fez_lynx_s4::pins::P3_5;
+		s13.pins[9] = fez_lynx_s4::pins::P3_6;
+		this->sockets[13] = s13;
 
 
-	socket s16(16, socket::types::Y | socket::types::P | socket::types::X);
-	s16.pins[3] = fez_lynx_s4::pins::P1_0;
-	s16.pins[4] = fez_lynx_s4::pins::P1_1;
-	s16.pins[5] = fez_lynx_s4::pins::P1_2;
-	s16.pins[6] = fez_lynx_s4::pins::P1_3;
-	s16.pins[7] = fez_lynx_s4::pins::P6_6;
-	s16.pins[8] = fez_lynx_s4::pins::P6_7;
-	s16.pins[9] = fez_lynx_s4::pins::P7_0;
-	this->sockets[16] = s16;
+		socket s14(14, socket::types::Y | socket::types::P | socket::types::X);
+		s14.pins[3] = fez_lynx_s4::pins::P2_0;
+		s14.pins[4] = fez_lynx_s4::pins::P2_1;
+		s14.pins[5] = fez_lynx_s4::pins::P2_2;
+		s14.pins[6] = fez_lynx_s4::pins::P2_3;
+		s14.pins[7] = fez_lynx_s4::pins::P7_4;
+		s14.pins[8] = fez_lynx_s4::pins::P7_5;
+		s14.pins[9] = fez_lynx_s4::pins::P7_6;
+		this->sockets[14] = s14;
 
 
-	socket s17(17, socket::types::Y | socket::types::P | socket::types::X);
-	s16.pins[3] = fez_lynx_s4::pins::P0_4;
-	s16.pins[4] = fez_lynx_s4::pins::P0_5;
-	s16.pins[5] = fez_lynx_s4::pins::P0_6;
-	s16.pins[6] = fez_lynx_s4::pins::P0_7;
-	s16.pins[7] = fez_lynx_s4::pins::P6_3;
-	s16.pins[8] = fez_lynx_s4::pins::P6_4;
-	s16.pins[9] = fez_lynx_s4::pins::P6_5;
-	this->sockets[17] = s17;
+		socket s15(15, socket::types::Y | socket::types::P | socket::types::X);
+		s15.pins[3] = fez_lynx_s4::pins::P1_4;
+		s15.pins[4] = fez_lynx_s4::pins::P1_5;
+		s15.pins[5] = fez_lynx_s4::pins::P1_6;
+		s15.pins[6] = fez_lynx_s4::pins::P1_7;
+		s15.pins[7] = fez_lynx_s4::pins::P7_1;
+		s15.pins[8] = fez_lynx_s4::pins::P7_2;
+		s15.pins[9] = fez_lynx_s4::pins::P7_3;
+		this->sockets[15] = s15;
 
 
-	socket s18(18, socket::types::Y | socket::types::P | socket::types::X);
-	s18.pins[3] = fez_lynx_s4::pins::P0_0;
-	s18.pins[4] = fez_lynx_s4::pins::P0_1;
-	s18.pins[5] = fez_lynx_s4::pins::P0_2;
-	s18.pins[6] = fez_lynx_s4::pins::P0_3;
-	s18.pins[7] = fez_lynx_s4::pins::P6_0;
-	s18.pins[8] = fez_lynx_s4::pins::P6_1;
-	s18.pins[9] = fez_lynx_s4::pins::P6_2;
-	this->sockets[18] = s18;
+		socket s16(16, socket::types::Y | socket::types::P | socket::types::X);
+		s16.pins[3] = fez_lynx_s4::pins::P1_0;
+		s16.pins[4] = fez_lynx_s4::pins::P1_1;
+		s16.pins[5] = fez_lynx_s4::pins::P1_2;
+		s16.pins[6] = fez_lynx_s4::pins::P1_3;
+		s16.pins[7] = fez_lynx_s4::pins::P6_6;
+		s16.pins[8] = fez_lynx_s4::pins::P6_7;
+		s16.pins[9] = fez_lynx_s4::pins::P7_0;
+		this->sockets[16] = s16;
+
+
+		socket s17(17, socket::types::Y | socket::types::P | socket::types::X);
+		s16.pins[3] = fez_lynx_s4::pins::P0_4;
+		s16.pins[4] = fez_lynx_s4::pins::P0_5;
+		s16.pins[5] = fez_lynx_s4::pins::P0_6;
+		s16.pins[6] = fez_lynx_s4::pins::P0_7;
+		s16.pins[7] = fez_lynx_s4::pins::P6_3;
+		s16.pins[8] = fez_lynx_s4::pins::P6_4;
+		s16.pins[9] = fez_lynx_s4::pins::P6_5;
+		this->sockets[17] = s17;
+
+
+		socket s18(18, socket::types::Y | socket::types::P | socket::types::X);
+		s18.pins[3] = fez_lynx_s4::pins::P0_0;
+		s18.pins[4] = fez_lynx_s4::pins::P0_1;
+		s18.pins[5] = fez_lynx_s4::pins::P0_2;
+		s18.pins[6] = fez_lynx_s4::pins::P0_3;
+		s18.pins[7] = fez_lynx_s4::pins::P6_0;
+		s18.pins[8] = fez_lynx_s4::pins::P6_1;
+		s18.pins[9] = fez_lynx_s4::pins::P6_2;
+		this->sockets[18] = s18;
+	}
 }
 
 const socket& fez_lynx_s4::get_socket(unsigned char number)
