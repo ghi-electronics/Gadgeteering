@@ -1,0 +1,402 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Core\DaisyLink.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\DaisyLinkCommandBus.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\Interfaces.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\Mainboard.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\Socket.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\Types.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\Accelerometer\Accelerometer.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\AccelG248\AccelG248.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\ALFATLink\ALFATLink.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\Barometer\Barometer.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\Breakout\Breakout.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\Button\Button.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\ButtonS7\ButtonS7.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\CharDisplay\CharDisplay.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\ColorSense\ColorSense.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\Compass\Compass.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\CurrentACS712\CurrentACS712.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\DisplayN18\DisplayN18.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\DistanceUS3\DistanceUS3.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\Extender\Extender.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\FEZTive\FEZTive.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\FLASH\FLASH.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\FMRadio\FMRadio.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\GasSense\GasSense.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\Gyroscope\Gyroscope.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\IO60P16\IO60P16.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\Joystick\Joystick.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\KeypadKP16\KeypadKP16.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\LED7C\LED7C.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\LED7R\LED7R.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\LEDMatrix\LEDMatrix.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\LEDStrip\LEDStrip.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\LightSensor\LightSensor.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\Load\Load.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\MaxO\MaxO.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\Moisture\Moisture.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\MotionSensor\MotionSensor.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\MotorDriverL298\MotorDriverL298.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\MultiColorLED\MultiColorLED.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\Potentiometer\Potentiometer.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\PulseCount\PulseCount.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\RelayX1\RelayX1.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\RelayX16\RelayX16.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\RotaryH1\RotaryH1.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\RS232\RS232.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\TemperatureHumidity\TemperatureHumidity.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\Thermocouple\Thermocouple.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\TouchC8\TouchC8.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\TouchL12\TouchL12.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\Tunes\Tunes.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\USBSerial\USBSerial.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\WiFiRN171\WiFiRN171.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\SoftwareI2C.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\Devices.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusa\FEZMedusa.cpp">
+      <Filter>Mainboards\FEZMedusa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D\System.cpp">
+      <Filter>Mainboards\FEZMedusa3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D\FEZMedusa3D.cpp">
+      <Filter>Mainboards\FEZMedusa3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D\I2CBus.cpp">
+      <Filter>Mainboards\FEZMedusa3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D\SerialDevice.cpp">
+      <Filter>Mainboards\FEZMedusa3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D\SPIBus.cpp">
+      <Filter>Mainboards\FEZMedusa3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\FEZMedusaMini.cpp">
+      <Filter>Mainboards\FEZMedusaMini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\I2CBus.cpp">
+      <Filter>Mainboards\FEZMedusaMini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\SerialDevice.cpp">
+      <Filter>Mainboards\FEZMedusaMini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\SPIBus.cpp">
+      <Filter>Mainboards\FEZMedusaMini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\System.cpp">
+      <Filter>Mainboards\FEZMedusaMini</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Core\Gadgeteering.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\Accelerometer\Accelerometer.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\AccelG248\AccelG248.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\ALFATLink\ALFATLink.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\Barometer\Barometer.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\Breakout\Breakout.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\Button\Button.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\ButtonS7\ButtonS7.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\CharDisplay\CharDisplay.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\ColorSense\ColorSense.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\Compass\Compass.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\CurrentACS712\CurrentACS712.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\DisplayN18\DisplayN18.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\DistanceUS3\DistanceUS3.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\Extender\Extender.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\FEZTive\FEZTive.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\FLASH\FLASH.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\FMRadio\FMRadio.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\GasSense\GasSense.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\Gyroscope\Gyroscope.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\IO60P16\IO60P16.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\Joystick\Joystick.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\KeypadKP16\KeypadKP16.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\LED7C\LED7C.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\LED7R\LED7R.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\LEDMatrix\LEDMatrix.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\LEDStrip\LEDStrip.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\LightSensor\LightSensor.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\Load\Load.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\MaxO\MaxO.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\Moisture\Moisture.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\MotionSensor\MotionSensor.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\MotorDriverL298\MotorDriverL298.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\MultiColorLED\MultiColorLED.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\Potentiometer\Potentiometer.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\PulseCount\PulseCount.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\RelayX1\RelayX1.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\RelayX16\RelayX16.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\RotaryH1\RotaryH1.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\RS232\RS232.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\TemperatureHumidity\TemperatureHumidity.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\Thermocouple\Thermocouple.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\TouchC8\TouchC8.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\TouchL12\TouchL12.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\Tunes\Tunes.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\USBSerial\USBSerial.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\WiFiRN171\WiFiRN171.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Types.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\System.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Socket.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Mainboard.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Interfaces.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\DaisyLinkCommandBus.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\DaisyLink.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\SoftwareI2C.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Devices.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Mainboards\FEZMedusa\FEZMedusa.h">
+      <Filter>Mainboards\FEZMedusa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Mainboards\FEZMedusa3D\Environment.h">
+      <Filter>Mainboards\FEZMedusa3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Mainboards\FEZMedusa3D\FEZMedusa3D.h">
+      <Filter>Mainboards\FEZMedusa3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Mainboards\FEZMedusaMini\FEZMedusaMini.h">
+      <Filter>Mainboards\FEZMedusaMini</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Core">
+      <UniqueIdentifier>{BABF3F23-2CD8-48C5-B50B-87553C79B9AF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mainboards">
+      <UniqueIdentifier>{B55AF56C-3180-461B-B4A2-972E08F858E5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules">
+      <UniqueIdentifier>{5F40CCB3-D1BE-4EEB-8436-3B3F4AC4355A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mainboards\FEZMedusa">
+      <UniqueIdentifier>{4106064b-8c6b-42a1-aa3f-2fcfface4839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mainboards\FEZMedusa3D">
+      <UniqueIdentifier>{67221cc1-eff7-4a3d-be75-90d23cd28461}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mainboards\FEZMedusaMini">
+      <UniqueIdentifier>{faa6ee26-74e3-4af7-aafa-72a9e4735dee}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
