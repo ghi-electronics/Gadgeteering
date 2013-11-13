@@ -113,15 +113,9 @@ io_mode digital_io::get_io_mode()
 	return this->current_io_state;
 }
 
-analog_input::analog_input(const socket& socket, socket::pin pin_number)
+analog_input::analog_input(analog_channel channel)
 {
-	switch (pin_number)
-	{
-		case socket::pins::THREE: this->channel = socket.analog1;
-		case socket::pins::FOUR: this->channel = socket.analog2;
-		case socket::pins::FIVE: this->channel = socket.analog3;
-		default: system::panic(error_codes::PIN_INVALID);
-	}
+	this->channel = channel;
 }
 
 double analog_input::read()
@@ -134,15 +128,9 @@ double analog_input::read_proportion()
 	return mainboard->read_analog(this->channel);
 }
 
-analog_output::analog_output(const socket& socket, socket::pin pin_number)
+analog_output::analog_output(analog_channel channel)
 {
-	switch (pin_number)
-	{
-		case socket::pins::THREE: this->channel = socket.analog1;
-		case socket::pins::FOUR: this->channel = socket.analog2;
-		case socket::pins::FIVE: this->channel = socket.analog3;
-		default: system::panic(error_codes::PIN_INVALID);
-	}
+	this->channel = channel;
 }
 
 void analog_output::write(double value)

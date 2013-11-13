@@ -68,7 +68,7 @@ namespace gadgeteering
 			analog_channel channel;
 
 			public:
-				analog_input(const socket& socket, socket::pin pin_number);
+				analog_input(analog_channel channel);
 				
 				double read();
 				double read_proportion();
@@ -78,7 +78,7 @@ namespace gadgeteering
 			analog_channel channel;
 
 			public:
-				analog_output(const socket& socket, socket::pin pin_number);
+				analog_output(analog_channel channel);
 				
 				void write(double value);
 				void write_proportion(double value);
