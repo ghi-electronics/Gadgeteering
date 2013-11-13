@@ -366,6 +366,37 @@ void fez_lynx_s4::set_pwm(cpu_pin pin, double duty_cycle, double frequency)
 	}
 }
 
+void fez_lynx_s4::spi_read_write(spi_channel channel, const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int count, spi_configuration& config, bool deselect_after)
+{
+	this->channels[channel].spi_read_write(write_buffer, read_buffer, count, config, deselect_after);
+}
+
+bool fez_lynx_s4::i2c_write(i2c_channel channel, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
+{
+	return this->channels[channel].i2c_write(buffer, length, send_start, send_stop);
+}
+
+bool fez_lynx_s4::i2c_read(i2c_channel channel, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
+{
+	return this->channels[channel].i2c_read(buffer, length, send_start, send_stop);
+}
+
+unsigned int fez_lynx_s4::serial_write(serial_channel  channel, const unsigned char* buffer, unsigned int count, serial_configuration& config)
+{
+	return this->channels[channel].serial_write(buffer, count, config);
+}
+
+unsigned int fez_lynx_s4::serial_read(serial_channel  channel, unsigned char* buffer, unsigned int count, serial_configuration& config)
+{
+	return this->channels[channel].serial_read(buffer, count, config);
+}
+
+unsigned int fez_lynx_s4::serial_available(serial_channel channel)
+{
+	return this->channels[channel].serial_available();
+}
+
+
 void system::sleep(unsigned long milliseconds)
 {
 	system::sleep_micro(milliseconds * 1000);

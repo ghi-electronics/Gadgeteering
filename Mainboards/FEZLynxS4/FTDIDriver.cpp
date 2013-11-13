@@ -195,13 +195,12 @@ bool ftdi_channel::get_pin_state(unsigned char pin)
 	return (this->current_pin_state & (1 << pin)) != 0;
 }
 
-void ftdi_channel::spi_read_write(const unsigned char* write_buffer, unsigned char* read_buffer, DWORD count, DWORD* sent, DWORD* received, spi_configuration& config, bool deselect_after)
+void ftdi_channel::spi_read_write(const unsigned char* write_buffer, unsigned char* read_buffer, DWORD count, spi_configuration& config, bool deselect_after)
 {
+	DWORD sent, received;
+
 	if (count > ftdi_channel::MAX_BUFFER_SIZE - 3)
-	{
-		*sent = 0; *received = 0;
 		return;
-	}
 
 	FT_STATUS status = FT_OK;
 
@@ -211,7 +210,7 @@ void ftdi_channel::spi_read_write(const unsigned char* write_buffer, unsigned ch
 
 	this->buffer[0] = ftdi_channel::MPSSE_DISABLE_THREE_PHASE_CLOCK;
 	this->buffer[1] = ftdi_channel::MPSSE_SET_DIVISOR; this->buffer[2] = divisor & 0xFF; this->buffer[3] = (divisor >> 8) & 0xFF;
-	status |= FT_Write(handle, this->buffer, 4, sent);
+	status |= FT_Write(handle, this->buffer, 4, &sent);
 
 	this->set_pin_direction(ftdi_channel::CLOCK_PIN, io_modes::DIGITAL_OUTPUT, false);
 	this->set_pin_direction(ftdi_channel::DO_PIN, io_modes::DIGITAL_OUTPUT, config.clock_idle_state);
@@ -229,16 +228,16 @@ void ftdi_channel::spi_read_write(const unsigned char* write_buffer, unsigned ch
 	if (config.cs_setup_time != 0)
 		Sleep(config.cs_setup_time);
 
-	status |= FT_Write(handle, this->buffer, count + 3, sent);
+	status |= FT_Write(handle, this->buffer, count + 3, &sent);
 	sent -= 3;
 
 	do
 	{
-		status |= FT_GetQueueStatus(this->handle, received);
-	} while (*received < count && status == FT_OK);
+		status |= FT_GetQueueStatus(this->handle, &received);
+	} while (received < count && status == FT_OK);
 
 	if (read_buffer)
-		status |= FT_Read(handle, read_buffer, count, received);
+		status |= FT_Read(handle, read_buffer, count, &received);
 
 	if (deselect_after)
 	{

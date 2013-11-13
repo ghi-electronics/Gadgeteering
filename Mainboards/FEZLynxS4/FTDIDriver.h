@@ -50,7 +50,7 @@ class ftdi_channel
 		void set_pin_state(unsigned char pin, bool state);
 		bool get_pin_state(unsigned char pin);
 
-		void spi_read_write(const unsigned char* write_buffer, unsigned char* read_buffer, DWORD count, DWORD* sent, DWORD* received, gadgeteering::spi_configuration& config, bool deselect_after = true);
+		void spi_read_write(const unsigned char* write_buffer, unsigned char* read_buffer, DWORD count, gadgeteering::spi_configuration& config, bool deselect_after = true);
 		bool i2c_write(const unsigned char* buffer, DWORD length, bool send_start = true, bool send_stop = true);
 		bool i2c_read(unsigned char* buffer, DWORD length, bool send_start = true, bool send_stop = true);
 		DWORD serial_write(const unsigned char* buffer, DWORD count, gadgeteering::serial_configuration& config);
