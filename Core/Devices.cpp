@@ -16,13 +16,28 @@ limitations under the License.
 
 #include "Devices.h"
 #include "Mainboard.h"
+#include "System.h"
 
 using namespace gadgeteering;
 using namespace gadgeteering::devices;
 
 i2c::i2c(i2c_channel channel, unsigned char address)
 {
+	if (channel == i2c_channels::NONE)
+		system::panic(error_codes::CHANNEL_INVALID);
+
 	this->channel = channel;
+	this->w_address = address << 1;
+	this->r_address = (address << 1) | 1;
+	this->soft_i2c = NULL;
+}
+
+i2c::i2c(const socket& socket, unsigned char address)
+{
+	if (socket.i2c == i2c_channels::NONE)
+		system::panic(error_codes::CHANNEL_INVALID);
+
+	this->channel = socket.i2c;
 	this->w_address = address << 1;
 	this->r_address = (address << 1) | 1;
 	this->soft_i2c = NULL;
@@ -111,16 +126,41 @@ bool i2c::read_registers(unsigned char start_address, unsigned char* values, uns
 	return this->write_read(&start_address, 1, values, length);
 }
 
-spi::spi(i2c_channel channel, spi_configuration configuration)
+spi::spi(spi_channel channel, spi_configuration configuration)
 {
+	if (channel == spi_channels::NONE)
+		system::panic(error_codes::CHANNEL_INVALID);
+
 	this->config = configuration;
 	this->channel = channel;
 }
 
-spi::spi(i2c_channel channel, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number)
+spi::spi(spi_channel channel, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number)
 {
+	if (channel == spi_channels::NONE)
+		system::panic(error_codes::CHANNEL_INVALID);
+
 	this->config = configuration;
 	this->channel = channel;
+	this->config.chip_select = cs_socket.pins[cs_pin_number];
+}
+
+spi::spi(const socket& spi_socket, spi_configuration configuration)
+{
+	if (spi_socket.spi == spi_channels::NONE)
+		system::panic(error_codes::CHANNEL_INVALID);
+
+	this->config = configuration;
+	this->channel = spi_socket.spi;
+}
+
+spi::spi(const socket& spi_socket, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number)
+{
+	if (spi_socket.spi == spi_channels::NONE)
+		system::panic(error_codes::CHANNEL_INVALID);
+
+	this->config = configuration;
+	this->channel = spi_socket.spi;
 	this->config.chip_select = cs_socket.pins[cs_pin_number];
 }
 
@@ -154,8 +194,20 @@ void spi::read(unsigned char* buffer, unsigned int length, bool deselect_after)
 
 serial::serial(serial_channel channel, serial_configuration configuration)
 {
+	if (channel == serial_channels::NONE)
+		system::panic(error_codes::CHANNEL_INVALID);
+
 	this->config = configuration;
 	this->channel = channel;
+}
+
+serial::serial(const socket& socket, serial_configuration configuration)
+{
+	if (socket.serial == serial_channels::NONE)
+		system::panic(error_codes::CHANNEL_INVALID);
+
+	this->config = configuration;
+	this->channel = socket.serial;
 }
 
 void serial::write(const unsigned char* buffer, unsigned int length) 

@@ -30,6 +30,7 @@ namespace gadgeteering {
 			software_i2c* soft_i2c;
 
 			public:
+				i2c(const socket& socket, unsigned char address);
 				i2c(i2c_channel channel, unsigned char address);
 				i2c(cpu_pin sda, cpu_pin scl, unsigned char address);
 				~i2c();
@@ -52,6 +53,8 @@ namespace gadgeteering {
 			public:
 				spi_configuration config;
 
+				spi(const socket& spi_socket, spi_configuration configuration);
+				spi(const socket& spi_socket, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number);
 				spi(spi_channel channel, spi_configuration configuration);
 				spi(spi_channel channel, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number);
 
@@ -77,7 +80,8 @@ namespace gadgeteering {
 
 			public:
 				serial_configuration config;
-				
+
+				serial(const socket& socket, serial_configuration configuration);
 				serial(serial_channel channel, serial_configuration configuration);
 
 				void write(const unsigned char* buffer, unsigned int length);
