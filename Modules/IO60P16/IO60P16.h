@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,17 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _IO60P16_H_
-#define _IO60P16_H_
+#pragma once
 
 #include <Core/Gadgeteering.h>
 
-namespace gadgeteering {
-	namespace modules {
+namespace gadgeteering
+{
+	namespace modules
+	{
 		class io60p16
 		{
-			unsigned char outputPorts[8];
-			unsigned char pinDirections[8];
+			unsigned char output_ports[8];
+			unsigned char pin_directions[8];
 			unsigned char pwms[8];
 			unsigned char resistors[4][8];
 
@@ -46,20 +47,19 @@ namespace gadgeteering {
 
 			static const unsigned char CLOCK_SOURCE = 0x3;
 
-			devices::i2c* io60Chip;
+			devices::i2c* chip;
 
-			void changeResistor(unsigned char port, unsigned char mask, unsigned char newResistor);
+			void change_resistor(unsigned char port, unsigned char mask, unsigned char new_resistor);
 
-			public:
-				io60p16(unsigned char socketNumber);
-				~io60p16();
+		public:
+			io60p16(unsigned char socket_number);
+			io60p16(cpu_pin sda, cpu_pin scl);
+			~io60p16();
 
-				void set_io_mode(unsigned char port, unsigned char pin, io_mode new_io_mode, resistor_mode new_resistor_mode);
-				void set_pwm(unsigned char port, unsigned char pin, double duty_cycle, double frequency);
-				bool read_digital(unsigned char port, unsigned char pin);
-				void write_digital(unsigned char port, unsigned char pin, bool value);
+			void set_io_mode(unsigned char port, unsigned char pin, io_mode new_io_mode, resistor_mode new_resistor_mode);
+			void set_pwm(unsigned char port, unsigned char pin, double duty_cycle, double frequency);
+			bool read_digital(unsigned char port, unsigned char pin);
+			void write_digital(unsigned char port, unsigned char pin, bool value);
 		};
 	}
 }
-
-#endif

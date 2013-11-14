@@ -61,15 +61,13 @@ fez_lynx_s4::fez_lynx_s4(bool extender_present) : base_mainboard(3.3)
 
 	this->create_sockets();
 
-	const socket& i2c_socket = mainboard->get_socket(0);
-
 	if (this->extender_present)
 	{
-		this->extender = new io60p16(0);
-		this->extender_analog_converter = new devices::i2c(i2c_socket.i2c, 0x48);
+		this->extender = new io60p16(fez_lynx_s4::pins::BD1, fez_lynx_s4::pins::BD0);
+		this->extender_analog_converter = new devices::i2c(fez_lynx_s4::pins::BD1, fez_lynx_s4::pins::BD0, 0x48);
 	}
 
-	this->analog_converter = new devices::i2c(i2c_socket.i2c, 0x49);
+	this->analog_converter = new devices::i2c(fez_lynx_s4::pins::BD1, fez_lynx_s4::pins::BD0, 0x49);
 }
 
 fez_lynx_s4::~fez_lynx_s4()

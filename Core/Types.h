@@ -40,7 +40,6 @@ namespace gadgeteering
 		static const io_mode NONE = 0;
 		static const io_mode DIGITAL_OUTPUT = 1;
 		static const io_mode DIGITAL_INPUT = 2;
-		static const io_mode PWM_OUTPUT = 5;
 	};
 
 	struct resistor_modes 

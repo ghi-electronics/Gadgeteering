@@ -192,16 +192,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Gadgeteering\Build\FEZLynx\Headers\Windows;C:\Gadgeteering;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Gadgeteering\Build\FEZMedusa\Headers;C:\Gadgeteering;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Gadgeteering\Build\FEZLynx\Headers\Windows;C:\Gadgeteering;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Gadgeteering\Build\FEZMedusa\Headers;C:\Gadgeteering;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Gadgeteering\Build\FEZLynx\Headers\Windows;C:\Gadgeteering;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Gadgeteering\Build\FEZMedusa\Headers;C:\Gadgeteering;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Gadgeteering\Build\FEZLynx\Headers\Windows;C:\Gadgeteering;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Gadgeteering\Build\FEZMedusa\Headers;C:\Gadgeteering;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

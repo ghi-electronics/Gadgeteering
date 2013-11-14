@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -66,7 +66,8 @@ void led_strip::turn_all_off()
 		this->ports[i]->write(false);
 }
 
-void led_strip::set(unsigned char led, bool state) {
+void led_strip::set(unsigned char led, bool state)
+{
 	if (led < 1 || led > 7)
 		system::panic(error_codes::MODULE_ERROR);
 
@@ -75,8 +76,10 @@ void led_strip::set(unsigned char led, bool state) {
 
 void led_strip::animate(unsigned int switch_time, bool clockwise, bool turn_on, bool remain_on)
 {
-	if (clockwise) {
-		for (int i = 1; i <= 7; i++) {
+	if (clockwise)
+	{
+		for (int i = 1; i <= 7; i++)
+		{
 			if (turn_on)
 				this->turn_on_led(i, !remain_on);
 			else
@@ -85,8 +88,10 @@ void led_strip::animate(unsigned int switch_time, bool clockwise, bool turn_on, 
 			system::sleep(switch_time);
 		}
 	}
-	else {
-		for (int i = 7; i >= 1; i--) {
+	else
+	{
+		for (int i = 7; i >= 1; i--)
+		{
 			if (turn_on)
 				this->turn_on_led(i, !remain_on);
 			else

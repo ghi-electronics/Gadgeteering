@@ -29,7 +29,7 @@ fez_medusa_s12::fez_medusa_s12() : fez_medusa_mini()
 
 	this->create_sockets();
 
-	this->extender = new modules::io60p16(3);
+	this->extender = new modules::io60p16(fez_medusa_s12::pins::AD4, fez_medusa_s12::pins::AD5);
 }
 
 fez_medusa_s12::~fez_medusa_s12()
