@@ -21,14 +21,6 @@ limitations under the License.
 #include <iostream>
 #include <stdlib.h>
 
-#ifdef _WIN32
-	#define WIN32_LEAN_AND_MEAN
-	#include <Windows.h>
-#else
-	#include <sys/time.h>
-#endif
-
-
 using namespace std;
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
@@ -516,4 +508,402 @@ void system::print(int data)
 void system::print(double data)
 {
 	std::cout << data << std::endl;
+}
+
+fez_lynx_s4::ftdi_channel::ftdi_channel()
+{
+	this->current_pin_direction = 0x00;
+	this->current_pin_state = 0x00;
+	this->current_mode = 0xFF;
+	this->i2c_started = false;
+}
+
+fez_lynx_s4::ftdi_channel::~ftdi_channel()
+{
+	FT_SetBitMode(this->handle, 0x00, 0x00);
+	FT_Close(this->handle);
+}
+
+void fez_lynx_s4::ftdi_channel::open(const char* serial_number)
+{
+	if (FT_OpenEx(const_cast<char*>(serial_number), FT_OPEN_BY_SERIAL_NUMBER, &this->handle) != FT_OK)
+		throw "Can't open channel.";
+
+	FT_ResetDevice(this->handle);
+
+	this->serial_number = serial_number;
+}
+
+bool fez_lynx_s4::ftdi_channel::set_mode(mode mode)
+{
+	FT_STATUS status = FT_OK;
+	DWORD to_read = 0, to_send = 0;
+	DWORD read = 0, sent = 0;
+
+	if (this->current_mode == mode)
+		return true;
+
+	this->current_mode = mode;
+
+	status |= FT_ResetDevice(this->handle);
+
+	do
+	{
+		status |= FT_GetQueueStatus(this->handle, &to_read);
+		if (status == FT_OK && to_read > 0)
+			status |= FT_Read(this->handle, this->buffer, to_read, &read);
+	} while (to_read != 0);
+
+	status |= FT_SetLatencyTimer(this->handle, 2);
+	status |= FT_SetBitMode(this->handle, 0x00, 0x00);
+
+	if (mode == modes::MPSSE)
+	{
+		status |= FT_SetBitMode(this->handle, 0x00, modes::MPSSE);
+
+		this->buffer[0] = fez_lynx_s4::ftdi_channel::MPSSE_SET_PIN_STATE; this->buffer[1] = this->current_pin_state; this->buffer[2] = this->current_pin_direction;
+		this->buffer[3] = fez_lynx_s4::ftdi_channel::MPSSE_DISABLE_CLOCK_DIVIDE_FIVE; this->buffer[4] = fez_lynx_s4::ftdi_channel::MPSSE_DISABLE_ADAPTIVE_CLOCK;
+		status |= FT_Write(this->handle, this->buffer, 5, &sent);
+
+		this->sync_mpsse();
+	}
+	else if (mode == modes::BITBANG)
+	{
+		status |= FT_SetBitMode(this->handle, this->current_pin_direction, modes::BITBANG);
+
+		status |= FT_Write(this->handle, &this->current_pin_state, 1, &sent);
+	}
+	else if (mode == modes::SERIAL)
+	{
+		status |= FT_SetChars(this->handle, false, 0, false, 0);
+	}
+
+	if (status == FT_OK)
+		return true;
+
+	FT_SetBitMode(this->handle, 0x00, 0x00);
+	FT_Close(this->handle);
+
+	return false;
+}
+
+void fez_lynx_s4::ftdi_channel::sync_mpsse()
+{
+	FT_STATUS status = FT_OK;
+	DWORD to_read = 0, read = 0, sent = 0;
+
+	this->buffer[0] = 0xAB;
+	status |= FT_Write(this->handle, this->buffer, 1, &sent);
+	for (int x = 0; x < 25; x++)
+	{
+		system::sleep(10);
+
+		status |= FT_GetQueueStatus(this->handle, &to_read);
+		status |= FT_Read(this->handle, this->buffer, to_read, &read);
+
+		if (read == 0)
+			continue;
+
+		for (DWORD i = 0; i < read - 1; i++)
+		if (this->buffer[i] == 0xFA && this->buffer[i + 1] == 0xAB)
+			return;
+	}
+
+	throw "Couldn't sync to MPSSE.";
+}
+
+void fez_lynx_s4::ftdi_channel::set_pin_direction(unsigned char pin, io_mode mode, bool output_state)
+{
+	FT_STATUS status = FT_OK;
+	DWORD sent = 0;
+
+	if (mode == io_modes::DIGITAL_OUTPUT)
+		this->current_pin_direction |= (1 << pin);
+	else
+		this->current_pin_direction &= ~(1 << pin);
+
+	if (output_state)
+		this->current_pin_state |= (1 << pin);
+	else
+		this->current_pin_state &= ~(1 << pin);
+
+	if (this->current_mode == modes::MPSSE)
+	{
+		this->buffer[0] = fez_lynx_s4::ftdi_channel::MPSSE_SET_PIN_STATE; this->buffer[1] = this->current_pin_state; this->buffer[2] = this->current_pin_direction;
+		status |= FT_Write(this->handle, this->buffer, 3, &sent);
+	}
+	else if (this->current_mode == modes::BITBANG)
+	{
+		status |= FT_SetBitMode(this->handle, this->current_pin_direction, 0x01);
+		status |= FT_Write(this->handle, &this->current_pin_state, 1, &sent);
+	}
+}
+
+void fez_lynx_s4::ftdi_channel::set_pin_state(unsigned char pin, bool state)
+{
+	FT_STATUS status = FT_OK;
+	DWORD sent = 0;
+
+	if (state)
+		this->current_pin_state |= (1 << pin);
+	else
+		this->current_pin_state &= ~(1 << pin);
+
+	if (this->current_mode == modes::MPSSE)
+	{
+		this->buffer[0] = fez_lynx_s4::ftdi_channel::MPSSE_SET_PIN_STATE; this->buffer[1] = this->current_pin_state; this->buffer[2] = this->current_pin_direction;
+		status |= FT_Write(this->handle, this->buffer, 3, &sent);
+	}
+	else if (this->current_mode == modes::BITBANG)
+	{
+		status |= FT_Write(this->handle, &this->current_pin_state, 1, &sent);
+	}
+}
+
+bool fez_lynx_s4::ftdi_channel::get_pin_state(unsigned char pin)
+{
+	FT_STATUS status = FT_OK;
+	DWORD sent = 0, read = 0;
+
+	if (this->current_mode == modes::MPSSE)
+	{
+		this->buffer[0] = fez_lynx_s4::ftdi_channel::MPSSE_GET_PIN_STATE;
+		status |= FT_Write(this->handle, this->buffer, 1, &sent);
+
+		do
+		{
+			status |= FT_GetQueueStatus(this->handle, &read);
+		} while (read < 1);
+
+		status |= FT_Read(this->handle, &this->current_pin_state, 1, &read);
+	}
+	else if (this->current_mode == modes::BITBANG)
+	{
+		status |= FT_GetBitMode(this->handle, &this->current_pin_state);
+	}
+
+	return (this->current_pin_state & (1 << pin)) != 0;
+}
+
+void fez_lynx_s4::ftdi_channel::spi_read_write(const unsigned char* write_buffer, unsigned char* read_buffer, DWORD count, spi_configuration& config, bool deselect_after)
+{
+	DWORD sent, received;
+
+	if (count > fez_lynx_s4::ftdi_channel::MAX_BUFFER_SIZE - 3)
+		return;
+
+	FT_STATUS status = FT_OK;
+
+	this->set_mode(fez_lynx_s4::ftdi_channel::modes::MPSSE);
+
+	ULONG divisor = 30000000 / config.clock_rate + 1;
+
+	this->buffer[0] = fez_lynx_s4::ftdi_channel::MPSSE_DISABLE_THREE_PHASE_CLOCK;
+	this->buffer[1] = fez_lynx_s4::ftdi_channel::MPSSE_SET_DIVISOR; this->buffer[2] = divisor & 0xFF; this->buffer[3] = (divisor >> 8) & 0xFF;
+	status |= FT_Write(handle, this->buffer, 4, &sent);
+
+	this->set_pin_direction(fez_lynx_s4::ftdi_channel::CLOCK_PIN, io_modes::DIGITAL_OUTPUT, false);
+	this->set_pin_direction(fez_lynx_s4::ftdi_channel::DO_PIN, io_modes::DIGITAL_OUTPUT, config.clock_idle_state);
+	this->set_pin_direction(fez_lynx_s4::ftdi_channel::DI_PIN, io_modes::DIGITAL_INPUT);
+
+	this->buffer[0] = config.clock_edge ? fez_lynx_s4::ftdi_channel::MPSSE_CLOCK_BYTES_IN_OUT_MSB_RISE_FALL : fez_lynx_s4::ftdi_channel::MPSSE_CLOCK_BYTES_IN_OUT_MSB_FALL_RISE;
+
+	if (write_buffer)
+		memcpy(this->buffer + 3, write_buffer, count);
+
+	this->buffer[1] = (count - 1) & 0xFF;
+	this->buffer[2] = ((count - 1) >> 8) & 0xFF;
+
+	mainboard->write_digital(config.chip_select, config.cs_active_state);
+	if (config.cs_setup_time != 0)
+		system::sleep(config.cs_setup_time);
+
+	status |= FT_Write(handle, this->buffer, count + 3, &sent);
+	sent -= 3;
+
+	do
+	{
+		status |= FT_GetQueueStatus(this->handle, &received);
+	} while (received < count && status == FT_OK);
+
+	if (read_buffer)
+		status |= FT_Read(handle, read_buffer, count, &received);
+
+	if (deselect_after)
+	{
+		if (config.cs_hold_time != 0)
+			system::sleep(config.cs_hold_time);
+
+		mainboard->write_digital(config.chip_select, !config.cs_active_state);
+	}
+
+	this->set_pin_direction(fez_lynx_s4::ftdi_channel::DO_PIN, io_modes::DIGITAL_OUTPUT, config.clock_idle_state);
+}
+
+bool fez_lynx_s4::ftdi_channel::i2c_read(unsigned char* buffer, DWORD length, bool send_start, bool send_stop)
+{
+	DWORD read = 0;
+
+	this->set_mode(fez_lynx_s4::ftdi_channel::modes::MPSSE);
+
+	this->buffer[0] = fez_lynx_s4::ftdi_channel::MPSSE_ENABLE_THREE_PHASE_CLOCK;
+	this->buffer[1] = fez_lynx_s4::ftdi_channel::MPSSE_SET_DIVISOR; this->buffer[2] = 0x2B; this->buffer[3] = 0x01;
+	FT_Write(this->handle, this->buffer, 4, &read);
+
+	if (send_start)
+		this->i2c_start();
+
+	for (DWORD i = 0; i < length; i++)
+	if (buffer[i] = this->i2c_read_byte())
+		read++;
+
+	if (send_stop)
+		this->i2c_stop();
+
+	return read == length;
+}
+
+bool fez_lynx_s4::ftdi_channel::i2c_write(const unsigned char* buffer, DWORD length, bool send_start, bool send_stop)
+{
+	DWORD sent = 0;
+
+	this->set_mode(fez_lynx_s4::ftdi_channel::modes::MPSSE);
+
+	this->buffer[0] = fez_lynx_s4::ftdi_channel::MPSSE_ENABLE_THREE_PHASE_CLOCK;
+	this->buffer[1] = fez_lynx_s4::ftdi_channel::MPSSE_SET_DIVISOR; this->buffer[2] = 0x2B; this->buffer[3] = 0x01;
+	FT_Write(this->handle, this->buffer, 4, &sent);
+
+	if (send_start)
+		this->i2c_start();
+
+	for (DWORD i = 0; i < length; i++)
+	if (this->i2c_write_byte(buffer[i]))
+		sent++;
+
+	if (send_stop)
+		this->i2c_stop();
+
+	return sent == length;
+}
+
+void fez_lynx_s4::ftdi_channel::i2c_wait_for_scl()
+{
+	this->set_pin_direction(fez_lynx_s4::ftdi_channel::CLOCK_PIN, io_modes::DIGITAL_INPUT);
+	while (!this->get_pin_state(fez_lynx_s4::ftdi_channel::CLOCK_PIN))
+		;
+}
+
+void fez_lynx_s4::ftdi_channel::i2c_start()
+{
+	if (this->i2c_started)
+	{
+		this->set_pin_direction(fez_lynx_s4::ftdi_channel::DO_PIN, io_modes::DIGITAL_INPUT);
+
+		this->i2c_wait_for_scl();
+	}
+
+	this->set_pin_direction(fez_lynx_s4::ftdi_channel::DO_PIN, io_modes::DIGITAL_INPUT);
+
+	this->set_pin_direction(fez_lynx_s4::ftdi_channel::DO_PIN, io_modes::DIGITAL_OUTPUT, false);
+
+	this->set_pin_direction(fez_lynx_s4::ftdi_channel::CLOCK_PIN, io_modes::DIGITAL_OUTPUT, false);
+
+	this->i2c_started = true;
+}
+
+void fez_lynx_s4::ftdi_channel::i2c_stop()
+{
+	this->set_pin_direction(fez_lynx_s4::ftdi_channel::DO_PIN, io_modes::DIGITAL_OUTPUT, false);
+	this->set_pin_direction(fez_lynx_s4::ftdi_channel::CLOCK_PIN, io_modes::DIGITAL_OUTPUT, false);
+
+	this->i2c_wait_for_scl();
+
+	this->set_pin_direction(fez_lynx_s4::ftdi_channel::DO_PIN, io_modes::DIGITAL_INPUT);
+
+	this->i2c_started = false;
+}
+
+bool fez_lynx_s4::ftdi_channel::i2c_write_byte(BYTE data)
+{
+	DWORD sent = 0, read = 0;
+	FT_STATUS status = FT_OK;
+
+	this->set_pin_direction(fez_lynx_s4::ftdi_channel::DO_PIN, io_modes::DIGITAL_OUTPUT, false);
+
+	this->buffer[0] = fez_lynx_s4::ftdi_channel::MPSSE_CLOCK_BYTES_OUT_MSB_RISE; this->buffer[1] = 0x00; this->buffer[2] = 0x00; this->buffer[3] = data;
+
+	status = FT_Write(this->handle, this->buffer, 4, &sent);
+
+	this->set_pin_direction(fez_lynx_s4::ftdi_channel::DO_PIN, io_modes::DIGITAL_INPUT);
+
+	this->i2c_wait_for_scl();
+
+	this->get_pin_state(fez_lynx_s4::ftdi_channel::DO_PIN);
+
+	this->set_pin_direction(fez_lynx_s4::ftdi_channel::CLOCK_PIN, io_modes::DIGITAL_OUTPUT, false);
+
+	return true;
+}
+
+BYTE fez_lynx_s4::ftdi_channel::i2c_read_byte()
+{
+	DWORD sent = 0, read = 0;
+	FT_STATUS status = FT_OK;
+	BYTE read_in;
+
+	this->buffer[0] = fez_lynx_s4::ftdi_channel::MPSSE_CLOCK_BYTES_IN_MSB_RISE; this->buffer[1] = 0x00; this->buffer[2] = 0x00;
+
+	status = FT_Write(this->handle, this->buffer, 3, &sent);
+
+	status = FT_Read(this->handle, &read_in, 1, &read);
+
+	this->set_pin_direction(fez_lynx_s4::ftdi_channel::DO_PIN, io_modes::DIGITAL_INPUT);
+
+	this->i2c_wait_for_scl();
+
+	this->get_pin_state(fez_lynx_s4::ftdi_channel::DO_PIN);
+
+	this->set_pin_direction(fez_lynx_s4::ftdi_channel::CLOCK_PIN, io_modes::DIGITAL_OUTPUT, false);
+
+	return read_in;
+}
+
+DWORD fez_lynx_s4::ftdi_channel::serial_write(const unsigned char* buffer, DWORD count, serial_configuration& config)
+{
+	this->set_mode(fez_lynx_s4::ftdi_channel::modes::SERIAL);
+
+	DWORD sent;
+	FT_STATUS status = FT_OK;
+
+	status |= FT_SetBaudRate(this->handle, config.baud_rate);
+	status |= FT_SetDataCharacteristics(this->handle, config.data_bits, config.stop_bits, config.parity);
+	status |= FT_SetFlowControl(this->handle, FT_FLOW_NONE, 0x00, 0x00);
+
+	status |= FT_Write(this->handle, const_cast<unsigned char*>(buffer), count, &sent);
+
+	return sent;
+}
+
+DWORD fez_lynx_s4::ftdi_channel::serial_read(unsigned char* buffer, DWORD count, serial_configuration& config)
+{
+	this->set_mode(fez_lynx_s4::ftdi_channel::modes::SERIAL);
+
+	DWORD read = 0, available = 0;
+	FT_STATUS status = FT_OK;
+
+	status |= FT_SetBaudRate(this->handle, config.baud_rate);
+	status |= FT_SetDataCharacteristics(this->handle, config.data_bits, config.stop_bits, config.parity);
+	status |= FT_SetFlowControl(this->handle, FT_FLOW_NONE, 0x00, 0x00);
+
+	status |= FT_GetQueueStatus(this->handle, &available);
+	status |= FT_Read(this->handle, buffer, available > count ? count : available, &read);
+
+	return read;
+}
+
+DWORD fez_lynx_s4::ftdi_channel::serial_available()
+{
+	DWORD available = 0;
+	FT_GetQueueStatus(this->handle, &available);
+	return available;
 }

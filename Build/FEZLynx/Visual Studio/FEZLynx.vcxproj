@@ -28,7 +28,6 @@
     <ClCompile Include="..\..\..\Core\SoftwareI2C.cpp" />
     <ClCompile Include="..\..\..\Core\Types.cpp" />
     <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\FEZLynxS4.cpp" />
-    <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\FTDIDriver.cpp" />
     <ClCompile Include="..\..\..\Modules\Accelerometer\Accelerometer.cpp" />
     <ClCompile Include="..\..\..\Modules\AccelG248\AccelG248.cpp" />
     <ClCompile Include="..\..\..\Modules\ADS7830\ADS7830.cpp" />
@@ -90,7 +89,6 @@
     <ClInclude Include="..\..\..\Core\System.h" />
     <ClInclude Include="..\..\..\Core\Types.h" />
     <ClInclude Include="..\..\..\Mainboards\FEZLynxS4\FEZLynxS4.h" />
-    <ClInclude Include="..\..\..\Mainboards\FEZLynxS4\FTDIDriver.h" />
     <ClInclude Include="..\..\..\Modules\Accelerometer\Accelerometer.h" />
     <ClInclude Include="..\..\..\Modules\AccelG248\AccelG248.h" />
     <ClInclude Include="..\..\..\Modules\ADS7830\ADS7830.h" />

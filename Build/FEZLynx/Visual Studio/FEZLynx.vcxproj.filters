@@ -160,9 +160,6 @@
     <ClCompile Include="..\..\..\Modules\WiFiRN171\WiFiRN171.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\FTDIDriver.cpp">
-      <Filter>Mainboards</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Core\SoftwareI2C.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -341,9 +338,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Core\DaisyLink.h">
       <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Mainboards\FEZLynxS4\FTDIDriver.h">
-      <Filter>Mainboards</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Core\SoftwareI2C.h">
       <Filter>Core</Filter>
