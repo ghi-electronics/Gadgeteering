@@ -92,7 +92,7 @@ void hubap5::indirected_pwm_output::set(socket::pin pin_number, double duty_cycl
 	this->hub.set_pwm(this->sock.pins[pin_number], duty_cycle, frequency);
 }
 
-hubap5::hubap5(unsigned char socket_number) : socket_start(socket_number * 10), socket_1(this->socket_start + 1), socket_2(this->socket_start + 2), socket_3(this->socket_start + 3), socket_4(this->socket_start + 4), socket_5(this->socket_start + 5), socket_6(this->socket_start + 6), socket_7(this->socket_start + 7), socket_8(this->socket_start + 8)
+hubap5::hubap5(unsigned char socket_number) : socket_start(socket_number * 10 + 10), socket_1(this->socket_start + 1), socket_2(this->socket_start + 2), socket_3(this->socket_start + 3), socket_4(this->socket_start + 4), socket_5(this->socket_start + 5), socket_6(this->socket_start + 6), socket_7(this->socket_start + 7), socket_8(this->socket_start + 8)
 {
 	const socket& s = mainboard->get_socket(socket_number);
 
