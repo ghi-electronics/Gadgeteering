@@ -29,6 +29,7 @@ namespace gadgeteering
 	typedef unsigned char i2c_channel;
 	typedef unsigned char serial_channel;
 	typedef unsigned char analog_channel;
+	typedef unsigned char analog_out_channel;
 	typedef unsigned char pwm_channel;
 
 	typedef unsigned char error_number;
@@ -98,6 +99,17 @@ namespace gadgeteering
 		static const analog_channel ANALOG_10 = 10;
 		static const analog_channel ANALOG_11 = 11;
 		static const analog_channel ANALOG_12 = 12;
+		static const analog_channel NONE = 0xFF;
+	};
+
+	struct analog_out_channels
+	{
+		static const analog_channel ANALOG_0 = 0;
+		static const analog_channel ANALOG_1 = 1;
+		static const analog_channel ANALOG_2 = 2;
+		static const analog_channel ANALOG_3 = 3;
+		static const analog_channel ANALOG_4 = 4;
+		static const analog_channel ANALOG_5 = 5;
 		static const analog_channel NONE = 0xFF;
 	};
 

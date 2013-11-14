@@ -21,7 +21,12 @@ using namespace gadgeteering;
 
 socket::socket()
 {
-
+	this->digital_input_indirector = NULL;
+	this->digital_output_indirector = NULL;
+	this->digital_io_indirector = NULL;
+	this->analog_input_indirector = NULL;
+	this->analog_output_indirector = NULL;
+	this->pwm_output_indirector = NULL;
 }
 
 socket::socket(unsigned char number, type type) 
@@ -33,6 +38,8 @@ socket::socket(unsigned char number, type type)
 	this->analog4 = analog_channels::NONE;
 	this->analog5 = analog_channels::NONE;
 
+	this->analog_out = analog_out_channels::NONE;
+
 	this->pwm7 = pwm_channels::NONE;
 	this->pwm8 = pwm_channels::NONE;
 	this->pwm9 = pwm_channels::NONE;
@@ -41,8 +48,36 @@ socket::socket(unsigned char number, type type)
 	this->i2c = i2c_channels::NONE;
 	this->serial = serial_channels::NONE;
 
+	this->digital_input_indirector = NULL;
+	this->digital_output_indirector = NULL;
+	this->digital_io_indirector = NULL;
+	this->analog_input_indirector = NULL;
+	this->analog_output_indirector = NULL;
+	this->pwm_output_indirector = NULL;
+
 	for (unsigned char i = 1; i <= 10; i++)
 		this->pins[i] = socket::pins::UNCONNECTED;
+}
+
+socket::~socket()
+{
+	if (this->digital_input_indirector)
+		delete this->digital_input_indirector;
+
+	if (this->digital_output_indirector)
+		delete this->digital_output_indirector;
+
+	if (this->digital_io_indirector)
+		delete this->digital_io_indirector;
+
+	if (this->analog_input_indirector)
+		delete this->analog_input_indirector;
+
+	if (this->analog_output_indirector)
+		delete this->analog_output_indirector;
+
+	if (this->pwm_output_indirector)
+		delete this->pwm_output_indirector;
 }
 
 void socket::ensure_type(type type) const

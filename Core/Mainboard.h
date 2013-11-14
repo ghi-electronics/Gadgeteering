@@ -29,6 +29,7 @@ namespace gadgeteering {
 		public:
 			const double max_analog_voltage;
 
+			virtual socket& register_socket(socket s) = 0;
 			virtual const socket& get_socket(unsigned char number) = 0;
 
 			virtual void set_debug_led(bool state) = 0;
@@ -36,7 +37,7 @@ namespace gadgeteering {
 			virtual void set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_resistor_mode) = 0;
 			virtual void write_digital(cpu_pin pin, bool value) = 0;
 			virtual bool read_digital(cpu_pin pin) = 0;
-			virtual void write_analog(analog_channel channel, double voltage) = 0;
+			virtual void write_analog(analog_out_channel channel, double voltage) = 0;
 			virtual double read_analog(analog_channel channel) = 0;
 			virtual void set_pwm(pwm_channel channel, double duty_cycle, double frequency) = 0;
 

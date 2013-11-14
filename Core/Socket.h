@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,8 +18,20 @@ limitations under the License.
 
 #include "Types.h"
 
-namespace gadgeteering {
-	struct socket {
+namespace gadgeteering
+{
+	namespace indirectors
+	{
+		class digital_input;
+		class digital_output;
+		class digital_io;
+		class analog_input;
+		class analog_output;
+		class pwm_output;
+	}
+
+	struct socket
+	{
 		typedef unsigned long type;
 		typedef unsigned char pin;
 
@@ -71,13 +83,66 @@ namespace gadgeteering {
 		analog_channel analog4;
 		analog_channel analog5;
 
+		analog_out_channel analog_out;
+
 		pwm_channel pwm7;
 		pwm_channel pwm8;
 		pwm_channel pwm9;
 
+		indirectors::digital_input* digital_input_indirector;
+		indirectors::digital_output* digital_output_indirector;
+		indirectors::digital_io* digital_io_indirector;
+		indirectors::analog_input* analog_input_indirector;
+		indirectors::analog_output* analog_output_indirector;
+		indirectors::pwm_output* pwm_output_indirector;
+
 		socket();
 		socket(unsigned char number, type type);
+		~socket();
 
 		void ensure_type(type type) const;
 	};
+
+	namespace indirectors
+	{
+		class digital_input
+		{
+			public:
+				virtual bool read(socket::pin pin_number) = 0;
+				virtual void set_input(socket::pin pin_number, resistor_mode mode) = 0;
+		};
+
+		class digital_output
+		{
+			public:
+				virtual void write(socket::pin pin_number, bool value) = 0;
+				virtual void set_output(socket::pin pin_number) = 0;
+		};
+
+		class digital_io
+		{
+			public:
+				virtual void write(socket::pin pin_number, bool value) = 0;
+				virtual bool read(socket::pin pin_number) = 0;
+				virtual void set_io_mode(socket::pin pin_number, io_mode new_io_mode, resistor_mode new_resistor_mode) = 0;
+		};
+
+		class analog_input
+		{
+			public:
+				virtual double read(socket::pin pin_number) = 0;
+		};
+
+		class analog_output
+		{
+			public:
+				virtual void write(socket::pin pin_number, double voltage) = 0;
+		};
+
+		class pwm_output
+		{
+			public:
+				virtual void set(socket::pin pin_number, double duty_cycle, double frequency) = 0;
+		};
+	}
 }

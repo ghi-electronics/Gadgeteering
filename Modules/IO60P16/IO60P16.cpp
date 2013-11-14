@@ -18,7 +18,6 @@ limitations under the License.
 
 using namespace gadgeteering;
 using namespace gadgeteering::modules;
-using namespace gadgeteering::interfaces;
 
 io60p16::io60p16(unsigned char socket_number)
 {
@@ -41,9 +40,12 @@ io60p16::io60p16(unsigned char socket_number)
 			this->resistors[i][j] = 0x00;
 }
 
-io60p16::io60p16(cpu_pin sda, cpu_pin scl)
+io60p16::io60p16(const socket& socket, socket::pin sda, socket::pin scl)
 {
-	this->chip = new devices::i2c(sda, scl, 0x20);
+	if (sda == socket::pins::EIGHT && scl == socket::pins::NINE && socket.i2c != i2c_channels::NONE)
+		this->chip = new devices::i2c(socket.i2c, 0x20);
+	else
+		this->chip = new devices::i2c(socket.pins[sda], socket.pins[scl], 0x20);
 
 	for (int i = 0; i < 8; i++)
 	{

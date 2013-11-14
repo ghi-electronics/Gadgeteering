@@ -153,9 +153,10 @@ namespace gadgeteering
 					static const cpu_pin DD7 = 16 * 3 + 7;
 				};
 				
-				fez_lynx_s4(bool extender_present = false);
+				fez_lynx_s4(bool extender_present = true);
 				virtual ~fez_lynx_s4();
 
+				virtual socket& register_socket(socket s);
 				virtual const socket& get_socket(unsigned char number);
 
 				virtual void set_debug_led(bool state);
@@ -163,7 +164,7 @@ namespace gadgeteering
 				virtual void set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_resistor_mode);
 				virtual void write_digital(cpu_pin pin, bool value);
 				virtual bool read_digital(cpu_pin pin);
-				virtual void write_analog(analog_channel channel, double voltage);
+				virtual void write_analog(analog_out_channel channel, double voltage);
 				virtual double read_analog(analog_channel channel);
 				virtual void set_pwm(pwm_channel channel, double duty_cycle, double frequency);
 

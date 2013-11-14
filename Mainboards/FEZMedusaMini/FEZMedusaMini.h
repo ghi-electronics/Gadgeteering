@@ -25,9 +25,14 @@ namespace gadgeteering
 		class fez_medusa_mini : public base_mainboard
 		{
 			protected:
+				struct socket_list_node
+				{
+					socket_list_node* next;
+					socket data;
+				}* sockets;
+
 				void create_sockets();
 
-				socket sockets[12];
 				bool serial_began;
 				bool spi_began;
 
@@ -63,6 +68,7 @@ namespace gadgeteering
 				fez_medusa_mini();
 				virtual ~fez_medusa_mini();
 
+				virtual socket& register_socket(socket s);
 				virtual const socket& get_socket(unsigned char number);
 
 				virtual void set_debug_led(bool state);

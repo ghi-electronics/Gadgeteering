@@ -184,6 +184,9 @@
     <ClCompile Include="..\..\..\Mainboards\FEZMedusaS12\FEZMedusaS12.cpp">
       <Filter>Mainboards\FEZMedusaS12</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Modules\HubAP5\HubAP5.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Core\Gadgeteering.h">
@@ -365,6 +368,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Mainboards\FEZMedusaS12\FEZMedusaS12.h">
       <Filter>Mainboards\FEZMedusaS12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\HubAP5\HubAP5.h">
+      <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

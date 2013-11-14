@@ -25,6 +25,8 @@ using namespace gadgeteering;
 software_i2c::software_i2c(cpu_pin sda, cpu_pin scl)
 {
 	this->start = false;
+	this->scl = scl;
+	this->sda = sda;
 	this->read_scl();
 	this->read_sda();
 }

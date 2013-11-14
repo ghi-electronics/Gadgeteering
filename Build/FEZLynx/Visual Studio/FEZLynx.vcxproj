@@ -48,6 +48,7 @@
     <ClCompile Include="..\..\..\Modules\FMRadio\FMRadio.cpp" />
     <ClCompile Include="..\..\..\Modules\GasSense\GasSense.cpp" />
     <ClCompile Include="..\..\..\Modules\Gyroscope\Gyroscope.cpp" />
+    <ClCompile Include="..\..\..\Modules\HubAP5\HubAP5.cpp" />
     <ClCompile Include="..\..\..\Modules\IO60P16\IO60P16.cpp" />
     <ClCompile Include="..\..\..\Modules\Joystick\Joystick.cpp" />
     <ClCompile Include="..\..\..\Modules\KeypadKP16\KeypadKP16.cpp" />
@@ -108,6 +109,7 @@
     <ClInclude Include="..\..\..\Modules\FMRadio\FMRadio.h" />
     <ClInclude Include="..\..\..\Modules\GasSense\GasSense.h" />
     <ClInclude Include="..\..\..\Modules\Gyroscope\Gyroscope.h" />
+    <ClInclude Include="..\..\..\Modules\HubAP5\HubAP5.h" />
     <ClInclude Include="..\..\..\Modules\IO60P16\IO60P16.h" />
     <ClInclude Include="..\..\..\Modules\Joystick\Joystick.h" />
     <ClInclude Include="..\..\..\Modules\KeypadKP16\KeypadKP16.h" />

@@ -21,41 +21,76 @@ limitations under the License.
 using namespace gadgeteering;
 using namespace gadgeteering::interfaces;
 
-digital_output::digital_output(const socket& socket, socket::pin pin_number, bool initial_state)
+digital_output::digital_output(const socket& socket, socket::pin pin_number, bool initial_state) : sock(socket), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
 	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
 		system::panic(error_codes::PIN_UNCONNECTED);
 
-	this->pin = socket.pins[pin_number];
-
-	mainboard->set_io_mode(this->pin, io_modes::DIGITAL_OUTPUT, resistor_modes::FLOATING);
-
+	if (!this->sock.digital_output_indirector)
+	{
+		mainboard->set_io_mode(this->pin, io_modes::DIGITAL_OUTPUT, resistor_modes::FLOATING);
+	}
+	else
+	{
+		this->sock.digital_output_indirector->set_output(this->sock_pin);
+	}
+	
 	this->write(initial_state);
 }
 
 void digital_output::write(bool value)
 {
-	mainboard->write_digital(this->pin, value);
+	if (!this->sock.digital_output_indirector)
+	{
+		mainboard->write_digital(this->pin, value);
+	}
+	else
+	{
+		this->sock.digital_output_indirector->write(this->sock_pin, value);
+	}
 }
 
-digital_input::digital_input(const socket& socket, socket::pin pin_number, resistor_mode new_resistor_mode)
+digital_input::digital_input(const socket& socket, socket::pin pin_number, resistor_mode new_resistor_mode) : sock(socket), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
 	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
 		system::panic(error_codes::PIN_UNCONNECTED);
 
-	this->pin = socket.pins[pin_number];
+	if (!this->sock.digital_input_indirector)
+	{
+		mainboard->set_io_mode(this->pin, io_modes::DIGITAL_OUTPUT, resistor_modes::FLOATING);
+	}
+	else
+	{
+		this->sock.digital_input_indirector->set_input(this->sock_pin, new_resistor_mode);
+	}
+	
 	this->set_resistor_mode(new_resistor_mode);
 }
 
 bool digital_input::read()
 {
-	return mainboard->read_digital(this->pin);
+	if (!this->sock.digital_input_indirector)
+	{
+		return mainboard->read_digital(this->pin);
+	}
+	else
+	{
+		return this->sock.digital_input_indirector->read(this->sock_pin);
+	}
 }
 
 void digital_input::set_resistor_mode(resistor_mode new_resistor_mode)
 {
 	this->current_resistor_mode = new_resistor_mode;
-	mainboard->set_io_mode(this->pin, io_modes::DIGITAL_INPUT, new_resistor_mode);
+
+	if (!this->sock.digital_input_indirector)
+	{
+		mainboard->set_io_mode(this->pin, io_modes::DIGITAL_INPUT, new_resistor_mode);
+	}
+	else
+	{
+		this->sock.digital_input_indirector->set_input(this->sock_pin, new_resistor_mode);
+	}
 }
 
 resistor_mode digital_input::get_resistor_mode()
@@ -63,12 +98,11 @@ resistor_mode digital_input::get_resistor_mode()
 	return this->current_resistor_mode;
 }
 
-digital_io::digital_io(const socket& socket, socket::pin pin_number)
+digital_io::digital_io(const socket& socket, socket::pin pin_number) : sock(socket), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
 	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
 		system::panic(error_codes::PIN_UNCONNECTED);
 
-	this->pin = socket.pins[pin_number];
 	this->current_resistor_mode = resistor_modes::NONE;
 	this->current_io_state = io_modes::NONE;
 }
@@ -76,13 +110,29 @@ digital_io::digital_io(const socket& socket, socket::pin pin_number)
 void digital_io::write(bool value)
 {
 	this->set_io_mode(io_modes::DIGITAL_OUTPUT);
-	mainboard->write_digital(this->pin, value);
+
+	if (!this->sock.digital_io_indirector)
+	{
+		mainboard->write_digital(this->pin, value);
+	}
+	else
+	{
+		this->sock.digital_io_indirector->write(this->sock_pin, value);
+	}
 }
 
 bool digital_io::read()
 {
 	this->set_io_mode(io_modes::DIGITAL_INPUT);
-	return mainboard->read_digital(this->pin);
+
+	if (!this->sock.digital_io_indirector)
+	{
+		return mainboard->read_digital(this->pin);
+	}
+	else
+	{
+		return this->sock.digital_io_indirector->read(this->sock_pin);
+	}
 }
 
 void digital_io::set_io_mode(io_mode new_io_mode)
@@ -91,7 +141,15 @@ void digital_io::set_io_mode(io_mode new_io_mode)
 		return;
 
 	this->current_io_state = new_io_mode;
-	mainboard->set_io_mode(this->pin, this->current_io_state, this->current_resistor_mode);
+
+	if (!this->sock.digital_io_indirector)
+	{
+		mainboard->set_io_mode(this->pin, this->current_io_state, this->current_resistor_mode);
+	}
+	else
+	{
+		this->sock.digital_io_indirector->set_io_mode(this->sock_pin, this->current_io_state, this->current_resistor_mode);
+	}
 }
 
 void digital_io::set_resistor_mode(resistor_mode new_resistor_mode)
@@ -100,7 +158,15 @@ void digital_io::set_resistor_mode(resistor_mode new_resistor_mode)
 		return;
 
 	this->current_resistor_mode = new_resistor_mode;
-	mainboard->set_io_mode(this->pin, this->current_io_state, this->current_resistor_mode);
+
+	if (!this->sock.digital_io_indirector)
+	{
+		mainboard->set_io_mode(this->pin, this->current_io_state, this->current_resistor_mode);
+	}
+	else
+	{
+		this->sock.digital_io_indirector->set_io_mode(this->sock_pin, this->current_io_state, this->current_resistor_mode);
+	}
 }
 
 resistor_mode digital_io::get_resistor_mode()
@@ -113,12 +179,25 @@ io_mode digital_io::get_io_mode()
 	return this->current_io_state;
 }
 
-analog_input::analog_input(analog_channel channel)
+analog_input::analog_input(const socket& socket, socket::pin pin_number) : sock(socket), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
-	if (channel = analog_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+	if (!this->sock.analog_input_indirector)
+	{
+		switch (pin_number)
+		{
+			case socket::pins::THREE: this->channel = socket.analog3;
+			case socket::pins::FOUR: this->channel = socket.analog4;
+			case socket::pins::FIVE: this->channel = socket.analog5;
+		}
 
-	this->channel = channel;
+		if (this->channel == analog_channels::NONE)
+			system::panic(error_codes::PIN_UNCONNECTED);
+	}
+	else
+	{
+		if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
+			system::panic(error_codes::PIN_UNCONNECTED);
+	}
 }
 
 double analog_input::read()
@@ -128,15 +207,30 @@ double analog_input::read()
 
 double analog_input::read_proportion()
 {
-	return mainboard->read_analog(this->channel);
+	if (!this->sock.analog_input_indirector)
+	{
+		return mainboard->read_analog(this->channel);
+	}
+	else
+	{
+		return this->sock.analog_input_indirector->read(this->sock_pin);
+	}
 }
 
-analog_output::analog_output(analog_channel channel)
+analog_output::analog_output(const socket& socket, socket::pin pin_number) : sock(socket), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
-	if (channel = analog_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+	if (!this->sock.analog_output_indirector)
+	{
+		if (pin_number != socket::pins::FIVE || socket.analog_out == analog_out_channels::NONE)
+			system::panic(error_codes::CHANNEL_INVALID);
 
-	this->channel = channel;
+		this->channel = socket.analog_out;
+	}
+	else
+	{
+		if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
+			system::panic(error_codes::PIN_UNCONNECTED);
+	}
 }
 
 void analog_output::write(double value)
@@ -146,15 +240,35 @@ void analog_output::write(double value)
 
 void analog_output::write_proportion(double value)
 {
-	mainboard->write_analog(this->channel, value);
+	if (!this->sock.analog_output_indirector)
+	{
+		mainboard->write_analog(this->channel, value);
+	}
+	else
+	{
+		this->sock.analog_output_indirector->write(this->sock_pin, value);
+	}
 }
 
-pwm_output::pwm_output(pwm_channel channel)
+pwm_output::pwm_output(const socket& socket, socket::pin pin_number) : sock(socket), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
-	if (channel = pwm_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+	if (!this->sock.pwm_output_indirector)
+	{
+		switch (pin_number)
+		{
+			case socket::pins::SEVEN: this->channel = socket.pwm7;
+			case socket::pins::EIGHT: this->channel = socket.pwm8;
+			case socket::pins::NINE: this->channel = socket.pwm9;
+		}
 
-	this->channel = channel;
+		if (this->channel == pwm_channels::NONE)
+			system::panic(error_codes::CHANNEL_INVALID);
+	}
+	else
+	{
+		if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
+			system::panic(error_codes::PIN_UNCONNECTED);
+	}
 
 	this->set(0, 0);
 }
@@ -164,7 +278,14 @@ void pwm_output::set(double frequency, double duty_cycle)
 	this->duty_cycle = duty_cycle;
 	this->frequency = frequency;
 
-	mainboard->set_pwm(this->channel, this->frequency, this->duty_cycle);
+	if (!this->sock.pwm_output_indirector)
+	{
+		mainboard->set_pwm(this->channel, this->frequency, this->duty_cycle);
+	}
+	else
+	{
+		this->sock.pwm_output_indirector->set(this->sock_pin, duty_cycle, frequency);
+	}
 }
 
 void pwm_output::set_frequency(double frequency)

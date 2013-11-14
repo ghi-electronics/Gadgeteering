@@ -29,6 +29,7 @@ fez_medusa_mini::fez_medusa_mini() : base_mainboard(3.3)
 
 	this->serial_began = false;
 	this->spi_began = false;
+	this->sockets = NULL;
 
 	this->create_sockets();
 
@@ -58,9 +59,9 @@ void fez_medusa_mini::create_sockets()
 	s1.i2c = i2c_channels::I2C_0;
 	s1.spi = spi_channels::SPI_0;
 
-	this->sockets[1] = s1;
+	this->register_socket(s1);
 
-	socket s2(1, socket::types::I | socket::types::P | socket::types::U | socket::types::Y | socket::types::X);
+	socket s2(2, socket::types::I | socket::types::P | socket::types::U | socket::types::Y | socket::types::X);
 	s2.pins[3] = fez_medusa_mini::pins::IO2;
 	s2.pins[4] = fez_medusa_mini::pins::IO1;
 	s2.pins[5] = fez_medusa_mini::pins::IO0;
@@ -76,9 +77,9 @@ void fez_medusa_mini::create_sockets()
 	s2.pwm8 = pwm_channels::PWM_1;
 	s2.pwm9 = pwm_channels::PWM_2;
 
-	this->sockets[2] = s2;
+	this->register_socket(s2);
 
-	socket s3(1, socket::types::A | socket::types::I | socket::types::X);
+	socket s3(3, socket::types::A | socket::types::I | socket::types::X);
 	s3.pins[3] = fez_medusa_mini::pins::AD0;
 	s3.pins[4] = fez_medusa_mini::pins::AD1;
 	s3.pins[5] = fez_medusa_mini::pins::AD2;
@@ -92,15 +93,44 @@ void fez_medusa_mini::create_sockets()
 	s3.analog4 = analog_channels::ANALOG_1;
 	s3.analog5 = analog_channels::ANALOG_2;
 
-	this->sockets[3] = s3;
+	this->register_socket(s3);
 }
 
 const socket& fez_medusa_mini::get_socket(unsigned char number)
 {
-	if (number == 0 || number > 3)
-		system::panic(error_codes::INVALID_SOCKET);
+	socket_list_node* start = this->sockets;
 
-	return this->sockets[number];
+	while (start)
+		if (start->data.number == number)
+			return start->data;
+
+	system::panic(error_codes::INVALID_SOCKET);
+
+	return socket();
+}
+
+socket& fez_medusa_mini::register_socket(socket s)
+{
+	socket_list_node* current = this->sockets;
+
+	if (!current)
+	{
+		this->sockets = current = new socket_list_node();
+	}
+	else
+	{
+		while (current->next)
+			current = current->next;
+
+		current->next = new socket_list_node();
+		current = current->next;
+	}
+
+	current = new socket_list_node();
+	current->next = NULL;
+	current->data = s;
+
+	return current->next->data;
 }
 
 void fez_medusa_mini::set_debug_led(bool state)
@@ -112,7 +142,7 @@ void fez_medusa_mini::set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mod
 {
 	if (new_io_mode == io_modes::DIGITAL_INPUT)
 		pinMode(pin, new_resistor_mode == resistor_modes::PULL_UP ? INPUT_PULLUP : INPUT);
-	else if ((new_io_mode == io_modes::DIGITAL_OUTPUT) || (new_io_mode == io_modes::PWM_OUTPUT))
+	else if (new_io_mode == io_modes::DIGITAL_OUTPUT)
 		pinMode(pin, OUTPUT);
 }
 
@@ -149,13 +179,21 @@ double fez_medusa_mini::read_analog(analog_channel channel)
 
 void fez_medusa_mini::set_pwm(pwm_channel channel, double duty_cycle, double frequency)
 {
+	cpu_pin pin = socket::pins::UNCONNECTED;
+
 	switch (channel)
 	{
-		case pwm_channels::PWM_0: return ::analogWrite(pins::IO3, static_cast<int>(duty_cycle * 255.0)); break;
-		case pwm_channels::PWM_1: return ::analogWrite(pins::IO5, static_cast<int>(duty_cycle * 255.0)); break;
-		case pwm_channels::PWM_2: return ::analogWrite(pins::IO6, static_cast<int>(duty_cycle * 255.0)); break;
+		case pwm_channels::PWM_0: pin = pins::IO3; break;
+		case pwm_channels::PWM_1: pin = pins::IO3; break;
+		case pwm_channels::PWM_2: pin = pins::IO3; break;
 		default: system::panic(error_codes::CHANNEL_INVALID);
 	}
+
+	if (pin == socket::pins::UNCONNECTED)
+		system::panic(error_codes::CHANNEL_INVALID);
+
+	pinMode(pin, OUTPUT);
+	return ::analogWrite(pin, static_cast<int>(duty_cycle * 255.0));
 }
 
 void fez_medusa_mini::set_pwm(cpu_pin pin, double duty_cycle, double frequency, double duration)

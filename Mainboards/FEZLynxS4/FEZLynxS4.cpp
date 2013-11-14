@@ -61,13 +61,15 @@ fez_lynx_s4::fez_lynx_s4(bool extender_present) : base_mainboard(3.3)
 
 	this->create_sockets();
 
+	const socket& sock = mainboard->get_socket(2);
+
 	if (this->extender_present)
 	{
-		this->extender = new io60p16(fez_lynx_s4::pins::BD1, fez_lynx_s4::pins::BD0);
-		this->extender_analog_converter = new devices::i2c(fez_lynx_s4::pins::BD1, fez_lynx_s4::pins::BD0, 0x48);
+		this->extender = new io60p16(sock);
+		this->extender_analog_converter = new devices::i2c(sock.i2c, 0x48);
 	}
 
-	this->analog_converter = new devices::i2c(fez_lynx_s4::pins::BD1, fez_lynx_s4::pins::BD0, 0x49);
+	this->analog_converter = new devices::i2c(sock.i2c, 0x49);
 }
 
 fez_lynx_s4::~fez_lynx_s4()
@@ -119,7 +121,7 @@ void fez_lynx_s4::create_sockets()
 	this->analog_channel_to_pin_map[s2.analog4] = make_pair(s2.pins[5], 1);
 	this->analog_channel_to_pin_map[s2.analog5] = make_pair(s2.pins[4], 2);
 
-	s2.i2c = i2c_channels::I2C_2;
+	s2.i2c = i2c_channels::I2C_1;
 
 	this->sockets[2] = s2;
 
@@ -133,8 +135,8 @@ void fez_lynx_s4::create_sockets()
 	s3.pins[8] = fez_lynx_s4::pins::BD1;
 	s3.pins[9] = fez_lynx_s4::pins::BD0;
 
-	s3.i2c = i2c_channels::I2C_2;
-	s3.serial = serial_channels::SERIAL_3;
+	s3.i2c = i2c_channels::I2C_1;
+	s3.serial = serial_channels::SERIAL_2;
 
 	this->sockets[3] = s3;
 
@@ -159,12 +161,12 @@ void fez_lynx_s4::create_sockets()
 		s0.pins[8] = fez_lynx_s4::pins::BD1;
 		s0.pins[9] = fez_lynx_s4::pins::BD0;
 
-		s0.i2c = i2c_channels::I2C_2;
+		s0.i2c = i2c_channels::I2C_1;
 
 		this->sockets[0] = s0;
 
 
-		socket s11(11, socket::types::Y | socket::types::A);
+		socket s11(11, socket::types::Y | socket::types::X | socket::types::A);
 		s11.pins[3] = fez_lynx_s4::pins::P5_0;
 		s11.pins[4] = fez_lynx_s4::pins::P5_1;
 		s11.pins[5] = fez_lynx_s4::pins::P5_2;
@@ -184,7 +186,7 @@ void fez_lynx_s4::create_sockets()
 		this->sockets[11] = s11;
 
 
-		socket s12(12, socket::types::Y | socket::types::A);
+		socket s12(12, socket::types::Y | socket::types::X | socket::types::A);
 		s12.pins[3] = fez_lynx_s4::pins::P4_0;
 		s12.pins[4] = fez_lynx_s4::pins::P4_1;
 		s12.pins[5] = fez_lynx_s4::pins::P4_2;
@@ -296,6 +298,12 @@ void fez_lynx_s4::create_sockets()
 	}
 }
 
+socket& fez_lynx_s4::register_socket(socket s)
+{
+	this->sockets[s.number] = s;
+	return this->sockets[s.number];
+}
+
 const socket& fez_lynx_s4::get_socket(unsigned char number)
 {
 	if (this->sockets.count(number) == 0)
@@ -354,11 +362,8 @@ bool fez_lynx_s4::read_digital(cpu_pin pin)
 	}
 }
 
-void fez_lynx_s4::write_analog(analog_channel channel, double voltage)
+void fez_lynx_s4::write_analog(analog_out_channel channel, double voltage)
 {
-	if (channel == analog_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
-
 	system::panic(error_codes::WRITE_ANALOG_NOT_SUPPORTED);
 }
 

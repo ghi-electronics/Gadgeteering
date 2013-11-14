@@ -29,7 +29,7 @@ fez_medusa_s12::fez_medusa_s12() : fez_medusa_mini()
 
 	this->create_sockets();
 
-	this->extender = new modules::io60p16(fez_medusa_s12::pins::AD4, fez_medusa_s12::pins::AD5);
+	this->extender = new modules::io60p16(this->get_socket(3));
 }
 
 fez_medusa_s12::~fez_medusa_s12()
@@ -52,7 +52,7 @@ void fez_medusa_s12::create_sockets()
 	s5.pwm8 = pwm_channels::PWM_4;
 	s5.pwm9 = pwm_channels::PWM_5;
 
-	this->sockets[5] = s5;
+	this->register_socket(s5);
 
 
 	socket s6(6, socket::types::Y | socket::types::P | socket::types::X);
@@ -68,7 +68,7 @@ void fez_medusa_s12::create_sockets()
 	s6.pwm8 = pwm_channels::PWM_7;
 	s6.pwm9 = pwm_channels::PWM_8;
 
-	this->sockets[6] = s6;
+	this->register_socket(s6);
 
 
 	socket s7(7, socket::types::Y | socket::types::P | socket::types::X);
@@ -84,7 +84,7 @@ void fez_medusa_s12::create_sockets()
 	s7.pwm8 = pwm_channels::PWM_10;
 	s7.pwm9 = pwm_channels::PWM_11;
 
-	this->sockets[7] = s7;
+	this->register_socket(s7);
 
 
 	socket s8(8, socket::types::Y | socket::types::P | socket::types::X);
@@ -100,7 +100,7 @@ void fez_medusa_s12::create_sockets()
 	s8.pwm8 = pwm_channels::PWM_13;
 	s8.pwm9 = pwm_channels::PWM_14;
 
-	this->sockets[8] = s8;
+	this->register_socket(s8);
 
 
 	socket s9(9, socket::types::Y | socket::types::P | socket::types::X);
@@ -116,7 +116,7 @@ void fez_medusa_s12::create_sockets()
 	s9.pwm8 = pwm_channels::PWM_16;
 	s9.pwm9 = pwm_channels::PWM_17;
 
-	this->sockets[9] = s9;
+	this->register_socket(s9);
 
 
 	socket s10(10, socket::types::Y | socket::types::X);
@@ -127,7 +127,7 @@ void fez_medusa_s12::create_sockets()
 	s10.pins[7] = fez_medusa_s12::pins::P3_4;
 	s10.pins[8] = fez_medusa_s12::pins::P3_5;
 	s10.pins[9] = fez_medusa_s12::pins::P3_6;
-	this->sockets[10] = s10;
+	this->register_socket(s10);
 
 
 	socket s11(11, socket::types::Y | socket::types::X);
@@ -138,7 +138,7 @@ void fez_medusa_s12::create_sockets()
 	s11.pins[7] = fez_medusa_s12::pins::P4_4;
 	s11.pins[8] = fez_medusa_s12::pins::P4_5;
 	s11.pins[9] = fez_medusa_s12::pins::P4_6;
-	this->sockets[11] = s11;
+	this->register_socket(s11);
 
 
 	socket s12(12, socket::types::Y | socket::types::X);
@@ -149,15 +149,7 @@ void fez_medusa_s12::create_sockets()
 	s12.pins[7] = fez_medusa_s12::pins::P5_4;
 	s12.pins[8] = fez_medusa_s12::pins::P5_5;
 	s12.pins[9] = fez_medusa_s12::pins::P5_6;
-	this->sockets[12] = s12;
-}
-
-const socket& fez_medusa_s12::get_socket(unsigned char number)
-{
-	if (number == 0 || number == 4 || number > 12)
-		system::panic(error_codes::INVALID_SOCKET);
-
-	return this->sockets[number - 1];
+	this->register_socket(s12);
 }
 
 void fez_medusa_s12::set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_resistor_mode)
