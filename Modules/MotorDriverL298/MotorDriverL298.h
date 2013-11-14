@@ -19,18 +19,18 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
 		class MotorDriverL298 : protected Module
 		{
 			private:
-				Interfaces::PWMOutput *m_Pwm1;
-				Interfaces::PWMOutput *m_Pwm2;
+				interfaces::pwm_output *m_Pwm1;
+				interfaces::pwm_output *m_Pwm2;
 
-				Interfaces::DigitalOutput *m_Direction1;
-				Interfaces::DigitalOutput *m_Direction2;
+				interfaces::digital_output *m_Direction1;
+				interfaces::digital_output *m_Direction2;
 
 				int m_lastSpeed1;
 				int m_lastSpeed2;

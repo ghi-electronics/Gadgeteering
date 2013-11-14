@@ -16,21 +16,24 @@ limitations under the License.
 
 #include "MotionSensor.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-MotionSensor::MotionSensor(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::X);
+MotionSensor::MotionSensor(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::X);
 
-    this->input = new DigitalInput(socket, Socket::Pins::Three, ResistorModes::PULL_UP);
+    this->input = new digital_input(socket, socket::pins::Three, resistor_modes::PULL_UP);
 }
 
-MotionSensor::~MotionSensor() {
+MotionSensor::~MotionSensor()
+{
 	delete this->input;
 }
 
-bool MotionSensor::isMotionDetected() {
+bool MotionSensor::isMotionDetected()
+{
 	return this->input->read();
 }

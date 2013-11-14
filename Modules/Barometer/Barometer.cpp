@@ -16,27 +16,30 @@ limitations under the License.
 
 #include "Barometer.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-Barometer::Barometer(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::I);
-	
-    this->XCLR = new DigitalOutput(socket, Socket::Pins::Three, false);
+Barometer::Barometer(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::I);
+
+    this->XCLR = new digital_output(socket, socket::pins::Three, false);
 	ReadFactoryCalibrationData(socket);
-	this->i2c = socket->getI2CDevice(Barometer::ADC_ADDRESS);
+	this->i2c = t_socket->getI2CDevice(Barometer::ADC_ADDRESS);
 }
 
-Barometer::~Barometer() {
+Barometer::~Barometer()
+{
     delete this->XCLR;
 	delete this->i2c;
 }
 
 
-void Barometer::ReadFactoryCalibrationData(Socket* socket) {
-	I2CDevice eeprom_i2c = *socket->getI2CDevice(Barometer::EEPROM_ADDR);
+void Barometer::ReadFactoryCalibrationData(socket* socket)
+{
+	I2CDevice eeprom_i2c = *t_socket->getI2CDevice(Barometer::EEPROM_ADDR);
 
     XCLR->write(false);
 
@@ -58,7 +61,8 @@ void Barometer::ReadFactoryCalibrationData(Socket* socket) {
     Coeff.D = data[17];
 }
 
-Barometer::SensorData Barometer::RequestMeasurement() {
+Barometer::SensorData Barometer::RequestMeasurement()
+{
 	double dUT, OFF, SENS, X;
 	double P, T;
 	long long D1, D2;

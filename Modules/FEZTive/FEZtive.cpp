@@ -18,19 +18,19 @@ limitations under the License.
 
 #include <string.h>
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
 
 FEZtive::FEZtive(int socket)
 {
 	this->sock = mainboard->getSocket(socket);
-	this->sock->ensureTypeIsSupported(Gadgeteering::Socket::Types::S);
+	this->sock->ensureTypeIsSupported(Gadgeteering::socket::types::S);
 }
 
 void FEZtive::Initialize(int numLEDS, unsigned int spiClockRateKHZ)
 {
-	this->spi_config = new Interfaces::SPIConfiguration(true, 0, 0, false, true, spiClockRateKHZ);
-	this->spi = new Interfaces::SPIDevice(mainboard->getSPIBus(this->sock),0,this->spi_config);
+	this->spi_config = new interfaces::SPIConfiguration(true, 0, 0, false, true, spiClockRateKHZ);
+	this->spi = new interfaces::SPIDevice(mainboard->getSPIBus(this->sock),0,this->spi_config);
 
 	ledLength = numLEDS;
     LEDs = new Color[numLEDS];
@@ -84,7 +84,7 @@ void FEZtive::SetAll(Color *colorArr)
 	{
 		SetLED(colorArr[i], i);
 		SetLED(colorArr[i + 1], i + 1);
-                
+
 		this->GetColorForRender(LEDs[i], color + 2, color + 1, color);
 		spi->write(color, 1);
 		this->GetColorForRender(LEDs[i + 1], color + 2, color + 1, color);

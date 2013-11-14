@@ -16,18 +16,20 @@ limitations under the License.
 
 #include "Potentiometer.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-Potentiometer::Potentiometer(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::A);
-	
-    this->input = new AnalogInput(socket, Socket::Pins::Three);
+Potentiometer::Potentiometer(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::A);
+
+    this->input = new analog_input(socket, socket::pins::Three);
 }
 
-Potentiometer::~Potentiometer() {
+Potentiometer::~Potentiometer()
+{
     delete this->input;
 }
 

@@ -16,38 +16,44 @@ limitations under the License.
 
 #include "Joystick.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-Joystick::Joystick(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::A);
+Joystick::Joystick(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::A);
 
-    this->button = new DigitalInput(socket, Socket::Pins::Three, ResistorModes::PULL_UP);
-	this->x = new AnalogInput(socket, Socket::Pins::Four);
-	this->y = new AnalogInput(socket, Socket::Pins::Five);
+    this->button = new digital_input(socket, socket::pins::Three, resistor_modes::PULL_UP);
+	this->x = new analog_input(socket, socket::pins::Four);
+	this->y = new analog_input(socket, socket::pins::Five);
 }
 
-Joystick::~Joystick() {
+Joystick::~Joystick()
+{
 	delete this->button;
 	delete this->x;
 	delete this->y;
 }
 
-bool Joystick::isPressed() {
+bool Joystick::isPressed()
+{
 	return !this->button->read();
 }
 
-void Joystick::getXY(double* x, double* y) {
+void Joystick::getXY(double* x, double* y)
+{
 	if (x) *x = this->getX();
 	if (y) *y = this->getY();
 }
 
-double Joystick::getX() {
+double Joystick::getX()
+{
 	return this->x->readProportion();
 }
 
-double Joystick::getY() {
+double Joystick::getY()
+{
 	return 1.0 - this->y->readProportion();
 }

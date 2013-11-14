@@ -19,13 +19,13 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class FLASH : public Module {
+		class FLASH {
 			SPIDevice* spi;
-			DigitalOutput* statusLED;
+			digital_output* statusLED;
 
 			static const unsigned long MAX_ADDRESS = 0x400000;
 			static const unsigned char CMD_GET_IDENTIFICATION = 0x9F;

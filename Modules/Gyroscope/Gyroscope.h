@@ -19,14 +19,14 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
 		class Gyroscope : protected Module
 		{
 			private:
-				Interfaces::I2CDevice *i2c;
+				devices::i2c *i2c;
 
 				class CalibrationOffsets
 				{

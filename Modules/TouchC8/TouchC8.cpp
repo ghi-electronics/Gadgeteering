@@ -16,24 +16,26 @@ limitations under the License.
 
 #include "TouchC8.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-TouchC8::TouchC8(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::I);
+TouchC8::TouchC8(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::I);
 
-	this->reset = new DigitalOutput(socket, Socket::Pins::Six, true);
+	this->reset = new digital_output(socket, socket::pins::Six, true);
 
 	this->Reset();
 
-	this->device = socket->getI2CDevice(TouchC8::I2C_ADDRESS);
+	this->device = t_socket->getI2CDevice(TouchC8::I2C_ADDRESS);
 
 	this->ConfigureSPM();
 }
 
-TouchC8::~TouchC8() {
+TouchC8::~TouchC8()
+{
 	delete this->reset;
 	delete this->device;
 }

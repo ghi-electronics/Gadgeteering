@@ -16,16 +16,16 @@ limitations under the License.
 
 #include "RelayX1.h"
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
 		RelayX1::RelayX1(int socket) : Module()
 		{
 			Socket *sock = mainboard->getSocket(socket);
-			sock->ensureTypeIsSupported(Socket::Types::X);
+			sock->ensureTypeIsSupported(socket::types::X);
 
-			this->output = new Interfaces::DigitalOutput(sock->pins[5]);
+			this->output = new interfaces::digital_output(sock->pins[5]);
 			enabled = false;
 		}
 

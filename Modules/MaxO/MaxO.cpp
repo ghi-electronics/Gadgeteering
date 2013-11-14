@@ -18,24 +18,26 @@ limitations under the License.
 #include <string.h>
 #include <stdlib.h>
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-MaxO::MaxO(unsigned char socketNumber) {
-	Socket socket = *mainboard->getSocket(socketNumber);
-	socket.ensureTypeIsSupported(Socket::Types::S);
+MaxO::MaxO(unsigned char socketNumber)
+{
+	Socket t_socket =*mainboard->getSocket(socketNumber);
+	socket.ensureTypeIsSupported(socket::types::S);
 
 	this->spi = new SPIDevice(socket.getSPIBus(), socket.pins[5], new SPIConfiguration(false, 0, 0, false, true, 1000));
-	this->Enable = new DigitalOutput(socket.pins[3], false);
-	this->CLR = new DigitalOutput(socket.pins[4], true);
+	this->Enable = new digital_output(socket.pins[3], false);
+	this->CLR = new digital_output(socket.pins[4], true);
 
 	this->reSized = false;
 	this->numBoards = 0;
 	this->data = NULL;
 }
 
-MaxO::~MaxO() {
+MaxO::~MaxO()
+{
 	delete this->spi;
 	delete this->Enable;
 	delete this->CLR;
@@ -54,7 +56,7 @@ void MaxO::SetNumBoards(int boards)
     }
     else
     {
-        mainboard->panic(error_codes::MODULE_ERROR);
+        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
     }
 }
 
@@ -67,7 +69,7 @@ void MaxO::Clear()
 {
     if (!reSized)
     {
-        mainboard->panic(error_codes::MODULE_ERROR);
+        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
     }
 
     Enable->write(true);
@@ -88,12 +90,12 @@ void MaxO::WriteArray(unsigned char* arr, unsigned int arrLength)
 {
     if (!reSized)
     {
-        mainboard->panic(error_codes::MODULE_ERROR);
+        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
     }
 
     if (arrLength != this->length)
     {
-        mainboard->panic(error_codes::MODULE_ERROR);
+        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
     }
 
     Enable->write(true);
@@ -117,7 +119,7 @@ void MaxO::WritePin(int _board, int _pin, bool _value)
 {
     if (!reSized)
     {
-        mainboard->panic(error_codes::MODULE_ERROR);
+        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
     }
 
     // check to see if the pin is inside our range
@@ -125,11 +127,11 @@ void MaxO::WritePin(int _board, int _pin, bool _value)
     int position = ((_board - 1) * 4) + _pin;
 
     if (length > (int)this->length)
-        mainboard->panic(error_codes::MODULE_ERROR);
+        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
 
     // make a "dummy" to turn our pin on or off
     unsigned char* dummy = new unsigned char[this->length];
-	
+
 	memcpy(dummy, data, this->length);
 
     // find exact bit position
@@ -153,7 +155,7 @@ unsigned char* MaxO::Read()
 {
     if (!reSized)
     {
-        mainboard->panic(error_codes::MODULE_ERROR);
+        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
     }
 
     return data;
@@ -163,7 +165,7 @@ void MaxO::EnableOutputs()
 {
     if (!reSized)
     {
-        mainboard->panic(error_codes::MODULE_ERROR);
+        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
     }
 
     Enable->write(false);
@@ -173,7 +175,7 @@ void MaxO::DisableOutputs()
 {
     if (!reSized)
     {
-        mainboard->panic(error_codes::MODULE_ERROR);
+        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
     }
 
     Enable->write(true);

@@ -16,26 +16,29 @@ limitations under the License.
 
 #include "ButtonS7.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-ButtonS7::ButtonS7(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::Y);
-	
+ButtonS7::ButtonS7(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::Y);
+
 	for (unsigned char i = 0; i < 7; i++)
-		this->buttons[i] = new DigitalInput(socket, i + 3, ResistorModes::PULL_UP);
+		this->buttons[i] = new digital_input(socket, i + 3, resistor_modes::PULL_UP);
 }
 
-ButtonS7::~ButtonS7() {
+ButtonS7::~ButtonS7()
+{
 	for (unsigned char i = 0; i < 6; i++)
 		delete this->buttons[i];
 }
 
-bool ButtonS7::isPressed(Button buttonNumber) {
+bool ButtonS7::isPressed(Button buttonNumber)
+{
 	if (buttonNumber > 9 || buttonNumber < 3)
-		mainboard->panic(error_codes::MODULE_ERROR, 1);
+		mainboard->panic(Exceptions::ERR_MODULE_ERROR, 1);
 
 	return !this->buttons[buttonNumber - 3]->read();
 }

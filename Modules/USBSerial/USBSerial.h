@@ -19,9 +19,9 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
 		class USBSerial : protected Module
 		{
@@ -29,7 +29,7 @@ namespace Gadgeteering
 				bool b_IsOpen;
 				int baudRate;
 
-				Interfaces::SerialDevice *serial;
+				devices::serial *serial;
 				Socket *sock;
 
 			public:

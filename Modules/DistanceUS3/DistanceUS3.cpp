@@ -16,17 +16,17 @@ limitations under the License.
 
 #include "DistanceUS3.h"
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
 		DistanceUS3::DistanceUS3(int socket) : Module()
 		{
 			Socket *sock = mainboard->getSocket(socket);
-			sock->ensureTypeIsSupported(Socket::Types::X | Socket::Types::Y);
+			sock->ensureTypeIsSupported(socket::types::X | socket::types::Y);
 
-			Echo = new Interfaces::DigitalInput(sock->pins[3]);
-			Trigger = new Interfaces::DigitalOutput(sock->pins[4]);
+			Echo = new interfaces::digital_input(sock->pins[3]);
+			Trigger = new interfaces::digital_output(sock->pins[4]);
 
 			TicksPerMicrosecond = 12;
 		}
@@ -57,7 +57,7 @@ namespace Gadgeteering
 
                     if (errorCount > AcceptableErrorRate)
                     {
-						mainboard->panic(error_codes::MODULE_ERROR);
+						mainboard->panic(Exceptions::ERR_MODULE_ERROR);
                     }
                 }
 

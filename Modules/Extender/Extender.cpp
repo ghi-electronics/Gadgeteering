@@ -16,38 +16,46 @@ limitations under the License.
 
 #include "Extender.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-Extender::Extender(unsigned char socketNumber) {
-	this->socket = mainboard->getSocket(socketNumber);
+Extender::Extender(unsigned char socketNumber)
+{
+	this->t_socket = mainboard->getSocket(socketNumber);
 }
 
-Extender::~Extender() {
+Extender::~Extender()
+{
 
 }
-				
-Interfaces::DigitalInput* Extender::SetupDigitalInput(Socket::Pin pin, ResistorMode resistorMode) {
-	return new Interfaces::DigitalInput(this->socket, pin, resistorMode);
+
+interfaces::digital_input* Extender::Setupdigital_input(Socket::Pin pin, resistor_mode resistor_mode)
+{
+	return new interfaces::digital_input(this->socket, pin, resistor_mode);
 }
 
-Interfaces::DigitalOutput* Extender::SetupDigitalOutput(Socket::Pin pin, bool initialState) {
-	return new Interfaces::DigitalOutput(this->socket, pin, initialState);
+interfaces::digital_output* Extender::Setupdigital_output(Socket::Pin pin, bool initialState)
+{
+	return new interfaces::digital_output(this->socket, pin, initialState);
 }
 
-Interfaces::DigitalIO* Extender::SetupDigitalIO(Socket::Pin pin) {
-	return new Interfaces::DigitalIO(this->socket, pin);
+interfaces::DigitalIO* Extender::SetupDigitalIO(Socket::Pin pin)
+{
+	return new interfaces::DigitalIO(this->socket, pin);
 }
 
-Interfaces::AnalogInput* Extender::SetupAnalogInput(Socket::Pin pin) {
-	return new Interfaces::AnalogInput(this->socket, pin);
+interfaces::analog_input* Extender::Setupanalog_input(Socket::Pin pin)
+{
+	return new interfaces::analog_input(this->socket, pin);
 }
 
-Interfaces::AnalogOutput* Extender::SetupAnalogOutput(Socket::Pin pin) {
-	return new Interfaces::AnalogOutput(this->socket, pin);
+interfaces::analog_output* Extender::Setupanalog_output(Socket::Pin pin)
+{
+	return new interfaces::analog_output(this->socket, pin);
 }
 
-Interfaces::PWMOutput* Extender::SetupPWMOutput(Socket::Pin pin) {
-	return new Interfaces::PWMOutput(this->socket, pin);
+interfaces::pwm_output* Extender::Setuppwm_output(Socket::Pin pin)
+{
+	return new interfaces::pwm_output(this->socket, pin);
 }

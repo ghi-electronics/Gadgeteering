@@ -16,34 +16,38 @@ limitations under the License.
 
 #include "ColorSense.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-ColorSense::ColorSense(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::X);
+ColorSense::ColorSense(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::X);
 
-	this->LEDControl = new DigitalOutput(socket, Socket::Pins::Three, false);
+	this->LEDControl = new digital_output(socket, socket::pins::Three, false);
 
-	I2CBus* bus = mainboard->getI2CBus(socket->pins[5], socket->pins[4]);
+	I2CBus* bus = mainboard->getI2CBus(t_socket->pins[5], t_socket->pins[4]);
 	this->softwareI2C = bus->getI2CDevice(ColorSense::COLOR_ADDRESS);
 
 
 	this->softwareI2C->writeRegister(0x80, 0x03);
 }
 
-ColorSense::~ColorSense() {
+ColorSense::~ColorSense()
+{
 	delete this->LEDControl;
 	delete this->softwareI2C;
 }
 
 
-void ColorSense::ToggleOnboardLED(bool LEDState) {
+void ColorSense::ToggleOnboardLED(bool LEDState)
+{
 	this->LEDControl->write(LEDState);
 }
 
-ColorSense::ColorChannels ColorSense::ReadColorChannels() {
+ColorSense::ColorChannels ColorSense::ReadColorChannels()
+{
 	ColorChannels returnData;
 
 	unsigned char TransmitBuffer = 0x00;

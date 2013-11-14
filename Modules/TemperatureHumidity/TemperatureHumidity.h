@@ -19,13 +19,13 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class TemperatureHumidity : public Module {
+		class TemperatureHumidity {
 			DigitalIO* _data;
-			DigitalOutput* _sck;
+			digital_output* _sck;
 
 			void ResetCommuncation();
 			double TranslateRH(unsigned int rawRH);

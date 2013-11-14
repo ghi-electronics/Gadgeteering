@@ -16,50 +16,57 @@ limitations under the License.
 
 #include "DisplayN18.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-DisplayN18::DisplayN18(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::S);
+DisplayN18::DisplayN18(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::S);
 
-	this->resetPin = new DigitalOutput(socket, Socket::Pins::Three, false);
-	this->backlightPin = new DigitalOutput(socket, Socket::Pins::Four, true);
-	this->rsPin = new DigitalOutput(socket, Socket::Pins::Five, false);
-	this->spi = socket->getSPIBus()->getSPIDevice(socket->pins[6], new SPIConfiguration(false, 0, 0, false, true, 8000));
+	this->resetPin = new digital_output(socket, socket::pins::Three, false);
+	this->backlightPin = new digital_output(socket, socket::pins::Four, true);
+	this->rsPin = new digital_output(socket, socket::pins::Five, false);
+	this->spi = t_socket->getSPIBus()->getSPIDevice(t_socket->pins[6], new SPIConfiguration(false, 0, 0, false, true, 8000));
 
 	this->initialize();
 }
 
-DisplayN18::~DisplayN18() {
+DisplayN18::~DisplayN18()
+{
 	delete this->resetPin;
 	delete this->backlightPin;
 	delete this->rsPin;
 }
 
-void DisplayN18::writeCommand(unsigned char command) {
+void DisplayN18::writeCommand(unsigned char command)
+{
 	this->rsPin->write(false);
 	this->spi->write(&command, 1, true);
 }
 
-void DisplayN18::writeData(unsigned char data) {
+void DisplayN18::writeData(unsigned char data)
+{
 	this->writeData(&data, 1);
 }
 
-void DisplayN18::writeData(const unsigned char* data, unsigned int length) {
+void DisplayN18::writeData(const unsigned char* data, unsigned int length)
+{
 	this->rsPin->write(true);
 	this->spi->write(data, length, true);
 }
 
-void DisplayN18::reset() {
+void DisplayN18::reset()
+{
 	this->resetPin->write(false);
 	System::Sleep(300);
 	this->resetPin->write(true);
 	System::Sleep(500);
 }
 
-void DisplayN18::initialize() {
+void DisplayN18::initialize()
+{
 	this->reset();
 
 	this->writeCommand(0x11);
@@ -135,7 +142,8 @@ void DisplayN18::initialize() {
 	this->clear();
 }
 
-void DisplayN18::setupDraw(int x, int y, int width, int height) {
+void DisplayN18::setupDraw(int x, int y, int width, int height)
+{
 	if (x > DisplayN18::WIDTH || y > DisplayN18::HEIGHT)
 		return;
 
@@ -154,15 +162,18 @@ void DisplayN18::setupDraw(int x, int y, int width, int height) {
 	this->rsPin->write(true);
 }
 
-void DisplayN18::sendDrawData(const unsigned char* data, unsigned int length, bool deselectChip) {
+void DisplayN18::sendDrawData(const unsigned char* data, unsigned int length, bool deselectChip)
+{
 	this->spi->write(data, length, deselectChip);
 }
 
-void DisplayN18::sendDrawData(const unsigned short* data, unsigned int length, bool deselectChip) {
+void DisplayN18::sendDrawData(const unsigned short* data, unsigned int length, bool deselectChip)
+{
 	this->sendDrawData(reinterpret_cast<const unsigned char*>(data), length, deselectChip);
 }
 
-void DisplayN18::setClippingArea(unsigned char x, unsigned char y, unsigned char width, unsigned char height) {
+void DisplayN18::setClippingArea(unsigned char x, unsigned char y, unsigned char width, unsigned char height)
+{
 	unsigned char data[4] = { 0x00, 0x00, 0x00, 0x00 };
 
 	data[1] = x;
@@ -176,7 +187,8 @@ void DisplayN18::setClippingArea(unsigned char x, unsigned char y, unsigned char
 	this->writeData(data, 4);
 }
 
-unsigned short DisplayN18::rgbToShort(unsigned char r, unsigned char g, unsigned char b) {
+unsigned short DisplayN18::rgbToShort(unsigned char r, unsigned char g, unsigned char b)
+{
 	unsigned short red = r;
 	unsigned short green = g;
 	unsigned short blue = b;
@@ -196,15 +208,18 @@ unsigned short DisplayN18::rgbToShort(unsigned char r, unsigned char g, unsigned
 	return red | green | blue;
 }
 
-void DisplayN18::clear(unsigned short color) {
+void DisplayN18::clear(unsigned short color)
+{
 	this->fillRect(0, 0, DisplayN18::WIDTH, DisplayN18::HEIGHT, color);
 }
 
-void DisplayN18::draw(const unsigned short* data, int x, int y, int width, int height) {
+void DisplayN18::draw(const unsigned short* data, int x, int y, int width, int height)
+{
 	this->draw(reinterpret_cast<const unsigned char*>(data), x, y, width, height);
 }
 
-void DisplayN18::draw(const unsigned char* data, int x, int y, int width, int height) {
+void DisplayN18::draw(const unsigned char* data, int x, int y, int width, int height)
+{
 	if (x > DisplayN18::WIDTH || y > DisplayN18::HEIGHT)
 		return;
 
@@ -223,11 +238,13 @@ void DisplayN18::draw(const unsigned char* data, int x, int y, int width, int he
 	this->writeData(data, width * height * 2);
 }
 
-void DisplayN18::setPixel(int x, int y, unsigned short color) {
+void DisplayN18::setPixel(int x, int y, unsigned short color)
+{
 	this->draw(reinterpret_cast<unsigned char*>(&color), x, y, 1, 1);
 }
 
-void DisplayN18::fillRect(int x, int y, int width, int height, unsigned short color) {
+void DisplayN18::fillRect(int x, int y, int width, int height, unsigned short color)
+{
 	this->setClippingArea((unsigned char)x, (unsigned char)y, (unsigned char)width - 1, (unsigned char)height);
 	this->writeCommand(0x2C);
 
@@ -248,14 +265,16 @@ void DisplayN18::fillRect(int x, int y, int width, int height, unsigned short co
 	delete[] buffer;
 }
 
-void DisplayN18::drawRect(int x, int y, int width, int height, unsigned short color) {
+void DisplayN18::drawRect(int x, int y, int width, int height, unsigned short color)
+{
 	this->drawLine(x, y, x + width, y, color);
 	this->drawLine(x, y + height, x + width, y + height, color);
 	this->drawLine(x, y, x, y + height, color);
 	this->drawLine(x + width, y, x + width, y + height, color);
 }
 
-void DisplayN18::fillCircle(int x, int y, int radius, unsigned short color) {
+void DisplayN18::fillCircle(int x, int y, int radius, unsigned short color)
+{
     int f = 1 - radius;
     int ddF_x = 1;
     int ddF_y = -2 * radius;
@@ -265,8 +284,10 @@ void DisplayN18::fillCircle(int x, int y, int radius, unsigned short color) {
     for (int i = y - radius; i <= y + radius; i++)
         this->setPixel(x, i, color);
 
-    while (x1 < y1) {
-        if (f >= 0) {
+    while (x1 < y1)
+{
+        if (f >= 0)
+{
             y1--;
             ddF_y += 2;
             f += ddF_y;
@@ -276,19 +297,22 @@ void DisplayN18::fillCircle(int x, int y, int radius, unsigned short color) {
         ddF_x += 2;
         f += ddF_x;
 
-        for (int i = y - y1; i <= y + y1; i++) {
+        for (int i = y - y1; i <= y + y1; i++)
+{
             this->setPixel(x + x1, i, color);
             this->setPixel(x - x1, i, color);
         }
 
-        for (int i = y - x1; i <= y + x1; i++) {
+        for (int i = y - x1; i <= y + x1; i++)
+{
             this->setPixel(x + y1, i, color);
             this->setPixel(x - y1, i, color);
         }
     }
 }
 
-void DisplayN18::drawCircle(int x, int y, int radius, unsigned short color) {
+void DisplayN18::drawCircle(int x, int y, int radius, unsigned short color)
+{
     int f = 1 - radius;
     int ddF_x = 1;
     int ddF_y = -2 * radius;
@@ -300,8 +324,10 @@ void DisplayN18::drawCircle(int x, int y, int radius, unsigned short color) {
     this->setPixel(x + radius, y, color);
     this->setPixel(x - radius, y, color);
 
-    while (x1 < y1) {
-        if (f >= 0) {
+    while (x1 < y1)
+{
+        if (f >= 0)
+{
             y1--;
             ddF_y += 2;
             f += ddF_y;
@@ -323,9 +349,12 @@ void DisplayN18::drawCircle(int x, int y, int radius, unsigned short color) {
     }
 }
 
-void DisplayN18::drawLine(int x0, int y0, int x1, int y1, unsigned short color) {
-	if (x0 == x1) {
-		if (y1 < y0) {
+void DisplayN18::drawLine(int x0, int y0, int x1, int y1, unsigned short color)
+{
+	if (x0 == x1)
+{
+		if (y1 < y0)
+{
 			int temp = y0;
 			y0 = y1;
 			y1 = temp;
@@ -344,8 +373,10 @@ void DisplayN18::drawLine(int x0, int y0, int x1, int y1, unsigned short color) 
 		return;
 	}
 
-	if (y0 == y1) {
-		if (x1 < x0) {
+	if (y0 == y1)
+{
+		if (x1 < x0)
+{
 			int temp = x0;
 			x0 = x1;
 			x1 = temp;
@@ -367,7 +398,8 @@ void DisplayN18::drawLine(int x0, int y0, int x1, int y1, unsigned short color) 
 	int t;
 	bool steep = ((y1 - y0) < 0 ? -(y1 - y0) : (y1 - y0)) > ((x1 - x0) < 0 ? -(x1 - x0) : (x1 - x0));
 
-	if (steep) {
+	if (steep)
+{
 		t = x0;
 		x0 = y0;
 		y0 = t;
@@ -376,7 +408,8 @@ void DisplayN18::drawLine(int x0, int y0, int x1, int y1, unsigned short color) 
 		y1 = t;
 	}
 
-	if (x0 > x1) {
+	if (x0 > x1)
+{
 		t = x0;
 		x0 = x1;
 		x1 = t;
@@ -398,7 +431,8 @@ void DisplayN18::drawLine(int x0, int y0, int x1, int y1, unsigned short color) 
 	else
 		ystep = -1;
 
-	for (; x0 < x1; x0++) {
+	for (; x0 < x1; x0++)
+{
 		if (steep)
 			this->setPixel(y0, x0, color);
 		else
@@ -406,7 +440,8 @@ void DisplayN18::drawLine(int x0, int y0, int x1, int y1, unsigned short color) 
 
 		err -= dy;
 
-		if (err < 0) {
+		if (err < 0)
+{
 			y0 += (char)ystep;
 			err += dx;
 		}
@@ -518,13 +553,16 @@ unsigned char characters[95][5] = {
 	0x08,0x08,0x2a,0x1c,0x08  /* ~ */
 };
 
-void DisplayN18::drawCharacter(int x, int y, const char character, unsigned short foreColor, unsigned short backColor, unsigned char fontSize) {
+void DisplayN18::drawCharacter(int x, int y, const char character, unsigned short foreColor, unsigned short backColor, unsigned char fontSize)
+{
 	if (character > 126 || character < 32)
 		return;
 
 	unsigned short* horizontal = new unsigned short[DisplayN18::CHAR_HEIGHT * fontSize];
-	for (int i = 0; i < DisplayN18::CHAR_WIDTH; i++) {
-		for (int j = 0; j < DisplayN18::CHAR_HEIGHT; j++) {
+	for (int i = 0; i < DisplayN18::CHAR_WIDTH; i++)
+{
+		for (int j = 0; j < DisplayN18::CHAR_HEIGHT; j++)
+{
 			for (int k = 0; k < fontSize; k++)
 #ifdef Arduino_h
 				horizontal[j * fontSize + k] = pgm_read_byte_near(characters + (character - 32) * 5 + i) & (1 << j) ? foreColor : backColor;
@@ -547,7 +585,8 @@ void DisplayN18::drawCharacter(int x, int y, const char character, unsigned shor
 	delete[] horizontal;
 }
 
-void DisplayN18::drawString(int x, int y, const char* str, unsigned short foreColor, unsigned short backColor, unsigned char fontSize) {
+void DisplayN18::drawString(int x, int y, const char* str, unsigned short foreColor, unsigned short backColor, unsigned char fontSize)
+{
 	if (*str == '\0')
 		return;
 

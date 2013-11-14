@@ -16,38 +16,46 @@ limitations under the License.
 
 #include "Breakout.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-Breakout::Breakout(unsigned char socketNumber) {
-	this->socket = mainboard->getSocket(socketNumber);
+Breakout::Breakout(unsigned char socketNumber)
+{
+	this->t_socket = mainboard->getSocket(socketNumber);
 }
 
-Breakout::~Breakout() {
+Breakout::~Breakout()
+{
 
 }
-				
-Interfaces::DigitalInput* Breakout::SetupDigitalInput(Socket::Pin pin, ResistorMode resistorMode) {
-	return new Interfaces::DigitalInput(this->socket, pin, resistorMode);
+
+interfaces::digital_input* Breakout::Setupdigital_input(Socket::Pin pin, resistor_mode resistor_mode)
+{
+	return new interfaces::digital_input(this->socket, pin, resistor_mode);
 }
 
-Interfaces::DigitalOutput* Breakout::SetupDigitalOutput(Socket::Pin pin, bool initialState) {
-	return new Interfaces::DigitalOutput(this->socket, pin, initialState);
+interfaces::digital_output* Breakout::Setupdigital_output(Socket::Pin pin, bool initialState)
+{
+	return new interfaces::digital_output(this->socket, pin, initialState);
 }
 
-Interfaces::DigitalIO* Breakout::SetupDigitalIO(Socket::Pin pin) {
-	return new Interfaces::DigitalIO(this->socket, pin);
+interfaces::DigitalIO* Breakout::SetupDigitalIO(Socket::Pin pin)
+{
+	return new interfaces::DigitalIO(this->socket, pin);
 }
 
-Interfaces::AnalogInput* Breakout::SetupAnalogInput(Socket::Pin pin) {
-	return new Interfaces::AnalogInput(this->socket, pin);
+interfaces::analog_input* Breakout::Setupanalog_input(Socket::Pin pin)
+{
+	return new interfaces::analog_input(this->socket, pin);
 }
 
-Interfaces::AnalogOutput* Breakout::SetupAnalogOutput(Socket::Pin pin) {
-	return new Interfaces::AnalogOutput(this->socket, pin);
+interfaces::analog_output* Breakout::Setupanalog_output(Socket::Pin pin)
+{
+	return new interfaces::analog_output(this->socket, pin);
 }
 
-Interfaces::PWMOutput* Breakout::SetupPWMOutput(Socket::Pin pin) {
-	return new Interfaces::PWMOutput(this->socket, pin);
+interfaces::pwm_output* Breakout::Setuppwm_output(Socket::Pin pin)
+{
+	return new interfaces::pwm_output(this->socket, pin);
 }

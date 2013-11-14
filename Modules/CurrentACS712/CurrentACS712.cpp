@@ -16,18 +16,20 @@ limitations under the License.
 
 #include "CurrentACS712.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-CurrentACS712::CurrentACS712(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::A);
+CurrentACS712::CurrentACS712(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::A);
 
-    this->ain = new AnalogInput(socket, Socket::Pins::Five);
+    this->ain = new analog_input(socket, socket::pins::Five);
 }
 
-CurrentACS712::~CurrentACS712() {
+CurrentACS712::~CurrentACS712()
+{
 	delete this->ain;
 }
 

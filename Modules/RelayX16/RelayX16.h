@@ -19,20 +19,20 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
 		class RelayX16 : protected Module
 		{
 			protected:
 				unsigned short regData;
 
-				Interfaces::DigitalOutput *data;
-				Interfaces::DigitalOutput *clock;
-				Interfaces::DigitalOutput *latch;
-				Interfaces::DigitalOutput *enable;
-				Interfaces::DigitalOutput *clear;
+				interfaces::digital_output *data;
+				interfaces::digital_output *clock;
+				interfaces::digital_output *latch;
+				interfaces::digital_output *enable;
+				interfaces::digital_output *clear;
 
 				void writeRegisterData();
 

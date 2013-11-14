@@ -19,20 +19,20 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
+namespace gadgeteering {
+	namespace modules {
 
-		class AccelG248 : public Module {
-			Interfaces::I2CDevice* i2c;
+		class accel_g248 {
+			devices::i2c* i2c;
 
 			public:
-				AccelG248(unsigned char socketNumber);
-				~AccelG248();
+				accel_g248(unsigned char socketNumber);
+				~accel_g248();
 
-				void getXYZ(int* x, int* y, int* z);
-				int getX();
-				int getY();
-				int getZ();
+				void get_xyz(int* x, int* y, int* z);
+				int get_x();
+				int get_y();
+				int get_z();
 		};
 	}
 }

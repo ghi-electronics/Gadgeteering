@@ -16,24 +16,26 @@ limitations under the License.
 
 #include "Load.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-Load::Load(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::Y);
-	
-    this->P1 = new DigitalOutput(socket, Socket::Pins::Three, false);
-    this->P2 = new DigitalOutput(socket, Socket::Pins::Four, false);
-    this->P3 = new DigitalOutput(socket, Socket::Pins::Five, false);
-    this->P4 = new DigitalOutput(socket, Socket::Pins::Six, false);
-    this->P5 = new DigitalOutput(socket, Socket::Pins::Seven, false);
-    this->P6 = new DigitalOutput(socket, Socket::Pins::Eight, false);
-    this->P7 = new DigitalOutput(socket, Socket::Pins::Nine, false);
+Load::Load(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::Y);
+
+    this->P1 = new digital_output(socket, socket::pins::Three, false);
+    this->P2 = new digital_output(socket, socket::pins::Four, false);
+    this->P3 = new digital_output(socket, socket::pins::Five, false);
+    this->P4 = new digital_output(socket, socket::pins::Six, false);
+    this->P5 = new digital_output(socket, socket::pins::Seven, false);
+    this->P6 = new digital_output(socket, socket::pins::Eight, false);
+    this->P7 = new digital_output(socket, socket::pins::Nine, false);
 }
 
-Load::~Load() {
+Load::~Load()
+{
     delete this->P1;
     delete this->P2;
     delete this->P3;

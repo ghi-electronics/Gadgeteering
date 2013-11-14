@@ -16,33 +16,35 @@ limitations under the License.
 
 #include "CharDisplay.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-CharDisplay::CharDisplay(unsigned char socketNumber) {
-	this->socket = mainboard->getSocket(socketNumber);
-	this->socket->ensureTypeIsSupported(Socket::Types::Y);
+CharDisplay::CharDisplay(unsigned char socketNumber)
+{
+	this->t_socket = mainboard->getSocket(socketNumber);
+	this->t_socket->ensureTypeIsSupported(socket::types::Y);
 
-    this->lcdRS = new DigitalOutput(socket, Socket::Pins::Four, false);
-    this->lcdE = new DigitalOutput(socket, Socket::Pins::Three, false);
-    this->lcdD4 = new DigitalOutput(socket, Socket::Pins::Five, false);
-    this->lcdD5 = new DigitalOutput(socket, Socket::Pins::Seven, false);
-    this->lcdD6 = new DigitalOutput(socket, Socket::Pins::Nine, false);
-    this->lcdD7 = new DigitalOutput(socket, Socket::Pins::Six, false);
+    this->lcdRS = new digital_output(socket, socket::pins::Four, false);
+    this->lcdE = new digital_output(socket, socket::pins::Three, false);
+    this->lcdD4 = new digital_output(socket, socket::pins::Five, false);
+    this->lcdD5 = new digital_output(socket, socket::pins::Seven, false);
+    this->lcdD6 = new digital_output(socket, socket::pins::Nine, false);
+    this->lcdD7 = new digital_output(socket, socket::pins::Six, false);
 
-    this->backlight = new DigitalOutput(socket, Socket::Pins::Eight, true);
-	
+    this->backlight = new digital_output(socket, socket::pins::Eight, true);
+
     this->sendCommand(0x33);
     this->sendCommand(0x32);
     this->sendCommand(CharDisplay::DISP_ON);
-	
+
     this->clear();
-			
+
 	System::Sleep(3);
 }
 
-CharDisplay::~CharDisplay() {
+CharDisplay::~CharDisplay()
+{
     delete this->lcdRS;
     delete this->lcdE;
     delete this->lcdD4;
@@ -52,56 +54,65 @@ CharDisplay::~CharDisplay() {
     delete this->backlight;
 }
 
-void CharDisplay::sendNibble(unsigned char b) {
+void CharDisplay::sendNibble(unsigned char b)
+{
     this->lcdD7->write((b & 0x8) != 0);
     this->lcdD6->write((b & 0x4) != 0);
     this->lcdD5->write((b & 0x2) != 0);
     this->lcdD4->write((b & 0x1) != 0);
-				
+
     this->lcdE->write(true);
 	this->lcdE->write(false);
 
 	System::Sleep(1);
 }
 
-void CharDisplay::sendByte(unsigned char b) {
+void CharDisplay::sendByte(unsigned char b)
+{
     this->sendNibble((char)(b >> 4));
     this->sendNibble(b);
 }
 
-void CharDisplay::sendCommand(unsigned char c) {
+void CharDisplay::sendCommand(unsigned char c)
+{
     this->lcdRS->write(false); //set LCD to data mode
 	this->sendByte(c);
 
 	System::Sleep(2);
 
-    this->lcdRS->write(true); //set LCD to data mode  
+    this->lcdRS->write(true); //set LCD to data mode
 }
 
-void CharDisplay::print(const char* string) {
+void CharDisplay::print(const char* string)
+{
 	while (*string != '\0')
 		this->print(*(string++));
 }
 
-void CharDisplay::print(char character) {
+void CharDisplay::print(char character)
+{
 	this->sendByte(character);
 }
 
-void CharDisplay::clear() {
+void CharDisplay::clear()
+{
     this->sendCommand(CharDisplay::CLR_DISP);
 	System::Sleep(2);
 }
 
-void CharDisplay::cursorHome() {
+void CharDisplay::cursorHome()
+{
     this->sendCommand(CharDisplay::CUR_HOME);
 	System::Sleep(2);
 }
 
-void CharDisplay::setCursor(unsigned char row, unsigned char col) {
+void CharDisplay::setCursor(unsigned char row, unsigned char col)
+{
     char offsets[] = { 0x00, 0x40, 0x14, 0x54 };
     this->sendCommand(CharDisplay::SET_CURSOR | offsets[row] | col);
 }
 
-void CharDisplay::setBacklight(bool state) {
+void CharDisplay::setBacklight(bool state)
+{
     this->backlight->write(state);
 }

@@ -16,20 +16,20 @@ limitations under the License.
 
 #include "RelayX16.h"
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
-		RelayX16::RelayX16(int socket) 
+		RelayX16::RelayX16(int socket)
 		{
 			Socket *sock = mainboard->getSocket(socket);
-			sock->ensureTypeIsSupported(Socket::Types::Y);
+			sock->ensureTypeIsSupported(socket::types::Y);
 
-			this->data = new Interfaces::DigitalOutput(sock->pins[7],true);
-			this->clock = new Interfaces::DigitalOutput(sock->pins[9]);
-			this->latch = new Interfaces::DigitalOutput(sock->pins[5]);
-			this->enable = new Interfaces::DigitalOutput(sock->pins[3], true);
-			this->clear = new Interfaces::DigitalOutput(sock->pins[4], true);
+			this->data = new interfaces::digital_output(sock->pins[7],true);
+			this->clock = new interfaces::digital_output(sock->pins[9]);
+			this->latch = new interfaces::digital_output(sock->pins[5]);
+			this->enable = new interfaces::digital_output(sock->pins[3], true);
+			this->clear = new interfaces::digital_output(sock->pins[4], true);
 
 			disableAllRelays();
 			disableAllRelays();

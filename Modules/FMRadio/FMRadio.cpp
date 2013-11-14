@@ -16,9 +16,9 @@ limitations under the License.
 
 #include "FMRadio.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
 const double FMRadio::MAX_CHANNEL = 107.5;
 const double FMRadio::MIN_CHANNEL = 87.5;
@@ -26,13 +26,13 @@ const double FMRadio::INVALID_CHANNEL = -1.0;
 
 FMRadio::FMRadio(unsigned char socketNumber)
 {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	//socket->ensureTypeIsSupported(Socket::Types::Y);
-	
-	this->resetPin = new DigitalOutput(socket, 5, false);
-	this->senPin = new DigitalInput(socket, 4, true);
-	this->i2c = socket->getI2CDevice(FMRadio::I2C_ADDRESS);
-	
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	//t_socket->ensureTypeIsSupported(socket::types::Y);
+
+	this->resetPin = new digital_output(socket, 5, false);
+	this->senPin = new digital_input(socket, 4, true);
+	this->i2c = t_socket->getI2CDevice(FMRadio::I2C_ADDRESS);
+
 	this->resetPin->write(true);
 
 	System::Sleep(100);
@@ -52,7 +52,7 @@ FMRadio::FMRadio(unsigned char socketNumber)
 	this->UpdateRegisters();
 
 	System::Sleep(110); //Max powerup time, from datasheet page 13
-	
+
 	this->SetChannel(FMRadio::MIN_CHANNEL);
 	this->SetVolume(FMRadio::MIN_VOLUME);
 }
@@ -109,7 +109,8 @@ void FMRadio::SetVolume(unsigned short Volume)
 	this->volume = Volume;
 }
 
-unsigned short FMRadio::GetVolume() {
+unsigned short FMRadio::GetVolume()
+{
 	return this->volume;
 }
 

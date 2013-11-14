@@ -16,27 +16,27 @@ limitations under the License.
 
 #include "MotorDriverL298.h"
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
-		MotorDriverL298::MotorDriverL298(unsigned char socket) 
+		MotorDriverL298::MotorDriverL298(unsigned char socket)
 		{
 			Socket *sock = mainboard->getSocket(socket);
-			sock->ensureTypeIsSupported(Socket::Types::P);
+			sock->ensureTypeIsSupported(socket::types::P);
 
 			this->freq = 50000;
 			this->m_lastSpeed1 = 0;
 			this->m_lastSpeed2 = 0;
 
-			this->m_Direction1 = new Interfaces::DigitalOutput(sock, Socket::Pins::Nine);
-			this->m_Direction2 = new Interfaces::DigitalOutput(sock, Socket::Pins::Six);
+			this->m_Direction1 = new interfaces::digital_output(sock, socket::pins::Nine);
+			this->m_Direction2 = new interfaces::digital_output(sock, socket::pins::Six);
 
 			this->m_Direction1->write(false);
 			this->m_Direction2->write(false);
 
-			this->m_Pwm1 = new Interfaces::PWMOutput(sock, Socket::Pins::Seven);
-			this->m_Pwm2 = new Interfaces::PWMOutput(sock, Socket::Pins::Eight);
+			this->m_Pwm1 = new interfaces::pwm_output(sock, socket::pins::Seven);
+			this->m_Pwm2 = new interfaces::pwm_output(sock, socket::pins::Eight);
 
 			this->m_Pwm1->set(freq, 0);
 			this->m_Pwm2->set(freq, 0);
@@ -54,7 +54,7 @@ namespace Gadgeteering
         {
             // Make sure the speed is within an acceptable range.
             if (_newSpeed > 100 || _newSpeed < -100)
-				mainboard->panic(error_codes::MODULE_ERROR, 0x01);
+				mainboard->panic(Exceptions::ERR_MODULE_ERROR, 0x01);
 
             //////////////////////////////////////////////////////////////////////////////////
             // Motor1
@@ -121,7 +121,7 @@ namespace Gadgeteering
                 {
                     // Set direction and power.
                     m_Direction2->write(true);
-					
+
 					_newSpeed *= -1; //Replacement for System.Math.Abs()
                     /////////////////////////////////////////////////////////////////////////////
                     // Quick fix for current PWM issue

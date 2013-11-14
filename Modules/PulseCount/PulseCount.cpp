@@ -16,23 +16,25 @@ limitations under the License.
 
 #include "PulseCount.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-PulseCount::PulseCount(unsigned char socketNumber) {
-Socket* socket = mainboard->getSocket(socketNumber);
-socket->ensureTypeIsSupported(Socket::Types::Y);
+PulseCount::PulseCount(unsigned char socketNumber)
+{
+socket* t_socket = mainboard->getSocket(socketNumber);
+t_socket->ensureTypeIsSupported(socket::types::Y);
 
-	CS = new DigitalOutput(socket, Socket::Pins::Six, true);
-    MISO = new DigitalInput(socket, Socket::Pins::Eight, ResistorModes::FLOATING);
-    MOSI = new DigitalOutput(socket, Socket::Pins::Seven, false);
-    CLOCK = new DigitalOutput(socket, Socket::Pins::Nine, false);
+	CS = new digital_output(socket, socket::pins::Six, true);
+    MISO = new digital_input(socket, socket::pins::Eight, resistor_modes::FLOATING);
+    MOSI = new digital_output(socket, socket::pins::Seven, false);
+    CLOCK = new digital_output(socket, socket::pins::Nine, false);
 
 	Initialize();
 }
 
-PulseCount::~PulseCount() {
+PulseCount::~PulseCount()
+{
 	delete CS;
 	delete MISO;
 	delete MOSI;

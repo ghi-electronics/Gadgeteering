@@ -19,11 +19,11 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		class Tunes : public Module {
-			static const Socket::Pin PWM_PIN = 9;
-			Interfaces::PWMOutput* pwm;
+namespace gadgeteering {
+	namespace modules {
+		class Tunes {
+			static const socket::Pin PWM_PIN = 9;
+			interfaces::pwm_output* pwm;
 
 			public:
 				Tunes(unsigned char socketNumber);

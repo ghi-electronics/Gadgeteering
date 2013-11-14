@@ -19,23 +19,23 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class Breakout : public Module {
-			Socket* socket;
+		class Breakout {
+			socket* socket;
 
 			public:
 				Breakout(unsigned char socketNumber);
 				~Breakout();
 
-				Interfaces::DigitalInput* SetupDigitalInput(Socket::Pin pin, ResistorMode resistorMode = ResistorModes::FLOATING);
-				Interfaces::DigitalOutput* SetupDigitalOutput(Socket::Pin pin, bool initialState = false);
-				Interfaces::DigitalIO* SetupDigitalIO(Socket::Pin pin);
-				Interfaces::AnalogInput* SetupAnalogInput(Socket::Pin pin);
-				Interfaces::AnalogOutput* SetupAnalogOutput(Socket::Pin pin);
-				Interfaces::PWMOutput* SetupPWMOutput(Socket::Pin pin);
+				interfaces::digital_input* Setupdigital_input(Socket::Pin pin, resistor_mode resistor_mode = resistor_modes::FLOATING);
+				interfaces::digital_output* Setupdigital_output(Socket::Pin pin, bool initialState = false);
+				interfaces::DigitalIO* SetupDigitalIO(Socket::Pin pin);
+				interfaces::analog_input* Setupanalog_input(Socket::Pin pin);
+				interfaces::analog_output* Setupanalog_output(Socket::Pin pin);
+				interfaces::pwm_output* Setuppwm_output(Socket::Pin pin);
 		};
 	}
 }

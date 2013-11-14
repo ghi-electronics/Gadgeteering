@@ -16,44 +16,51 @@ limitations under the License.
 
 #include "Button.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-Button::Button(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::X);
+Button::Button(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::X);
 
-    this->input = new DigitalInput(socket, Socket::Pins::Three, ResistorModes::PULL_UP);
-	this->led = new DigitalOutput(socket, Socket::Pins::Four, false);
+    this->input = new digital_input(socket, socket::pins::Three, resistor_modes::PULL_UP);
+	this->led = new digital_output(socket, socket::pins::Four, false);
 
 	this->ledState = false;
 }
 
-Button::~Button() {
+Button::~Button()
+{
 	delete this->input;
 	delete this->led;
 }
 
-bool Button::isPressed() {
+bool Button::isPressed()
+{
 	return !this->input->read();
 }
 
-void Button::turnLEDOn() {
+void Button::turnLEDOn()
+{
 	this->led->write(true);
 	this->ledState = true;
 }
 
-void Button::turnLEDOff() {
+void Button::turnLEDOff()
+{
 	this->led->write(false);
 	this->ledState = false;
 }
 
-void Button::toggleLED() {
+void Button::toggleLED()
+{
 	this->ledState = !this->ledState;
 	this->led->write(this->ledState);
 }
 
-bool Button::isLEDOn() {
+bool Button::isLEDOn()
+{
 	return this->ledState;
 }

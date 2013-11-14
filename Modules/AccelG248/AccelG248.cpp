@@ -16,29 +16,31 @@ limitations under the License.
 
 #include "AccelG248.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-AccelG248::AccelG248(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::I);
+accel_g248::accel_g248(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::I);
 
-	this->i2c = socket->getI2CDevice(0x1C);
-	this->i2c->writeRegister(0x2A, 1);
+	this->i2c = t_socket->getI2CDevice(0x1C);
+	this->i2c->write_register(0x2A, 1);
 }
 
-AccelG248::~AccelG248() {
+accel_g248::~accel_g248()
+{
 	delete this->i2c;
 }
 
-void AccelG248::getXYZ(int* x, int* y, int* z) {
+void accel_g248::get_xyz(int* x, int* y, int* z)
+{
 	unsigned char address = 0x1;
 	unsigned char buffer[6];
-	unsigned int a, b;
-  
-	i2c->writeRead(&address, 1, buffer, 6, &a, &b);
-  
+
+	i2c->write_read(&address, 1, buffer, 6);
+
 	if (x) *x = buffer[0] << 2 | buffer[1] >> 6 & 0x3F;
 	if (y) *y = buffer[2] << 2 | buffer[3] >> 6 & 0x3F;
 	if (z) *z = buffer[4] << 2 | buffer[5] >> 6 & 0x3F;
@@ -51,20 +53,23 @@ void AccelG248::getXYZ(int* x, int* y, int* z) {
 		*z -= 1024;
 }
 
-int AccelG248::getX() {
+int accel_g248::get_x()
+{
 	int x = 0;
-	this->getXYZ(&x, NULL, NULL);
+	this->get_xyz(&x, NULL, NULL);
 	return x;
 }
 
-int AccelG248::getY() {
+int accel_g248::get_y()
+{
 	int y = 0;
-	this->getXYZ(NULL, NULL, &y);
+	this->get_xyz(NULL, NULL, &y);
 	return y;
 }
 
-int AccelG248::getZ() {
+int accel_g248::get_z()
+{
 	int z = 0;
-	this->getXYZ(NULL, &z, NULL);
+	this->get_xyz(NULL, &z, NULL);
 	return z;
 }

@@ -19,11 +19,11 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class ALFATLink : public Module {
+		class ALFATLink {
 			public:
 				typedef unsigned char Drive;
 				class Drives {
@@ -111,10 +111,10 @@ namespace Gadgeteering {
 				File* openFile(const char* path, File::Mode mode);
 
 			private:
-				Socket* socket;
+				socket* socket;
 				SPIDevice* spi;
-				DigitalInput* busyPin;
-				DigitalOutput* resetPin;
+				digital_input* busyPin;
+				digital_output* resetPin;
 				List* handles;
 				Drive drive;
 

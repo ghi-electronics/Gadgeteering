@@ -16,18 +16,18 @@ limitations under the License.
 
 #include "Moisture.h"
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
 		Moisture::Moisture(int socket) : Module()
 		{
 			Socket *sock = mainboard->getSocket(socket);
 
-			sock->ensureTypeIsSupported(Socket::Types::A);
+			sock->ensureTypeIsSupported(socket::types::A);
 
-			this->input = new Interfaces::AnalogInput(sock->pins[3]);
-			this->output = new Interfaces::DigitalOutput(sock->pins[6]);
+			this->input = new interfaces::analog_input(sock->pins[3]);
+			this->output = new interfaces::digital_output(sock->pins[6]);
 		}
 
 		double Moisture::GetMoistureReading(int samples)

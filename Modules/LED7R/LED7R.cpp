@@ -16,17 +16,17 @@ limitations under the License.
 
 #include "LED7R.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
 LED7R::LED7R(unsigned char socketNumber)
 {
-	this->socket = mainboard->getSocket(socketNumber);
-	this->socket->ensureTypeIsSupported(Socket::Types::Y);
+	this->t_socket = mainboard->getSocket(socketNumber);
+	this->t_socket->ensureTypeIsSupported(socket::types::Y);
 
 	for (unsigned char i = 0; i < LED7R::LEDS; i++)
-		this->ports[i] = new DigitalOutput(this->socket, i + 3, false);
+		this->ports[i] = new digital_output(this->socket, i + 3, false);
 }
 
 LED7R::~LED7R()
@@ -35,9 +35,10 @@ LED7R::~LED7R()
 		delete this->ports[i];
 }
 
-void LED7R::turnOnLED(unsigned char led, bool onlyLED) {
+void LED7R::turnOnLED(unsigned char led, bool onlyLED)
+{
 	if (led < 1 || led > LED7R::LEDS)
-		mainboard->panic(error_codes::MODULE_ERROR);
+		mainboard->panic(Exceptions::ERR_MODULE_ERROR);
 
 	if (onlyLED)
 		this->turnAllOff();
@@ -45,35 +46,42 @@ void LED7R::turnOnLED(unsigned char led, bool onlyLED) {
 	this->ports[led - 1]->write(true);
 }
 
-void LED7R::turnOffLED(unsigned char led) {
+void LED7R::turnOffLED(unsigned char led)
+{
 	if (led < 1 || led > 7)
-		mainboard->panic(error_codes::MODULE_ERROR);
+		mainboard->panic(Exceptions::ERR_MODULE_ERROR);
 
 	this->ports[led - 1]->write(false);
 }
 
-void LED7R::turnAllOn() {
+void LED7R::turnAllOn()
+{
 	for (unsigned char i = 0; i < LED7R::LEDS; i++)
 		this->ports[i]->write(true);
 }
 
-void LED7R::turnAllOff() {
+void LED7R::turnAllOff()
+{
 	for (unsigned char i = 0; i < LED7R::LEDS; i++)
 		this->ports[i]->write(false);
 }
 
-void LED7R::set(unsigned char led, bool state) {
+void LED7R::set(unsigned char led, bool state)
+{
 	if (led < 1 || led > 7)
-		mainboard->panic(error_codes::MODULE_ERROR);
+		mainboard->panic(Exceptions::ERR_MODULE_ERROR);
 
 	this->ports[led - 1]->write(state);
 }
 
-void LED7R::animate(unsigned int switchTime, bool clockwise, bool turnOn, bool remainOn) {
+void LED7R::animate(unsigned int switchTime, bool clockwise, bool turnOn, bool remainOn)
+{
 	int length = 7;
 
-	if (clockwise) {
-		for (int i = 1; i <= 7; i++) {
+	if (clockwise)
+{
+		for (int i = 1; i <= 7; i++)
+{
 			if (turnOn)
 				this->turnOnLED(i, !remainOn);
 			else
@@ -83,7 +91,8 @@ void LED7R::animate(unsigned int switchTime, bool clockwise, bool turnOn, bool r
 		}
 	}
 	else {
-		for (int i = 7; i >= 1; i--) {
+		for (int i = 7; i >= 1; i--)
+{
 			if (turnOn)
 				this->turnOnLED(i, !remainOn);
 			else

@@ -16,39 +16,44 @@ limitations under the License.
 
 #include "Accelerometer.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-Accelerometer::Accelerometer(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::I);
+accelerometer::accelerometer(unsigned char socket_number)
+{
+    socket* t_socket = mainboard->getSocket(socket_number);
+    t_socket->ensureTypeIsSupported(socket::types::I);
 
-	this->i2c = socket->getI2CDevice(0x1D);
+	this->i2c = t_socket->getI2CDevice(0x1D);
 	this->OperatingMode = Modes::Measurement;
 	this->MeasurementRange = Ranges::TwoG;
 }
 
-Accelerometer::~Accelerometer() {
+accelerometer::~accelerometer()
+{
 	delete this->i2c;
 }
 
-unsigned char Accelerometer::ReadByte(Register reg) {
-	return this->i2c->readRegister(reg);
+unsigned char accelerometer::read_byte(unsigned char reg)
+{
+    return this->i2c->read_register(reg);
 }
 
-void Accelerometer::Read(Register reg, unsigned char* readBuffer, unsigned int count) {
-	unsigned int a, b;
-	this->i2c->writeRead(&reg, 1, readBuffer, count, &a, &b);
+void accelerometer::read(unsigned char reg, unsigned char* read_buffer, unsigned int count)
+{
+    this->i2c->write_read(&reg, 1, readBuffer, count);
 }
 
-void Accelerometer::Write(Register reg, unsigned char value) {
-	this->i2c->writeRegister(reg, value);
+void accelerometer::write(unsigned char reg, unsigned char value)
+{
+    this->i2c->write_register(reg, value);
 }
 
-Accelerometer::Acceleration Accelerometer::RequestMeasurement() {
+accelerometer::acceleration accelerometer::RequestMeasurement()
+{
 	unsigned char data[3];
-	Read(Registers::XOUT8, data, 3);
+    this->read(registers::XOUT8, data, 3);
 
     // Decode Two's Complement values.
     int x = ((((data[0] >> 7) == 1) ? -128 : 0) + (data[0] & 0x7F)) + offsets.X;
@@ -65,7 +70,7 @@ Accelerometer::Acceleration Accelerometer::RequestMeasurement() {
     return Acceleration(ConvertDataToG(x), ConvertDataToG(y), ConvertDataToG(z));
 }
 
-double Accelerometer::ConvertDataToG(int data)
+double accelerometer::ConvertDataToG(int data)
 {
     switch (this->MeasurementRange)
     {
@@ -73,11 +78,11 @@ double Accelerometer::ConvertDataToG(int data)
         case Ranges::FourG: return ((double)data / 128) * 4;
 		case Ranges::EightG: return ((double)data / 128) * 8;
     }
-	mainboard->panic(error_codes::MODULE_ERROR);
+	mainboard->panic(Exceptions::ERR_MODULE_ERROR);
 	return 0;
 }
 
-void Accelerometer::EnableThresholdDetection(double threshold, bool enableX, bool enableY, bool enableZ, bool absolute, bool detectFreefall, bool autoReset)
+void accelerometer::EnableThresholdDetection(double threshold, bool enableX, bool enableY, bool enableZ, bool absolute, bool detectFreefall, bool autoReset)
 {
     OperatingMode = Modes::LevelDetection;
     MeasurementRange = Ranges::EightG;
@@ -110,14 +115,14 @@ void Accelerometer::EnableThresholdDetection(double threshold, bool enableX, boo
     ResetThresholdDetection();
 }
 
-void Accelerometer::ResetThresholdDetection()
+void accelerometer::reset_threshold_detection()
 {
     // Clear the interrupts
     Write(Registers::INTRST, 0x03);
     Write(Registers::INTRST, 0x00);
 }
 
-void Accelerometer::Calibrate(Acceleration referenceAcceleration)
+void accelerometer::calibrate(Acceleration referenceAcceleration)
 {
     OperatingMode = Modes::Measurement;
 
@@ -149,7 +154,7 @@ void Accelerometer::Calibrate(Acceleration referenceAcceleration)
     offsets.Z = -z + (int)(gravityValue * referenceAcceleration.Z);
 }
 
-void Accelerometer::Calibrate()
+void accelerometer::calibrate()
 {
     Calibrate(Acceleration(0, 0, 1));
 }

@@ -19,18 +19,18 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class Thermocouple : public Module {
+		class Thermocouple {
 			static const unsigned char ERROR_NOCONECT = 0x01;
 			static const unsigned char ERROR_SHORTGND = 0x02;
 			static const unsigned char ERROR_SHORTVCC = 0x04;
 
-			DigitalInput* _miso;
-			DigitalOutput* _clk;
-			DigitalOutput* _cs;
+			digital_input* _miso;
+			digital_output* _clk;
+			digital_output* _cs;
 
 			unsigned long ReadData();
 

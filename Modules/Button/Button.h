@@ -19,13 +19,14 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class Button : public Module {
-			DigitalInput* input;
-			DigitalOutput* led;
+		class Button
+		{
+			digital_input* input;
+			digital_output* led;
 			bool ledState;
 
 			public:

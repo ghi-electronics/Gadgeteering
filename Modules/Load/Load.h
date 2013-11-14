@@ -19,19 +19,19 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class Load : public Module {
+		class Load {
 			public:
-				DigitalOutput* P1;
-				DigitalOutput* P2;
-				DigitalOutput* P3;
-				DigitalOutput* P4;
-				DigitalOutput* P5;
-				DigitalOutput* P6;
-				DigitalOutput* P7;
+				digital_output* P1;
+				digital_output* P2;
+				digital_output* P3;
+				digital_output* P4;
+				digital_output* P5;
+				digital_output* P6;
+				digital_output* P7;
 
 				Load(unsigned char socketNumber);
 				~Load();

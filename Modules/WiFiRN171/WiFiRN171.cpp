@@ -22,9 +22,9 @@ limitations under the License.
 
 using namespace std;
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
 		WiFiRN171::WiFiRN171(int socket, int baud)
 		{

@@ -16,30 +16,33 @@ limitations under the License.
 
 #include "RotaryH1.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-RotaryH1::RotaryH1(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::Y);
+RotaryH1::RotaryH1(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::Y);
 
-	CS = new DigitalOutput(socket, Socket::Pins::Six, true);
-	MISO = new DigitalInput(socket, Socket::Pins::Eight, ResistorModes::FLOATING);
-	MOSI = new DigitalOutput(socket, Socket::Pins::Seven, false);
-	CLOCK = new DigitalOutput(socket, Socket::Pins::Nine, false);
+	CS = new digital_output(socket, socket::pins::Six, true);
+	MISO = new digital_input(socket, socket::pins::Eight, resistor_modes::FLOATING);
+	MOSI = new digital_output(socket, socket::pins::Seven, false);
+	CLOCK = new digital_output(socket, socket::pins::Nine, false);
 
 	Initialize();
 }
 
-RotaryH1::~RotaryH1() {
+RotaryH1::~RotaryH1()
+{
 	delete CS;
 	delete MISO;
 	delete MOSI;
 	delete CLOCK;
 }
 
-void RotaryH1::Initialize() {
+void RotaryH1::Initialize()
+{
 	// Clear MDR0 register
 	Write1Byte((unsigned char)Commands::LS7366_CLEAR | (unsigned char)Registers::LS7366_MDR0);
 
@@ -59,7 +62,7 @@ void RotaryH1::Initialize() {
 	Write2Bytes((unsigned char)Commands::LS7366_WRITE        // write command
 				| (unsigned char)Registers::LS7366_MDR0,       // to MDR0
 				(unsigned char)MDR0Mode::LS7366_MDR0_QUAD1   // none quadrature mode
-				| (unsigned char)MDR0Mode::LS7366_MDR0_FREER   // modulo-n counting 
+				| (unsigned char)MDR0Mode::LS7366_MDR0_FREER   // modulo-n counting
 				| (unsigned char)MDR0Mode::LS7366_MDR0_DIDX
 				//| (unsigned char)MDR0Mode::LS7366_MDR0_LDOTR
 				| (unsigned char)MDR0Mode::LS7366_MDR0_FFAC2);
@@ -71,14 +74,16 @@ void RotaryH1::Initialize() {
 				| (unsigned char)MDR1Mode::LS7366_MDR1_ENCNT);   // enable counting
 }
 
-unsigned char RotaryH1::Return1Byte(unsigned char reg) {
+unsigned char RotaryH1::Return1Byte(unsigned char reg)
+{
 	LS7366_1B_wr[0] = reg;
 
 	SoftwareSPI_WriteRead(LS7366_1B_wr, 1, LS7366_2B_rd, 2);
 	return LS7366_2B_rd[1];
 }
 
-unsigned short RotaryH1::Return2Bytes(unsigned char reg) {
+unsigned short RotaryH1::Return2Bytes(unsigned char reg)
+{
 	int result = 0;
 	LS7366_1B_wr[0] = reg;
 
@@ -88,26 +93,31 @@ unsigned short RotaryH1::Return2Bytes(unsigned char reg) {
 	return result;
 }
 
-void RotaryH1::Write1Byte(unsigned char reg) {
+void RotaryH1::Write1Byte(unsigned char reg)
+{
 	LS7366_1B_wr[0] = reg;
 
 	SoftwareSPI_WriteRead(LS7366_1B_wr, 1, NULL, 0);
 }
 
-void RotaryH1::Write2Bytes(unsigned char reg, unsigned char cmd) {
+void RotaryH1::Write2Bytes(unsigned char reg, unsigned char cmd)
+{
 	LS7366_2B_wr[0] = reg;
 	LS7366_2B_wr[1] = cmd;
 	SoftwareSPI_WriteRead(LS7366_2B_wr, 2, NULL, 0);
 }
 
-void RotaryH1::SoftwareSPI_WriteRead(const unsigned char* write, unsigned int writeLength, unsigned char* read, unsigned int readLength) {
+void RotaryH1::SoftwareSPI_WriteRead(const unsigned char* write, unsigned int writeLength, unsigned char* read, unsigned int readLength)
+{
 	int writeLen = writeLength;
 	int readLen = 0;
 
-	if (read != NULL) {
+	if (read != NULL)
+{
 		readLen = readLength;
 
-		for (int i = 0; i < readLen; i++) {
+		for (int i = 0; i < readLen; i++)
+{
 			read[i] = 0;
 		}
 	}
@@ -119,14 +129,16 @@ void RotaryH1::SoftwareSPI_WriteRead(const unsigned char* write, unsigned int wr
 	CS->write(false);
 
 	// per unsigned char
-	for (int len = 0; len < loopLen; len++) {
+	for (int len = 0; len < loopLen; len++)
+{
 		if (len < writeLen)
 			w = write[len];
 
 		unsigned char mask = 0x80;
 
 		// per bit
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 8; i++)
+{
 			CLOCK->write(false);
 
 			if ((w & mask) == mask)
@@ -151,7 +163,8 @@ void RotaryH1::SoftwareSPI_WriteRead(const unsigned char* write, unsigned int wr
 	CS->write(true);
 }
 
-long RotaryH1::ReadEncoders() {
+long RotaryH1::ReadEncoders()
+{
 	int retVal = Return2Bytes((unsigned char)Commands::LS7366_READ | (unsigned char)Registers::LS7366_CNTR);
 	if ((ReadStatusReg() & 0x1)>0) // native number
 	{
@@ -166,13 +179,15 @@ long RotaryH1::ReadEncoders() {
 	return retVal;
 }
 
-unsigned char RotaryH1::ReadStatusReg() {
+unsigned char RotaryH1::ReadStatusReg()
+{
 	unsigned char retVal = Return1Byte((unsigned char)((unsigned char)Commands::LS7366_READ | (unsigned char)Registers::LS7366_STR));//Return1Bytes((unsigned char)((unsigned char)Commands::LS7366_READ | (unsigned char)Registers::LS7366_STR));
 
 	return retVal;
 }
 
-RotaryH1::Direction RotaryH1::ReadDirection() {
+RotaryH1::Direction RotaryH1::ReadDirection()
+{
 	unsigned char dir = (unsigned char)((ReadStatusReg() & 0x2) >> 1);
 	return dir == 1 ? Directions::DOWN : Directions::UP;
 }

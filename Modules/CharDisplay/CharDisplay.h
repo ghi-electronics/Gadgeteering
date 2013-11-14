@@ -19,22 +19,22 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class CharDisplay : public Module {
-			Socket* socket;
+		class CharDisplay {
+			socket* socket;
 
-			DigitalOutput* lcdRS;
-			DigitalOutput* lcdE;
+			digital_output* lcdRS;
+			digital_output* lcdE;
 
-			DigitalOutput* lcdD4;
-			DigitalOutput* lcdD5;
-			DigitalOutput* lcdD6;
-			DigitalOutput* lcdD7;
+			digital_output* lcdD4;
+			digital_output* lcdD5;
+			digital_output* lcdD6;
+			digital_output* lcdD7;
 
-			DigitalOutput* backlight;
+			digital_output* backlight;
 
 			static const unsigned char DISP_ON = 0xC;
 			static const unsigned char CLR_DISP = 1;

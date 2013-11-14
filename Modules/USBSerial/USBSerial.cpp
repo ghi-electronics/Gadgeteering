@@ -18,11 +18,11 @@ limitations under the License.
 
 #include <string.h>
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
-		USBSerial::USBSerial(int socket) 
+		USBSerial::USBSerial(int socket)
 		{
 			this->sock = mainboard->getSocket(socket);
 			this->b_IsOpen = false;
@@ -54,7 +54,7 @@ namespace Gadgeteering
 			if(this->b_IsOpen)
 				serial->close();
 
-			serial = mainboard->getSerialDevice(baud, Interfaces::SerialDevice::Parity::NONE, 1, 8, this->sock, Socket::Pins::Four, Socket::Pins::Five);
+			serial = mainboard->getSerialDevice(baud, devices::serial::Parity::NONE, 1, 8, this->sock, socket::pins::Four, socket::pins::Five);
 
 			if(this->b_IsOpen)
 				serial->open();

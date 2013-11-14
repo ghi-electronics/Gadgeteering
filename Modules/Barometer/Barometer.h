@@ -19,11 +19,11 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class Barometer : public Module {
+		class Barometer {
 			static const unsigned char ADC_ADDRESS = 0x77;
 			static const unsigned char EEPROM_ADDR = 0x50;
 
@@ -42,12 +42,12 @@ namespace Gadgeteering {
 				int A, B, C, D;
 			};
 
-			DigitalOutput* XCLR;
+			digital_output* XCLR;
 			I2CDevice* i2c;
 
 			Coefficients Coeff;
 
-			void ReadFactoryCalibrationData(Socket* socket);
+			void ReadFactoryCalibrationData(socket* socket);
 
 			public:
 				struct SensorData
@@ -55,7 +55,8 @@ namespace Gadgeteering {
 					double Temperature;
 					double Pressure;
 
-					SensorData(double temperature, double pressure) : Temperature(temperature), Pressure(pressure) { };
+					SensorData(double temperature, double pressure) : Temperature(temperature), Pressure(pressure)
+{ };
 				};
 
 				Barometer(unsigned char socketNumber);

@@ -19,12 +19,12 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class Potentiometer : public Module {
-			AnalogInput* input;
+		class Potentiometer {
+			analog_input* input;
 
 			public:
 				Potentiometer(unsigned char socketNumber);

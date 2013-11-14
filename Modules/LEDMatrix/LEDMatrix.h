@@ -19,9 +19,9 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
 		class LEDMatrix : public DaisyLinkModule {
 			static const unsigned char GHI_DAISYLINK_MANUFACTURER = 0x10;

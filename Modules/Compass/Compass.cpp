@@ -18,7 +18,7 @@ limitations under the License.
 
 #include <string.h>
 
-using namespace Gadgeteering::Modules;
+using namespace gadgeteering::modules;
 
 
 const double Compass::sq2p1 = 2.414213562373095048802e0F;
@@ -40,7 +40,7 @@ Compass::Compass(int socket)
 {
 	Socket *sock = mainboard->getSocket(socket);
 
-	i2c = new Interfaces::I2CDevice(mainboard->getI2CBus(sock), 0x1E);
+	i2c = new devices::i2c(mainboard->getI2CBus(sock), 0x1E);
 
 	this->_readBuffer8 = new unsigned char[1];
 	this->_writeBuffer8 = new unsigned char[1];
@@ -131,5 +131,5 @@ Compass::SensorData::SensorData(double angle, int x, int y, int z)
 	this->Angle = angle;
 	this->X = x;
 	this->Y = y;
-	this->Z = z;                
+	this->Z = z;
 }

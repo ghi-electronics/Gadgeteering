@@ -16,18 +16,18 @@ limitations under the License.
 
 #include "LED7C.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
 LED7C::LED7C(unsigned char socketNumber)
 {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::X);
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::X);
 
-	this->red = new DigitalOutput(socket, Socket::Pins::Four);
-	this->green = new DigitalOutput(socket, Socket::Pins::Five);
-	this->blue = new DigitalOutput(socket, Socket::Pins::Three);
+	this->red = new digital_output(socket, socket::pins::Four);
+	this->green = new digital_output(socket, socket::pins::Five);
+	this->blue = new digital_output(socket, socket::pins::Three);
 }
 
 LED7C::~LED7C()
@@ -37,7 +37,8 @@ LED7C::~LED7C()
 	delete this->blue;
 }
 
-void LED7C::setColor(Color color) {
+void LED7C::setColor(Color color)
+{
 	int r = ((int)(color) & 4);
 
     this->red->write((((int)color & 4) != 0 ? true : false));

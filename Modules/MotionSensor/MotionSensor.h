@@ -19,12 +19,12 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class MotionSensor : public Module {
-			DigitalInput* input;
+		class MotionSensor {
+			digital_input* input;
 
 			public:
 				MotionSensor(unsigned char socketNumber);

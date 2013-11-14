@@ -19,14 +19,14 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class ColorSense : public Module {
+		class ColorSense {
 			static const unsigned char COLOR_ADDRESS = 0x39;
 
-			DigitalOutput* LEDControl;
+			digital_output* LEDControl;
 			I2CDevice* softwareI2C;
 
 			public:

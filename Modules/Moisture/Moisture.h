@@ -16,15 +16,15 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
 		class Moisture : protected Module
 		{
 			protected:
-				Interfaces::AnalogInput *input;
-				Interfaces::DigitalOutput *output;
+				interfaces::analog_input *input;
+				interfaces::digital_output *output;
 
 			public:
 				Moisture(int socket);

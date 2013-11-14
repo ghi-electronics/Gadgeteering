@@ -16,9 +16,9 @@ limitations under the License.
 
 #include "LEDMatrix.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
 LEDMatrix::LEDMatrix(unsigned char socketNumber) : DaisyLinkModule(socketNumber, LEDMatrix::GHI_DAISYLINK_MANUFACTURER, LEDMatrix::GHI_DAISYLINK_TYPE_LEDMATRIX, LEDMatrix::GHI_DAISYLINK_VERSION_LEDMATRIX, LEDMatrix::GHI_DAISYLINK_VERSION_LEDMATRIX)
 {

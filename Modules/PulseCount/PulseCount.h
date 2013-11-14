@@ -19,15 +19,15 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class PulseCount : public Module {
-			DigitalInput* MISO;
-			DigitalOutput* MOSI;
-			DigitalOutput* CLOCK;
-			DigitalOutput* CS;
+		class PulseCount {
+			digital_input* MISO;
+			digital_output* MOSI;
+			digital_output* CLOCK;
+			digital_output* CS;
 
 			unsigned char LS7366_1B_wr[1]; // write one byte
 			unsigned char LS7366_2B_wr[2]; // write two bytes

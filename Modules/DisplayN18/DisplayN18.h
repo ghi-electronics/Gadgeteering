@@ -19,11 +19,11 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class DisplayN18 : public Module {
+		class DisplayN18 {
 #ifndef LYNX
 			static const unsigned char STEP_X = 4;
 			static const unsigned char STEP_Y = 5;
@@ -34,9 +34,9 @@ namespace Gadgeteering {
 			static const unsigned char STEP = 160;
 #endif
 
-			DigitalOutput* resetPin;
-			DigitalOutput* backlightPin;
-			DigitalOutput* rsPin;
+			digital_output* resetPin;
+			digital_output* backlightPin;
+			digital_output* rsPin;
 			SPIDevice* spi;
 
 			void writeCommand(unsigned char command);

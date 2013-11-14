@@ -19,12 +19,12 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class ButtonS7 : public Module {
-			DigitalInput* buttons[7];
+		class ButtonS7 {
+			digital_input* buttons[7];
 
 			public:
 				typedef unsigned char Button;

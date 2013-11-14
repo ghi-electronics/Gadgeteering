@@ -16,15 +16,15 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
 		class WiFiRN171 : protected Module
 		{
 			private:
 				bool DeviceReady;
-				Interfaces::SerialDevice *serial;
+				devices::serial *serial;
 
 				void CommandModeStart();
 				void CommandModeExit();

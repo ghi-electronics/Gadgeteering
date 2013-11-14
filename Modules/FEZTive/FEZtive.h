@@ -19,15 +19,15 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
 		class FEZtive : protected Module
 		{
 			private:
-				Interfaces::SPIDevice *spi;
-				Interfaces::SPIConfiguration *spi_config;
+				interfaces::SPIDevice *spi;
+				interfaces::SPIConfiguration *spi_config;
 				Socket *sock;
 
 				Color *LEDs;

@@ -19,12 +19,12 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		class FMRadio : public Module {
-			Interfaces::I2CDevice* i2c;
-			Interfaces::DigitalOutput* resetPin;
-			Interfaces::DigitalInput* senPin;
+namespace gadgeteering {
+	namespace modules {
+		class FMRadio {
+			devices::i2c* i2c;
+			interfaces::digital_output* resetPin;
+			interfaces::digital_input* senPin;
 			unsigned short registers[16];
 			unsigned short volume;
 

@@ -21,10 +21,10 @@ limitations under the License.
 
 //All times are in milliseconds
 
-namespace Gadgeteering {
-	namespace Modules {
+namespace gadgeteering {
+	namespace modules {
 
-		using namespace Gadgeteering::Interfaces;
+		using namespace gadgeteering::interfaces;
 
 		class MultiColorLED : public DaisyLinkModule {
 			typedef unsigned char Register;

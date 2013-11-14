@@ -19,15 +19,15 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class MaxO : public Module {
+		class MaxO {
 			SPIDevice* spi;
 
-			DigitalOutput* Enable;
-			DigitalOutput* CLR;
+			digital_output* Enable;
+			digital_output* CLR;
 
 			unsigned char* data;
 			unsigned int length;

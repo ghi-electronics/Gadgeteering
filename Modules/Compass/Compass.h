@@ -19,14 +19,14 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
 		class Compass : protected Module
 		{
 			private:
-				Interfaces::I2CDevice *i2c;
+				devices::i2c *i2c;
 
 				unsigned char *_readBuffer8;
 				unsigned char *_writeBuffer8;

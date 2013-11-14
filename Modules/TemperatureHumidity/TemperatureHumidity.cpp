@@ -16,26 +16,29 @@ limitations under the License.
 
 #include "TemperatureHumidity.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-TemperatureHumidity::TemperatureHumidity(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::X);
-	
-    this->_data = new DigitalIO(socket, Socket::Pins::Three);
-	this->_sck = new DigitalOutput(socket, Socket::Pins::Four);
-	this->_data->setIOState(IOStates::DIGITAL_OUTPUT);
-	this->_data->setResistorMode(ResistorModes::PULL_UP);
+TemperatureHumidity::TemperatureHumidity(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::X);
+
+    this->_data = new DigitalIO(socket, socket::pins::Three);
+	this->_sck = new digital_output(socket, socket::pins::Four);
+	this->_data->setio_mode(io_modes::DIGITAL_OUTPUT);
+	this->_data->setresistor_mode(resistor_modes::PULL_UP);
 }
 
-TemperatureHumidity::~TemperatureHumidity() {
+TemperatureHumidity::~TemperatureHumidity()
+{
     delete this->_data;
 	delete this->_sck;
 }
 
-void TemperatureHumidity::TakeMeasurements(double* temperature, double* humidity) {
+void TemperatureHumidity::TakeMeasurements(double* temperature, double* humidity)
+{
     double temperatureReading;
     unsigned int rawRHReading;
     double rhReading;
@@ -58,12 +61,13 @@ void TemperatureHumidity::TakeMeasurements(double* temperature, double* humidity
 
     // Correct RH reading based on temperature
     rhReading = (temperatureReading - 25) * (0.01 + 0.00008 * rawRHReading) + rhReading;
-	
+
     *temperature = temperatureReading;
     *humidity = rhReading;
 }
 
-void TemperatureHumidity::SHT_TransmissionStart() {
+void TemperatureHumidity::SHT_TransmissionStart()
+{
 	_data->write(true);
 
     _sck->write(true);
@@ -74,7 +78,8 @@ void TemperatureHumidity::SHT_TransmissionStart() {
     _sck->write(false);
 }
 
-unsigned int TemperatureHumidity::SHT_MeasureTemperature() {
+unsigned int TemperatureHumidity::SHT_MeasureTemperature()
+{
     bool ack;
     bool reading[16];
 
@@ -119,8 +124,8 @@ unsigned int TemperatureHumidity::SHT_MeasureTemperature() {
     _sck->write(false);
 
     //TEMP
-    if (ack) 
-		mainboard->panic(error_codes::MODULE_ERROR);
+    if (ack)
+		mainboard->panic(Exceptions::ERR_MODULE_ERROR);
 
     //It will take up to 80ms to read. Sensor will
     // pull DATA line low when ready
@@ -169,7 +174,8 @@ unsigned int TemperatureHumidity::SHT_MeasureTemperature() {
 	return temp;
 }
 
-unsigned int TemperatureHumidity::SHT_MeasureRH() {
+unsigned int TemperatureHumidity::SHT_MeasureRH()
+{
 	bool ack;
     bool reading[16];
 

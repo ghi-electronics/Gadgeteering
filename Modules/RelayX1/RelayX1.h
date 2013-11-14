@@ -16,14 +16,14 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
 		class RelayX1 : protected Module
 		{
 			protected:
-				Interfaces::DigitalOutput *output;
+				interfaces::digital_output *output;
 				bool enabled;
 
 			public:

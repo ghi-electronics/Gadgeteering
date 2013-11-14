@@ -16,29 +16,34 @@ limitations under the License.
 
 #include "Tunes.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-Tunes::Tunes(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::P);
+Tunes::Tunes(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::P);
 
-	this->pwm = new PWMOutput(socket, this->PWM_PIN);
+	this->pwm = new pwm_output(socket, this->PWM_PIN);
 }
 
-Tunes::~Tunes() {
+Tunes::~Tunes()
+{
 	delete this->pwm;
 }
 
-void Tunes::set(double frequency, double dutyCycle) {
+void Tunes::set(double frequency, double dutyCycle)
+{
 	this->pwm->set(frequency, dutyCycle);
 }
 
-void Tunes::setFrequency(double frequency) {
+void Tunes::setFrequency(double frequency)
+{
 	this->pwm->setFrequency(frequency);
 }
 
-void Tunes::setDutyCycle(double dutyCycle) {
+void Tunes::setDutyCycle(double dutyCycle)
+{
 	this->pwm->setDutyCycle(dutyCycle);
 }

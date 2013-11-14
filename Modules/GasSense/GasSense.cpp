@@ -16,18 +16,18 @@ limitations under the License.
 
 #include "GasSense.h"
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
 		GasSense::GasSense(int socket) : Module()
 		{
 			Socket *sock = mainboard->getSocket(socket);
 
-			sock->ensureTypeIsSupported(Socket::Types::A);
+			sock->ensureTypeIsSupported(socket::types::A);
 
-			this->input = new Interfaces::AnalogInput(sock->pins[3]);
-			this->output = new Interfaces::DigitalOutput(sock->pins[4]);
+			this->input = new interfaces::analog_input(sock->pins[3]);
+			this->output = new interfaces::digital_output(sock->pins[4]);
 		}
 
 		double GasSense::GetGasReading(int samples)

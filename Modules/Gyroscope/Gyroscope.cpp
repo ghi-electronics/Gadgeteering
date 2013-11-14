@@ -16,13 +16,13 @@ limitations under the License.
 
 #include "Gyroscope.h"
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
 		Gyroscope::Gyroscope(int socket)
 		{
-			i2c = new Interfaces::I2CDevice(mainboard->getI2CBus(mainboard->getSocket(socket), Socket::Pins::Eight, Socket::Pins::Nine), 0x68);
+			i2c = new devices::i2c(mainboard->getI2CBus(mainboard->getSocket(socket), socket::pins::Eight, socket::pins::Nine), 0x68);
 		}
 
 		Gyroscope::Bandwidth Gyroscope::LowPassFilter(char filter)
@@ -70,7 +70,7 @@ namespace Gadgeteering
 			registers[0] = Register::TEMP_OUT_H;
 
 			i2c->writeRead(registers, 1, readings, 8, &numWritten, &numRead);
-			
+
             rawT = (readings[0] << 8) | readings[1];
             rawX = (readings[2] << 8) | readings[3];
             rawY = (readings[4] << 8) | readings[5];

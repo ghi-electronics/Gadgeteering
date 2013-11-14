@@ -19,15 +19,15 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		class KeypadKP16 : public Module {
-			Interfaces::DigitalOutput* A0;
-			Interfaces::DigitalOutput* A1;
-			Interfaces::DigitalInput* R1;
-			Interfaces::DigitalInput* R2;
-			Interfaces::DigitalInput* R3;
-			Interfaces::DigitalInput* R4;
+namespace gadgeteering {
+	namespace modules {
+		class KeypadKP16 {
+			interfaces::digital_output* A0;
+			interfaces::digital_output* A1;
+			interfaces::digital_input* R1;
+			interfaces::digital_input* R2;
+			interfaces::digital_input* R3;
+			interfaces::digital_input* R4;
 
 			public:
 				KeypadKP16(unsigned char socketNumber);

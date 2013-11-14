@@ -19,15 +19,15 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
+namespace gadgeteering {
+	namespace modules {
 
-		using namespace Gadgeteering::Interfaces;
+		using namespace gadgeteering::interfaces;
 
-		class LED7C : public Module {
-			DigitalOutput* red;
-			DigitalOutput* green;
-			DigitalOutput* blue;
+		class LED7C {
+			digital_output* red;
+			digital_output* green;
+			digital_output* blue;
 
 			public:
 				typedef unsigned char Color;

@@ -19,14 +19,14 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class CurrentACS712 : public Module {
+		class CurrentACS712 {
 			static const unsigned int AC_SAMPLE_COUNT = 400;
 
-			AnalogInput* ain;
+			analog_input* ain;
 
 			public:
 				CurrentACS712(unsigned char socketNumber);

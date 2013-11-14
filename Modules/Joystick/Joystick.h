@@ -19,14 +19,14 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		using namespace Gadgeteering::Interfaces;
+namespace gadgeteering {
+	namespace modules {
+		using namespace gadgeteering::interfaces;
 
-		class Joystick : public Module {
-			AnalogInput* x;
-			AnalogInput* y;
-			DigitalInput* button;
+		class Joystick {
+			analog_input* x;
+			analog_input* y;
+			digital_input* button;
 
 			public:
 				Joystick(unsigned char socketNumber);

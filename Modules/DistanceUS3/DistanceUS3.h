@@ -19,15 +19,15 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering
+namespace gadgeteering
 {
-	namespace Modules
+	namespace modules
 	{
 		class DistanceUS3 : protected Module
 		{
 			protected:
-				Interfaces::DigitalInput *Echo;
-				Interfaces::DigitalOutput *Trigger;
+				interfaces::digital_input *Echo;
+				interfaces::digital_output *Trigger;
 
 				int TicksPerMicrosecond;
 

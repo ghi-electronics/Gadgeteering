@@ -19,16 +19,16 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
+namespace gadgeteering {
+	namespace modules {
 
-		using namespace Gadgeteering::Interfaces;
+		using namespace gadgeteering::interfaces;
 
-		class LED7R : public Module {
+		class LED7R {
 			static const unsigned char LEDS = 7;
 
-			Socket* socket;
-			DigitalOutput* ports[LED7R::LEDS];
+			socket* socket;
+			digital_output* ports[LED7R::LEDS];
 
 			public:
 				LED7R(unsigned char socketNumber);

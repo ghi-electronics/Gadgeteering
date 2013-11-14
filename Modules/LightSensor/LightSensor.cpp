@@ -16,18 +16,20 @@ limitations under the License.
 
 #include "LightSensor.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-LightSensor::LightSensor(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::A);
-	
-    this->input = new AnalogInput(socket, Socket::Pins::Three);
+LightSensor::LightSensor(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::A);
+
+    this->input = new analog_input(socket, socket::pins::Three);
 }
 
-LightSensor::~LightSensor() {
+LightSensor::~LightSensor()
+{
     delete this->input;
 }
 

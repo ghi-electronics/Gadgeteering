@@ -19,9 +19,9 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace Gadgeteering {
-	namespace Modules {
-		class TouchC8 : public Module
+namespace gadgeteering {
+	namespace modules {
+		class TouchC8
 		{
 			static const unsigned char I2C_ADDRESS = 0x2B;
 			static const unsigned char IRQ_SRC = 0x0;
@@ -31,8 +31,8 @@ namespace Gadgeteering {
 			static const unsigned char WHL_POS_LSB = 0x4;
 			static const unsigned char WHEELS = 8;
 
-			Interfaces::DigitalOutput* reset;
-			Interfaces::I2CDevice* device;
+			interfaces::digital_output* reset;
+			devices::i2c* device;
 
 			void Reset();
 			void ConfigureSPM();

@@ -16,35 +16,40 @@ limitations under the License.
 
 #include "Thermocouple.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-Thermocouple::Thermocouple(unsigned char socketNumber) {
-	Socket* socket = mainboard->getSocket(socketNumber);
-	socket->ensureTypeIsSupported(Socket::Types::X);
+Thermocouple::Thermocouple(unsigned char socketNumber)
+{
+	socket* t_socket = mainboard->getSocket(socketNumber);
+	t_socket->ensureTypeIsSupported(socket::types::X);
 
-	_miso = new DigitalInput(socket, Socket::Pins::Three, ResistorModes::PULL_UP);
-	_clk = new DigitalOutput(socket, Socket::Pins::Four, false);
-	_cs = new DigitalOutput(socket, Socket::Pins::Five, true);
+	_miso = new digital_input(socket, socket::pins::Three, resistor_modes::PULL_UP);
+	_clk = new digital_output(socket, socket::pins::Four, false);
+	_cs = new digital_output(socket, socket::pins::Five, true);
 }
 
-Thermocouple::~Thermocouple() {
+Thermocouple::~Thermocouple()
+{
 	delete this->_miso;
 	delete this->_clk;
 	delete this->_cs;
 }
 
-unsigned long Thermocouple::ReadData() {
+unsigned long Thermocouple::ReadData()
+{
 	long bitCount;
 	unsigned long data = 0;
 
 	_cs->write(false);
 	{
-		for (bitCount = 31; bitCount >= 0; bitCount--) {
+		for (bitCount = 31; bitCount >= 0; bitCount--)
+{
 			_clk->write(true);
 			System::Sleep(1);
-			if (_miso->read()) {
+			if (_miso->read())
+{
 				data |= (unsigned long)(1L << (unsigned long)bitCount);
 			}
 
@@ -57,15 +62,18 @@ unsigned long Thermocouple::ReadData() {
 	return data;
 }
 
-short Thermocouple::GetExternalTemp_Celsius() {
+short Thermocouple::GetExternalTemp_Celsius()
+{
 	return (ReadData() >> 20) & 0xFFF;
 }
 
-short Thermocouple::GetExternalTemp_Fahrenheit() {
+short Thermocouple::GetExternalTemp_Fahrenheit()
+{
 	return (short)((GetExternalTemp_Celsius() * 1.8) + 32);
 }
 
-unsigned char Thermocouple::GetInternalTemp_Celsius() {
+unsigned char Thermocouple::GetInternalTemp_Celsius()
+{
 	unsigned long value = ReadData();
 	return (unsigned char)((value >> 8) & 0xFF); // get byte 2
 }

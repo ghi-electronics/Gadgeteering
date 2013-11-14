@@ -16,9 +16,9 @@ limitations under the License.
 
 #include "MultiColorLED.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Modules;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
 MultiColorLED::MultiColorLED(unsigned char socketNumber) : DaisyLinkModule(socketNumber, MultiColorLED::GHI_DAISYLINK_MANUFACTURER, MultiColorLED::GHI_DAISYLINK_TYPE_MULTICOLORLED, MultiColorLED::GHI_DAISYLINK_VERSION_MULTICOLORLED, MultiColorLED::GHI_DAISYLINK_VERSION_MULTICOLORLED)
 {
