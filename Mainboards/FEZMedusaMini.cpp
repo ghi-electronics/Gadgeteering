@@ -101,8 +101,12 @@ const socket& fez_medusa_mini::get_socket(unsigned char number)
 	socket_list_node* start = this->sockets;
 
 	while (start)
+	{
 		if (start->data.number == number)
 			return start->data;
+
+		start = start->next;
+	}
 
 	system::panic(error_codes::INVALID_SOCKET);
 
@@ -111,22 +115,22 @@ const socket& fez_medusa_mini::get_socket(unsigned char number)
 
 socket& fez_medusa_mini::register_socket(socket s)
 {
+	if (!this->sockets)
+	{
+		this->sockets = new socket_list_node();
+		this->sockets->next = NULL;
+		this->sockets->data = s;
+
+		return this->sockets->data;
+	}
+
 	socket_list_node* current = this->sockets;
 
-	if (!current)
-	{
-		this->sockets = current = new socket_list_node();
-	}
-	else
-	{
-		while (current->next)
-			current = current->next;
-
-		current->next = new socket_list_node();
+	while (current->next)
 		current = current->next;
-	}
 
-	current = new socket_list_node();
+	current->next = new socket_list_node();
+	current = current->next;
 	current->next = NULL;
 	current->data = s;
 
