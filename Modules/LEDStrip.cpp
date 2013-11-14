@@ -38,7 +38,7 @@ led_strip::~led_strip()
 void led_strip::turn_on_led(unsigned char led, bool only_led)
 {
 	if (led < 1 || led > 7)
-		system::panic(error_codes::MODULE_ERROR);
+		panic(errors::MODULE_ERROR);
 
 	if (only_led)
 		this->turn_all_off();
@@ -49,7 +49,7 @@ void led_strip::turn_on_led(unsigned char led, bool only_led)
 void led_strip::turn_off_led(unsigned char led)
 {
 	if (led < 1 || led > 7)
-		system::panic(error_codes::MODULE_ERROR);
+		panic(errors::MODULE_ERROR);
 
 	this->ports[led - 1]->write(false);
 }
@@ -69,7 +69,7 @@ void led_strip::turn_all_off()
 void led_strip::set(unsigned char led, bool state)
 {
 	if (led < 1 || led > 7)
-		system::panic(error_codes::MODULE_ERROR);
+		panic(errors::MODULE_ERROR);
 
 	this->ports[led - 1]->write(state);
 }

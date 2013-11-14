@@ -281,7 +281,7 @@ void hub_ap5::set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_re
 void hub_ap5::set_pwm(pwm_channel channel, double duty_cycle, double frequency)
 {
 	if (channel == pwm_channels::NONE || channel > pwm_channels::PWM_14)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::INVALID_CHANNEL);
 
 	unsigned char pin = 0xFF;
 
@@ -320,7 +320,7 @@ void hub_ap5::write_digital(cpu_pin pin, bool value)
 double hub_ap5::read_analog(analog_channel channel)
 {
 	if (channel == analog_channels::NONE || channel > analog_channels::ANALOG_5)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::INVALID_CHANNEL);
 
 	unsigned char pin = 0xFF;
 

@@ -24,7 +24,7 @@ using namespace gadgeteering::interfaces;
 digital_output::digital_output(const socket& socket, socket::pin pin_number, bool initial_state) : sock(socket), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
 	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
-		system::panic(error_codes::PIN_UNCONNECTED);
+		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	if (!this->sock.digital_output_indirector)
 	{
@@ -53,7 +53,7 @@ void digital_output::write(bool value)
 digital_input::digital_input(const socket& socket, socket::pin pin_number, resistor_mode new_resistor_mode) : sock(socket), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
 	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
-		system::panic(error_codes::PIN_UNCONNECTED);
+		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	if (!this->sock.digital_input_indirector)
 	{
@@ -101,7 +101,7 @@ resistor_mode digital_input::get_resistor_mode()
 digital_io::digital_io(const socket& socket, socket::pin pin_number) : sock(socket), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
 	if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
-		system::panic(error_codes::PIN_UNCONNECTED);
+		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	this->current_resistor_mode = resistor_modes::NONE;
 	this->current_io_state = io_modes::NONE;
@@ -191,12 +191,12 @@ analog_input::analog_input(const socket& socket, socket::pin pin_number) : sock(
 		}
 
 		if (this->channel == analog_channels::NONE)
-			system::panic(error_codes::PIN_UNCONNECTED);
+			panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
 	}
 	else
 	{
 		if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
-			system::panic(error_codes::PIN_UNCONNECTED);
+			panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
 	}
 }
 
@@ -222,14 +222,14 @@ analog_output::analog_output(const socket& socket, socket::pin pin_number) : soc
 	if (!this->sock.analog_output_indirector)
 	{
 		if (pin_number != socket::pins::FIVE || socket.analog_out == analog_out_channels::NONE)
-			system::panic(error_codes::CHANNEL_INVALID);
+			panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
 
 		this->channel = socket.analog_out;
 	}
 	else
 	{
-		if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
-			system::panic(error_codes::PIN_UNCONNECTED);
+		if (pin_number != socket::pins::FIVE || socket.pins[pin_number] == socket::pins::UNCONNECTED)
+			panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
 	}
 }
 
@@ -262,12 +262,12 @@ pwm_output::pwm_output(const socket& socket, socket::pin pin_number) : sock(sock
 		}
 
 		if (this->channel == pwm_channels::NONE)
-			system::panic(error_codes::CHANNEL_INVALID);
+			panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
 	}
 	else
 	{
 		if (socket.pins[pin_number] == socket::pins::UNCONNECTED)
-			system::panic(error_codes::PIN_UNCONNECTED);
+			panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
 	}
 
 	this->set(0, 0);

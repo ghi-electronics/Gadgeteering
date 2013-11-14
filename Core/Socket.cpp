@@ -83,5 +83,5 @@ socket::~socket()
 void socket::ensure_type(type type) const
 {
 	if ((this->type_mask & type) == 0)
-		system::panic(error_codes::SOCKET_NOT_HAVE_TYPE);
+		panic(errors::MODULE_IS_ON_INVALID_SOCKET_TYPE);
 }

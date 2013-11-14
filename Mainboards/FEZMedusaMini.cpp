@@ -108,7 +108,7 @@ const socket& fez_medusa_mini::get_socket(unsigned char number)
 		start = start->next;
 	}
 
-	system::panic(error_codes::INVALID_SOCKET);
+	panic(errors::INVALID_SOCKET_NUMBER);
 
 	return socket();
 }
@@ -139,7 +139,7 @@ socket& fez_medusa_mini::register_socket(socket s)
 
 void fez_medusa_mini::set_debug_led(bool state)
 {
-	system::panic(error_codes::NOT_IMPLEMENTED);
+	panic(errors::NOT_SUPPORTED);
 }
 
 void fez_medusa_mini::set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_resistor_mode) 
@@ -153,7 +153,7 @@ void fez_medusa_mini::set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mod
 void fez_medusa_mini::write_digital(cpu_pin pin, bool value)
 {
 	if (pin == socket::pins::UNCONNECTED)
-		system::panic(error_codes::PIN_INVALID);
+		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	::digitalWrite(pin, value ? HIGH : LOW);
 }
@@ -161,14 +161,14 @@ void fez_medusa_mini::write_digital(cpu_pin pin, bool value)
 bool fez_medusa_mini::read_digital(cpu_pin pin) 
 {
 	if (pin == socket::pins::UNCONNECTED)
-		system::panic(error_codes::PIN_INVALID);
+		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	return ::digitalRead(pin) == HIGH;
 }
 
 void fez_medusa_mini::write_analog(analog_channel channel, double voltage)
 {
-	system::panic(error_codes::NOT_IMPLEMENTED);
+	panic(errors::NOT_SUPPORTED);
 }
 double fez_medusa_mini::read_analog(analog_channel channel)
 {
@@ -177,7 +177,7 @@ double fez_medusa_mini::read_analog(analog_channel channel)
 		case analog_channels::ANALOG_0: return ::analogRead(pins::AD0) / 1024.0; break;
 		case analog_channels::ANALOG_1: return ::analogRead(pins::AD1) / 1024.0; break;
 		case analog_channels::ANALOG_2: return ::analogRead(pins::AD2) / 1024.0; break;
-		default: system::panic(error_codes::CHANNEL_INVALID); return 0.0;
+		default: panic(errors::INVALID_CHANNEL); return 0.0;
 	}
 }
 
@@ -188,13 +188,13 @@ void fez_medusa_mini::set_pwm(pwm_channel channel, double duty_cycle, double fre
 	switch (channel)
 	{
 		case pwm_channels::PWM_0: pin = pins::IO3; break;
-		case pwm_channels::PWM_1: pin = pins::IO3; break;
-		case pwm_channels::PWM_2: pin = pins::IO3; break;
-		default: system::panic(error_codes::CHANNEL_INVALID);
+		case pwm_channels::PWM_1: pin = pins::IO5; break;
+		case pwm_channels::PWM_2: pin = pins::IO6; break;
+		default: panic(errors::INVALID_CHANNEL);
 	}
 
 	if (pin == socket::pins::UNCONNECTED)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::INVALID_CHANNEL);
 
 	pinMode(pin, OUTPUT);
 	return ::analogWrite(pin, static_cast<int>(duty_cycle * 255.0));
@@ -203,7 +203,7 @@ void fez_medusa_mini::set_pwm(pwm_channel channel, double duty_cycle, double fre
 void fez_medusa_mini::set_pwm(cpu_pin pin, double duty_cycle, double frequency, double duration)
 {
 	if (pin == socket::pins::UNCONNECTED)
-		system::panic(error_codes::PIN_INVALID);
+		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	if (frequency <= 0 || duty_cycle < 0 || duty_cycle > 1)
 		return;
@@ -226,7 +226,7 @@ void fez_medusa_mini::set_pwm(cpu_pin pin, double duty_cycle, double frequency, 
 void fez_medusa_mini::spi_read_write(spi_channel channel, const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int count, spi_configuration& config, bool deselect_after)
 {
 	if (channel != spi_channels::SPI_0)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::INVALID_CHANNEL);
 
 	if (!config.clock_idle_state && config.clock_edge)
 		SPI.setDataMode(SPI_MODE0);
@@ -289,7 +289,7 @@ bool fez_medusa_mini::i2c_write(i2c_channel channel, const unsigned char* buffer
 		case i2c_channels::I2C_0: return this->i2c0->write(buffer, length, send_start, send_stop);
 		case i2c_channels::I2C_1: return this->i2c1->write(buffer, length, send_start, send_stop);
 		case i2c_channels::I2C_2: return this->i2c2->write(buffer, length, send_start, send_stop);
-		default: system::panic(error_codes::CHANNEL_INVALID); return false;
+		default: panic(errors::INVALID_CHANNEL); return false;
 	}
 }
 
@@ -300,14 +300,14 @@ bool fez_medusa_mini::i2c_read(i2c_channel channel, unsigned char* buffer, unsig
 		case i2c_channels::I2C_0: return this->i2c0->read(buffer, length, send_start, send_stop);
 		case i2c_channels::I2C_1: return this->i2c1->read(buffer, length, send_start, send_stop);
 		case i2c_channels::I2C_2: return this->i2c2->read(buffer, length, send_start, send_stop);
-		default: system::panic(error_codes::CHANNEL_INVALID); return false;
+		default: panic(errors::INVALID_CHANNEL); return false;
 	}
 }
 
 unsigned int fez_medusa_mini::serial_write(serial_channel  channel, const unsigned char* buffer, unsigned int count, serial_configuration& config)
 {
 	if (channel != serial_channels::SERIAL_0)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::INVALID_CHANNEL);
 
 	if (!this->serial_began)
 	{
@@ -321,7 +321,7 @@ unsigned int fez_medusa_mini::serial_write(serial_channel  channel, const unsign
 unsigned int fez_medusa_mini::serial_read(serial_channel  channel, unsigned char* buffer, unsigned int count, serial_configuration& config)
 {
 	if (channel != serial_channels::SERIAL_0)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::INVALID_CHANNEL);
 
 	return Serial.readBytes(reinterpret_cast<char*>(buffer), count);
 }
@@ -329,7 +329,7 @@ unsigned int fez_medusa_mini::serial_read(serial_channel  channel, unsigned char
 unsigned int fez_medusa_mini::serial_available(serial_channel channel)
 {
 	if (channel != serial_channels::SERIAL_0)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::INVALID_CHANNEL);
 
 	return Serial.available();
 }
@@ -359,7 +359,7 @@ void system::random_seed(int seed)
 	randomSeed(seed);
 }
 
-void system::panic(unsigned char error, unsigned char specific_error)
+void system::throw_error(error_type error, unsigned char specific_error)
 {
 	Serial.begin(9600);
 	while (true)
@@ -368,6 +368,23 @@ void system::panic(unsigned char error, unsigned char specific_error)
 		Serial.print((int)error);
 		Serial.print("-");
 		Serial.println((int)specific_error);
+	}
+}
+
+void system::throw_error(error_type error, const char* file, int line, unsigned char specific_error)
+{
+	Serial.begin(9600);
+	while (true)
+	{
+		Serial.print("ERROR: ");
+		Serial.print((int)error);
+		Serial.print("-");
+		Serial.println((int)specific_error);
+		Serial.print("ON: ");
+		Serial.print(file);
+		Serial.print("(");
+		Serial.print(line);
+		Serial.println(")");
 	}
 }
 

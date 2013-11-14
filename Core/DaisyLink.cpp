@@ -44,9 +44,9 @@ unsigned char DaisyLinkBus::ReserveNextDaisyLinkNodeAddress(DaisyLinkModule* mod
 	if (this->reservedCount >= this->nodeCount)
     {
         if (this->nodeCount == 0)
-            mainboard->panic(error_codes::MODULE_ERROR, 1); //No DaisyLink modules are detected on socket
+            mainboard->panic(errors::MODULE_ERROR, 1); //No DaisyLink modules are detected on socket
         else
-            mainboard->panic(error_codes::MODULE_ERROR, 2); //Tried to initialize more modules than were found
+            mainboard->panic(errors::MODULE_ERROR, 2); //Tried to initialize more modules than were found
     }
     
 	this->socketModuleList.addV(moduleInstance);
@@ -112,7 +112,7 @@ void DaisyLinkBus::GetModuleParameters(unsigned int position, unsigned char* man
 {
     unsigned char address;
     if (position >= this->nodeCount)
-		mainboard->panic(error_codes::MODULE_ERROR, 3); //Attempt to access invalid module
+		mainboard->panic(errors::MODULE_ERROR, 3); //Attempt to access invalid module
 
     address = (unsigned char)(this->startAddress + position);
     *type = this->ReadRegister((unsigned char)Registers::MODULE_TYPE, address);
@@ -125,7 +125,7 @@ unsigned char DaisyLinkBus::GetDaisyLinkVersion(unsigned int position)
     unsigned char address;
 
     if (position >= this->nodeCount)
-		mainboard->panic(error_codes::MODULE_ERROR, 4); //Attempt to access invalid module
+		mainboard->panic(errors::MODULE_ERROR, 4); //Attempt to access invalid module
 
     address = (unsigned char)(this->startAddress + position);
     return this->ReadRegister((unsigned char)Registers::DAISYLINK_VERSION, address);
@@ -183,26 +183,26 @@ DaisyLinkModule::DaisyLinkModule(unsigned char socketNumber, unsigned char manuf
     this->daisyLink = DaisyLinkBus::GetDaisyLinkForSocket(socket, this);
 
     if (this->daisyLink->nodeCount == 0)
-		mainboard->panic(error_codes::MODULE_ERROR, 1); //No DaisyLink modules present
+		mainboard->panic(errors::MODULE_ERROR, 1); //No DaisyLink modules present
 
     if (this->daisyLink->reservedCount >= this->daisyLink->nodeCount)
-		mainboard->panic(error_codes::MODULE_ERROR, 2); //This many modules do not exist on the chain.
+		mainboard->panic(errors::MODULE_ERROR, 2); //This many modules do not exist on the chain.
 
     // NOTE:  PositionOnChain will be invalid until the end of the constructor (it is dependent on DeviceAddress) so this->daisyLink->reservedCount is used until then
     DaisyLinkVersion = this->daisyLink->GetDaisyLinkVersion(this->daisyLink->reservedCount);
     if (DaisyLinkVersion != DaisyLinkModule::VERSION_IMPLEMENTED)
-		mainboard->panic(error_codes::MODULE_ERROR, DaisyLinkVersion); //Unsupported DaisyLink version
+		mainboard->panic(errors::MODULE_ERROR, DaisyLinkVersion); //Unsupported DaisyLink version
 
     this->daisyLink->GetModuleParameters(this->daisyLink->reservedCount, &this->Manufacturer, &this->ModuleType, &this->ModuleVersion);
 
     if (manufacturer != Manufacturer)
-		mainboard->panic(error_codes::MODULE_ERROR, 4); //Problem initializaing DaisyLink due to invalid manufacturer code
+		mainboard->panic(errors::MODULE_ERROR, 4); //Problem initializaing DaisyLink due to invalid manufacturer code
 
     if (moduleType != ModuleType)
-		mainboard->panic(error_codes::MODULE_ERROR, 5); //Problem initializaing DaisyLink due to invalid module type
+		mainboard->panic(errors::MODULE_ERROR, 5); //Problem initializaing DaisyLink due to invalid module type
 
     if (ModuleVersion < minModuleVersionSupported || ModuleVersion > maxModuleVersionSupported)
-		mainboard->panic(error_codes::MODULE_ERROR, 6); //Problem initializaing DaisyLink due to invalid firmware
+		mainboard->panic(errors::MODULE_ERROR, 6); //Problem initializaing DaisyLink due to invalid firmware
 
     ModuleAddress = this->daisyLink->ReserveNextDaisyLinkNodeAddress(this) << 1;
 }

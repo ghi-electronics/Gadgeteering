@@ -24,7 +24,7 @@ using namespace gadgeteering::devices;
 i2c::i2c(i2c_channel channel, unsigned char address)
 {
 	if (channel == i2c_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	this->channel = channel;
 	this->w_address = address << 1;
@@ -35,7 +35,7 @@ i2c::i2c(i2c_channel channel, unsigned char address)
 i2c::i2c(const socket& socket, unsigned char address)
 {
 	if (socket.i2c == i2c_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	this->channel = socket.i2c;
 	this->w_address = address << 1;
@@ -129,7 +129,7 @@ bool i2c::read_registers(unsigned char start_address, unsigned char* values, uns
 spi::spi(spi_channel channel, spi_configuration configuration)
 {
 	if (channel == spi_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	this->config = configuration;
 	this->channel = channel;
@@ -138,7 +138,7 @@ spi::spi(spi_channel channel, spi_configuration configuration)
 spi::spi(spi_channel channel, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number)
 {
 	if (channel == spi_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	this->config = configuration;
 	this->channel = channel;
@@ -148,7 +148,7 @@ spi::spi(spi_channel channel, spi_configuration configuration, const socket& cs_
 spi::spi(const socket& spi_socket, spi_configuration configuration)
 {
 	if (spi_socket.spi == spi_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	this->config = configuration;
 	this->channel = spi_socket.spi;
@@ -157,7 +157,7 @@ spi::spi(const socket& spi_socket, spi_configuration configuration)
 spi::spi(const socket& spi_socket, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number)
 {
 	if (spi_socket.spi == spi_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	this->config = configuration;
 	this->channel = spi_socket.spi;
@@ -195,7 +195,7 @@ void spi::read(unsigned char* buffer, unsigned int length, bool deselect_after)
 serial::serial(serial_channel channel, serial_configuration configuration)
 {
 	if (channel == serial_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	this->config = configuration;
 	this->channel = channel;
@@ -204,7 +204,7 @@ serial::serial(serial_channel channel, serial_configuration configuration)
 serial::serial(const socket& socket, serial_configuration configuration)
 {
 	if (socket.serial == serial_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	this->config = configuration;
 	this->channel = socket.serial;

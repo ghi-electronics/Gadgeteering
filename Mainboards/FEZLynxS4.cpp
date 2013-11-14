@@ -299,7 +299,7 @@ socket& fez_lynx_s4::register_socket(socket s)
 const socket& fez_lynx_s4::get_socket(unsigned char number)
 {
 	if (this->sockets.count(number) == 0)
-		system::panic(error_codes::INVALID_SOCKET);
+		panic(errors::INVALID_SOCKET_NUMBER);
 	
 	return this->sockets[number];
 }
@@ -312,7 +312,7 @@ void fez_lynx_s4::set_debug_led(bool state)
 void fez_lynx_s4::set_io_mode(cpu_pin pin, gadgeteering::io_mode new_io_mode, gadgeteering::resistor_mode new_resistor_mode)
 {
 	if (pin == socket::pins::UNCONNECTED)
-		system::panic(error_codes::PIN_INVALID);
+		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	if (IS_EXTENDER_PIN(pin))
 	{
@@ -327,7 +327,7 @@ void fez_lynx_s4::set_io_mode(cpu_pin pin, gadgeteering::io_mode new_io_mode, ga
 void fez_lynx_s4::write_digital(cpu_pin pin, bool value)
 {
 	if (pin == socket::pins::UNCONNECTED)
-		system::panic(error_codes::PIN_INVALID);
+		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	if (IS_EXTENDER_PIN(pin))
 	{
@@ -342,7 +342,7 @@ void fez_lynx_s4::write_digital(cpu_pin pin, bool value)
 bool fez_lynx_s4::read_digital(cpu_pin pin)
 {
 	if (pin == socket::pins::UNCONNECTED)
-		system::panic(error_codes::PIN_INVALID);
+		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	if (IS_EXTENDER_PIN(pin))
 	{
@@ -356,13 +356,13 @@ bool fez_lynx_s4::read_digital(cpu_pin pin)
 
 void fez_lynx_s4::write_analog(analog_out_channel channel, double voltage)
 {
-	system::panic(error_codes::WRITE_ANALOG_NOT_SUPPORTED);
+	panic(errors::WRITE_ANALOG_NOT_SUPPORTED);
 }
 
 double fez_lynx_s4::read_analog(analog_channel channel)
 {
 	if (channel == analog_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	pair<cpu_pin, unsigned char> mapping = this->analog_channel_to_pin_map[channel];
 
@@ -376,7 +376,7 @@ double fez_lynx_s4::read_analog(analog_channel channel)
 void fez_lynx_s4::set_pwm(pwm_channel channel, double duty_cycle, double frequency)
 {
 	if (channel == pwm_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	cpu_pin pin = this->pwm_channel_to_pin_map[channel];
 
@@ -386,14 +386,14 @@ void fez_lynx_s4::set_pwm(pwm_channel channel, double duty_cycle, double frequen
 	}
 	else
 	{
-		system::panic(error_codes::PWM_NOT_SUPPORTED);
+		panic(errors::PWM_NOT_SUPPORTED);
 	}
 }
 
 void fez_lynx_s4::spi_read_write(spi_channel channel, const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int count, spi_configuration& config, bool deselect_after)
 {
 	if (channel == spi_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	this->channels[channel].spi_read_write(write_buffer, read_buffer, count, config, deselect_after);
 }
@@ -401,7 +401,7 @@ void fez_lynx_s4::spi_read_write(spi_channel channel, const unsigned char* write
 bool fez_lynx_s4::i2c_write(i2c_channel channel, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
 {
 	if (channel == i2c_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	return this->channels[channel].i2c_write(buffer, length, send_start, send_stop);
 }
@@ -409,7 +409,7 @@ bool fez_lynx_s4::i2c_write(i2c_channel channel, const unsigned char* buffer, un
 bool fez_lynx_s4::i2c_read(i2c_channel channel, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
 {
 	if (channel == i2c_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	return this->channels[channel].i2c_read(buffer, length, send_start, send_stop);
 }
@@ -417,7 +417,7 @@ bool fez_lynx_s4::i2c_read(i2c_channel channel, unsigned char* buffer, unsigned 
 unsigned int fez_lynx_s4::serial_write(serial_channel  channel, const unsigned char* buffer, unsigned int count, serial_configuration& config)
 {
 	if (channel == serial_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	return this->channels[channel].serial_write(buffer, count, config);
 }
@@ -425,7 +425,7 @@ unsigned int fez_lynx_s4::serial_write(serial_channel  channel, const unsigned c
 unsigned int fez_lynx_s4::serial_read(serial_channel  channel, unsigned char* buffer, unsigned int count, serial_configuration& config)
 {
 	if (channel == serial_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	return this->channels[channel].serial_read(buffer, count, config);
 }
@@ -433,7 +433,7 @@ unsigned int fez_lynx_s4::serial_read(serial_channel  channel, unsigned char* bu
 unsigned int fez_lynx_s4::serial_available(serial_channel channel)
 {
 	if (channel == serial_channels::NONE)
-		system::panic(error_codes::CHANNEL_INVALID);
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	return this->channels[channel].serial_available();
 }
@@ -488,9 +488,17 @@ void system::random_seed(int seed)
 	srand(seed);
 }
 
-void system::panic(error_number error, unsigned char specific_error)
+void system::throw_error(error_type error, unsigned char specific_error)
 {
 	std::cout << "ERROR: " << (int)error << "-" << (int)specific_error << std::endl;
+
+	throw exception();
+}
+
+void system::throw_error(error_type error, const char* file, int line, unsigned char specific_error)
+{
+	std::cout << "ERROR: " << (int)error << "-" << (int)specific_error << std::endl;
+	std::cout << "ON: " << file << " (" << line << ")" << std::endl;
 
 	throw exception();
 }

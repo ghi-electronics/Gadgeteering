@@ -16,6 +16,9 @@ limitations under the License.
 
 #pragma once
 
+#define panic(code) gadgeteering::system::throw_error(code, __FILE__, __LINE__)
+#define panic_specific(code, specific) gadgeteering::system::throw_error(code, __FILE__, __LINE__, specific)
+
 namespace gadgeteering
 {
 	namespace system
@@ -28,7 +31,8 @@ namespace gadgeteering
 		int random_number(int low, int high);
 		void random_seed(int seed);
 
-		void panic(error_number error, unsigned char specific_error = 0);
+		void throw_error(error_type error, unsigned char specific_error = 0);
+		void throw_error(error_type error, const char* file, int line, unsigned char specific_error = 0);
 
 		void print(const char* data);
 		void print(int data);

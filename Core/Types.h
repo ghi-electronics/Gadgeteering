@@ -32,7 +32,7 @@ namespace gadgeteering
 	typedef unsigned char analog_out_channel;
 	typedef unsigned char pwm_channel;
 
-	typedef unsigned char error_number;
+	typedef unsigned char error_type;
 
 	typedef unsigned char cpu_pin;
 
@@ -211,30 +211,24 @@ namespace gadgeteering
 		serial_configuration(unsigned int baud_rate, partity parity, stop_bit stop_bits, unsigned char data_bits);
 	};
 
-	namespace error_codes
+	namespace errors
 	{
-		static const error_number ONLY_ONE_MAINBOARD = 0;
-		static const error_number SPI_NOT_SUPPORTED = 1;
-		static const error_number PWM_NOT_SUPPORTED = 2;
-		static const error_number READ_DIGITAL_NOT_SUPPORTED = 3;
-		static const error_number WRITE_DIGITAL_NOT_SUPPORTED = 4;
-		static const error_number READ_ANALOG_NOT_SUPPORTED = 5;
-		static const error_number WRITE_ANALOG_NOT_SUPPORTED = 6;
-		static const error_number SET_IO_NOT_SUPPORTED = 7;
-		static const error_number SOCKET_NOT_HAVE_TYPE = 8;
-		static const error_number INVALID_SOCKET = 9;
-		static const error_number PIN_OUT_OF_RANGE = 10;
-		static const error_number PIN_RESERVED = 11;
-		static const error_number SERIAL_NOT_SUPPORTED = 12;
-		static const error_number MODULE_ERROR = 13;
-		static const error_number IO_MODE_NOT_SUPPORTED = 14;
-		static const error_number PORT_OUT_OF_RANGE = 15;
-		static const error_number NOT_IMPLEMENTED = 16;
-		static const error_number OUT_OF_SYNC = 17;
-		static const error_number I2C_NOT_SUPPORTED = 18;
-		static const error_number MAINBOARD_ERROR = 19;
-		static const error_number PIN_UNCONNECTED = 20;
-		static const error_number PIN_INVALID = 21;
-		static const error_number CHANNEL_INVALID = 22;
+		static const error_type ONLY_ONE_MAINBOARD_ALLOWED = 0;
+		static const error_type NOT_SUPPORTED = 1;
+		static const error_type SPI_NOT_SUPPORTED = 2;
+		static const error_type I2C_NOT_SUPPORTED = 3;
+		static const error_type PWM_NOT_SUPPORTED = 4;
+		static const error_type SERIAL_NOT_SUPPORTED = 5;
+		static const error_type READ_DIGITAL_NOT_SUPPORTED = 6;
+		static const error_type WRITE_DIGITAL_NOT_SUPPORTED = 7;
+		static const error_type READ_ANALOG_NOT_SUPPORTED = 8;
+		static const error_type WRITE_ANALOG_NOT_SUPPORTED = 9;
+		static const error_type MODULE_IS_ON_INVALID_SOCKET_TYPE = 10;
+		static const error_type SOCKET_PIN_NOT_CONNECTED = 11;
+		static const error_type PIN_DOES_NOT_SUPPORT_THIS_TYPE = 12;
+		static const error_type INVALID_CHANNEL = 13;
+		static const error_type INVALID_SOCKET_NUMBER = 14;
+		static const error_type SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL = 15;
+		static const error_type MODULE_ERROR = 16;
 	}
 }
