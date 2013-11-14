@@ -19,27 +19,28 @@ limitations under the License.
 #include <Core/Gadgeteering.h>
 
 #include "../IO60P16/IO60P16.h"
+#include "../ADS7830/ADS7830.h"
 
 namespace gadgeteering
 {
 	namespace modules
 	{
-		class hubap5
+		class hub_ap5
 		{
 			unsigned char socket_start;
 
 			io60p16* io60_chip;
-			devices::i2c* analog_chip;
+			ads_7830* analog_chip;
 
 			void create_sockets();
 
 			class indirected_digital_input : public indirectors::digital_input
 			{
 				const socket& sock;
-				hubap5& hub;
+				hub_ap5& hub;
 
 				public:
-					indirected_digital_input(const socket& socket, hubap5& hub);
+					indirected_digital_input(const socket& socket, hub_ap5& hub);
 
 					virtual bool read(socket::pin pin_number);
 					virtual void set_input(socket::pin pin_number, resistor_mode mode);
@@ -48,10 +49,10 @@ namespace gadgeteering
 			class indirected_digital_output : public indirectors::digital_output
 			{
 				const socket& sock;
-				hubap5& hub;
+				hub_ap5& hub;
 
 				public:
-					indirected_digital_output(const socket& socket, hubap5& hub);
+					indirected_digital_output(const socket& socket, hub_ap5& hub);
 
 					virtual void write(socket::pin pin_number, bool value);
 					virtual void set_output(socket::pin pin_number);
@@ -60,10 +61,10 @@ namespace gadgeteering
 			class indirected_digital_io : public indirectors::digital_io
 			{
 				const socket& sock;
-				hubap5& hub;
+				hub_ap5& hub;
 
 				public:
-					indirected_digital_io(const socket& socket, hubap5& hub);
+					indirected_digital_io(const socket& socket, hub_ap5& hub);
 
 					virtual void write(socket::pin pin_number, bool value);
 					virtual bool read(socket::pin pin_number);
@@ -73,10 +74,10 @@ namespace gadgeteering
 			class indirected_analog_input : public indirectors::analog_input
 			{
 				const socket& sock;
-				hubap5& hub;
+				hub_ap5& hub;
 
 				public:
-					indirected_analog_input(const socket& socket, hubap5& hub);
+					indirected_analog_input(const socket& socket, hub_ap5& hub);
 
 					virtual double read(socket::pin pin_number);
 			};
@@ -84,10 +85,10 @@ namespace gadgeteering
 			class indirected_pwm_output : public indirectors::pwm_output
 			{
 				const socket& sock;
-				hubap5& hub;
+				hub_ap5& hub;
 
 				public:
-					indirected_pwm_output(const socket& socket, hubap5& hub);
+					indirected_pwm_output(const socket& socket, hub_ap5& hub);
 
 					virtual void set(socket::pin pin_number, double duty_cycle, double frequency);
 			};
@@ -168,8 +169,8 @@ namespace gadgeteering
 					static const cpu_pin P7_7 = 16 * 7 + 7;
 				};
 
-				hubap5(unsigned char socket_number);
-				~hubap5();
+				hub_ap5(unsigned char socket_number);
+				~hub_ap5();
 
 				const unsigned char socket_1;
 				const unsigned char socket_2;

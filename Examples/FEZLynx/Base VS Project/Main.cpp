@@ -10,7 +10,7 @@ using namespace gadgeteering::modules;
 int main(int argc, char** argv)
 {
 	fez_lynx_s4 board(false);
-	hubap5 hub(2);
+	hub_ap5 hub(2);
 	led_strip led(hub.socket_3);
 
 	while (true)

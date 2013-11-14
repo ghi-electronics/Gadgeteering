@@ -31,6 +31,7 @@
     <ClCompile Include="..\..\..\Mainboards\FEZLynxS4\FTDIDriver.cpp" />
     <ClCompile Include="..\..\..\Modules\Accelerometer\Accelerometer.cpp" />
     <ClCompile Include="..\..\..\Modules\AccelG248\AccelG248.cpp" />
+    <ClCompile Include="..\..\..\Modules\ADS7830\ADS7830.cpp" />
     <ClCompile Include="..\..\..\Modules\ALFATLink\ALFATLink.cpp" />
     <ClCompile Include="..\..\..\Modules\Barometer\Barometer.cpp" />
     <ClCompile Include="..\..\..\Modules\Breakout\Breakout.cpp" />
@@ -92,6 +93,7 @@
     <ClInclude Include="..\..\..\Mainboards\FEZLynxS4\FTDIDriver.h" />
     <ClInclude Include="..\..\..\Modules\Accelerometer\Accelerometer.h" />
     <ClInclude Include="..\..\..\Modules\AccelG248\AccelG248.h" />
+    <ClInclude Include="..\..\..\Modules\ADS7830\ADS7830.h" />
     <ClInclude Include="..\..\..\Modules\ALFATLink\ALFATLink.h" />
     <ClInclude Include="..\..\..\Modules\Barometer\Barometer.h" />
     <ClInclude Include="..\..\..\Modules\Breakout\Breakout.h" />

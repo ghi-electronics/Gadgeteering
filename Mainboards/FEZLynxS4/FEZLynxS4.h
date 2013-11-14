@@ -20,6 +20,7 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 #include <Modules/IO60P16/IO60P16.h>
+#include <Modules/ADS7830/ADS7830.h>
 
 #include "FTDIDriver.h"
 
@@ -36,8 +37,8 @@ namespace gadgeteering
            
 			bool extender_present;
 			modules::io60p16* extender;
-			devices::i2c* extender_analog_converter;
-			devices::i2c* analog_converter;
+			modules::ads_7830* extender_analog_converter;
+			modules::ads_7830* analog_converter;
 
 			void create_sockets();
 

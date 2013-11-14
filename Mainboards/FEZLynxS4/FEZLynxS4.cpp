@@ -66,10 +66,10 @@ fez_lynx_s4::fez_lynx_s4(bool extender_present) : base_mainboard(3.3)
 	if (this->extender_present)
 	{
 		this->extender = new io60p16(sock);
-		this->extender_analog_converter = new devices::i2c(sock.i2c, 0x48);
+		this->extender_analog_converter = new ads_7830(sock);
 	}
 
-	this->analog_converter = new devices::i2c(sock.i2c, 0x49);
+	this->analog_converter = new ads_7830(sock, 0x49);
 }
 
 fez_lynx_s4::~fez_lynx_s4()
@@ -374,17 +374,11 @@ double fez_lynx_s4::read_analog(analog_channel channel)
 
 	pair<cpu_pin, unsigned char> mapping = this->analog_channel_to_pin_map[channel];
 
-	devices::i2c* converter = IS_EXTENDER_PIN(mapping.first) ? this->extender_analog_converter : this->analog_converter;
+	ads_7830* converter = IS_EXTENDER_PIN(mapping.first) ? this->extender_analog_converter : this->analog_converter;
 
 	this->set_io_mode(mapping.first, io_modes::DIGITAL_INPUT, resistor_modes::FLOATING);
 	
-	unsigned char read, command = 0x80 | 0x04; //CMD_SD_SE | CMD_PD_ON
-	
-	command |= static_cast<unsigned char>((mapping.second % 2 == 0 ? mapping.second / 2 : (mapping.second - 1) / 2 + 4) << 4);
-	
-	converter->write_read(&command, 1, &read, 1);
-
-	return static_cast<double>(read) / 255.0;
+	return converter->get_reading(mapping.second);
 }
 
 void fez_lynx_s4::set_pwm(pwm_channel channel, double duty_cycle, double frequency)
