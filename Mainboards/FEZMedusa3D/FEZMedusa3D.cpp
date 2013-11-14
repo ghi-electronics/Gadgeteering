@@ -259,3 +259,478 @@ Interfaces::I2CBus* FEZMedusa3D::getI2CBus(CPUPin sdaPin, CPUPin sclPin, bool is
 	this->i2cBusses.addV(bus);
 	return bus;
 }
+
+void GHI::System::Sleep(unsigned long time)
+{
+	delay(time);
+}
+
+void GHI::System::SleepMicro(unsigned long time)
+{
+	delayMicroseconds(time * 1.59);
+}
+
+unsigned long GHI::System::TimeElapsed()
+{
+	return micros();
+}
+
+unsigned long GHI::System::CyclesToMicroseconds(unsigned long val)
+{
+	return clockCyclesToMicroseconds(val);
+}
+
+void GHI::System::RandomNumberSeed(int seed)
+{
+	randomSeed(seed);
+}
+
+int GHI::System::RandomNumber(int low, int max)
+{
+	return random(low, max);
+}
+
+#ifdef GADGETEERING_HARDWARE_I2C
+#include <Wire.h>
+#endif
+
+#ifndef GADGETEERING_HARDWARE_I2C
+#define I2C_DELAY() ;
+#endif
+
+FEZMedusa3D::I2CBus::I2CBus(CPUPin sda, CPUPin scl) : Interfaces::I2CBus(sda, scl)
+{
+#ifndef GADGETEERING_HARDWARE_I2C
+	this->start = false;
+	this->readSCL();
+	this->readSDA();
+#else
+	Wire.begin();
+#endif
+}
+
+FEZMedusa3D::I2CBus::~I2CBus()
+{
+#ifdef GADGETEERING_HARDWARE_I2C
+	Wire.end();
+#endif
+}
+
+#ifndef GADGETEERING_HARDWARE_I2C
+void FEZMedusa3D::I2CBus::clearSCL()
+{
+	mainboard->setIOMode(this->scl, IOStates::DIGITAL_OUTPUT);
+	mainboard->writeDigital(this->scl, false);
+}
+
+bool FEZMedusa3D::I2CBus::readSCL()
+{
+	mainboard->setIOMode(this->scl, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
+	return mainboard->readDigital(this->scl);
+}
+
+void FEZMedusa3D::I2CBus::clearSDA()
+{
+	mainboard->setIOMode(this->sda, IOStates::DIGITAL_OUTPUT);
+	mainboard->writeDigital(this->sda, false);
+}
+
+bool FEZMedusa3D::I2CBus::readSDA()
+{
+	mainboard->setIOMode(this->sda, IOStates::DIGITAL_INPUT, ResistorModes::PULL_UP);
+	return mainboard->readDigital(this->sda);
+}
+
+bool FEZMedusa3D::I2CBus::writeBit(bool bit)
+{
+	if (bit)
+		this->readSDA();
+	else
+		this->clearSDA();
+
+	I2C_DELAY();
+
+	unsigned long endTime = System::TimeElapsed() + 5000;
+	while (!this->readSCL() && System::TimeElapsed() < endTime)
+		;
+
+	if (bit && !this->readSDA())
+		return false;
+
+	I2C_DELAY();
+	this->clearSCL();
+
+	return true;
+}
+
+bool FEZMedusa3D::I2CBus::readBit()
+{
+	this->readSDA();
+
+	I2C_DELAY();
+
+	unsigned long endTime = System::TimeElapsed() + 5000;
+	while (!this->readSCL() && System::TimeElapsed() < endTime)
+		;
+
+	bool bit = this->readSDA();
+
+	I2C_DELAY();
+	this->clearSCL();
+
+	return bit;
+}
+
+bool FEZMedusa3D::I2CBus::sendStartCondition()
+{
+	if (this->start)
+	{
+		this->readSDA();
+		I2C_DELAY();
+
+		unsigned long endTime = System::TimeElapsed() + 5000;
+		while (!this->readSCL() && System::TimeElapsed() < endTime)
+			;
+
+	}
+
+	if (!this->readSDA())
+		return false;
+
+	this->clearSDA();
+	I2C_DELAY();
+	this->clearSCL();
+
+	this->start = true;
+
+	return true;
+}
+
+bool FEZMedusa3D::I2CBus::sendStopCondition()
+{
+	this->clearSDA();
+	I2C_DELAY();
+
+	unsigned long endTime = System::TimeElapsed() + 5000;
+	while (!this->readSCL() && System::TimeElapsed() < endTime)
+		;
+
+	if (!this->readSDA())
+		return false;
+
+	I2C_DELAY();
+	this->start = false;
+
+	return true;
+}
+
+bool FEZMedusa3D::I2CBus::transmit(bool sendStart, bool sendStop, unsigned char data)
+{
+	unsigned char bit;
+	bool nack;
+
+	if (sendStart)
+		this->sendStartCondition();
+
+	for (bit = 0; bit < 8; bit++)
+	{
+		this->writeBit((data & 0x80) != 0);
+
+		data <<= 1;
+	}
+
+	nack = this->readBit();
+
+	if (sendStop)
+		this->sendStopCondition();
+
+	return nack;
+}
+
+unsigned char FEZMedusa3D::I2CBus::receive(bool sendAcknowledgeBit, bool sendStopCondition)
+{
+	unsigned char d = 0;
+	unsigned char bit = 0;
+
+	for (bit = 0; bit < 8; bit++)
+	{
+		d <<= 1;
+
+		if (this->readBit())
+			d |= 1;
+	}
+
+	this->writeBit(!sendAcknowledgeBit);
+
+	if (sendStopCondition)
+		this->sendStopCondition();
+
+	return d;
+}
+#endif
+
+unsigned int FEZMedusa3D::I2CBus::write(const unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
+{
+#ifndef GADGETEERING_HARDWARE_I2C
+	if (!count)
+		return 0;
+
+	unsigned int numWrite = 0;
+	unsigned int i = 0;
+
+	if (!this->transmit(true, false, address))
+	for (i = 0; i < count - 1; i++)
+	if (!this->transmit(false, false, buffer[i]))
+		numWrite++;
+
+	if (!this->transmit(false, sendStop, buffer[i]))
+		numWrite++;
+
+	return numWrite;
+#else
+	Wire.beginTransmission(address);
+	Wire.write(buffer, count);
+
+	if (sendStop)
+		Wire.endTransmission();
+#endif
+}
+
+unsigned int FEZMedusa3D::I2CBus::read(unsigned char* buffer, unsigned int count, unsigned char address, bool sendStop)
+{
+#ifndef GADGETEERING_HARDWARE_I2C
+	if (!count)
+		return 0;
+
+	unsigned int numRead = 0;
+	unsigned int i = 0;
+
+	if (!this->transmit(true, false, address | 1))
+	{
+		for (i = 0; i < count - 1; i++)
+		{
+			buffer[i] = this->receive(true, false);
+			numRead++;
+		}
+	}
+
+	buffer[i] = this->receive(false, sendStop);
+	numRead++;
+
+	return numRead;
+#else
+	Wire.requestFrom(address, count, sendStop);
+
+	for (int i = 0; i < count; i++)
+	{
+		while (Wire.available() < 1) //Wait for one byte to avoid overflowing the buffer
+			System::Sleep(10);
+
+		buffer[i] = Wire.read();
+	}
+#endif
+}
+
+bool FEZMedusa3D::I2CBus::writeRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead, unsigned char address)
+{
+#ifndef GADGETEERING_HARDWARE_I2C
+	*numWritten = 0;
+	*numRead = 0;
+
+	unsigned int i = 0;
+	unsigned int write = 0;
+	unsigned int read = 0;
+
+	if (writeLength > 0)
+	{
+		if (!this->transmit(true, false, address))
+		{
+			for (i = 0; i < writeLength - 1; i++)
+			{
+				if (!this->transmit(false, false, writeBuffer[i]))
+				{
+					(write)++;
+				}
+			}
+		}
+
+		if (!this->transmit(false, (readLength == 0), writeBuffer[i]))
+			write++;
+
+		*numWritten = write;
+	}
+
+	if (readLength > 0)
+	{
+		if (!this->transmit(true, false, address | 1))
+		{
+			for (i = 0; i < readLength - 1; i++)
+			{
+				readBuffer[i] = this->receive(true, false);
+				read++;
+			}
+		}
+
+		readBuffer[i] = this->receive(false, true);
+		read++;
+		*numRead = read;
+	}
+
+	return (write + read) == (writeLength + readLength);
+#else
+	this->write(writeBuffer, writeLength, address, false);
+	this->read(readBuffer, readLength, address, true);
+#endif
+}
+
+
+FEZMedusa3D::SerialDevice::SerialDevice(CPUPin tx, CPUPin rx, unsigned int baudRate, unsigned char parity, unsigned char stopBits, unsigned char dataBits) : Interfaces::SerialDevice(tx, rx, baudRate, parity, stopBits, dataBits)
+{
+
+}
+
+FEZMedusa3D::SerialDevice::~SerialDevice()
+{
+
+}
+
+void FEZMedusa3D::SerialDevice::open()
+{
+	Serial.begin(this->baudRate);
+}
+
+void FEZMedusa3D::SerialDevice::close()
+{
+	Serial.end();
+}
+
+void FEZMedusa3D::SerialDevice::write(const unsigned char* buffer, unsigned int count)
+{
+	Serial.write(buffer, count);
+	Serial.flush();
+}
+
+unsigned int FEZMedusa3D::SerialDevice::read(unsigned char* buffer, unsigned int count)
+{
+	return Serial.readBytes(reinterpret_cast<char*>(buffer), count);
+}
+
+
+unsigned int FEZMedusa3D::SerialDevice::available()
+{
+	return Serial.available();
+}
+
+#include <SPI.h>
+
+//#define SYSTEM_CLOCK 84000U /*KHz*/
+//#define GADGETEERING_SYSTEM_CLOCK 84000U /*KHz*/
+//#define GADGETEERING_EXTENDED_SPI
+
+FEZMedusa3D::SPIBus::SPIBus(CPUPin mosi, CPUPin miso, CPUPin sck) : Interfaces::SPIBus(mosi, miso, sck)
+{
+#ifndef GADGETEERING_EXTENDED_SPI
+	this->spi = new SPIClass();
+	this->spi->begin();
+#else
+	SPI.begin(0);
+#endif
+}
+
+FEZMedusa3D::SPIBus::~SPIBus()
+{
+#ifndef GADGETEERING_EXTENDED_SPI
+	this->spi->end();
+	delete this->spi;
+#else
+	SPI.end();
+#endif
+}
+
+void FEZMedusa3D::SPIBus::setup(GHI::Interfaces::SPIConfiguration* configuration)
+{
+#ifndef GADGETEERING_EXTENDED_SPI
+	if (!configuration->clockIdleState && configuration->clockEdge)
+		this->spi->setDataMode(SPI_MODE0);
+	else if (!configuration->clockIdleState && !configuration->clockEdge)
+		this->spi->setDataMode(SPI_MODE1);
+	else if (configuration->clockIdleState && !configuration->clockEdge)
+		this->spi->setDataMode(SPI_MODE2);
+	else if (configuration->clockIdleState && configuration->clockEdge)
+		this->spi->setDataMode(SPI_MODE3);
+
+	unsigned int divider = SYSTEM_CLOCK / configuration->clockRate;
+	unsigned char count = 1;
+
+	while ((divider >>= 1) > 0)
+		count++;
+
+	switch (count)
+	{
+		case 1: mainboard->panic(Exceptions::ERR_SPI_NOT_SUPPORTED); break;
+		case 2: this->spi->setClockDivider(SPI_CLOCK_DIV2); break;
+		case 3: this->spi->setClockDivider(SPI_CLOCK_DIV4); break;
+		case 4: this->spi->setClockDivider(SPI_CLOCK_DIV8); break;
+		case 5: this->spi->setClockDivider(SPI_CLOCK_DIV16); break;
+		case 6: this->spi->setClockDivider(SPI_CLOCK_DIV32); break;
+		case 7: this->spi->setClockDivider(SPI_CLOCK_DIV64); break;
+		case 8: this->spi->setClockDivider(SPI_CLOCK_DIV128); break;
+	}
+#else
+
+	if (!configuration->clockIdleState && configuration->clockEdge)
+		SPI.setDataMode(configuration->chipSelect, SPI_MODE0);
+	else if (!configuration->clockIdleState && !configuration->clockEdge)
+		SPI.setDataMode(configuration->chipSelect, SPI_MODE1);
+	else if (configuration->clockIdleState && !configuration->clockEdge)
+		SPI.setDataMode(configuration->chipSelect, SPI_MODE2);
+	else if (configuration->clockIdleState && configuration->clockEdge)
+		SPI.setDataMode(configuration->chipSelect, SPI_MODE3);
+
+	unsigned int divider = GADGETEERING_SYSTEM_CLOCK / configuration->clockRate;
+	SPI.setClockDivider(0, divider);
+#endif
+}
+
+void FEZMedusa3D::SPIBus::selectChip(GHI::Interfaces::SPIConfiguration* configuration)
+{
+	mainboard->writeDigital(configuration->chipSelect, configuration->chipSelectActiveState);
+	System::Sleep(configuration->chipSelectSetupTime);
+}
+
+void FEZMedusa3D::SPIBus::deselectChip(GHI::Interfaces::SPIConfiguration* configuration)
+{
+	System::Sleep(configuration->chipSelectHoldTime);
+	mainboard->writeDigital(configuration->chipSelect, !configuration->chipSelectActiveState);
+}
+
+void FEZMedusa3D::SPIBus::writeRead(const unsigned char* sendBuffer, unsigned char* receiveBuffer, unsigned int count, Interfaces::SPIConfiguration* configuration, bool deselectAfter)
+{
+	this->setup(configuration);
+	this->selectChip(configuration);
+
+#ifndef GADGETEERING_EXTENDED_SPI
+	for (int i = 0; i < count; i++)
+	{
+		if (sendBuffer != NULL && receiveBuffer != NULL)
+			receiveBuffer[i] = this->spi->transfer(sendBuffer[i]);
+		else if (sendBuffer != NULL && receiveBuffer == NULL)
+			this->spi->transfer(sendBuffer[i]);
+		else if (sendBuffer == NULL && receiveBuffer != NULL)
+			receiveBuffer[i] = this->spi->transfer(0);
+	}
+#else
+	for (int i = 0; i < count; i++)
+	{
+		if (sendBuffer != NULL && receiveBuffer != NULL)
+			receiveBuffer[i] = SPI.transfer(0, sendBuffer[i], SPI_CONTINUE);
+		else if (sendBuffer != NULL && receiveBuffer == NULL)
+			SPI.transfer(0, sendBuffer[i], SPI_CONTINUE);
+		else if (sendBuffer == NULL && receiveBuffer != NULL)
+			receiveBuffer[i] = SPI.transfer(0, 0, SPI_CONTINUE);
+	}
+#endif
+
+	if (deselectAfter)
+		this->deselectChip(configuration);
+}

@@ -163,27 +163,6 @@
     <ClCompile Include="..\..\..\Core\Devices.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D\System.cpp">
-      <Filter>Mainboards\FEZMedusa3D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D\FEZMedusa3D.cpp">
-      <Filter>Mainboards\FEZMedusa3D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D\I2CBus.cpp">
-      <Filter>Mainboards\FEZMedusa3D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D\SerialDevice.cpp">
-      <Filter>Mainboards\FEZMedusa3D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D\SPIBus.cpp">
-      <Filter>Mainboards\FEZMedusa3D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\FEZMedusaMini.cpp">
-      <Filter>Mainboards\FEZMedusaMini</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusaS12\FEZMedusaS12.cpp">
-      <Filter>Mainboards\FEZMedusaS12</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Modules\HubAP5\HubAP5.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -191,7 +170,16 @@
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Mainboards\FEZMedusaShield\FEZMedusaShield.cpp">
-      <Filter>Mainboards\FEZMedusaShield</Filter>
+      <Filter>Mainboards</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusaS12\FEZMedusaS12.cpp">
+      <Filter>Mainboards</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\FEZMedusaMini.cpp">
+      <Filter>Mainboards</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D\FEZMedusa3D.cpp">
+      <Filter>Mainboards</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -363,18 +351,6 @@
     <ClInclude Include="..\..\..\Core\Devices.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Mainboards\FEZMedusa3D\Environment.h">
-      <Filter>Mainboards\FEZMedusa3D</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Mainboards\FEZMedusa3D\FEZMedusa3D.h">
-      <Filter>Mainboards\FEZMedusa3D</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Mainboards\FEZMedusaMini\FEZMedusaMini.h">
-      <Filter>Mainboards\FEZMedusaMini</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Mainboards\FEZMedusaS12\FEZMedusaS12.h">
-      <Filter>Mainboards\FEZMedusaS12</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Modules\HubAP5\HubAP5.h">
       <Filter>Modules</Filter>
     </ClInclude>
@@ -382,7 +358,16 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Mainboards\FEZMedusaShield\FEZMedusaShield.h">
-      <Filter>Mainboards\FEZMedusaShield</Filter>
+      <Filter>Mainboards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Mainboards\FEZMedusaS12\FEZMedusaS12.h">
+      <Filter>Mainboards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Mainboards\FEZMedusaMini\FEZMedusaMini.h">
+      <Filter>Mainboards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Mainboards\FEZMedusa3D\FEZMedusa3D.h">
+      <Filter>Mainboards</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -394,18 +379,6 @@
     </Filter>
     <Filter Include="Modules">
       <UniqueIdentifier>{5F40CCB3-D1BE-4EEB-8436-3B3F4AC4355A}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Mainboards\FEZMedusa3D">
-      <UniqueIdentifier>{67221cc1-eff7-4a3d-be75-90d23cd28461}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Mainboards\FEZMedusaMini">
-      <UniqueIdentifier>{faa6ee26-74e3-4af7-aafa-72a9e4735dee}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Mainboards\FEZMedusaS12">
-      <UniqueIdentifier>{4106064b-8c6b-42a1-aa3f-2fcfface4839}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Mainboards\FEZMedusaShield">
-      <UniqueIdentifier>{0e8aa187-2ced-4e10-b3b8-a25bad7f696e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
