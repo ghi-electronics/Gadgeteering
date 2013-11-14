@@ -28,7 +28,7 @@ ads_7830::ads_7830(unsigned char socket_number, unsigned char address)
 	this->chip = new devices::i2c(s.i2c, address);
 }
 
-ads_7830::ads_7830(const socket& socket, unsigned char address = 0x48)
+ads_7830::ads_7830(const socket& socket, unsigned char address)
 {
 	socket.ensure_type(socket::types::I);
 
