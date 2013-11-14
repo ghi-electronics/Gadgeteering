@@ -97,7 +97,7 @@ void fez_medusa_mini::create_sockets()
 
 const socket& fez_medusa_mini::get_socket(unsigned char number)
 {
-	if (number == 0 || number > 4)
+	if (number == 0 || number > 3)
 		system::panic(error_codes::INVALID_SOCKET);
 
 	return this->sockets[number];

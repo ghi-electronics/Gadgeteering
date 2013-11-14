@@ -163,9 +163,6 @@
     <ClCompile Include="..\..\..\Core\Devices.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusa\FEZMedusa.cpp">
-      <Filter>Mainboards\FEZMedusa</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D\System.cpp">
       <Filter>Mainboards\FEZMedusa3D</Filter>
     </ClCompile>
@@ -183,6 +180,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\FEZMedusaMini.cpp">
       <Filter>Mainboards\FEZMedusaMini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusaS12\FEZMedusaS12.cpp">
+      <Filter>Mainboards\FEZMedusaS12</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -354,9 +354,6 @@
     <ClInclude Include="..\..\..\Core\Devices.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Mainboards\FEZMedusa\FEZMedusa.h">
-      <Filter>Mainboards\FEZMedusa</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Mainboards\FEZMedusa3D\Environment.h">
       <Filter>Mainboards\FEZMedusa3D</Filter>
     </ClInclude>
@@ -365,6 +362,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Mainboards\FEZMedusaMini\FEZMedusaMini.h">
       <Filter>Mainboards\FEZMedusaMini</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Mainboards\FEZMedusaS12\FEZMedusaS12.h">
+      <Filter>Mainboards\FEZMedusaS12</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -377,14 +377,14 @@
     <Filter Include="Modules">
       <UniqueIdentifier>{5F40CCB3-D1BE-4EEB-8436-3B3F4AC4355A}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Mainboards\FEZMedusa">
-      <UniqueIdentifier>{4106064b-8c6b-42a1-aa3f-2fcfface4839}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Mainboards\FEZMedusa3D">
       <UniqueIdentifier>{67221cc1-eff7-4a3d-be75-90d23cd28461}</UniqueIdentifier>
     </Filter>
     <Filter Include="Mainboards\FEZMedusaMini">
       <UniqueIdentifier>{faa6ee26-74e3-4af7-aafa-72a9e4735dee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mainboards\FEZMedusaS12">
+      <UniqueIdentifier>{4106064b-8c6b-42a1-aa3f-2fcfface4839}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

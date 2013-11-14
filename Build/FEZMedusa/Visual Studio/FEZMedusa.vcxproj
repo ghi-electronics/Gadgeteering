@@ -33,7 +33,7 @@
     <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D\SPIBus.cpp" />
     <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D\System.cpp" />
     <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini\FEZMedusaMini.cpp" />
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusa\FEZMedusa.cpp" />
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusaS12\FEZMedusaS12.cpp" />
     <ClCompile Include="..\..\..\Modules\Accelerometer\Accelerometer.cpp" />
     <ClCompile Include="..\..\..\Modules\AccelG248\AccelG248.cpp" />
     <ClCompile Include="..\..\..\Modules\ALFATLink\ALFATLink.cpp" />
@@ -95,7 +95,7 @@
     <ClInclude Include="..\..\..\Mainboards\FEZMedusa3D\Environment.h" />
     <ClInclude Include="..\..\..\Mainboards\FEZMedusa3D\FEZMedusa3D.h" />
     <ClInclude Include="..\..\..\Mainboards\FEZMedusaMini\FEZMedusaMini.h" />
-    <ClInclude Include="..\..\..\Mainboards\FEZMedusa\FEZMedusa.h" />
+    <ClInclude Include="..\..\..\Mainboards\FEZMedusaS12\FEZMedusaS12.h" />
     <ClInclude Include="..\..\..\Modules\Accelerometer\Accelerometer.h" />
     <ClInclude Include="..\..\..\Modules\AccelG248\AccelG248.h" />
     <ClInclude Include="..\..\..\Modules\ALFATLink\ALFATLink.h" />

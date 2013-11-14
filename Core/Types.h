@@ -120,6 +120,10 @@ namespace gadgeteering
 		static const pwm_channel PWM_13 = 13;
 		static const pwm_channel PWM_14 = 14;
 		static const pwm_channel PWM_15 = 15;
+		static const pwm_channel PWM_16 = 16;
+		static const pwm_channel PWM_17 = 17;
+		static const pwm_channel PWM_18 = 18;
+		static const pwm_channel PWM_19 = 19;
 		static const pwm_channel NONE = 0xFF;
 	};
 

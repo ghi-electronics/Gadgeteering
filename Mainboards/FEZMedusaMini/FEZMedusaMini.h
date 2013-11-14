@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,18 +18,22 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-namespace gadgeteering {
-	namespace mainboards {
-		class fez_medusa_mini : public base_mainboard {
-			void create_sockets();
+namespace gadgeteering
+{
+	namespace mainboards
+	{
+		class fez_medusa_mini : public base_mainboard
+		{
+			protected:
+				void create_sockets();
 
-			socket sockets[11];
-			bool serial_began;
-			bool spi_began;
+				socket sockets[12];
+				bool serial_began;
+				bool spi_began;
 
-			software_i2c* i2c0;
-			software_i2c* i2c1;
-			software_i2c* i2c2;
+				software_i2c* i2c0;
+				software_i2c* i2c1;
+				software_i2c* i2c2;
 
 			public:
 				struct pins
