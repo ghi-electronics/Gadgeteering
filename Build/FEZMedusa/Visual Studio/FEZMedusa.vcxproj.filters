@@ -190,6 +190,9 @@
     <ClCompile Include="..\..\..\Modules\ADS7830\ADS7830.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusaShield\FEZMedusaShield.cpp">
+      <Filter>Mainboards\FEZMedusaShield</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Core\Gadgeteering.h">
@@ -378,6 +381,9 @@
     <ClInclude Include="..\..\..\Modules\ADS7830\ADS7830.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Mainboards\FEZMedusaShield\FEZMedusaShield.h">
+      <Filter>Mainboards\FEZMedusaShield</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -397,6 +403,9 @@
     </Filter>
     <Filter Include="Mainboards\FEZMedusaS12">
       <UniqueIdentifier>{4106064b-8c6b-42a1-aa3f-2fcfface4839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mainboards\FEZMedusaShield">
+      <UniqueIdentifier>{0e8aa187-2ced-4e10-b3b8-a25bad7f696e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
