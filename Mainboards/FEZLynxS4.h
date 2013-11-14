@@ -19,8 +19,9 @@ limitations under the License.
 #include <map>
 
 #include <Core/Gadgeteering.h>
-#include <Modules/IO60P16/IO60P16.h>
-#include <Modules/ADS7830/ADS7830.h>
+
+#include <Modules/IO60P16.h>
+#include <Modules/ADS7830.h>
 
 #ifdef _WIN32
 	#define WIN32_LEAN_AND_MEAN

@@ -18,7 +18,7 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-#include "../FEZMedusaS12/FEZMedusaS12.h"
+#include "FEZMedusaS12.h"
 
 namespace gadgeteering
 {

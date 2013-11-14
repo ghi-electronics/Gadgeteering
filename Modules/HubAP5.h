@@ -18,8 +18,8 @@ limitations under the License.
 
 #include <Core/Gadgeteering.h>
 
-#include "../IO60P16/IO60P16.h"
-#include "../ADS7830/ADS7830.h"
+#include "IO60P16.h"
+#include "ADS7830.h"
 
 namespace gadgeteering
 {

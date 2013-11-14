@@ -17,9 +17,10 @@ limitations under the License.
 #pragma once
 
 #include <Core/Gadgeteering.h>
-#include <Modules/IO60P16/IO60P16.h>
 
-#include "../FEZMedusaMini/FEZMedusaMini.h"
+#include <Modules/IO60P16.h>
+
+#include "FEZMedusaMini.h"
 
 namespace gadgeteering
 {
