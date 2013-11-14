@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _TOUCHL12_H_
 #define _TOUCHL12_H_
 
-#include <Core/Gadgeteering.h>
+#include "../Gadgeteering.h"
 
 namespace gadgeteering {
 	namespace modules {

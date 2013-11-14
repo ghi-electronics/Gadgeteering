@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _RS232_H_
 #define _RS232_H_
 
-#include <Core/Gadgeteering.h>
+#include "../Gadgeteering.h"
 
 namespace gadgeteering
 {

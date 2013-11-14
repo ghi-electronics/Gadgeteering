@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _DISPLAYN18_H_
 #define _DISPLAYN18_H_
 
-#include <Core/Gadgeteering.h>
+#include "../Gadgeteering.h"
 
 namespace gadgeteering {
 	namespace modules {

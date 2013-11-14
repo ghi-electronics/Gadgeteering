@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _FEZTIVE_H_
 #define _FEZTIVE_H_
 
-#include <Core/Gadgeteering.h>
+#include "../Gadgeteering.h"
 
 namespace gadgeteering
 {

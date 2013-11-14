@@ -19,7 +19,8 @@ limitations under the License.
 #include "Socket.h"
 #include "Types.h"
 
-namespace gadgeteering {
+namespace gadgeteering 
+{
 	class base_mainboard
 	{
 		protected:

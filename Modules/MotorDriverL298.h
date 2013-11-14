@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _MOTORL298_H_
 #define _MOTORL298_H_
 
-#include <Core/Gadgeteering.h>
+#include "../Gadgeteering.h"
 
 namespace gadgeteering
 {

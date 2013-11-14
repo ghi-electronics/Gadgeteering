@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _FEZMedusa3D_H_
 #define _FEZMedusa3D_H_
 
-#include <Core/Gadgeteering.h>
+#include "../Gadgeteering.h"
 
 class SPIClass;
 

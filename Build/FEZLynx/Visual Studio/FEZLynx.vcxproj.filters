@@ -174,9 +174,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Core\Gadgeteering.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Core\Types.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -351,6 +348,7 @@
     <ClInclude Include="..\..\..\Mainboards\FEZLynxS4.h">
       <Filter>Mainboards</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Gadgeteering.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">

@@ -16,7 +16,7 @@ limitations under the License.
 
 #pragma once
 
-#include <Core/Gadgeteering.h>
+#include "../Gadgeteering.h"
 
 namespace gadgeteering
 {

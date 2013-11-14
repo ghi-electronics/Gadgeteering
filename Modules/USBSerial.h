@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _USBSERIAL_H_
 #define _USBSERIAL_H_
 
-#include <Core/Gadgeteering.h>
+#include "../Gadgeteering.h"
 
 namespace gadgeteering
 {

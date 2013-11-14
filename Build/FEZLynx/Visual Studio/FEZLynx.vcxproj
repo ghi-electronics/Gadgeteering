@@ -81,13 +81,13 @@
     <ClInclude Include="..\..\..\Core\DaisyLink.h" />
     <ClInclude Include="..\..\..\Core\DaisyLinkCommandBus.h" />
     <ClInclude Include="..\..\..\Core\Devices.h" />
-    <ClInclude Include="..\..\..\Core\Gadgeteering.h" />
     <ClInclude Include="..\..\..\Core\Interfaces.h" />
     <ClInclude Include="..\..\..\Core\Mainboard.h" />
     <ClInclude Include="..\..\..\Core\Socket.h" />
     <ClInclude Include="..\..\..\Core\SoftwareI2C.h" />
     <ClInclude Include="..\..\..\Core\System.h" />
     <ClInclude Include="..\..\..\Core\Types.h" />
+    <ClInclude Include="..\..\..\Gadgeteering.h" />
     <ClInclude Include="..\..\..\Mainboards\FEZLynxS4.h" />
     <ClInclude Include="..\..\..\Modules\Accelerometer.h" />
     <ClInclude Include="..\..\..\Modules\AccelG248.h" />

@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _COMPASS_H_
 #define _COMPASS_H_
 
-#include <Core/Gadgeteering.h>
+#include "../Gadgeteering.h"
 
 namespace gadgeteering
 {

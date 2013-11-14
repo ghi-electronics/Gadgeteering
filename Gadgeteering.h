@@ -16,10 +16,10 @@ limitations under the License.
 
 #pragma once
 
-#include "Devices.h"
-#include "Interfaces.h"
-#include "Mainboard.h"
-#include "Socket.h"
-#include "SoftwareI2C.h"
-#include "System.h"
-#include "Types.h"
+#include "Core/Devices.h"
+#include "Core/Interfaces.h"
+#include "Core/Mainboard.h"
+#include "Core/Socket.h"
+#include "Core/SoftwareI2C.h"
+#include "Core/System.h"
+#include "Core/Types.h"

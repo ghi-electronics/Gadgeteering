@@ -16,9 +16,9 @@ limitations under the License.
 
 #pragma once
 
-#include <Core/Gadgeteering.h>
+#include "../Gadgeteering.h"
 
-#include <Modules/IO60P16.h>
+#include "../Modules/IO60P16.h"
 
 #include "FEZMedusaMini.h"
 

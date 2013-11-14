@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _LED7R_H_
 #define _LED7R_H_
 
-#include <Core/Gadgeteering.h>
+#include "../Gadgeteering.h"
 
 namespace gadgeteering {
 	namespace modules {

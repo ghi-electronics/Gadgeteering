@@ -16,7 +16,7 @@ limitations under the License.
 
 #pragma once
 
-#include <Core/Gadgeteering.h>
+#include "../Gadgeteering.h"
 
 /*
 NOTE: This is not a physical module. It is a convience driver for 

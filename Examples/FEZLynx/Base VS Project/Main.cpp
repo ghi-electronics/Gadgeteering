@@ -1,4 +1,4 @@
-#include <Core/Gadgeteering.h>
+#include <Gadgeteering.h>
 
 #include <Mainboards/FEZLynxS4.h>
 

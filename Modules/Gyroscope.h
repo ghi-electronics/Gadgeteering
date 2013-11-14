@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _GYROSCOPE_HPP_
 #define _GYROSCOPE_HPP_
 
-#include <Core/Gadgeteering.h>
+#include "../Gadgeteering.h"
 
 namespace gadgeteering
 {

@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef _ALFATLINK_H_
 #define _ALFATLINK_H_
 
-#include <Core/Gadgeteering.h>
+#include "../Gadgeteering.h"
 
 namespace gadgeteering {
 	namespace modules {
