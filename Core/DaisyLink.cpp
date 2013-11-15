@@ -26,7 +26,7 @@ unsigned char DaisyLinkBus::totalNodeCount = 0;
 DaisyLinkBus::DaisyLinkBus(const socket& sock, DaisyLinkModule* module) : sock(sock)
 {
 	//this->i2c = mainboard->getI2CBus(socket, DaisyLinkBus::SDA_PIN, DaisyLinkBus::SCL_PIN);
-	this->i2c = new devices::i2c(sock.pins[DaisyLinkBus::SDA_PIN], sock.pins[DaisyLinkBus::SCL_PIN], DaisyLinkBus::DEFAULT_I2C_ADDRESS);
+	this->i2c = new devices::i2c(sock.pins[DaisyLinkBus::SDA_PIN], sock.pins[DaisyLinkBus::SCL_PIN], DaisyLinkBus::DEFAULT_I2C_ADDRESS, false);
 	this->ready = false;
 	this->reservedCount = 0;
 	this->nodeCount = 0;
