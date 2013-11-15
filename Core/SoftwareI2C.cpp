@@ -22,8 +22,9 @@ using namespace gadgeteering;
 
 #define i2c_delay() ;
 
-software_i2c::software_i2c(cpu_pin sda, cpu_pin scl)
+software_i2c::software_i2c(cpu_pin sda, cpu_pin scl, bool use_resistors)
 {
+	this->use_resistors = use_resistors;
 	this->start = false;
 	this->scl = scl;
 	this->sda = sda;
@@ -37,7 +38,7 @@ void software_i2c::clear_scl()
 
 bool software_i2c::read_scl()
 {
-	mainboard->set_io_mode(this->scl, io_modes::DIGITAL_INPUT, resistor_modes::PULL_UP);
+	mainboard->set_io_mode(this->scl, io_modes::DIGITAL_INPUT, this->use_resistors ? resistor_modes::PULL_UP : resistor_modes::FLOATING);
 	return mainboard->read_digital(this->scl);
 }
 
@@ -49,7 +50,7 @@ void software_i2c::clear_sda()
 
 bool software_i2c::read_sda()
 {
-	mainboard->set_io_mode(this->sda, io_modes::DIGITAL_INPUT, resistor_modes::PULL_UP);
+	mainboard->set_io_mode(this->sda, io_modes::DIGITAL_INPUT, this->use_resistors ? resistor_modes::PULL_UP : resistor_modes::FLOATING);
 	return mainboard->read_digital(this->sda);
 }
 

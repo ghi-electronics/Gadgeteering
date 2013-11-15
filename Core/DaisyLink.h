@@ -14,42 +14,43 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _DAISYLINK_
-#define _DAISYLINK_
+#pragma once
 
-#include "DaisyLinkCommandBus.h"
 #include "Mainboard.h"
-#include "Module.h"
-#include "I2CBus.h"
 #include "Interfaces.h"
-#include "List.h"
+#include "Types.h"
+#include "Devices.h"
 
-namespace Gadgeteering
+namespace gadgeteering
 {
 	class DaisyLinkModule;
 
 	class DaisyLinkBus {
 		private:
-			static const Socket::Pin DAISYLINK_PIN = Socket::Pins::Three;
-			static const Socket::Pin SDA_PIN = Socket::Pins::Four;
-			static const Socket::Pin SCL_PIN = Socket::Pins::Five;
+			static const socket_pin_number DAISYLINK_PIN = 3;
+			static const socket_pin_number SDA_PIN = 4;
+			static const socket_pin_number SCL_PIN = 5;
 			static const unsigned char DEFAULT_I2C_ADDRESS = 0x7F;
 
-			static List daisyLinkList;
-			Interfaces::DigitalIO* daisyLinkResetPort;
+			struct link_node
+			{
+				link_node* next;
+				DaisyLinkBus* data;
+			};
+			static link_node* daisyLinkList;
+
+			interfaces::digital_io* daisyLinkResetPort;
 
 			static unsigned char totalNodeCount;
-			List socketModuleList;
 			
 			bool ready;
 			unsigned char nodeCount;
 			unsigned char reservedCount;
 			unsigned char startAddress;
-			Socket* socket;
-			//Interfaces::I2CBus* i2c;
-			Interfaces::DaisyLinkCommandBus *i2c;
+			const socket& sock;
+			devices::i2c* i2c;
 
-			DaisyLinkBus(Socket* socket, DaisyLinkModule* module);
+			DaisyLinkBus(const socket& sock, DaisyLinkModule* module);
 			~DaisyLinkBus();
 
 			unsigned char ReserveNextDaisyLinkNodeAddress(DaisyLinkModule* moduleInstance);
@@ -76,14 +77,14 @@ namespace Gadgeteering
 			unsigned char GetNodeCount() const;
 			unsigned char GetReservedCount() const;
 			unsigned char GetStartAddress() const;
-			Socket* GetSocket() const;
+			const socket& GetSocket() const;
 
-			static DaisyLinkBus* GetDaisyLinkForSocket(Socket* socket, DaisyLinkModule* module);
+			static DaisyLinkBus* GetDaisyLinkForSocket(const socket& sock, DaisyLinkModule* module);
 
 			friend class DaisyLinkModule;
 	};
 
-	class DaisyLinkModule : public Module {
+	class DaisyLinkModule {
 		protected:
 			DaisyLinkBus* daisyLink;
 
@@ -118,4 +119,3 @@ namespace Gadgeteering
 			friend class DaisyLinkBus;
 	};
 }
-#endif

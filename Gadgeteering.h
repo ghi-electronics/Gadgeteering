@@ -16,6 +16,7 @@ limitations under the License.
 
 #pragma once
 
+#include "Core/DaisyLink.h"
 #include "Core/Devices.h"
 #include "Core/Interfaces.h"
 #include "Core/Mainboard.h"

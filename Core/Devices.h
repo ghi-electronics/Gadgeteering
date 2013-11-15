@@ -24,16 +24,18 @@ namespace gadgeteering {
 	namespace devices {
 		class i2c
 		{
-			unsigned char w_address;
-			unsigned char r_address;
 			i2c_channel channel;
 			software_i2c* soft_i2c;
 
 			public:
+				unsigned char address;
+
 				i2c(const socket& socket, unsigned char address);
 				i2c(i2c_channel channel, unsigned char address);
-				i2c(cpu_pin sda, cpu_pin scl, unsigned char address);
+				i2c(cpu_pin sda, cpu_pin scl, unsigned char address, bool use_resistors = true);
 				~i2c();
+
+				void update_address(unsigned char new_address);
 
 				bool write(const unsigned char* buffer, unsigned int length, bool send_start = true, bool send_stop = true);
 				bool read(unsigned char* buffer, unsigned int length, bool send_start = true, bool send_stop = true);

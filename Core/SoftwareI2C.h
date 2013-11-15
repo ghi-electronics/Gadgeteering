@@ -26,6 +26,7 @@ namespace gadgeteering
 		cpu_pin scl;
 		
 		bool start;
+		bool use_resistors;
 
 		void clear_scl();
 		bool read_scl();
@@ -42,7 +43,7 @@ namespace gadgeteering
 		unsigned char receive(bool send_ack, bool send_stop_condition);
 
 		public:
-			software_i2c(cpu_pin sda, cpu_pin scl);
+			software_i2c(cpu_pin sda, cpu_pin scl, bool use_resistors = true);
                                                         
 			bool write(unsigned char address, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);
 			bool read(unsigned char address, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);

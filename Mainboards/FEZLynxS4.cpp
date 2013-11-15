@@ -427,6 +427,8 @@ bool fez_lynx_s4::i2c_write(i2c_channel channel, unsigned char address, const un
 	if (channel != i2c_channels::I2C_0)
 		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
+	address <<= 1;
+
 	if (this->channels[1].i2c_write(&address, 1, send_start, length == 0))
 		if (this->channels[1].i2c_write(buffer, length, false, send_stop))
 			return true;
@@ -438,6 +440,9 @@ bool fez_lynx_s4::i2c_read(i2c_channel channel, unsigned char address, unsigned 
 {
 	if (channel != i2c_channels::I2C_0)
 		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
+
+	address <<= 1;
+	address |= 1;
 
 	if (this->channels[1].i2c_write(&address, 1, send_start, length == 0))
 		if (this->channels[1].i2c_read(buffer, length, false, send_stop))

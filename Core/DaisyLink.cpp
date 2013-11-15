@@ -17,18 +17,17 @@ limitations under the License.
 #include "DaisyLink.h"
 #include "System.h"
 
-using namespace Gadgeteering;
-using namespace Gadgeteering::Interfaces;
+using namespace gadgeteering;
+using namespace gadgeteering::interfaces;
 
-List DaisyLinkBus::daisyLinkList;
+DaisyLinkBus::link_node* DaisyLinkBus::daisyLinkList;
 unsigned char DaisyLinkBus::totalNodeCount = 0;
 
-DaisyLinkBus::DaisyLinkBus(Socket* socket, DaisyLinkModule* module)
+DaisyLinkBus::DaisyLinkBus(const socket& sock, DaisyLinkModule* module) : sock(sock)
 {
 	//this->i2c = mainboard->getI2CBus(socket, DaisyLinkBus::SDA_PIN, DaisyLinkBus::SCL_PIN);
-	this->i2c = new DaisyLinkCommandBus(socket->pins[DaisyLinkBus::SDA_PIN], socket->pins[DaisyLinkBus::SCL_PIN]);
+	this->i2c = new devices::i2c(sock.pins[DaisyLinkBus::SDA_PIN], sock.pins[DaisyLinkBus::SCL_PIN], DaisyLinkBus::DEFAULT_I2C_ADDRESS);
 	this->ready = false;
-	this->socket = socket;
 	this->reservedCount = 0;
 	this->nodeCount = 0;
 	this->daisyLinkResetPort = NULL;
@@ -44,12 +43,11 @@ unsigned char DaisyLinkBus::ReserveNextDaisyLinkNodeAddress(DaisyLinkModule* mod
 	if (this->reservedCount >= this->nodeCount)
     {
         if (this->nodeCount == 0)
-            mainboard->panic(errors::MODULE_ERROR, 1); //No DaisyLink modules are detected on socket
+            panic(errors::MODULE_ERROR, 1); //No DaisyLink modules are detected on socket
         else
-            mainboard->panic(errors::MODULE_ERROR, 2); //Tried to initialize more modules than were found
+            panic(errors::MODULE_ERROR, 2); //Tried to initialize more modules than were found
     }
     
-	this->socketModuleList.addV(moduleInstance);
     unsigned char ret = (unsigned char)(this->startAddress + this->reservedCount);
     this->reservedCount++;
     return ret;
@@ -73,7 +71,8 @@ void DaisyLinkBus::Initialize()
         if (modulesFound != 0)      // If a device is left in Standby mode
         {
             unsigned char data[2] = { (unsigned char)Registers::CONFIG, (unsigned char)(lastFound ? 1 : 0) };
-            this->i2c->write(data, 2, (unsigned char)((totalNodeCount + modulesFound) << 1));     // Enable/disable I2C pull-ups depending on whether last in chain (place module in Active mode)
+			this->i2c->address = (unsigned char)((totalNodeCount + modulesFound) << 1);
+            this->i2c->write(data, 2);     // Enable/disable I2C pull-ups depending on whether last in chain (place module in Active mode)
         }
 
         if (!lastFound)
@@ -81,8 +80,9 @@ void DaisyLinkBus::Initialize()
             // Next module in chain is in Setup mode so start setting it up
             modulesFound++;         // Increase the total number of modules found connected to this socket
 
-            unsigned char data[2] = { (unsigned char)Registers::ADDRESS, (unsigned char)(totalNodeCount + modulesFound) };
-            this->i2c->write(data, 2, DaisyLinkBus::DEFAULT_I2C_ADDRESS << 1);     // Set the I2C ID of the next module in the chain (place module in Standby mode)
+			unsigned char data[2] = { (unsigned char)Registers::ADDRESS, (unsigned char)(totalNodeCount + modulesFound) };
+			this->i2c->address = DaisyLinkBus::DEFAULT_I2C_ADDRESS << 1;
+            this->i2c->write(data, 2);     // Set the I2C ID of the next module in the chain (place module in Standby mode)
         }
     }
 	
@@ -97,12 +97,12 @@ void DaisyLinkBus::SendResetPulse()
 {
     if (!daisyLinkResetPort)
     {
-        daisyLinkResetPort = new DigitalIO(socket, DaisyLinkBus::DAISYLINK_PIN);
-		daisyLinkResetPort->setIOState(IOStates::DIGITAL_INPUT);
-		daisyLinkResetPort->setResistorMode(ResistorModes::PULL_UP);
+        daisyLinkResetPort = new digital_io(this->sock, DaisyLinkBus::DAISYLINK_PIN);
+		daisyLinkResetPort->set_io_mode(io_modes::DIGITAL_INPUT);
+		daisyLinkResetPort->set_resistor_mode(resistor_modes::PULL_UP);
     }
 	daisyLinkResetPort->write(true);
-    System::Sleep(2);                        // 2 milliseconds is definitely more than 1 ms
+    system::sleep(2);                        // 2 milliseconds is definitely more than 1 ms
     daisyLinkResetPort->read();				// Pull-downs should take the neighbor bus back low
     delete daisyLinkResetPort;
 	daisyLinkResetPort = NULL;
@@ -112,7 +112,7 @@ void DaisyLinkBus::GetModuleParameters(unsigned int position, unsigned char* man
 {
     unsigned char address;
     if (position >= this->nodeCount)
-		mainboard->panic(errors::MODULE_ERROR, 3); //Attempt to access invalid module
+		panic(errors::MODULE_ERROR, 3); //Attempt to access invalid module
 
     address = (unsigned char)(this->startAddress + position);
     *type = this->ReadRegister((unsigned char)Registers::MODULE_TYPE, address);
@@ -125,7 +125,7 @@ unsigned char DaisyLinkBus::GetDaisyLinkVersion(unsigned int position)
     unsigned char address;
 
     if (position >= this->nodeCount)
-		mainboard->panic(errors::MODULE_ERROR, 4); //Attempt to access invalid module
+		panic(errors::MODULE_ERROR, 4); //Attempt to access invalid module
 
     address = (unsigned char)(this->startAddress + position);
     return this->ReadRegister((unsigned char)Registers::DAISYLINK_VERSION, address);
@@ -135,7 +135,8 @@ unsigned char DaisyLinkBus::ReadRegister(unsigned char registerAddress, unsigned
 {
 	unsigned char result;
 	unsigned int a, b;
-	this->i2c->writeRead(&registerAddress, 1, &result, 1, &a, &b, moduleAddress << 1);
+	this->i2c->address = moduleAddress;
+	this->i2c->write_read(&registerAddress, 1, &result, 1);
 	return result;
 }
 
@@ -159,50 +160,63 @@ unsigned char DaisyLinkBus::GetStartAddress() const
 	return this->startAddress;
 }
 
-Socket* DaisyLinkBus::GetSocket() const
+const socket& DaisyLinkBus::GetSocket() const
 {
-	return this->socket;
+	return this->sock;
 }
 
-DaisyLinkBus* DaisyLinkBus::GetDaisyLinkForSocket(Socket* socket, DaisyLinkModule* module)
+DaisyLinkBus* DaisyLinkBus::GetDaisyLinkForSocket(const socket& sock, DaisyLinkModule* module)
 {
-	for (DaisyLinkBus* current = (DaisyLinkBus*)DaisyLinkBus::daisyLinkList.start(); !DaisyLinkBus::daisyLinkList.ended(); current = (DaisyLinkBus*)DaisyLinkBus::daisyLinkList.next())
-		if (current->socket == socket)
-			return current;
+	DaisyLinkBus::link_node* start = DaisyLinkBus::daisyLinkList;
+	DaisyLinkBus::link_node* last = NULL;
+
+	while (start)
+	{
+		if (start->data->sock.number == sock.number)
+			return start->data;
+
+		last = start;
+		start = start->next;
+	}
 	
-    DaisyLinkBus* daisylink = new DaisyLinkBus(socket, module);
-    daisyLinkList.addV(daisylink);
+    DaisyLinkBus* daisylink = new DaisyLinkBus(sock, module);
     daisylink->Initialize();
-    return daisylink;
+
+	last->next = new DaisyLinkBus::link_node();
+	start = last->next;
+	start->next = NULL;
+	start->data = daisylink;
+
+	return start->data;
 }
 
 DaisyLinkModule::DaisyLinkModule(unsigned char socketNumber, unsigned char manufacturer, unsigned char moduleType, unsigned char minModuleVersionSupported, unsigned char maxModuleVersionSupported) 
 {
-    Socket* socket = mainboard->getSocket(socketNumber);
+	const socket& sock = mainboard->get_socket(socketNumber);
 
-    this->daisyLink = DaisyLinkBus::GetDaisyLinkForSocket(socket, this);
+    this->daisyLink = DaisyLinkBus::GetDaisyLinkForSocket(sock, this);
 
     if (this->daisyLink->nodeCount == 0)
-		mainboard->panic(errors::MODULE_ERROR, 1); //No DaisyLink modules present
+		panic(errors::MODULE_ERROR, 1); //No DaisyLink modules present
 
     if (this->daisyLink->reservedCount >= this->daisyLink->nodeCount)
-		mainboard->panic(errors::MODULE_ERROR, 2); //This many modules do not exist on the chain.
+		panic(errors::MODULE_ERROR, 2); //This many modules do not exist on the chain.
 
     // NOTE:  PositionOnChain will be invalid until the end of the constructor (it is dependent on DeviceAddress) so this->daisyLink->reservedCount is used until then
     DaisyLinkVersion = this->daisyLink->GetDaisyLinkVersion(this->daisyLink->reservedCount);
     if (DaisyLinkVersion != DaisyLinkModule::VERSION_IMPLEMENTED)
-		mainboard->panic(errors::MODULE_ERROR, DaisyLinkVersion); //Unsupported DaisyLink version
+		panic(errors::MODULE_ERROR, DaisyLinkVersion); //Unsupported DaisyLink version
 
     this->daisyLink->GetModuleParameters(this->daisyLink->reservedCount, &this->Manufacturer, &this->ModuleType, &this->ModuleVersion);
 
     if (manufacturer != Manufacturer)
-		mainboard->panic(errors::MODULE_ERROR, 4); //Problem initializaing DaisyLink due to invalid manufacturer code
+		panic(errors::MODULE_ERROR, 4); //Problem initializaing DaisyLink due to invalid manufacturer code
 
     if (moduleType != ModuleType)
-		mainboard->panic(errors::MODULE_ERROR, 5); //Problem initializaing DaisyLink due to invalid module type
+		panic(errors::MODULE_ERROR, 5); //Problem initializaing DaisyLink due to invalid module type
 
     if (ModuleVersion < minModuleVersionSupported || ModuleVersion > maxModuleVersionSupported)
-		mainboard->panic(errors::MODULE_ERROR, 6); //Problem initializaing DaisyLink due to invalid firmware
+		panic(errors::MODULE_ERROR, 6); //Problem initializaing DaisyLink due to invalid firmware
 
     ModuleAddress = this->daisyLink->ReserveNextDaisyLinkNodeAddress(this) << 1;
 }
@@ -214,15 +228,15 @@ DaisyLinkModule::~DaisyLinkModule()
 
 unsigned int DaisyLinkModule::GetLengthOfChain(unsigned char socketNumber) 
 {
-    Socket* socket = mainboard->getSocket(socketNumber);
-    return DaisyLinkBus::GetDaisyLinkForSocket(socket, NULL)->nodeCount;
+	const socket& sock = mainboard->get_socket(socketNumber);
+	return DaisyLinkBus::GetDaisyLinkForSocket(sock, NULL)->nodeCount;
 }
 
 void DaisyLinkModule::GetModuleParameters(unsigned char socketNumber, unsigned int position, unsigned char* manufacturer, unsigned char* type, unsigned char* version)
 {
-    Socket* socket = mainboard->getSocket(socketNumber);
+	const socket& sock = mainboard->get_socket(socketNumber);
 	if (position >= 1) position--;
-	DaisyLinkBus::GetDaisyLinkForSocket(socket, NULL)->GetModuleParameters(position, manufacturer, type, version);
+	DaisyLinkBus::GetDaisyLinkForSocket(sock, NULL)->GetModuleParameters(position, manufacturer, type, version);
 }
 
 unsigned char DaisyLinkModule::Read(unsigned char memoryAddress)
@@ -232,12 +246,14 @@ unsigned char DaisyLinkModule::Read(unsigned char memoryAddress)
 
 void DaisyLinkModule::Write(const unsigned char* buffer, unsigned int length)
 {
-	this->daisyLink->i2c->write(buffer, length, ModuleAddress);
+	this->daisyLink->i2c->address = ModuleAddress;
+	this->daisyLink->i2c->write(buffer, length);
 }
 
 void DaisyLinkModule::WriteRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead)
 {
-	this->daisyLink->i2c->writeRead(writeBuffer, writeLength, readBuffer, readLength, numWritten, numRead, ModuleAddress);
+	this->daisyLink->i2c->address = ModuleAddress;
+	this->daisyLink->i2c->write_read(writeBuffer, writeLength, readBuffer, readLength);
 }
 
 unsigned int DaisyLinkModule::GetPositionOnChain() const

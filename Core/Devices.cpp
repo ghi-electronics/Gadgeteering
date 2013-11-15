@@ -27,8 +27,7 @@ i2c::i2c(i2c_channel channel, unsigned char address)
 		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	this->channel = channel;
-	this->w_address = address << 1;
-	this->r_address = (address << 1) | 1;
+	this->address = address;
 	this->soft_i2c = NULL;
 
 	mainboard->i2c_begin(this->channel);
@@ -40,18 +39,16 @@ i2c::i2c(const socket& socket, unsigned char address)
 		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	this->channel = socket.i2c;
-	this->w_address = address << 1;
-	this->r_address = (address << 1) | 1;
+	this->address = address;
 	this->soft_i2c = NULL;
 
 	mainboard->i2c_begin(this->channel);
 }
 
-i2c::i2c(cpu_pin sda, cpu_pin scl, unsigned char address)
+i2c::i2c(cpu_pin sda, cpu_pin scl, unsigned char address, bool use_resistors)
 {
-	this->w_address = address << 1;
-	this->r_address = (address << 1) | 1;
-	this->soft_i2c = new software_i2c(sda, scl);
+	this->address = address;
+	this->soft_i2c = new software_i2c(sda, scl, use_resistors);
 }
 
 i2c::~i2c()
@@ -66,11 +63,11 @@ bool i2c::write(const unsigned char* buffer, unsigned int length, bool send_star
 {
 	if (this->soft_i2c == NULL)
 	{
-		return mainboard->i2c_write(this->channel, this->w_address, buffer, length, false, send_stop);
+		return mainboard->i2c_write(this->channel, this->address, buffer, length, false, send_stop);
 	}
 	else
 	{
-		return this->soft_i2c->write(this->w_address, buffer, length, false, send_stop);
+		return this->soft_i2c->write(this->address, buffer, length, false, send_stop);
 	}
 }
 
@@ -78,11 +75,11 @@ bool i2c::read(unsigned char* buffer, unsigned int length, bool send_start, bool
 {
 	if (this->soft_i2c == NULL)
 	{
-		return mainboard->i2c_read(this->channel, this->r_address, buffer, length, false, send_stop);
+		return mainboard->i2c_read(this->channel, this->address, buffer, length, false, send_stop);
 	}
 	else
 	{
-		return this->soft_i2c->read(this->r_address, buffer, length, false, send_stop);
+		return this->soft_i2c->read(this->address, buffer, length, false, send_stop);
 	}
 }
 
