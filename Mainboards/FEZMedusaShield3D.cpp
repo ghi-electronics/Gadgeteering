@@ -230,9 +230,11 @@ HardwareSerial* fez_medusa_shield_3d::get_serial_instance(serial_channel channel
 	switch (channel)
 	{
 		case serial_channels::SERIAL_0: return &Serial;
+#if !(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA)
 		case serial_channels::SERIAL_1: return &Serial1;
 		case serial_channels::SERIAL_2: return &Serial2;
 		case serial_channels::SERIAL_3: return &Serial3;
+#endif
 		default: return NULL;
 	}
 }

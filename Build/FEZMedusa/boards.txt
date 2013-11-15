@@ -84,7 +84,7 @@ medusa.bootloader.file=optiboot/optiboot_medusa.hex
 
 medusa.build.mcu=atmega328p
 medusa.build.f_cpu=12000000L
-medusa.build.board=AVR_medusa
+medusa.build.board=AVR_MEDUSA
 medusa.build.core=arduino
 medusa.build.variant=standard
 
