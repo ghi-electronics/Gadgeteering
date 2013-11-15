@@ -64,6 +64,16 @@ fez_medusa_mini::~fez_medusa_mini()
 		delete this->i2c1;
 		delete this->i2c2;
 	}
+
+	socket_list_node* current = this->sockets;
+	socket_list_node* next = NULL;
+
+	while (current)
+	{
+		next = current->next;
+		delete current;
+		current = next;
+	}
 }
 
 void fez_medusa_mini::create_sockets()
