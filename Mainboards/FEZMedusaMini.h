@@ -29,14 +29,13 @@ namespace gadgeteering
 				{
 					socket_list_node* next;
 					socket data;
-				}* sockets;
+				} * sockets;
+
+				fez_medusa_mini(double max_analog_voltage, bool create_soft_i2c);
 
 				void create_sockets();
+				unsigned char get_serial_config(serial_configuration& config);
 
-				bool serial_began;
-				bool spi_began;
-
-				software_i2c* i2c0;
 				software_i2c* i2c1;
 				software_i2c* i2c2;
 
@@ -65,7 +64,7 @@ namespace gadgeteering
 					static const cpu_pin AD5 = 19;
 				};
 
-				fez_medusa_mini();
+				fez_medusa_mini(double max_analog_voltage = 3.3);
 				virtual ~fez_medusa_mini();
 
 				virtual socket& register_socket(socket s);
@@ -76,17 +75,25 @@ namespace gadgeteering
 				virtual void set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_resistor_mode);
 				virtual void write_digital(cpu_pin pin, bool value);
 				virtual bool read_digital(cpu_pin pin);
-				virtual void write_analog(analog_channel channel, double voltage);
+				virtual void write_analog(analog_channel channel, double voltage_proportion);
 				virtual double read_analog(analog_channel channel);
 				virtual void set_pwm(pwm_channel channel, double duty_cycle, double frequency);
 
 				void set_pwm(cpu_pin pin, double duty_cycle, double frequency, double duration); //socket 2 only
 
+				virtual void spi_begin(spi_channel channel, spi_configuration& config);
+				virtual void spi_end(spi_channel channel, spi_configuration& config);
 				virtual void spi_read_write(spi_channel channel, const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int count, spi_configuration& config, bool deselect_after);
-				virtual bool i2c_write(i2c_channel channel, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);
-				virtual bool i2c_read(i2c_channel channel, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);
-				virtual unsigned int serial_write(serial_channel  channel, const unsigned char* buffer, unsigned int count, serial_configuration& config);
-				virtual unsigned int serial_read(serial_channel  channel, unsigned char* buffer, unsigned int count, serial_configuration& config);
+
+				virtual void i2c_begin(i2c_channel channel);
+				virtual void i2c_end(i2c_channel channel);
+				virtual bool i2c_write(i2c_channel channel, unsigned char address, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);
+				virtual bool i2c_read(i2c_channel channel, unsigned char address, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);
+
+				virtual void serial_begin(serial_channel channel, serial_configuration& config);
+				virtual void serial_end(serial_channel channel, serial_configuration& config);
+				virtual unsigned int serial_write(serial_channel channel, const unsigned char* buffer, unsigned int count, serial_configuration& config);
+				virtual unsigned int serial_read(serial_channel channel, unsigned char* buffer, unsigned int count, serial_configuration& config);
 				virtual unsigned int serial_available(serial_channel channel);
 		};
 

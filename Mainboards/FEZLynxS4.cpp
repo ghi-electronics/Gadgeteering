@@ -113,7 +113,7 @@ void fez_lynx_s4::create_sockets()
 	this->analog_channel_to_pin_map[s2.analog4] = make_pair(s2.pins[5], 1);
 	this->analog_channel_to_pin_map[s2.analog5] = make_pair(s2.pins[4], 2);
 
-	s2.i2c = i2c_channels::I2C_1;
+	s2.i2c = i2c_channels::I2C_0;
 
 	this->sockets[2] = s2;
 
@@ -127,8 +127,8 @@ void fez_lynx_s4::create_sockets()
 	s3.pins[8] = fez_lynx_s4::pins::BD1;
 	s3.pins[9] = fez_lynx_s4::pins::BD0;
 
-	s3.i2c = i2c_channels::I2C_1;
-	s3.serial = serial_channels::SERIAL_2;
+	s3.i2c = i2c_channels::I2C_0;
+	s3.serial = serial_channels::SERIAL_0;
 
 	this->sockets[3] = s3;
 
@@ -153,7 +153,7 @@ void fez_lynx_s4::create_sockets()
 		s0.pins[8] = fez_lynx_s4::pins::BD1;
 		s0.pins[9] = fez_lynx_s4::pins::BD0;
 
-		s0.i2c = i2c_channels::I2C_1;
+		s0.i2c = i2c_channels::I2C_0;
 
 		this->sockets[0] = s0;
 
@@ -354,7 +354,7 @@ bool fez_lynx_s4::read_digital(cpu_pin pin)
 	}
 }
 
-void fez_lynx_s4::write_analog(analog_out_channel channel, double voltage)
+void fez_lynx_s4::write_analog(analog_out_channel channel, double voltage_proportion)
 {
 	panic(errors::WRITE_ANALOG_NOT_SUPPORTED);
 }
@@ -390,52 +390,96 @@ void fez_lynx_s4::set_pwm(pwm_channel channel, double duty_cycle, double frequen
 	}
 }
 
+void fez_lynx_s4::spi_begin(spi_channel channel, spi_configuration& config)
+{
+	if (channel != spi_channels::SPI_0)
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
+}
+
+void fez_lynx_s4::spi_end(spi_channel channel, spi_configuration& config)
+{
+	if (channel != spi_channels::SPI_0)
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
+}
+
 void fez_lynx_s4::spi_read_write(spi_channel channel, const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int count, spi_configuration& config, bool deselect_after)
 {
-	if (channel == spi_channels::NONE)
+	if (channel != spi_channels::SPI_0)
 		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
-	this->channels[channel].spi_read_write(write_buffer, read_buffer, count, config, deselect_after);
+	this->channels[0].spi_read_write(write_buffer, read_buffer, count, config, deselect_after);
 }
 
-bool fez_lynx_s4::i2c_write(i2c_channel channel, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
+void fez_lynx_s4::i2c_begin(i2c_channel channel)
 {
-	if (channel == i2c_channels::NONE)
+	if (channel != i2c_channels::I2C_0)
 		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
-
-	return this->channels[channel].i2c_write(buffer, length, send_start, send_stop);
 }
 
-bool fez_lynx_s4::i2c_read(i2c_channel channel, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
+void fez_lynx_s4::i2c_end(i2c_channel channel)
 {
-	if (channel == i2c_channels::NONE)
+	if (channel != i2c_channels::I2C_0)
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
+}
+
+bool fez_lynx_s4::i2c_write(i2c_channel channel, unsigned char address, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
+{
+	if (channel != i2c_channels::I2C_0)
 		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
-	return this->channels[channel].i2c_read(buffer, length, send_start, send_stop);
+	if (this->channels[1].i2c_write(&address, 1, send_start, length == 0))
+		if (this->channels[1].i2c_write(buffer, length, false, send_stop))
+			return true;
+
+	return false;
+}
+
+bool fez_lynx_s4::i2c_read(i2c_channel channel, unsigned char address, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
+{
+	if (channel != i2c_channels::I2C_0)
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
+
+	if (this->channels[1].i2c_write(&address, 1, send_start, length == 0))
+		if (this->channels[1].i2c_read(buffer, length, false, send_stop))
+			return true;
+
+	return false;
+}
+
+void fez_lynx_s4::serial_begin(serial_channel channel, serial_configuration& config)
+{
+	if (channel != serial_channels::SERIAL_0)
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
+}
+
+void fez_lynx_s4::serial_end(serial_channel channel, serial_configuration& config)
+{
+	if (channel != serial_channels::SERIAL_0)
+		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 }
 
 unsigned int fez_lynx_s4::serial_write(serial_channel  channel, const unsigned char* buffer, unsigned int count, serial_configuration& config)
 {
-	if (channel == serial_channels::NONE)
+	if (channel != serial_channels::SERIAL_0)
 		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
-	return this->channels[channel].serial_write(buffer, count, config);
+	return this->channels[2].serial_write(buffer, count, config);
 }
 
 unsigned int fez_lynx_s4::serial_read(serial_channel  channel, unsigned char* buffer, unsigned int count, serial_configuration& config)
 {
-	if (channel == serial_channels::NONE)
+	if (channel != serial_channels::SERIAL_0)
 		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
-	return this->channels[channel].serial_read(buffer, count, config);
+	return this->channels[2].serial_read(buffer, count, config);
 }
 
 unsigned int fez_lynx_s4::serial_available(serial_channel channel)
 {
-	if (channel == serial_channels::NONE)
+	if (channel != serial_channels::SERIAL_0)
 		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
-	return this->channels[channel].serial_available();
+	return this->channels[2].serial_available();
 }
 
 void system::sleep(unsigned long milliseconds)

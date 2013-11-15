@@ -27,7 +27,7 @@
     <ClCompile Include="..\..\..\Core\Socket.cpp" />
     <ClCompile Include="..\..\..\Core\SoftwareI2C.cpp" />
     <ClCompile Include="..\..\..\Core\Types.cpp" />
-    <ClCompile Include="..\..\..\Mainboards\FEZMedusa3D.cpp" />
+    <ClCompile Include="..\..\..\Mainboards\FEZMedusaShield3D.cpp" />
     <ClCompile Include="..\..\..\Mainboards\FEZMedusaMini.cpp" />
     <ClCompile Include="..\..\..\Mainboards\FEZMedusaS12.cpp" />
     <ClCompile Include="..\..\..\Mainboards\FEZMedusaShield.cpp" />
@@ -91,7 +91,7 @@
     <ClInclude Include="..\..\..\Core\System.h" />
     <ClInclude Include="..\..\..\Core\Types.h" />
     <ClInclude Include="..\..\..\Gadgeteering.h" />
-    <ClInclude Include="..\..\..\Mainboards\FEZMedusa3D.h" />
+    <ClInclude Include="..\..\..\Mainboards\FEZMedusaShield3D.h" />
     <ClInclude Include="..\..\..\Mainboards\FEZMedusaMini.h" />
     <ClInclude Include="..\..\..\Mainboards\FEZMedusaS12.h" />
     <ClInclude Include="..\..\..\Mainboards\FEZMedusaShield.h" />

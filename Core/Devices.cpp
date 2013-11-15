@@ -30,6 +30,8 @@ i2c::i2c(i2c_channel channel, unsigned char address)
 	this->w_address = address << 1;
 	this->r_address = (address << 1) | 1;
 	this->soft_i2c = NULL;
+
+	mainboard->i2c_begin(this->channel);
 }
 
 i2c::i2c(const socket& socket, unsigned char address)
@@ -41,6 +43,8 @@ i2c::i2c(const socket& socket, unsigned char address)
 	this->w_address = address << 1;
 	this->r_address = (address << 1) | 1;
 	this->soft_i2c = NULL;
+
+	mainboard->i2c_begin(this->channel);
 }
 
 i2c::i2c(cpu_pin sda, cpu_pin scl, unsigned char address)
@@ -54,19 +58,19 @@ i2c::~i2c()
 {
 	if (this->soft_i2c)
 		delete this->soft_i2c;
+	else
+		mainboard->i2c_end(this->channel);
 }
 
 bool i2c::write(const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
 {
 	if (this->soft_i2c == NULL)
 	{
-		mainboard->i2c_write(this->channel, &this->w_address, 1, send_start, false);
-		return mainboard->i2c_write(this->channel, buffer, length, false, send_stop);
+		return mainboard->i2c_write(this->channel, this->w_address, buffer, length, false, send_stop);
 	}
 	else
 	{
-		this->soft_i2c->write(&this->w_address, 1, send_start, false);
-		return this->soft_i2c->write(buffer, length, false, send_stop);
+		return this->soft_i2c->write(this->w_address, buffer, length, false, send_stop);
 	}
 }
 
@@ -74,13 +78,11 @@ bool i2c::read(unsigned char* buffer, unsigned int length, bool send_start, bool
 {
 	if (this->soft_i2c == NULL)
 	{
-		mainboard->i2c_write(this->channel, &this->r_address, 1, send_start, false);
-		return mainboard->i2c_read(this->channel, buffer, length, false, send_stop);
+		return mainboard->i2c_read(this->channel, this->r_address, buffer, length, false, send_stop);
 	}
 	else
 	{
-		this->soft_i2c->write(&this->r_address, 1, send_start, false);
-		return this->soft_i2c->read(buffer, length, false, send_stop);
+		return this->soft_i2c->read(this->r_address, buffer, length, false, send_stop);
 	}
 }
 
@@ -133,6 +135,8 @@ spi::spi(spi_channel channel, spi_configuration configuration)
 
 	this->config = configuration;
 	this->channel = channel;
+
+	mainboard->spi_begin(this->channel, config);
 }
 
 spi::spi(spi_channel channel, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number)
@@ -143,6 +147,8 @@ spi::spi(spi_channel channel, spi_configuration configuration, const socket& cs_
 	this->config = configuration;
 	this->channel = channel;
 	this->config.chip_select = cs_socket.pins[cs_pin_number];
+
+	mainboard->spi_begin(this->channel, config);
 }
 
 spi::spi(const socket& spi_socket, spi_configuration configuration)
@@ -152,6 +158,8 @@ spi::spi(const socket& spi_socket, spi_configuration configuration)
 
 	this->config = configuration;
 	this->channel = spi_socket.spi;
+
+	mainboard->spi_begin(this->channel, config);
 }
 
 spi::spi(const socket& spi_socket, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number)
@@ -162,6 +170,13 @@ spi::spi(const socket& spi_socket, spi_configuration configuration, const socket
 	this->config = configuration;
 	this->channel = spi_socket.spi;
 	this->config.chip_select = cs_socket.pins[cs_pin_number];
+
+	mainboard->spi_begin(this->channel, config);
+}
+
+spi::~spi()
+{
+	mainboard->spi_end(this->channel, config);
 }
 
 unsigned char spi::write_read_byte(unsigned char value, bool deselect_after) 
@@ -199,6 +214,7 @@ serial::serial(serial_channel channel, serial_configuration configuration)
 
 	this->config = configuration;
 	this->channel = channel;
+	mainboard->serial_begin(this->channel, config);
 }
 
 serial::serial(const socket& socket, serial_configuration configuration)
@@ -208,6 +224,12 @@ serial::serial(const socket& socket, serial_configuration configuration)
 
 	this->config = configuration;
 	this->channel = socket.serial;
+	mainboard->serial_begin(this->channel, config);
+}
+
+serial::~serial()
+{
+	mainboard->serial_end(this->channel, config);
 }
 
 void serial::write(const unsigned char* buffer, unsigned int length) 

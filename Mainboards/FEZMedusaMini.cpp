@@ -17,32 +17,53 @@ limitations under the License.
 #include "FEZMedusaMini.h"
 
 #include <Arduino.h>
+#include <Wire.h>
+#include <SPI.h>
 
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
 
 base_mainboard* gadgeteering::mainboard = NULL;
 
-fez_medusa_mini::fez_medusa_mini() : base_mainboard(3.3)
+fez_medusa_mini::fez_medusa_mini(double max_analog_voltage, bool create_soft_i2c) : base_mainboard(max_analog_voltage)
 {
 	mainboard = this;
 
-	this->serial_began = false;
-	this->spi_began = false;
 	this->sockets = NULL;
 
 	this->create_sockets();
 
-	this->i2c0 = new software_i2c(fez_medusa_mini::pins::IO12, fez_medusa_mini::pins::IO13);
+	if (create_soft_i2c)
+	{
+		this->i2c1 = new software_i2c(fez_medusa_mini::pins::IO5, fez_medusa_mini::pins::IO6);
+		this->i2c2 = new software_i2c(fez_medusa_mini::pins::IO12, fez_medusa_mini::pins::IO13);
+	}
+	else
+	{
+		this->i2c1 = NULL;
+		this->i2c2 = NULL;
+	}
+}
+
+fez_medusa_mini::fez_medusa_mini(double max_analog_voltage) : base_mainboard(max_analog_voltage)
+{
+	mainboard = this;
+
+	this->sockets = NULL;
+
+	this->create_sockets();
+
 	this->i2c1 = new software_i2c(fez_medusa_mini::pins::IO5, fez_medusa_mini::pins::IO6);
-	this->i2c2 = new software_i2c(fez_medusa_mini::pins::AD4, fez_medusa_mini::pins::AD5);
+	this->i2c2 = new software_i2c(fez_medusa_mini::pins::IO12, fez_medusa_mini::pins::IO13);;
 }
 
 fez_medusa_mini::~fez_medusa_mini() 
 {
-	delete this->i2c0;
-	delete this->i2c1;
-	delete this->i2c2;
+	if (this->i2c1)
+	{
+		delete this->i2c1;
+		delete this->i2c2;
+	}
 }
 
 void fez_medusa_mini::create_sockets()
@@ -56,7 +77,7 @@ void fez_medusa_mini::create_sockets()
 	s1.pins[8] = fez_medusa_mini::pins::IO12;
 	s1.pins[9] = fez_medusa_mini::pins::IO13;
 
-	s1.i2c = i2c_channels::I2C_0;
+	s1.i2c = i2c_channels::I2C_2;
 	s1.spi = spi_channels::SPI_0;
 
 	this->register_socket(s1);
@@ -87,13 +108,88 @@ void fez_medusa_mini::create_sockets()
 	s3.pins[8] = fez_medusa_mini::pins::AD4;
 	s3.pins[9] = fez_medusa_mini::pins::AD5;
 
-	s3.i2c = i2c_channels::I2C_2;
+	s3.i2c = i2c_channels::I2C_0;
 
 	s3.analog3 = analog_channels::ANALOG_0;
 	s3.analog4 = analog_channels::ANALOG_1;
 	s3.analog5 = analog_channels::ANALOG_2;
 
 	this->register_socket(s3);
+}
+
+unsigned char fez_medusa_mini::get_serial_config(serial_configuration& config)
+{
+	if (config.parity == serial_configuration::parities::EVEN)
+	{
+		if (config.stop_bits == serial_configuration::stop_bits::ONE)
+		{
+			switch (config.data_bits)
+			{
+				case 5: return SERIAL_5E1;
+				case 6: return SERIAL_6E1;
+				case 7: return SERIAL_7E1;
+				case 8: return SERIAL_8E1;
+			}
+		}
+		else if (config.stop_bits == serial_configuration::stop_bits::TWO)
+		{
+			switch (config.data_bits)
+			{
+				case 5: return SERIAL_5E2;
+				case 6: return SERIAL_6E2;
+				case 7: return SERIAL_7E2;
+				case 8: return SERIAL_8E2;
+			}
+		}
+	}
+	else if (config.parity == serial_configuration::parities::ODD)
+	{
+		if (config.stop_bits == serial_configuration::stop_bits::ONE)
+		{
+			switch (config.data_bits)
+			{
+				case 5: return SERIAL_5O1;
+				case 6: return SERIAL_6O1;
+				case 7: return SERIAL_7O1;
+				case 8: return SERIAL_8O1;
+			}
+		}
+		else if (config.stop_bits == serial_configuration::stop_bits::TWO)
+		{
+			switch (config.data_bits)
+			{
+				case 5: return SERIAL_5O2;
+				case 6: return SERIAL_6O2;
+				case 7: return SERIAL_7O2;
+				case 8: return SERIAL_8O2;
+			}
+		}
+	}
+	else if (config.parity == serial_configuration::parities::NONE)
+	{
+		if (config.stop_bits == serial_configuration::stop_bits::ONE)
+		{
+			switch (config.data_bits)
+			{
+				case 5: return SERIAL_5N1;
+				case 6: return SERIAL_6N1;
+				case 7: return SERIAL_7N1;
+				case 8: return SERIAL_8N1;
+			}
+		}
+		else if (config.stop_bits == serial_configuration::stop_bits::TWO)
+		{
+			switch (config.data_bits)
+			{
+				case 5: return SERIAL_5N2;
+				case 6: return SERIAL_6N2;
+				case 7: return SERIAL_7N2;
+				case 8: return SERIAL_8N2;
+			}
+		}
+	}
+
+	return 0xFF;
 }
 
 const socket& fez_medusa_mini::get_socket(unsigned char number)
@@ -166,7 +262,7 @@ bool fez_medusa_mini::read_digital(cpu_pin pin)
 	return ::digitalRead(pin) == HIGH;
 }
 
-void fez_medusa_mini::write_analog(analog_channel channel, double voltage)
+void fez_medusa_mini::write_analog(analog_channel channel, double voltage_proportion)
 {
 	panic(errors::NOT_SUPPORTED);
 }
@@ -193,10 +289,6 @@ void fez_medusa_mini::set_pwm(pwm_channel channel, double duty_cycle, double fre
 		default: panic(errors::INVALID_CHANNEL);
 	}
 
-	if (pin == socket::pins::UNCONNECTED)
-		panic(errors::INVALID_CHANNEL);
-
-	pinMode(pin, OUTPUT);
 	return ::analogWrite(pin, static_cast<int>(duty_cycle * 255.0));
 }
 
@@ -221,6 +313,22 @@ void fez_medusa_mini::set_pwm(cpu_pin pin, double duty_cycle, double frequency, 
 		::digitalWrite(pin, LOW);
 		system::sleep_micro(sleep_low);
 	} while (end > system::time_elapsed());
+}
+
+void fez_medusa_mini::spi_begin(spi_channel channel, spi_configuration& config)
+{
+	if (channel != spi_channels::SPI_0)
+		panic(errors::INVALID_CHANNEL);
+
+	SPI.begin();
+}
+
+void fez_medusa_mini::spi_end(spi_channel channel, spi_configuration& config)
+{
+	if (channel != spi_channels::SPI_0)
+		panic(errors::INVALID_CHANNEL);
+
+	SPI.end();
 }
 
 void fez_medusa_mini::spi_read_write(spi_channel channel, const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int count, spi_configuration& config, bool deselect_after)
@@ -282,43 +390,104 @@ void fez_medusa_mini::spi_read_write(spi_channel channel, const unsigned char* w
 	}
 }
 
-bool fez_medusa_mini::i2c_write(i2c_channel channel, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
+void fez_medusa_mini::i2c_begin(i2c_channel channel)
 {
 	switch (channel)
 	{
-		case i2c_channels::I2C_0: return this->i2c0->write(buffer, length, send_start, send_stop);
-		case i2c_channels::I2C_1: return this->i2c1->write(buffer, length, send_start, send_stop);
-		case i2c_channels::I2C_2: return this->i2c2->write(buffer, length, send_start, send_stop);
+		case i2c_channels::I2C_0: Wire.begin(); break;
+		case i2c_channels::I2C_1: break;
+		case i2c_channels::I2C_2: break;
+		default: panic(errors::INVALID_CHANNEL);
+	}
+}
+
+void fez_medusa_mini::i2c_end(i2c_channel channel)
+{
+	switch (channel)
+	{
+		case i2c_channels::I2C_0: Wire.end(); break;
+		case i2c_channels::I2C_1: break;
+		case i2c_channels::I2C_2: break;
+		default: panic(errors::INVALID_CHANNEL);
+	}
+}
+
+bool fez_medusa_mini::i2c_write(i2c_channel channel, unsigned char address, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
+{
+	if (channel == i2c_channels::I2C_0)
+	{
+		Wire.beginTransmission(address);
+
+		bool successful = Wire.write(buffer, length) == length;
+
+		if (send_stop)
+			Wire.endTransmission();
+
+		return successful;
+	}
+
+	switch (channel)
+	{
+		case i2c_channels::I2C_1: return this->i2c1->write(address, buffer, length, send_start, send_stop);
+		case i2c_channels::I2C_2: return this->i2c2->write(address, buffer, length, send_start, send_stop);
 		default: panic(errors::INVALID_CHANNEL); return false;
 	}
 }
 
-bool fez_medusa_mini::i2c_read(i2c_channel channel, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
+bool fez_medusa_mini::i2c_read(i2c_channel channel, unsigned char address, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
 {
+	if (channel == i2c_channels::I2C_0)
+	{
+		Wire.requestFrom(address, length, send_stop);
+
+		for (int i = 0; i < length; i++)
+		{
+			while (Wire.available() < 1) //Wait for one byte to avoid overflowing the buffer
+				system::sleep(10);
+
+			buffer[i] = Wire.read();
+		}
+
+		return true;
+	}
+
 	switch (channel)
 	{
-		case i2c_channels::I2C_0: return this->i2c0->read(buffer, length, send_start, send_stop);
-		case i2c_channels::I2C_1: return this->i2c1->read(buffer, length, send_start, send_stop);
-		case i2c_channels::I2C_2: return this->i2c2->read(buffer, length, send_start, send_stop);
+		case i2c_channels::I2C_1: return this->i2c1->read(address, buffer, length, send_start, send_stop);
+		case i2c_channels::I2C_2: return this->i2c2->read(address, buffer, length, send_start, send_stop);
 		default: panic(errors::INVALID_CHANNEL); return false;
 	}
 }
 
-unsigned int fez_medusa_mini::serial_write(serial_channel  channel, const unsigned char* buffer, unsigned int count, serial_configuration& config)
+void fez_medusa_mini::serial_begin(serial_channel channel, serial_configuration& config)
 {
 	if (channel != serial_channels::SERIAL_0)
 		panic(errors::INVALID_CHANNEL);
 
-	if (!this->serial_began)
-	{
-		Serial.begin(config.baud_rate);
-		this->serial_began = true;
-	}
+	unsigned char val = this->get_serial_config(config);
+	if (val == 0xFF)
+		panic(errors::NOT_SUPPORTED);
+
+	Serial.begin(config.baud_rate, val);
+}
+
+void fez_medusa_mini::serial_end(serial_channel channel, serial_configuration& config)
+{
+	if (channel != serial_channels::SERIAL_0)
+		panic(errors::INVALID_CHANNEL);
+
+	Serial.end();
+}
+
+unsigned int fez_medusa_mini::serial_write(serial_channel channel, const unsigned char* buffer, unsigned int count, serial_configuration& config)
+{
+	if (channel != serial_channels::SERIAL_0)
+		panic(errors::INVALID_CHANNEL);
 
 	return Serial.write(buffer, count);
 }
 
-unsigned int fez_medusa_mini::serial_read(serial_channel  channel, unsigned char* buffer, unsigned int count, serial_configuration& config)
+unsigned int fez_medusa_mini::serial_read(serial_channel channel, unsigned char* buffer, unsigned int count, serial_configuration& config)
 {
 	if (channel != serial_channels::SERIAL_0)
 		panic(errors::INVALID_CHANNEL);

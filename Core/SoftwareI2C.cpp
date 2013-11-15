@@ -27,8 +27,6 @@ software_i2c::software_i2c(cpu_pin sda, cpu_pin scl)
 	this->start = false;
 	this->scl = scl;
 	this->sda = sda;
-	this->read_scl();
-	this->read_sda();
 }
 
 void software_i2c::clear_scl()
@@ -182,26 +180,26 @@ unsigned char software_i2c::receive(bool send_ack, bool send_stop_condition)
 	return d;
 }
 
-bool software_i2c::write(const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
+bool software_i2c::write(unsigned char address, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
 {
 	bool result = true;
 
-	if (!this->transmit(send_start, length == 1 ? send_stop : false, buffer[0]))
+	if (!this->transmit(send_start, length == 0, address))
 		result = false;
 
-	for (unsigned int i = 1; i < length; i++)
+	for (unsigned int i = 0; i < length; i++)
 		if (!this->transmit(false, i == length - 1 ? send_stop : false, buffer[i]))
 			result = false;
 
 	return result;
 }
 
-bool software_i2c::read(unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
+bool software_i2c::read(unsigned char address, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
 {
 	bool result = true;
 
-	if (send_start)
-		this->send_start_condition();
+	if (!this->transmit(send_start, length == 0, address))
+		result = false;
 
 	for (unsigned int i = 0; i < length; i++)
 		buffer[i] = this->receive(true, i == length - 1 ? send_stop : false);

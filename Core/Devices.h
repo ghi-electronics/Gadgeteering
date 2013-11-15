@@ -57,6 +57,7 @@ namespace gadgeteering {
 				spi(const socket& spi_socket, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number);
 				spi(spi_channel channel, spi_configuration configuration);
 				spi(spi_channel channel, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number);
+				~spi();
 
 				//Clocks in one char and clocks out one char at the same time. If deselect_after is true, the CS line is set to logic low after the transmission, otherwise it remains logic high.
 				unsigned char write_read_byte(unsigned char value, bool deselect_after = true);
@@ -83,6 +84,7 @@ namespace gadgeteering {
 
 				serial(const socket& socket, serial_configuration configuration);
 				serial(serial_channel channel, serial_configuration configuration);
+				~serial();
 
 				void write(const unsigned char* buffer, unsigned int length);
 				void write(const char* buffer, unsigned int length);

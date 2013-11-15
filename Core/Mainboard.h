@@ -38,15 +38,23 @@ namespace gadgeteering
 			virtual void set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_resistor_mode) = 0;
 			virtual void write_digital(cpu_pin pin, bool value) = 0;
 			virtual bool read_digital(cpu_pin pin) = 0;
-			virtual void write_analog(analog_out_channel channel, double voltage) = 0;
+			virtual void write_analog(analog_out_channel channel, double voltage_proportion) = 0;
 			virtual double read_analog(analog_channel channel) = 0;
 			virtual void set_pwm(pwm_channel channel, double duty_cycle, double frequency) = 0;
 
+			virtual void spi_begin(spi_channel channel, spi_configuration& config) = 0;
+			virtual void spi_end(spi_channel channel, spi_configuration& config) = 0;
 			virtual void spi_read_write(spi_channel channel, const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int count, spi_configuration& config, bool deselect_after) = 0;
-			virtual bool i2c_write(i2c_channel channel, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop) = 0;
-			virtual bool i2c_read(i2c_channel channel, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop) = 0;
-			virtual unsigned int serial_write(serial_channel  channel, const unsigned char* buffer, unsigned int count, serial_configuration& config) = 0;
-			virtual unsigned int serial_read(serial_channel  channel, unsigned char* buffer, unsigned int count, serial_configuration& config) = 0;
+
+			virtual void i2c_begin(i2c_channel channel) = 0;
+			virtual void i2c_end(i2c_channel channel) = 0;
+			virtual bool i2c_write(i2c_channel channel, unsigned char address, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop) = 0;
+			virtual bool i2c_read(i2c_channel channel, unsigned char address, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop) = 0;
+
+			virtual void serial_begin(serial_channel channel, serial_configuration& config) = 0;
+			virtual void serial_end(serial_channel channel, serial_configuration& config) = 0;
+			virtual unsigned int serial_write(serial_channel channel, const unsigned char* buffer, unsigned int count, serial_configuration& config) = 0;
+			virtual unsigned int serial_read(serial_channel channel, unsigned char* buffer, unsigned int count, serial_configuration& config) = 0;
 			virtual unsigned int serial_available(serial_channel channel) = 0;
 	};
 

@@ -44,7 +44,7 @@ namespace gadgeteering
 		public:
 			software_i2c(cpu_pin sda, cpu_pin scl);
                                                         
-			bool write(const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);
-			bool read(unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);
+			bool write(unsigned char address, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);
+			bool read(unsigned char address, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);
     };
 }
