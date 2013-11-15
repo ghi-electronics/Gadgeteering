@@ -139,7 +139,7 @@ spi::spi(spi_channel channel, spi_configuration configuration)
 	mainboard->spi_begin(this->channel, config);
 }
 
-spi::spi(spi_channel channel, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number)
+spi::spi(spi_channel channel, spi_configuration configuration, const socket& cs_socket, socket_pin_number cs_pin_number)
 {
 	if (channel == spi_channels::NONE)
 		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
@@ -147,7 +147,7 @@ spi::spi(spi_channel channel, spi_configuration configuration, const socket& cs_
 	this->config = configuration;
 	this->channel = channel;
 	this->config.chip_select = cs_socket.pins[cs_pin_number];
-
+	
 	mainboard->spi_begin(this->channel, config);
 }
 
@@ -162,7 +162,7 @@ spi::spi(const socket& spi_socket, spi_configuration configuration)
 	mainboard->spi_begin(this->channel, config);
 }
 
-spi::spi(const socket& spi_socket, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number)
+spi::spi(const socket& spi_socket, spi_configuration configuration, const socket& cs_socket, socket_pin_number cs_pin_number)
 {
 	if (spi_socket.spi == spi_channels::NONE)
 		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);

@@ -56,7 +56,7 @@ socket::socket(unsigned char number, type type)
 	this->pwm_output_indirector = NULL;
 
 	for (unsigned char i = 1; i <= 10; i++)
-		this->pins[i] = socket::pins::UNCONNECTED;
+		this->pins[i] = UNCONNECTED_PIN;
 }
 
 socket::~socket()

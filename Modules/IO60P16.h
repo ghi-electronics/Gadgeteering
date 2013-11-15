@@ -53,7 +53,7 @@ namespace gadgeteering
 
 		public:
 			io60p16(unsigned char socket_number);
-			io60p16(const socket& socket, socket::pin sda = socket::pins::EIGHT, socket::pin scl = socket::pins::NINE);
+			io60p16(const socket& socket, socket_pin_number sda = 8, socket_pin_number scl = 9);
 			~io60p16();
 
 			void set_io_mode(unsigned char port, unsigned char pin, io_mode new_io_mode, resistor_mode new_resistor_mode);

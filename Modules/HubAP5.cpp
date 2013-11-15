@@ -27,12 +27,12 @@ hub_ap5::indirected_digital_input::indirected_digital_input(const socket& sock, 
 
 }
 
-bool hub_ap5::indirected_digital_input::read(socket::pin pin_number)
+bool hub_ap5::indirected_digital_input::read(socket_pin_number pin_number)
 {
 	return this->hub.read_digital(this->sock.pins[pin_number]);
 }
 
-void hub_ap5::indirected_digital_input::set_input(socket::pin pin_number, resistor_mode mode)
+void hub_ap5::indirected_digital_input::set_input(socket_pin_number pin_number, resistor_mode mode)
 {
 	this->hub.set_io_mode(this->sock.pins[pin_number], io_modes::DIGITAL_INPUT, mode);
 }
@@ -42,12 +42,12 @@ hub_ap5::indirected_digital_output::indirected_digital_output(const socket& sock
 
 }
 
-void hub_ap5::indirected_digital_output::write(socket::pin pin_number, bool value)
+void hub_ap5::indirected_digital_output::write(socket_pin_number pin_number, bool value)
 {
 	this->hub.write_digital(this->sock.pins[pin_number], value);
 }
 
-void hub_ap5::indirected_digital_output::set_output(socket::pin pin_number)
+void hub_ap5::indirected_digital_output::set_output(socket_pin_number pin_number)
 {
 	this->hub.set_io_mode(this->sock.pins[pin_number], io_modes::DIGITAL_OUTPUT, resistor_modes::NONE);
 }
@@ -57,17 +57,17 @@ hub_ap5::indirected_digital_io::indirected_digital_io(const socket& sock, hub_ap
 
 }
 
-void hub_ap5::indirected_digital_io::write(socket::pin pin_number, bool value)
+void hub_ap5::indirected_digital_io::write(socket_pin_number pin_number, bool value)
 {
 	this->hub.write_digital(this->sock.pins[pin_number], value);
 }
 
-bool hub_ap5::indirected_digital_io::read(socket::pin pin_number)
+bool hub_ap5::indirected_digital_io::read(socket_pin_number pin_number)
 {
 	return this->hub.read_digital(this->sock.pins[pin_number]);
 }
 
-void hub_ap5::indirected_digital_io::set_io_mode(socket::pin pin_number, io_mode new_io_mode, resistor_mode new_resistor_mode)
+void hub_ap5::indirected_digital_io::set_io_mode(socket_pin_number pin_number, io_mode new_io_mode, resistor_mode new_resistor_mode)
 {
 	this->hub.set_io_mode(this->sock.pins[pin_number], new_io_mode, new_resistor_mode);
 }
@@ -77,7 +77,7 @@ hub_ap5::indirected_analog_input::indirected_analog_input(const socket& sock, hu
 
 }
 
-double hub_ap5::indirected_analog_input::read(socket::pin pin_number)
+double hub_ap5::indirected_analog_input::read(socket_pin_number pin_number)
 {
 	return this->hub.read_analog(this->sock.pins[pin_number]);
 }
@@ -87,7 +87,7 @@ hub_ap5::indirected_pwm_output::indirected_pwm_output(const socket& sock, hub_ap
 
 }
 
-void hub_ap5::indirected_pwm_output::set(socket::pin pin_number, double duty_cycle, double frequency)
+void hub_ap5::indirected_pwm_output::set(socket_pin_number pin_number, double duty_cycle, double frequency)
 {
 	this->hub.set_pwm(this->sock.pins[pin_number], duty_cycle, frequency);
 }

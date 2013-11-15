@@ -311,7 +311,7 @@ void fez_lynx_s4::set_debug_led(bool state)
 
 void fez_lynx_s4::set_io_mode(cpu_pin pin, gadgeteering::io_mode new_io_mode, gadgeteering::resistor_mode new_resistor_mode)
 {
-	if (pin == socket::pins::UNCONNECTED)
+	if (pin == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	if (IS_EXTENDER_PIN(pin))
@@ -326,7 +326,7 @@ void fez_lynx_s4::set_io_mode(cpu_pin pin, gadgeteering::io_mode new_io_mode, ga
 
 void fez_lynx_s4::write_digital(cpu_pin pin, bool value)
 {
-	if (pin == socket::pins::UNCONNECTED)
+	if (pin == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	if (IS_EXTENDER_PIN(pin))
@@ -341,7 +341,7 @@ void fez_lynx_s4::write_digital(cpu_pin pin, bool value)
 
 bool fez_lynx_s4::read_digital(cpu_pin pin)
 {
-	if (pin == socket::pins::UNCONNECTED)
+	if (pin == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	if (IS_EXTENDER_PIN(pin))

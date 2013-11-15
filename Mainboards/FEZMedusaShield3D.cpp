@@ -241,7 +241,7 @@ HardwareSerial* fez_medusa_shield_3d::get_serial_instance(serial_channel channel
 
 void fez_medusa_shield_3d::write_analog(analog_out_channel channel, double voltage_proportion)
 {
-	cpu_pin pin = socket::pins::UNCONNECTED;
+	cpu_pin pin = UNCONNECTED_PIN;
 
 	switch (channel)
 	{
@@ -275,7 +275,7 @@ double fez_medusa_shield_3d::read_analog(analog_channel channel)
 
 void fez_medusa_shield_3d::set_pwm(pwm_channel channel, double duty_cycle, double frequency)
 {
-	cpu_pin pin = socket::pins::UNCONNECTED;
+	cpu_pin pin = UNCONNECTED_PIN;
 
 	switch (channel)
 	{
@@ -294,7 +294,7 @@ void fez_medusa_shield_3d::set_pwm(pwm_channel channel, double duty_cycle, doubl
 		default: panic(errors::INVALID_CHANNEL);
 	}
 
-	if (pin == socket::pins::UNCONNECTED)
+	if (pin == UNCONNECTED_PIN)
 		panic(errors::INVALID_CHANNEL);
 
 	return ::analogWrite(pin, static_cast<int>(duty_cycle * 255.0));

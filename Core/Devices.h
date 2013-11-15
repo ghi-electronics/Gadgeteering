@@ -54,9 +54,9 @@ namespace gadgeteering {
 				spi_configuration config;
 
 				spi(const socket& spi_socket, spi_configuration configuration);
-				spi(const socket& spi_socket, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number);
+				spi(const socket& spi_socket, spi_configuration configuration, const socket& cs_socket, socket_pin_number cs_pin_number);
 				spi(spi_channel channel, spi_configuration configuration);
-				spi(spi_channel channel, spi_configuration configuration, const socket& cs_socket, socket::pin cs_pin_number);
+				spi(spi_channel channel, spi_configuration configuration, const socket& cs_socket, socket_pin_number cs_pin_number);
 				~spi();
 
 				//Clocks in one char and clocks out one char at the same time. If deselect_after is true, the CS line is set to logic low after the transmission, otherwise it remains logic high.

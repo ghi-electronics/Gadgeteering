@@ -42,8 +42,8 @@ namespace gadgeteering
 				public:
 					indirected_digital_input(const socket& socket, hub_ap5& hub);
 
-					virtual bool read(socket::pin pin_number);
-					virtual void set_input(socket::pin pin_number, resistor_mode mode);
+					virtual bool read(socket_pin_number pin_number);
+					virtual void set_input(socket_pin_number pin_number, resistor_mode mode);
 			};
 
 			class indirected_digital_output : public indirectors::digital_output
@@ -54,8 +54,8 @@ namespace gadgeteering
 				public:
 					indirected_digital_output(const socket& socket, hub_ap5& hub);
 
-					virtual void write(socket::pin pin_number, bool value);
-					virtual void set_output(socket::pin pin_number);
+					virtual void write(socket_pin_number pin_number, bool value);
+					virtual void set_output(socket_pin_number pin_number);
 			};
 
 			class indirected_digital_io : public indirectors::digital_io
@@ -66,9 +66,9 @@ namespace gadgeteering
 				public:
 					indirected_digital_io(const socket& socket, hub_ap5& hub);
 
-					virtual void write(socket::pin pin_number, bool value);
-					virtual bool read(socket::pin pin_number);
-					virtual void set_io_mode(socket::pin pin_number, io_mode new_io_mode, resistor_mode new_resistor_mode);
+					virtual void write(socket_pin_number pin_number, bool value);
+					virtual bool read(socket_pin_number pin_number);
+					virtual void set_io_mode(socket_pin_number pin_number, io_mode new_io_mode, resistor_mode new_resistor_mode);
 			};
 
 			class indirected_analog_input : public indirectors::analog_input
@@ -79,7 +79,7 @@ namespace gadgeteering
 				public:
 					indirected_analog_input(const socket& socket, hub_ap5& hub);
 
-					virtual double read(socket::pin pin_number);
+					virtual double read(socket_pin_number pin_number);
 			};
 
 			class indirected_pwm_output : public indirectors::pwm_output
@@ -90,7 +90,7 @@ namespace gadgeteering
 				public:
 					indirected_pwm_output(const socket& socket, hub_ap5& hub);
 
-					virtual void set(socket::pin pin_number, double duty_cycle, double frequency);
+					virtual void set(socket_pin_number pin_number, double duty_cycle, double frequency);
 			};
 
 			public:

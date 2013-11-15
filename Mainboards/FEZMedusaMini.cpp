@@ -250,7 +250,7 @@ void fez_medusa_mini::set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mod
 
 void fez_medusa_mini::write_digital(cpu_pin pin, bool value)
 {
-	if (pin == socket::pins::UNCONNECTED)
+	if (pin == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	::digitalWrite(pin, value ? HIGH : LOW);
@@ -258,7 +258,7 @@ void fez_medusa_mini::write_digital(cpu_pin pin, bool value)
 
 bool fez_medusa_mini::read_digital(cpu_pin pin) 
 {
-	if (pin == socket::pins::UNCONNECTED)
+	if (pin == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	return ::digitalRead(pin) == HIGH;
@@ -281,7 +281,7 @@ double fez_medusa_mini::read_analog(analog_channel channel)
 
 void fez_medusa_mini::set_pwm(pwm_channel channel, double duty_cycle, double frequency)
 {
-	cpu_pin pin = socket::pins::UNCONNECTED;
+	cpu_pin pin = UNCONNECTED_PIN;
 
 	switch (channel)
 	{
@@ -296,7 +296,7 @@ void fez_medusa_mini::set_pwm(pwm_channel channel, double duty_cycle, double fre
 
 void fez_medusa_mini::set_pwm(cpu_pin pin, double duty_cycle, double frequency, double duration)
 {
-	if (pin == socket::pins::UNCONNECTED)
+	if (pin == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	if (frequency <= 0 || duty_cycle < 0 || duty_cycle > 1)

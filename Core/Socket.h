@@ -33,19 +33,6 @@ namespace gadgeteering
 	struct socket
 	{
 		typedef unsigned long type;
-		typedef unsigned char pin;
-
-		struct pins
-		{
-			static const pin UNCONNECTED = 0xFF;
-			static const pin THREE = 3;
-			static const pin FOUR = 4;
-			static const pin FIVE = 5;
-			static const pin SIX = 6;
-			static const pin SEVEN = 7;
-			static const pin EIGHT = 8;
-			static const pin NINE = 9;
-		};
 
 		struct types
 		{
@@ -108,41 +95,41 @@ namespace gadgeteering
 		class digital_input
 		{
 			public:
-				virtual bool read(socket::pin pin_number) = 0;
-				virtual void set_input(socket::pin pin_number, resistor_mode mode) = 0;
+				virtual bool read(socket_pin_number pin_number) = 0;
+				virtual void set_input(socket_pin_number pin_number, resistor_mode mode) = 0;
 		};
 
 		class digital_output
 		{
 			public:
-				virtual void write(socket::pin pin_number, bool value) = 0;
-				virtual void set_output(socket::pin pin_number) = 0;
+				virtual void write(socket_pin_number pin_number, bool value) = 0;
+				virtual void set_output(socket_pin_number pin_number) = 0;
 		};
 
 		class digital_io
 		{
 			public:
-				virtual void write(socket::pin pin_number, bool value) = 0;
-				virtual bool read(socket::pin pin_number) = 0;
-				virtual void set_io_mode(socket::pin pin_number, io_mode new_io_mode, resistor_mode new_resistor_mode) = 0;
+				virtual void write(socket_pin_number pin_number, bool value) = 0;
+				virtual bool read(socket_pin_number pin_number) = 0;
+				virtual void set_io_mode(socket_pin_number pin_number, io_mode new_io_mode, resistor_mode new_resistor_mode) = 0;
 		};
 
 		class analog_input
 		{
 			public:
-				virtual double read(socket::pin pin_number) = 0;
+				virtual double read(socket_pin_number pin_number) = 0;
 		};
 
 		class analog_output
 		{
 			public:
-				virtual void write(socket::pin pin_number, double voltage) = 0;
+				virtual void write(socket_pin_number pin_number, double voltage) = 0;
 		};
 
 		class pwm_output
 		{
 			public:
-				virtual void set(socket::pin pin_number, double duty_cycle, double frequency) = 0;
+				virtual void set(socket_pin_number pin_number, double duty_cycle, double frequency) = 0;
 		};
 	}
 }

@@ -25,7 +25,7 @@ io60p16::io60p16(unsigned char socket_number)
 
 	s.ensure_type(socket::types::X);
 
-	this->chip = new devices::i2c(s.pins[socket::pins::FIVE], s.pins[socket::pins::FOUR], 0x20);
+	this->chip = new devices::i2c(s.pins[5], s.pins[4], 0x20);
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -40,9 +40,9 @@ io60p16::io60p16(unsigned char socket_number)
 			this->resistors[i][j] = 0x00;
 }
 
-io60p16::io60p16(const socket& socket, socket::pin sda, socket::pin scl)
+io60p16::io60p16(const socket& socket, socket_pin_number sda, socket_pin_number scl)
 {
-	if (sda == socket::pins::EIGHT && scl == socket::pins::NINE && socket.i2c != i2c_channels::NONE)
+	if (sda == 8 && scl == 9 && socket.i2c != i2c_channels::NONE)
 		this->chip = new devices::i2c(socket.i2c, 0x20);
 	else
 		this->chip = new devices::i2c(socket.pins[sda], socket.pins[scl], 0x20);

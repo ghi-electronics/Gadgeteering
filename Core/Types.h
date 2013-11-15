@@ -35,6 +35,9 @@ namespace gadgeteering
 	typedef unsigned char error_type;
 
 	typedef unsigned char cpu_pin;
+	typedef unsigned char socket_pin_number;
+
+	static const cpu_pin UNCONNECTED_PIN = 0xFF;
 
 	struct io_modes 
 	{
