@@ -25,7 +25,7 @@ namespace gadgeteering
 	{
 		protected:
 			base_mainboard(double max_analog_voltage);
-			virtual ~base_mainboard();
+			virtual ~base_mainboard() = 0;
 
 		public:
 			const double max_analog_voltage;
