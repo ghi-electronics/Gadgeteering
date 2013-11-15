@@ -119,6 +119,7 @@ void fez_medusa_mini::create_sockets()
 
 unsigned char fez_medusa_mini::get_serial_config(serial_configuration& config)
 {
+#ifdef SERIAL_5E1 //The Due does not yet define these.
 	if (config.parity == serial_configuration::parities::EVEN)
 	{
 		if (config.stop_bits == serial_configuration::stop_bits::ONE)
@@ -188,6 +189,7 @@ unsigned char fez_medusa_mini::get_serial_config(serial_configuration& config)
 			}
 		}
 	}
+#endif
 
 	return 0xFF;
 }
@@ -345,6 +347,7 @@ void fez_medusa_mini::spi_read_write(spi_channel channel, const unsigned char* w
 	else if (config.clock_idle_state && config.clock_edge)
 		SPI.setDataMode(SPI_MODE3);
 
+#ifdef SPI_CLOCK_DIV2
 	unsigned int div = 12000 / config.clock_rate;
 	if (div <= 2)
 		SPI.setClockDivider(SPI_CLOCK_DIV2);
@@ -360,6 +363,9 @@ void fez_medusa_mini::spi_read_write(spi_channel channel, const unsigned char* w
 		SPI.setClockDivider(SPI_CLOCK_DIV64);
 	else if (div <= 128)
 		SPI.setClockDivider(SPI_CLOCK_DIV128);
+#else
+	SPI.setClockDivider(static_cast<int>(84000.0 / config.clock_rate));
+#endif
 
 	mainboard->write_digital(config.chip_select, config.cs_active_state);
 	if (config.cs_setup_time != 0)
@@ -405,7 +411,7 @@ void fez_medusa_mini::i2c_end(i2c_channel channel)
 {
 	switch (channel)
 	{
-		case i2c_channels::I2C_0: Wire.end(); break;
+		case i2c_channels::I2C_0:  break;
 		case i2c_channels::I2C_1: break;
 		case i2c_channels::I2C_2: break;
 		default: panic(errors::INVALID_CHANNEL);
@@ -438,9 +444,9 @@ bool fez_medusa_mini::i2c_read(i2c_channel channel, unsigned char address, unsig
 {
 	if (channel == i2c_channels::I2C_0)
 	{
-		Wire.requestFrom(address, length, send_stop);
+		Wire.requestFrom(static_cast<int>(address), static_cast<int>(length), static_cast<int>(send_stop));
 
-		for (int i = 0; i < length; i++)
+		for (unsigned int i = 0; i < length; i++)
 		{
 			while (Wire.available() < 1) //Wait for one byte to avoid overflowing the buffer
 				system::sleep(10);
@@ -464,11 +470,15 @@ void fez_medusa_mini::serial_begin(serial_channel channel, serial_configuration&
 	if (channel != serial_channels::SERIAL_0)
 		panic(errors::INVALID_CHANNEL);
 
+#ifdef SERIAL_5E1 //The Due does not yet support serial configuration.
 	unsigned char val = this->get_serial_config(config);
 	if (val == 0xFF)
 		panic(errors::NOT_SUPPORTED);
 
 	Serial.begin(config.baud_rate, val);
+#else
+	Serial.begin(config.baud_rate);
+#endif
 }
 
 void fez_medusa_mini::serial_end(serial_channel channel, serial_configuration& config)

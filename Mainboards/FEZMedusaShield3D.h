@@ -20,6 +20,8 @@ limitations under the License.
 
 #include "FEZMedusaMini.h"
 
+#include <Arduino.h>
+
 namespace gadgeteering
 {
 	namespace mainboards
@@ -109,11 +111,7 @@ namespace gadgeteering
 				virtual void write_analog(analog_channel channel, double voltage);
 				virtual double read_analog(analog_channel channel);
 				virtual void set_pwm(pwm_channel channel, double duty_cycle, double frequency);
-
-				virtual void spi_begin(spi_channel channel, spi_configuration& config);
-				virtual void spi_end(spi_channel channel, spi_configuration& config);
-				virtual void spi_read_write(spi_channel channel, const unsigned char* write_buffer, unsigned char* read_buffer, unsigned int count, spi_configuration& config, bool deselect_after);
-
+				
 				virtual void i2c_begin(i2c_channel channel);
 				virtual void i2c_end(i2c_channel channel);
 				virtual bool i2c_write(i2c_channel channel, unsigned char address, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);

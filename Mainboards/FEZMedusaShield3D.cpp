@@ -16,12 +16,8 @@ limitations under the License.
 
 #include "FEZMedusaShield3D.h"
 
-#include <Arduino.h>
-
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
-
-base_mainboard* gadgeteering::mainboard = NULL;
 
 fez_medusa_shield_3d::fez_medusa_shield_3d(double max_analog_voltage) : fez_medusa_mini(max_analog_voltage, false)
 {
@@ -323,7 +319,7 @@ bool fez_medusa_shield_3d::i2c_write(i2c_channel channel, unsigned char address,
 	if (channel != i2c_channels::I2C_0)
 		panic(errors::INVALID_CHANNEL);
 
-	fez_medusa_mini::i2c_write(channel, address, buffer, length, send_start, send_stop);
+	return fez_medusa_mini::i2c_write(channel, address, buffer, length, send_start, send_stop);
 }
 
 bool fez_medusa_shield_3d::i2c_read(i2c_channel channel, unsigned char address, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop)
@@ -331,24 +327,28 @@ bool fez_medusa_shield_3d::i2c_read(i2c_channel channel, unsigned char address, 
 	if (channel != i2c_channels::I2C_0)
 		panic(errors::INVALID_CHANNEL);
 
-	fez_medusa_mini::i2c_read(channel, address, buffer, length, send_start, send_stop);
+	return fez_medusa_mini::i2c_read(channel, address, buffer, length, send_start, send_stop);
 }
 
 void fez_medusa_shield_3d::serial_begin(serial_channel channel, serial_configuration& config)
 {
-	if (channel != serial_channels::SERIAL_0)
+	if (channel == serial_channels::SERIAL_0 || channel < serial_channels::SERIAL_4)
 		panic(errors::INVALID_CHANNEL);
 
+#ifdef SERIAL_5E1 //The Due does not yet support serial configuration.
 	unsigned char val = this->get_serial_config(config);
 	if (val == 0xFF)
 		panic(errors::NOT_SUPPORTED);
 
 	Serial.begin(config.baud_rate, val);
+#else
+	Serial.begin(config.baud_rate);
+#endif
 }
 
 void fez_medusa_shield_3d::serial_end(serial_channel channel, serial_configuration& config)
 {
-	if (channel != serial_channels::SERIAL_0)
+	if (channel == serial_channels::SERIAL_0 || channel < serial_channels::SERIAL_4)
 		panic(errors::INVALID_CHANNEL);
 
 	Serial.end();

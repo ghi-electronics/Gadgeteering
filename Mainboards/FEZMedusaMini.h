@@ -96,6 +96,5 @@ namespace gadgeteering
 				virtual unsigned int serial_read(serial_channel channel, unsigned char* buffer, unsigned int count, serial_configuration& config);
 				virtual unsigned int serial_available(serial_channel channel);
 		};
-
 	}
 }

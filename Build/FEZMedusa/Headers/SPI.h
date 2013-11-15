@@ -16,7 +16,7 @@
 class
 {
 	public:
-		unsigned char transfer(unsigned char) { return 0 { } }
+		unsigned char transfer(unsigned char) { return 0; }
 		void begin() { }
 		void end() { }
 		void setBitOrder(unsigned char) { }
