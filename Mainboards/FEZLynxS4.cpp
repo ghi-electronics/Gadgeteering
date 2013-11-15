@@ -100,7 +100,7 @@ void fez_lynx_s4::create_sockets()
 	socket s2(2, socket::types::I | socket::types::A);
 	s2.pins[3] = fez_lynx_s4::pins::DD1;
 	s2.pins[4] = fez_lynx_s4::pins::DD2;
-	s2.pins[5] = fez_lynx_s4::pins::AD1;
+	s2.pins[5] = 0x00; //fez_lynx_s4::pins::VIN2;
 	s2.pins[6] = fez_lynx_s4::pins::DD3;
 	s2.pins[8] = fez_lynx_s4::pins::BD1;
 	s2.pins[9] = fez_lynx_s4::pins::BD0;
