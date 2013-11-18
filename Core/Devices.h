@@ -35,15 +35,13 @@ namespace gadgeteering {
 				i2c(cpu_pin sda, cpu_pin scl, unsigned char address, bool use_resistors = true);
 				~i2c();
 
-				void update_address(unsigned char new_address);
-
 				bool write(const unsigned char* buffer, unsigned int length, bool send_start = true, bool send_stop = true);
 				bool read(unsigned char* buffer, unsigned int length, bool send_start = true, bool send_stop = true);
 
 				bool write_read(const unsigned char* write_buffer, unsigned int write_length, unsigned char* read_buffer, unsigned int read_length);
 
 				bool write_register(unsigned char address, unsigned char value);
-				bool write_registers(unsigned char start_address, unsigned char* values, unsigned int length);
+				bool write_registers(unsigned char start_address, const unsigned char* values, unsigned int length);
 				unsigned char read_register(unsigned char address);
 				bool read_registers(unsigned char start_address, unsigned char* values, unsigned int length);
 		};

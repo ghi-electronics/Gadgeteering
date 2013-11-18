@@ -185,6 +185,8 @@ bool software_i2c::write(unsigned char address, const unsigned char* buffer, uns
 {
 	bool result = true;
 
+	address <<= 1;
+
 	if (!this->transmit(send_start, length == 0, address))
 		result = false;
 
@@ -199,11 +201,14 @@ bool software_i2c::read(unsigned char address, unsigned char* buffer, unsigned i
 {
 	bool result = true;
 
+	address <<= 1;
+	address |= 1;
+
 	if (!this->transmit(send_start, length == 0, address))
 		result = false;
 
 	for (unsigned int i = 0; i < length; i++)
-		buffer[i] = this->receive(true, i == length - 1 ? send_stop : false);
+		buffer[i] = this->receive(i < length - 1, i == length - 1 ? send_stop : false);
 
 	return result;
 }

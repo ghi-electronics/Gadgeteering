@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,258 +15,215 @@ limitations under the License.
 */
 
 #include "DaisyLink.h"
+
 #include "System.h"
+#include "Mainboard.h"
 
 using namespace gadgeteering;
 using namespace gadgeteering::interfaces;
+using namespace gadgeteering::daisy_link;
 
-DaisyLinkBus::link_node* DaisyLinkBus::daisyLinkList;
-unsigned char DaisyLinkBus::totalNodeCount = 0;
+bus::bus_node* bus::bus_list = NULL;
 
-DaisyLinkBus::DaisyLinkBus(const socket& sock, DaisyLinkModule* module) : sock(sock)
+bus::bus(const socket& sock) : sock(sock), i2c(sock.pins[bus::SDA_PIN], sock.pins[bus::SCL_PIN], bus::DEFAULT_I2C_ADDRESS, false), neighbor_bus(sock, bus::DAISYLINK_PIN)
 {
-	//this->i2c = mainboard->getI2CBus(socket, DaisyLinkBus::SDA_PIN, DaisyLinkBus::SCL_PIN);
-	this->i2c = new devices::i2c(sock.pins[DaisyLinkBus::SDA_PIN], sock.pins[DaisyLinkBus::SCL_PIN], DaisyLinkBus::DEFAULT_I2C_ADDRESS, false);
-	this->ready = false;
-	this->reservedCount = 0;
-	this->nodeCount = 0;
-	this->daisyLinkResetPort = NULL;
+	this->module_count = 0;
+	this->reference_count = 0;
+	this->next_address = bus::START_ADDRESS;
+
+	this->initialize();
 }
 
-DaisyLinkBus::~DaisyLinkBus()
+void bus::initialize()
 {
-	delete this->daisyLinkResetPort;
-}
+	this->neighbor_bus.write(false);
+	system::sleep(2);
+	this->neighbor_bus.set_resistor_mode(resistor_modes::FLOATING);
+	this->neighbor_bus.read();
 
-unsigned char DaisyLinkBus::ReserveNextDaisyLinkNodeAddress(DaisyLinkModule* moduleInstance)
-{
-	if (this->reservedCount >= this->nodeCount)
-    {
-        if (this->nodeCount == 0)
-            panic(errors::MODULE_ERROR, 1); //No DaisyLink modules are detected on socket
-        else
-            panic(errors::MODULE_ERROR, 2); //Tried to initialize more modules than were found
-    }
-    
-    unsigned char ret = (unsigned char)(this->startAddress + this->reservedCount);
-    this->reservedCount++;
-    return ret;
-}
-
-void DaisyLinkBus::Initialize()
-{
-    bool lastFound = false;
-    unsigned char modulesFound = 0;
-
-    // Reset all modules in the chain and place the first module into Setup mode
-    SendResetPulse();
-    // For all modules in the chain
-    while (!lastFound)
-    {
-        if (DaisyLinkModule::VERSION_IMPLEMENTED != this->ReadRegister((unsigned char)Registers::DAISYLINK_VERSION, DaisyLinkBus::DEFAULT_I2C_ADDRESS))
-        {
-            lastFound = true;       // If the correct version can't be read back from a device, there are no more devices in the chain
-        }
-		
-        if (modulesFound != 0)      // If a device is left in Standby mode
-        {
-            unsigned char data[2] = { (unsigned char)Registers::CONFIG, (unsigned char)(lastFound ? 1 : 0) };
-			this->i2c->address = (unsigned char)((totalNodeCount + modulesFound) << 1);
-            this->i2c->write(data, 2);     // Enable/disable I2C pull-ups depending on whether last in chain (place module in Active mode)
-        }
-
-        if (!lastFound)
-        {
-            // Next module in chain is in Setup mode so start setting it up
-            modulesFound++;         // Increase the total number of modules found connected to this socket
-
-			unsigned char data[2] = { (unsigned char)Registers::ADDRESS, (unsigned char)(totalNodeCount + modulesFound) };
-			this->i2c->address = DaisyLinkBus::DEFAULT_I2C_ADDRESS << 1;
-            this->i2c->write(data, 2);     // Set the I2C ID of the next module in the chain (place module in Standby mode)
-        }
-    }
-	
-    this->startAddress = (unsigned char)(totalNodeCount + 1);
-    this->nodeCount = modulesFound;
-    this->reservedCount = 0;
-    totalNodeCount += modulesFound;
-    this->ready = true;
-}
-
-void DaisyLinkBus::SendResetPulse()
-{
-    if (!daisyLinkResetPort)
-    {
-        daisyLinkResetPort = new digital_io(this->sock, DaisyLinkBus::DAISYLINK_PIN);
-		daisyLinkResetPort->set_io_mode(io_modes::DIGITAL_INPUT);
-		daisyLinkResetPort->set_resistor_mode(resistor_modes::PULL_UP);
-    }
-	daisyLinkResetPort->write(true);
-    system::sleep(2);                        // 2 milliseconds is definitely more than 1 ms
-    daisyLinkResetPort->read();				// Pull-downs should take the neighbor bus back low
-    delete daisyLinkResetPort;
-	daisyLinkResetPort = NULL;
-}
-
-void DaisyLinkBus::GetModuleParameters(unsigned int position, unsigned char* manufacturer, unsigned char* type, unsigned char* version)
-{
-    unsigned char address;
-    if (position >= this->nodeCount)
-		panic(errors::MODULE_ERROR, 3); //Attempt to access invalid module
-
-    address = (unsigned char)(this->startAddress + position);
-    *type = this->ReadRegister((unsigned char)Registers::MODULE_TYPE, address);
-    *version = this->ReadRegister((unsigned char)(Registers::MODULE_VERSION), address);
-    *manufacturer = this->ReadRegister((unsigned char)(Registers::MANUFACTURER), address);
-}
-
-unsigned char DaisyLinkBus::GetDaisyLinkVersion(unsigned int position)
-{
-    unsigned char address;
-
-    if (position >= this->nodeCount)
-		panic(errors::MODULE_ERROR, 4); //Attempt to access invalid module
-
-    address = (unsigned char)(this->startAddress + position);
-    return this->ReadRegister((unsigned char)Registers::DAISYLINK_VERSION, address);
-}
-
-unsigned char DaisyLinkBus::ReadRegister(unsigned char registerAddress, unsigned char moduleAddress)
-{
-	unsigned char result;
-	unsigned int a, b;
-	this->i2c->address = moduleAddress;
-	this->i2c->write_read(&registerAddress, 1, &result, 1);
-	return result;
-}
-
-bool DaisyLinkBus::IsReady() const
-{
-	return this->ready;
-}
-
-unsigned char DaisyLinkBus::GetNodeCount() const
-{
-	return this->nodeCount;
-}
-
-unsigned char DaisyLinkBus::GetReservedCount() const
-{
-	return this->reservedCount;
-}
-
-unsigned char DaisyLinkBus::GetStartAddress() const
-{
-	return this->startAddress;
-}
-
-const socket& DaisyLinkBus::GetSocket() const
-{
-	return this->sock;
-}
-
-DaisyLinkBus* DaisyLinkBus::GetDaisyLinkForSocket(const socket& sock, DaisyLinkModule* module)
-{
-	DaisyLinkBus::link_node* start = DaisyLinkBus::daisyLinkList;
-	DaisyLinkBus::link_node* last = NULL;
-
-	while (start)
+	unsigned char next_address = bus::START_ADDRESS;
+	while (true)
 	{
-		if (start->data->sock.number == sock.number)
-			return start->data;
+		if (this->module_count > 0)
+		{
+			this->i2c.address = next_address - 1;
+			this->i2c.write_register(bus::registers::CONFIG, 0x00);
+			this->i2c.address = bus::DEFAULT_I2C_ADDRESS;
+		}
 
-		last = start;
-		start = start->next;
+		if (this->i2c.read_register(bus::registers::DAISYLINK_VERSION) != 0x04)
+			break;
+
+		this->i2c.write_register(bus::registers::ADDRESS, next_address);
+
+		this->module_count++;
+		next_address++;
+
+		system::sleep(2);
 	}
-	
-    DaisyLinkBus* daisylink = new DaisyLinkBus(sock, module);
-    daisylink->Initialize();
-
-	last->next = new DaisyLinkBus::link_node();
-	start = last->next;
-	start->next = NULL;
-	start->data = daisylink;
-
-	return start->data;
 }
 
-DaisyLinkModule::DaisyLinkModule(unsigned char socketNumber, unsigned char manufacturer, unsigned char moduleType, unsigned char minModuleVersionSupported, unsigned char maxModuleVersionSupported) 
+unsigned int bus::get_length_of_chain()
 {
-	const socket& sock = mainboard->get_socket(socketNumber);
-
-    this->daisyLink = DaisyLinkBus::GetDaisyLinkForSocket(sock, this);
-
-    if (this->daisyLink->nodeCount == 0)
-		panic(errors::MODULE_ERROR, 1); //No DaisyLink modules present
-
-    if (this->daisyLink->reservedCount >= this->daisyLink->nodeCount)
-		panic(errors::MODULE_ERROR, 2); //This many modules do not exist on the chain.
-
-    // NOTE:  PositionOnChain will be invalid until the end of the constructor (it is dependent on DeviceAddress) so this->daisyLink->reservedCount is used until then
-    DaisyLinkVersion = this->daisyLink->GetDaisyLinkVersion(this->daisyLink->reservedCount);
-    if (DaisyLinkVersion != DaisyLinkModule::VERSION_IMPLEMENTED)
-		panic(errors::MODULE_ERROR, DaisyLinkVersion); //Unsupported DaisyLink version
-
-    this->daisyLink->GetModuleParameters(this->daisyLink->reservedCount, &this->Manufacturer, &this->ModuleType, &this->ModuleVersion);
-
-    if (manufacturer != Manufacturer)
-		panic(errors::MODULE_ERROR, 4); //Problem initializaing DaisyLink due to invalid manufacturer code
-
-    if (moduleType != ModuleType)
-		panic(errors::MODULE_ERROR, 5); //Problem initializaing DaisyLink due to invalid module type
-
-    if (ModuleVersion < minModuleVersionSupported || ModuleVersion > maxModuleVersionSupported)
-		panic(errors::MODULE_ERROR, 6); //Problem initializaing DaisyLink due to invalid firmware
-
-    ModuleAddress = this->daisyLink->ReserveNextDaisyLinkNodeAddress(this) << 1;
+	return this->module_count;
 }
 
-DaisyLinkModule::~DaisyLinkModule()
+void bus::get_module_parameters(unsigned int position, unsigned char& manufacturer, unsigned char& type, unsigned char& version)
+{
+	unsigned char buffer[6];
+	this->i2c.address = position + bus::START_ADDRESS;
+	this->i2c.read_registers(0x00, buffer, 6);
+	this->i2c.address = bus::DEFAULT_I2C_ADDRESS;
+	manufacturer = buffer[bus::registers::MANUFACTURER];
+	type = buffer[bus::registers::MODULE_TYPE];
+	version = buffer[bus::registers::MODULE_VERSION];
+}
+
+unsigned char bus::get_version(unsigned int position)
+{
+	this->i2c.address = position + bus::START_ADDRESS;
+	unsigned char version = this->i2c.read_register(bus::registers::DAISYLINK_VERSION);
+	this->i2c.address = bus::DEFAULT_I2C_ADDRESS;
+	return version;
+}
+
+bus& bus::get_bus(unsigned char socket_number)
+{
+	bus::bus_node* current = bus::bus_list;
+	bus::bus_node* last = NULL;
+
+	while (current)
+	{
+		if (current->data->sock.number == socket_number)
+		{
+			current->data->reference_count++;
+			return *current->data;
+		}
+
+		last = current;
+		current = current->next;
+	}
+
+	const socket& sock = mainboard->get_socket(socket_number);
+	bus* new_bus = new bus(sock);
+
+	if (bus::bus_list == NULL)
+	{
+		bus::bus_list = new bus::bus_node();
+		bus::bus_list->next = NULL;
+		bus::bus_list->data = new_bus;
+	}
+	else
+	{
+		last->next = new bus::bus_node();
+		last->next->next = NULL;
+		last->next->data = new_bus;
+	}
+
+	new_bus->reference_count++;
+	return *new_bus;
+}
+
+void bus::release_bus(unsigned char socket_number)
+{
+	bus::bus_node* current = bus::bus_list;
+	bus::bus_node* prev = NULL;
+
+	while (current)
+	{
+		if (current->data->sock.number == socket_number)
+		{
+			if (--current->data->reference_count == 0)
+			{
+				if (current == bus::bus_list)
+				{
+					bus::bus_list = current->next;
+				}
+				else if (prev)
+				{
+					prev->next = current->next;
+				}
+
+				delete current->data;
+				delete current;
+
+				return;
+			}
+		}
+
+		prev = current;
+		current = current->next;
+	}
+}
+
+module::module(unsigned char socket_number, unsigned char manufacturer, unsigned char type, unsigned char min_version_supported, unsigned char max_version_supported) : bus(bus::get_bus(socket_number)), i2c(this->bus.sock.pins[bus::SDA_PIN], this->bus.sock.pins[bus::SCL_PIN], this->bus.next_address++, false)
+{
+	this->socket_number = socket_number;
+	this->position_on_chain = this->i2c.address - bus::START_ADDRESS;
+	this->bus.get_module_parameters(this->position_on_chain, this->manufacturer, this->type, this->version);
+	this->daisy_link_version = this->bus.get_version(this->position_on_chain);
+	this->length_of_chain = this->bus.get_length_of_chain();
+
+	if (this->bus.module_count == 0)
+		panic_specific(errors::MODULE_ERROR, 1);
+
+	if (this->bus.reference_count > this->bus.module_count)
+		panic_specific(errors::MODULE_ERROR, 2);
+
+	if (this->daisy_link_version != module::VERSION_IMPLEMENTED)
+		panic_specific(errors::MODULE_ERROR, 3);
+
+	if (manufacturer != this->manufacturer)
+		panic_specific(errors::MODULE_ERROR, 4);
+
+	if (type != this->type)
+		panic_specific(errors::MODULE_ERROR, 5);
+
+	if (this->version < min_version_supported || this->version > max_version_supported)
+		panic_specific(errors::MODULE_ERROR, 6);
+}
+
+module::~module()
 {
 
 }
 
-unsigned int DaisyLinkModule::GetLengthOfChain(unsigned char socketNumber) 
+unsigned char module::read_register(unsigned char address)
 {
-	const socket& sock = mainboard->get_socket(socketNumber);
-	return DaisyLinkBus::GetDaisyLinkForSocket(sock, NULL)->nodeCount;
+	return this->i2c.read_register(address);
 }
 
-void DaisyLinkModule::GetModuleParameters(unsigned char socketNumber, unsigned int position, unsigned char* manufacturer, unsigned char* type, unsigned char* version)
+void module::write_register(unsigned char address, unsigned char value)
 {
-	const socket& sock = mainboard->get_socket(socketNumber);
-	if (position >= 1) position--;
-	DaisyLinkBus::GetDaisyLinkForSocket(sock, NULL)->GetModuleParameters(position, manufacturer, type, version);
+	this->i2c.write_register(address, value);
 }
 
-unsigned char DaisyLinkModule::Read(unsigned char memoryAddress)
+void module::read_registers(unsigned char address, unsigned char* buffer, unsigned int length)
 {
-	return this->daisyLink->ReadRegister(memoryAddress, ModuleAddress);
+	this->i2c.read_registers(address, buffer, length);
 }
 
-void DaisyLinkModule::Write(const unsigned char* buffer, unsigned int length)
+void module::write_registers(unsigned char address, const unsigned char* buffer, unsigned int length)
 {
-	this->daisyLink->i2c->address = ModuleAddress;
-	this->daisyLink->i2c->write(buffer, length);
+	this->i2c.write_registers(address, buffer, length);
 }
 
-void DaisyLinkModule::WriteRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead)
+void module::write_read(const unsigned char* write_buffer, unsigned int write_length, unsigned char* read_buffer, unsigned int read_length)
 {
-	this->daisyLink->i2c->address = ModuleAddress;
-	this->daisyLink->i2c->write_read(writeBuffer, writeLength, readBuffer, readLength);
+	this->i2c.write_read(write_buffer, write_length, read_buffer, read_length);
 }
 
-unsigned int DaisyLinkModule::GetPositionOnChain() const
+unsigned int module::get_position_on_chain() const
 {
-	return this->PositionOnChain;
+	return this->position_on_chain;
 }
 
-unsigned int DaisyLinkModule::GetLengthOfChain() const
+unsigned int module::get_length_of_chain() const
 {
-	return this->LengthOfChain;
+	return this->length_of_chain;
 }
 
-unsigned int DaisyLinkModule::GetDaisyLinkSocketNumber() const
+unsigned int module::get_socket_number() const
 {
-	return this->DaisyLinkSocketNumber;
+	return this->socket_number;
 }

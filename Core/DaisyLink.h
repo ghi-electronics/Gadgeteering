@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,106 +16,94 @@ limitations under the License.
 
 #pragma once
 
-#include "Mainboard.h"
 #include "Interfaces.h"
-#include "Types.h"
 #include "Devices.h"
+#include "Socket.h"
+#include "Types.h"
 
 namespace gadgeteering
 {
-	class DaisyLinkModule;
-
-	class DaisyLinkBus {
-		private:
+	namespace daisy_link
+	{
+		class bus
+		{
 			static const socket_pin_number DAISYLINK_PIN = 3;
 			static const socket_pin_number SDA_PIN = 4;
 			static const socket_pin_number SCL_PIN = 5;
 			static const unsigned char DEFAULT_I2C_ADDRESS = 0x7F;
+			static const unsigned char START_ADDRESS = 0x01;
 
-			struct link_node
+			struct registers
 			{
-				link_node* next;
-				DaisyLinkBus* data;
+				static const unsigned char ADDRESS = 0;
+				static const unsigned char CONFIG = 1;
+				static const unsigned char DAISYLINK_VERSION = 2;
+				static const unsigned char MODULE_TYPE = 3;
+				static const unsigned char MODULE_VERSION = 4;
+				static const unsigned char MANUFACTURER = 5;
 			};
-			static link_node* daisyLinkList;
 
-			interfaces::digital_io* daisyLinkResetPort;
+			struct bus_node
+			{
+				bus_node* next;
+				bus* data;
+			};
 
-			static unsigned char totalNodeCount;
-			
-			bool ready;
-			unsigned char nodeCount;
-			unsigned char reservedCount;
-			unsigned char startAddress;
+			static bus_node* bus_list;
+
+			interfaces::digital_io neighbor_bus;
+			devices::i2c i2c;
 			const socket& sock;
-			devices::i2c* i2c;
+			unsigned int module_count;
+			unsigned int next_address;
+			unsigned int reference_count;
 
-			DaisyLinkBus(const socket& sock, DaisyLinkModule* module);
-			~DaisyLinkBus();
+			bus(const socket& sock);
 
-			unsigned char ReserveNextDaisyLinkNodeAddress(DaisyLinkModule* moduleInstance);
-			void Initialize();
-			void SendResetPulse();
-			void GetModuleParameters(unsigned int position, unsigned char* manufacturer, unsigned char* type, unsigned char* version);
-			unsigned char GetDaisyLinkVersion(unsigned int position);
-			unsigned char ReadRegister(unsigned char registerAddress, unsigned char moduleAddress = DaisyLinkBus::DEFAULT_I2C_ADDRESS);
+			void initialize();
+			unsigned int get_length_of_chain();
+			void get_module_parameters(unsigned int position, unsigned char& manufacturer, unsigned char& type, unsigned char& version);
+
+			friend class module;
+
+			unsigned char get_version(unsigned int position);
 
 		public:
-			typedef unsigned char Register;
+			static bus& get_bus(unsigned char socket_number);
+			static void release_bus(unsigned char socket_number);
+		};
 
-			class Registers {
-				public:
-					static const Register ADDRESS = 0;
-					static const Register CONFIG = 1;
-					static const Register DAISYLINK_VERSION = 2;
-					static const Register MODULE_TYPE = 3;
-					static const Register MODULE_VERSION = 4;
-					static const Register MANUFACTURER = 5;
-			};
-			
-			bool IsReady() const;
-			unsigned char GetNodeCount() const;
-			unsigned char GetReservedCount() const;
-			unsigned char GetStartAddress() const;
-			const socket& GetSocket() const;
-
-			static DaisyLinkBus* GetDaisyLinkForSocket(const socket& sock, DaisyLinkModule* module);
-
-			friend class DaisyLinkModule;
-	};
-
-	class DaisyLinkModule {
+		class module
+		{
 		protected:
-			DaisyLinkBus* daisyLink;
+			bus& bus;
+			devices::i2c i2c;
 
-			static const unsigned char OFFSET = 8;
+			static const unsigned char REGISTER_OFFSET = 8;
 			static const unsigned char VERSION_IMPLEMENTED = 4;
 
-			unsigned char ModuleAddress;
-			unsigned char Manufacturer;
-			unsigned char ModuleType;
-			unsigned char ModuleVersion;
-			unsigned char DaisyLinkVersion;
+			unsigned char manufacturer;
+			unsigned char type;
+			unsigned char version;
+			unsigned char daisy_link_version;
 
-			unsigned int PositionOnChain;
-			unsigned int LengthOfChain;
-			unsigned int DaisyLinkSocketNumber;
+			unsigned int position_on_chain;
+			unsigned int length_of_chain;
+			unsigned int socket_number;
 
-			DaisyLinkModule(unsigned char socketNumber, unsigned char manufacturer, unsigned char moduleType, unsigned char minModuleVersionSupported, unsigned char maxModuleVersionSupported);
-			virtual ~DaisyLinkModule();
+			module(unsigned char socket_number, unsigned char manufacturer, unsigned char type, unsigned char min_version_supported, unsigned char max_version_supported);
+			virtual ~module();
 
-			static unsigned int GetLengthOfChain(unsigned char socketNumber);
-			static void GetModuleParameters(unsigned char socketNumber, unsigned int position, unsigned char* manufacturer, unsigned char* type, unsigned char* version);
-
-			unsigned char Read(unsigned char memoryAddress);
-			void Write(const unsigned char* buffer, unsigned int length);
-			void WriteRead(const unsigned char* writeBuffer, unsigned int writeLength, unsigned char* readBuffer, unsigned int readLength, unsigned int* numWritten, unsigned int* numRead);
+			unsigned char read_register(unsigned char address);
+			void write_register(unsigned char address, unsigned char value);
+			void read_registers(unsigned char address, unsigned char* buffer, unsigned int length);
+			void write_registers(unsigned char address, const unsigned char* buffer, unsigned int length);
+			void write_read(const unsigned char* write_buffer, unsigned int write_length, unsigned char* read_buffer, unsigned int read_length);
 
 		public:
-			unsigned int GetPositionOnChain() const;
-			unsigned int GetLengthOfChain() const;
-			unsigned int GetDaisyLinkSocketNumber() const;
-
-			friend class DaisyLinkBus;
-	};
+			unsigned int get_position_on_chain() const;
+			unsigned int get_length_of_chain() const;
+			unsigned int get_socket_number() const;
+		};
+	}
 }

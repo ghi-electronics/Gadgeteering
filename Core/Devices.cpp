@@ -63,11 +63,11 @@ bool i2c::write(const unsigned char* buffer, unsigned int length, bool send_star
 {
 	if (this->soft_i2c == NULL)
 	{
-		return mainboard->i2c_write(this->channel, this->address, buffer, length, false, send_stop);
+		return mainboard->i2c_write(this->channel, this->address, buffer, length, send_start, send_stop);
 	}
 	else
 	{
-		return this->soft_i2c->write(this->address, buffer, length, false, send_stop);
+		return this->soft_i2c->write(this->address, buffer, length, send_start, send_stop);
 	}
 }
 
@@ -75,11 +75,11 @@ bool i2c::read(unsigned char* buffer, unsigned int length, bool send_start, bool
 {
 	if (this->soft_i2c == NULL)
 	{
-		return mainboard->i2c_read(this->channel, this->address, buffer, length, false, send_stop);
+		return mainboard->i2c_read(this->channel, this->address, buffer, length, send_start, send_stop);
 	}
 	else
 	{
-		return this->soft_i2c->read(this->address, buffer, length, false, send_stop);
+		return this->soft_i2c->read(this->address, buffer, length, send_start, send_stop);
 	}
 }
 
@@ -101,7 +101,7 @@ bool i2c::write_register(unsigned char address, unsigned char value)
 	return this->write(data, 2);
 }
 
-bool i2c::write_registers(unsigned char start_address, unsigned char* values, unsigned int length)
+bool i2c::write_registers(unsigned char start_address, const unsigned char* values, unsigned int length)
 {
 	unsigned char* data = new unsigned char[length + 1];
 	data[0] = start_address;
