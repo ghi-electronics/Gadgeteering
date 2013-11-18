@@ -15,12 +15,11 @@ limitations under the License.
 */
 
 #include "SoftwareI2C.h"
+
 #include "Mainboard.h"
 #include "System.h"
 
 using namespace gadgeteering;
-
-#define i2c_delay() ;
 
 software_i2c::software_i2c(cpu_pin sda, cpu_pin scl, bool use_resistors)
 {
@@ -54,6 +53,13 @@ bool software_i2c::read_sda()
 	return mainboard->read_digital(this->sda);
 }
 
+void software_i2c::wait_scl()
+{
+	unsigned long end = system::time_elapsed() + 5000;
+	while (!this->read_scl() && system::time_elapsed() < end)
+		;
+}
+
 bool software_i2c::write_bit(bool bit)
 {
 	if (bit)
@@ -61,16 +67,15 @@ bool software_i2c::write_bit(bool bit)
 	else
 		this->clear_sda();
 
-	i2c_delay();
+	this->delay();
 
-	unsigned long end = system::time_elapsed() + 5000;
-	while (!this->read_scl() && system::time_elapsed() < end)
-		;
+	this->wait_scl();
 
 	if (bit && !this->read_sda())
 		return false;
 
-	i2c_delay();
+	this->delay();
+
 	this->clear_scl();
 
 	return true;
@@ -80,15 +85,14 @@ bool software_i2c::read_bit()
 {
 	this->read_sda();
 
-	i2c_delay();
-
-	unsigned long end = system::time_elapsed() + 5000;
-	while (!this->read_scl() && system::time_elapsed() < end)
-		;
+	this->delay();
+	
+	this->wait_scl();
 
 	bool bit = this->read_sda();
 
-	i2c_delay();
+	this->delay();
+
 	this->clear_scl();
 
 	return bit;
@@ -99,19 +103,19 @@ bool software_i2c::send_start_condition()
 	if (this->start)
 	{
 		this->read_sda();
-		i2c_delay();
 
-		unsigned long end = system::time_elapsed() + 5000;
-		while (!this->read_scl() && system::time_elapsed() < end)
-			;
-
+		this->delay();
+		
+		this->wait_scl();
 	}
 
 	if (!this->read_sda())
 		return false;
 
 	this->clear_sda();
-	i2c_delay();
+
+	this->delay();
+
 	this->clear_scl();
 
 	this->start = true;
@@ -122,16 +126,16 @@ bool software_i2c::send_start_condition()
 bool software_i2c::send_stop_condition()
 {
 	this->clear_sda();
-	i2c_delay();
 
-	unsigned long end = system::time_elapsed() + 5000;
-	while (!this->read_scl() && system::time_elapsed() < end)
-		;
+	this->delay();
+
+	this->wait_scl();
 
 	if (!this->read_sda())
 		return false;
 
-	i2c_delay();
+	this->delay();
+
 	this->start = false;
 
 	return true;
@@ -139,20 +143,17 @@ bool software_i2c::send_stop_condition()
 
 bool software_i2c::transmit(bool send_start, bool send_stop, unsigned char data)
 {
-	unsigned char bit;
-	bool nack;
-
 	if (send_start)
 		this->send_start_condition();
 
-	for (bit = 0; bit < 8; bit++)
+	for (unsigned char bit = 0; bit < 8; bit++)
 	{
 		this->write_bit((data & 0x80) != 0);
 
 		data <<= 1;
 	}
 
-	nack = this->read_bit();
+	bool nack = this->read_bit();
 
 	if (send_stop)
 		this->send_stop_condition();
@@ -163,15 +164,9 @@ bool software_i2c::transmit(bool send_start, bool send_stop, unsigned char data)
 unsigned char software_i2c::receive(bool send_ack, bool send_stop_condition)
 {
 	unsigned char d = 0;
-	unsigned char bit = 0;
-
-	for (bit = 0; bit < 8; bit++)
-	{
-		d <<= 1;
-
-		if (this->read_bit())
-			d |= 1;
-	}
+	
+	for (unsigned char bit = 0; bit < 8; bit++)
+		d = (d << 1) | (this->read_bit ? 1 : 0);
 
 	this->write_bit(!send_ack);
 
