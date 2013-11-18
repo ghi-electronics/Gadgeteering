@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Core\DaisyLink.cpp" />
-    <ClCompile Include="..\..\..\Core\DaisyLinkCommandBus.cpp" />
     <ClCompile Include="..\..\..\Core\Devices.cpp" />
     <ClCompile Include="..\..\..\Core\Interfaces.cpp" />
     <ClCompile Include="..\..\..\Core\Mainboard.cpp" />
@@ -79,7 +78,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Core\DaisyLink.h" />
-    <ClInclude Include="..\..\..\Core\DaisyLinkCommandBus.h" />
     <ClInclude Include="..\..\..\Core\Devices.h" />
     <ClInclude Include="..\..\..\Core\Interfaces.h" />
     <ClInclude Include="..\..\..\Core\Mainboard.h" />

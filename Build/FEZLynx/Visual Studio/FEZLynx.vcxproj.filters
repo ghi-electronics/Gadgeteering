@@ -4,9 +4,6 @@
     <ClCompile Include="..\..\..\Core\DaisyLink.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Core\DaisyLinkCommandBus.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Core\Interfaces.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -187,9 +184,6 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Core\Interfaces.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Core\DaisyLinkCommandBus.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Core\DaisyLink.h">
