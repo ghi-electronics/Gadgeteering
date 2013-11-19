@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -232,6 +232,7 @@ namespace gadgeteering
 		static const error_type INVALID_CHANNEL = 13;
 		static const error_type INVALID_SOCKET_NUMBER = 14;
 		static const error_type SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL = 15;
-		static const error_type MODULE_ERROR = 16;
+		static const error_type MAINBOARD_ERROR = 16;
+		static const error_type MODULE_ERROR = 17;
 	}
 }

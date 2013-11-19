@@ -29,12 +29,12 @@ namespace gadgeteering
 	{
 		class ads_7830
 		{
-			devices::i2c* chip;
+			const socket& sock;
+			devices::i2c chip;
 
 			public:
 				ads_7830(unsigned char socket_number, unsigned char address = 0x48);
 				ads_7830(const socket& socket, unsigned char address = 0x48);
-				~ads_7830();
 
 				double get_reading(unsigned char channel);
 		};

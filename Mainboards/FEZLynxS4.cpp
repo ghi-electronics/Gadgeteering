@@ -149,7 +149,7 @@ const socket& fez_lynx_s4::get_socket(unsigned char number)
 {
 	if (this->sockets.count(number) == 0)
 		panic(errors::INVALID_SOCKET_NUMBER);
-	
+
 	return this->sockets[number];
 }
 
@@ -197,7 +197,7 @@ double fez_lynx_s4::read_analog(analog_channel channel)
 
 	if (channel != analog_channels::ANALOG_5)
 		this->set_io_mode(mapping.first, io_modes::DIGITAL_INPUT, resistor_modes::FLOATING);
-	
+
 	return this->analog_converter->get_reading(mapping.second);
 }
 
@@ -246,8 +246,8 @@ bool fez_lynx_s4::i2c_write(i2c_channel channel, unsigned char address, const un
 	address <<= 1;
 
 	if (this->channels[1].i2c_write(&address, 1, send_start, length == 0))
-		if (this->channels[1].i2c_write(buffer, length, false, send_stop))
-			return true;
+	if (this->channels[1].i2c_write(buffer, length, false, send_stop))
+		return true;
 
 	return false;
 }
@@ -261,8 +261,8 @@ bool fez_lynx_s4::i2c_read(i2c_channel channel, unsigned char address, unsigned 
 	address |= 1;
 
 	if (this->channels[1].i2c_write(&address, 1, send_start, length == 0))
-		if (this->channels[1].i2c_read(buffer, length, false, send_stop))
-			return true;
+	if (this->channels[1].i2c_read(buffer, length, false, send_stop))
+		return true;
 
 	return false;
 }
@@ -353,16 +353,16 @@ void system::random_seed(int seed)
 	srand(seed);
 }
 
-void system::throw_error(error_type error, unsigned char specific_error)
+void system::throw_error(error_type error, int specific_error)
 {
-	std::cout << "ERROR: " << (int)error << "-" << (int)specific_error << std::endl;
+	std::cout << "ERROR: " << static_cast<int>(error) << "-" << specific_error << std::endl;
 
 	throw exception();
 }
 
-void system::throw_error(error_type error, const char* file, int line, unsigned char specific_error)
+void system::throw_error(error_type error, const char* file, int line, int specific_error)
 {
-	std::cout << "ERROR: " << (int)error << "-" << (int)specific_error << std::endl;
+	std::cout << "ERROR: " << static_cast<int>(error) << "-" << specific_error << std::endl;
 	std::cout << "ON: " << file << " (" << line << ")" << std::endl;
 
 	throw exception();
@@ -400,7 +400,7 @@ fez_lynx_s4::ftdi_channel::~ftdi_channel()
 void fez_lynx_s4::ftdi_channel::open(const char* serial_number)
 {
 	if (FT_OpenEx(const_cast<char*>(serial_number), FT_OPEN_BY_SERIAL_NUMBER, &this->handle) != FT_OK)
-		throw "Can't open channel.";
+		panic(errors::MAINBOARD_ERROR, 1);
 
 	FT_ResetDevice(this->handle);
 
@@ -482,7 +482,7 @@ void fez_lynx_s4::ftdi_channel::sync_mpsse()
 			return;
 	}
 
-	throw "Couldn't sync to MPSSE.";
+	panic(errors::MAINBOARD_ERROR, 0);
 }
 
 void fez_lynx_s4::ftdi_channel::set_pin_direction(unsigned char pin, io_mode mode, bool output_state)
@@ -628,8 +628,8 @@ bool fez_lynx_s4::ftdi_channel::i2c_read(unsigned char* buffer, DWORD length, bo
 		this->i2c_start();
 
 	for (DWORD i = 0; i < length; i++)
-		if (buffer[i] = this->i2c_read_byte())
-			read++;
+	if (buffer[i] = this->i2c_read_byte())
+		read++;
 
 	if (send_stop)
 		this->i2c_stop();
@@ -652,8 +652,8 @@ bool fez_lynx_s4::ftdi_channel::i2c_write(const unsigned char* buffer, DWORD len
 		this->i2c_start();
 
 	for (DWORD i = 0; i < length; i++)
-		if (this->i2c_write_byte(buffer[i]))
-			sent++;
+	if (this->i2c_write_byte(buffer[i]))
+		sent++;
 
 	if (send_stop)
 		this->i2c_stop();

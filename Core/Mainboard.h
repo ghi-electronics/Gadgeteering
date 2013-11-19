@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,6 +32,7 @@ namespace gadgeteering
 
 			virtual socket& register_socket(socket s) = 0;
 			virtual const socket& get_socket(unsigned char number) = 0;
+			const socket& get_socket(unsigned char number, socket::type ensure_type);
 
 			virtual void set_debug_led(bool state) = 0;
 

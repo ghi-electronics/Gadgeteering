@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 #include "Mainboard.h"
+
 #include "System.h"
 
 using namespace gadgeteering;
@@ -27,4 +28,11 @@ base_mainboard::base_mainboard(double max_analog_voltage) : max_analog_voltage(m
 
 base_mainboard::~base_mainboard() {
 
+}
+
+const socket& base_mainboard::get_socket(unsigned char number, socket::type ensure_type)
+{
+	const socket& s = this->get_socket(number);
+	s.ensure_type(ensure_type);
+	return s;
 }

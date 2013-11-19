@@ -22,12 +22,45 @@ namespace gadgeteering
 {
 	namespace indirectors
 	{
-		class digital_input;
-		class digital_output;
-		class digital_io;
-		class analog_input;
-		class analog_output;
-		class pwm_output;
+		class digital_input
+		{
+			public:
+				virtual bool read(socket_pin_number pin_number) = 0;
+				virtual void set_input(socket_pin_number pin_number, resistor_mode mode) = 0;
+		};
+
+		class digital_output
+		{
+			public:
+				virtual void write(socket_pin_number pin_number, bool value) = 0;
+				virtual void set_output(socket_pin_number pin_number) = 0;
+		};
+
+		class digital_io
+		{
+			public:
+				virtual void write(socket_pin_number pin_number, bool value) = 0;
+				virtual bool read(socket_pin_number pin_number) = 0;
+				virtual void set_io_mode(socket_pin_number pin_number, io_mode new_io_mode, resistor_mode new_resistor_mode) = 0;
+		};
+
+		class analog_input
+		{
+			public:
+				virtual double read(socket_pin_number pin_number) = 0;
+		};
+
+		class analog_output
+		{
+			public:
+				virtual void write(socket_pin_number pin_number, double voltage) = 0;
+		};
+
+		class pwm_output
+		{
+			public:
+				virtual void set(socket_pin_number pin_number, double duty_cycle, double frequency) = 0;
+		};
 	}
 
 	struct socket
@@ -89,47 +122,4 @@ namespace gadgeteering
 
 		void ensure_type(type type) const;
 	};
-
-	namespace indirectors
-	{
-		class digital_input
-		{
-			public:
-				virtual bool read(socket_pin_number pin_number) = 0;
-				virtual void set_input(socket_pin_number pin_number, resistor_mode mode) = 0;
-		};
-
-		class digital_output
-		{
-			public:
-				virtual void write(socket_pin_number pin_number, bool value) = 0;
-				virtual void set_output(socket_pin_number pin_number) = 0;
-		};
-
-		class digital_io
-		{
-			public:
-				virtual void write(socket_pin_number pin_number, bool value) = 0;
-				virtual bool read(socket_pin_number pin_number) = 0;
-				virtual void set_io_mode(socket_pin_number pin_number, io_mode new_io_mode, resistor_mode new_resistor_mode) = 0;
-		};
-
-		class analog_input
-		{
-			public:
-				virtual double read(socket_pin_number pin_number) = 0;
-		};
-
-		class analog_output
-		{
-			public:
-				virtual void write(socket_pin_number pin_number, double voltage) = 0;
-		};
-
-		class pwm_output
-		{
-			public:
-				virtual void set(socket_pin_number pin_number, double duty_cycle, double frequency) = 0;
-		};
-	}
 }

@@ -21,9 +21,7 @@ using namespace gadgeteering::modules;
 
 io60p16::io60p16(unsigned char socket_number)
 {
-	const socket& s = mainboard->get_socket(socket_number);
-
-	s.ensure_type(socket::types::X);
+	const socket& s = mainboard->get_socket(socket_number, socket::types::X);
 
 	this->chip = new devices::i2c(s.pins[5], s.pins[4], 0x20);
 

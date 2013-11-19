@@ -22,8 +22,7 @@ using namespace gadgeteering::interfaces;
 
 led_strip::led_strip(unsigned char socket_number)
 {
-	const socket& s = mainboard->get_socket(socket_number);
-	s.ensure_type(socket::types::Y);
+	const socket& s = mainboard->get_socket(socket_number, socket::types::Y);
 
 	for (unsigned char i = 0; i < led_strip::LEDS; i++)
 		this->ports[i] = new digital_output(s, i + 3, false);

@@ -51,15 +51,15 @@ namespace gadgeteering
 
 			void change_resistor(unsigned char port, unsigned char mask, unsigned char new_resistor);
 
-		public:
-			io60p16(unsigned char socket_number);
-			io60p16(const socket& socket, socket_pin_number sda = 8, socket_pin_number scl = 9);
-			~io60p16();
+			public:
+				io60p16(unsigned char socket_number);
+				io60p16(const socket& socket, socket_pin_number sda = 8, socket_pin_number scl = 9);
+				~io60p16();
 
-			void set_io_mode(unsigned char port, unsigned char pin, io_mode new_io_mode, resistor_mode new_resistor_mode);
-			void set_pwm(unsigned char port, unsigned char pin, double duty_cycle, double frequency);
-			bool read_digital(unsigned char port, unsigned char pin);
-			void write_digital(unsigned char port, unsigned char pin, bool value);
+				void set_io_mode(unsigned char port, unsigned char pin, io_mode new_io_mode, resistor_mode new_resistor_mode);
+				void set_pwm(unsigned char port, unsigned char pin, double duty_cycle, double frequency);
+				bool read_digital(unsigned char port, unsigned char pin);
+				void write_digital(unsigned char port, unsigned char pin, bool value);
 		};
 	}
 }

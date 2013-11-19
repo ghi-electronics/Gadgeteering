@@ -171,7 +171,6 @@ namespace gadgeteering
 				};
 
 				hub_ap5(unsigned char socket_number);
-				~hub_ap5();
 
 				const unsigned char socket_1;
 				const unsigned char socket_2;

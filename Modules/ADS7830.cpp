@@ -19,25 +19,14 @@ limitations under the License.
 using namespace gadgeteering;
 using namespace gadgeteering::modules;
 
-ads_7830::ads_7830(unsigned char socket_number, unsigned char address)
+ads_7830::ads_7830(unsigned char socket_number, unsigned char address) : sock(mainboard->get_socket(socket_number, socket::types::I)), chip(this->sock.i2c, address)
 {
-	const socket& s = mainboard->get_socket(socket_number);
 
-	s.ensure_type(socket::types::I);
-
-	this->chip = new devices::i2c(s.i2c, address);
 }
 
-ads_7830::ads_7830(const socket& socket, unsigned char address)
+ads_7830::ads_7830(const socket& socket, unsigned char address) : sock(socket), chip(this->sock.i2c, address)
 {
 	socket.ensure_type(socket::types::I);
-
-	this->chip = new devices::i2c(socket.i2c, address);
-}
-
-ads_7830::~ads_7830()
-{
-	delete this->chip;
 }
 
 double ads_7830::get_reading(unsigned char channel)
@@ -46,7 +35,7 @@ double ads_7830::get_reading(unsigned char channel)
 
 	command |= static_cast<unsigned char>((channel % 2 == 0 ? channel / 2 : (channel - 1) / 2 + 4) << 4);
 
-	this->chip->write_read(&command, 1, &read, 1);
+	this->chip.write_read(&command, 1, &read, 1);
 
 	return static_cast<double>(read) / 255.0;
 }
