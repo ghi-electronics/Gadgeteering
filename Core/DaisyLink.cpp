@@ -156,18 +156,18 @@ void bus::release_bus(unsigned char socket_number)
 	}
 }
 
-module::module(unsigned char socket_number, unsigned char manufacturer, unsigned char type, unsigned char min_version_supported, unsigned char max_version_supported) : bus(bus::get_bus(socket_number)), i2c(this->bus.sock.pins[bus::SDA_PIN], this->bus.sock.pins[bus::SCL_PIN], this->bus.next_address++, false)
+module::module(unsigned char socket_number, unsigned char manufacturer, unsigned char type, unsigned char min_version_supported, unsigned char max_version_supported) : parent_bus(bus::get_bus(socket_number)), i2c(this->parent_bus.sock.pins[bus::SDA_PIN], this->parent_bus.sock.pins[bus::SCL_PIN], this->parent_bus.next_address++, false)
 {
 	this->socket_number = socket_number;
 	this->position_on_chain = this->i2c.address - bus::START_ADDRESS;
-	this->bus.get_module_parameters(this->position_on_chain, this->manufacturer, this->type, this->version);
-	this->daisy_link_version = this->bus.get_version(this->position_on_chain);
-	this->length_of_chain = this->bus.get_length_of_chain();
+	this->parent_bus.get_module_parameters(this->position_on_chain, this->manufacturer, this->type, this->version);
+	this->daisy_link_version = this->parent_bus.get_version(this->position_on_chain);
+	this->length_of_chain = this->parent_bus.get_length_of_chain();
 
-	if (this->bus.module_count == 0)
+	if (this->parent_bus.module_count == 0)
 		panic_specific(errors::MODULE_ERROR, 1);
 
-	if (this->bus.reference_count > this->bus.module_count)
+	if (this->parent_bus.reference_count > this->parent_bus.module_count)
 		panic_specific(errors::MODULE_ERROR, 2);
 
 	if (this->daisy_link_version != module::VERSION_IMPLEMENTED)

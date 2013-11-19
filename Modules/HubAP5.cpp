@@ -92,22 +92,18 @@ void hub_ap5::indirected_pwm_output::set(socket_pin_number pin_number, double du
 	this->hub.set_pwm(this->sock.pins[pin_number], duty_cycle, frequency);
 }
 
-hub_ap5::hub_ap5(unsigned char socket_number) : socket_start(socket_number * 10 + 10), socket_1(this->socket_start + 1), socket_2(this->socket_start + 2), socket_3(this->socket_start + 3), socket_4(this->socket_start + 4), socket_5(this->socket_start + 5), socket_6(this->socket_start + 6), socket_7(this->socket_start + 7), socket_8(this->socket_start + 8)
+hub_ap5::hub_ap5(unsigned char socket_number) : io60_chip(socket_number), analog_chip(socket_number), socket_start(socket_number * 10 + 10), socket_1(this->socket_start + 1), socket_2(this->socket_start + 2), socket_3(this->socket_start + 3), socket_4(this->socket_start + 4), socket_5(this->socket_start + 5), socket_6(this->socket_start + 6), socket_7(this->socket_start + 7), socket_8(this->socket_start + 8)
 {
 	const socket& s = mainboard->get_socket(socket_number);
 
 	s.ensure_type(socket::types::I);
-
-	this->io60_chip = new io60p16(s);
-	this->analog_chip = new ads_7830(s);
 
 	this->create_sockets();
 }
 
 hub_ap5::~hub_ap5()
 {
-	delete this->io60_chip;
-	delete this->analog_chip;
+
 }
 
 void hub_ap5::create_sockets()
@@ -275,7 +271,7 @@ void hub_ap5::create_sockets()
 
 void hub_ap5::set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_resistor_mode)
 {
-	this->io60_chip->set_io_mode(GET_PORT(pin), GET_PIN(pin), new_io_mode, new_resistor_mode);
+	this->io60_chip.set_io_mode(GET_PORT(pin), GET_PIN(pin), new_io_mode, new_resistor_mode);
 }
 
 void hub_ap5::set_pwm(pwm_channel channel, double duty_cycle, double frequency)
@@ -304,17 +300,17 @@ void hub_ap5::set_pwm(pwm_channel channel, double duty_cycle, double frequency)
 		case pwm_channels::PWM_14: pin = hub_ap5::pins::P7_6; break;
 	}
 
-	this->io60_chip->set_pwm(GET_PORT(pin), GET_PIN(pin), duty_cycle, frequency);
+	this->io60_chip.set_pwm(GET_PORT(pin), GET_PIN(pin), duty_cycle, frequency);
 }
 
 bool hub_ap5::read_digital(cpu_pin pin)
 {
-	return this->io60_chip->read_digital(GET_PORT(pin), GET_PIN(pin));
+	return this->io60_chip.read_digital(GET_PORT(pin), GET_PIN(pin));
 }
 
 void hub_ap5::write_digital(cpu_pin pin, bool value)
 {
-	this->io60_chip->write_digital(GET_PORT(pin), GET_PIN(pin), value);
+	this->io60_chip.write_digital(GET_PORT(pin), GET_PIN(pin), value);
 }
 
 double hub_ap5::read_analog(analog_channel channel)
@@ -336,5 +332,5 @@ double hub_ap5::read_analog(analog_channel channel)
 
 	this->set_io_mode(pin, io_modes::DIGITAL_INPUT, resistor_modes::FLOATING);
 
-	return this->analog_chip->get_reading(channel);
+	return this->analog_chip.get_reading(channel);
 }

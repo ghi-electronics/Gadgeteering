@@ -76,7 +76,7 @@ namespace gadgeteering
 		class module
 		{
 			protected:
-				bus& bus;
+				bus& parent_bus;
 				devices::i2c i2c;
 
 				static const unsigned char REGISTER_OFFSET = 8;
