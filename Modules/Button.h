@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,32 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _BUTTON_H_
-#define _BUTTON_H_
+#pragma once
 
 #include "../Gadgeteering.h"
 
-namespace gadgeteering {
-	namespace modules {
-		using namespace gadgeteering::interfaces;
-
-		class Button
+namespace gadgeteering
+{
+	namespace modules
+	{
+		class button
 		{
-			digital_input* input;
-			digital_output* led;
-			bool ledState;
+			interfaces::digital_input* input;
+			interfaces::digital_output* led;
+			bool led_state;
 
 			public:
-				Button(unsigned char socketNumber);
-				~Button();
+				button(unsigned char socket_number);
+				~button();
 
-				bool isPressed();
-				void turnLEDOn();
-				void turnLEDOff();
-				void toggleLED();
-				bool isLEDOn();
+				bool is_pressed();
+				void turn_led_on();
+				void turn_led_off();
+				void toggle_led();
+				void set_led(bool state);
+				bool is_led_on();
 		};
 	}
 }
-
-#endif

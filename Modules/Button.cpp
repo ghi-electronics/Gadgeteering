@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,47 +20,52 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-Button::Button(unsigned char socketNumber)
+button::button(unsigned char socket_number)
 {
-	socket* t_socket = mainboard->getSocket(socketNumber);
-	t_socket->ensureTypeIsSupported(socket::types::X);
+	const socket& sock = mainboard->get_socket(socket_number, socket::types::X);
 
-    this->input = new digital_input(socket, socket::pins::Three, resistor_modes::PULL_UP);
-	this->led = new digital_output(socket, socket::pins::Four, false);
+	this->input = new digital_input(sock, 3, resistor_modes::PULL_UP);
+	this->led = new digital_output(sock, 4, false);
 
-	this->ledState = false;
+	this->led_state = false;
 }
 
-Button::~Button()
+button::~button()
 {
 	delete this->input;
 	delete this->led;
 }
 
-bool Button::isPressed()
+bool button::is_pressed()
 {
 	return !this->input->read();
 }
 
-void Button::turnLEDOn()
+void button::turn_led_on()
 {
 	this->led->write(true);
-	this->ledState = true;
+	this->led_state = true;
 }
 
-void Button::turnLEDOff()
+void button::turn_led_off()
 {
 	this->led->write(false);
-	this->ledState = false;
+	this->led_state = false;
 }
 
-void Button::toggleLED()
+void button::set_led(bool state)
 {
-	this->ledState = !this->ledState;
-	this->led->write(this->ledState);
+	this->led_state = state;
+	this->led->write(this->led_state);
 }
 
-bool Button::isLEDOn()
+void button::toggle_led()
 {
-	return this->ledState;
+	this->led_state = !this->led_state;
+	this->led->write(this->led_state);
+}
+
+bool button::is_led_on()
+{
+	return this->led_state;
 }

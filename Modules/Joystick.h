@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,30 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _BUTTON_H_
-#define _BUTTON_H_
+#pragma once
 
 #include "../Gadgeteering.h"
 
-namespace gadgeteering {
-	namespace modules {
-		using namespace gadgeteering::interfaces;
-
-		class Joystick {
-			analog_input* x;
-			analog_input* y;
-			digital_input* button;
+namespace gadgeteering
+{
+	namespace modules
+	{
+		class joystick
+		{
+			interfaces::analog_input* x;
+			interfaces::analog_input* y;
+			interfaces::digital_input* button;
 
 			public:
-				Joystick(unsigned char socketNumber);
-				~Joystick();
+				joystick(unsigned char socket_number);
+				~joystick();
 
-				bool isPressed();
-				void getXY(double* x, double* y);
-				double getX();
-				double getY();
+				bool is_pressed();
+				void get_xy(double& x, double& y);
+				double get_x();
+				double get_y();
 		};
 	}
 }
-
-#endif

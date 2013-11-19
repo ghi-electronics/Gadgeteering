@@ -28,19 +28,19 @@ namespace gadgeteering
 
 			interfaces::digital_output* ports[led_strip::LEDS];
 
-		public:
-			led_strip(unsigned char socket_number);
-			~led_strip();
+			public:
+				led_strip(unsigned char socket_number);
+				~led_strip();
 
-			void turn_on_led(unsigned char led, bool only_led = false);
-			void turn_off_led(unsigned char led);
+				void turn_on_led(unsigned char led, bool only_led = false);
+				void turn_off_led(unsigned char led);
 
-			void turn_all_on();
-			void turn_all_off();
+				void turn_all_on();
+				void turn_all_off();
 
-			void set(unsigned char led, bool state);
+				void set(unsigned char led, bool state);
 
-			void animate(unsigned int switch_time, bool clockwise, bool turn_on, bool remain_on = true);
+				void animate(unsigned int switch_time, bool clockwise, bool turn_on, bool remain_on = true);
 		};
 	}
 }
