@@ -166,7 +166,7 @@ unsigned char software_i2c::receive(bool send_ack, bool send_stop_condition)
 	unsigned char d = 0;
 	
 	for (unsigned char bit = 0; bit < 8; bit++)
-		d = (d << 1) | (this->read_bit ? 1 : 0);
+		d = (d << 1) | (this->read_bit() ? 1 : 0);
 
 	this->write_bit(!send_ack);
 

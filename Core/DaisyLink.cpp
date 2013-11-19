@@ -227,3 +227,17 @@ unsigned int module::get_socket_number() const
 {
 	return this->socket_number;
 }
+
+bool module::has_signaled_interrupt()
+{
+	unsigned char reg = this->i2c.read_register(bus::registers::CONFIG);
+	bool interrupted = (reg & 0x80) != 0;
+	
+	if (interrupted)
+	{
+		reg &= 0x7F;
+		this->i2c.write_register(bus::registers::CONFIG, reg);
+	}
+
+	return interrupted;
+}

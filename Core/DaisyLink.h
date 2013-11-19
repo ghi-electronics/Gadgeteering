@@ -68,42 +68,43 @@ namespace gadgeteering
 
 			unsigned char get_version(unsigned int position);
 
-		public:
-			static bus& get_bus(unsigned char socket_number);
-			static void release_bus(unsigned char socket_number);
+			public:
+				static bus& get_bus(unsigned char socket_number);
+				static void release_bus(unsigned char socket_number);
 		};
 
 		class module
 		{
-		protected:
-			bus& bus;
-			devices::i2c i2c;
+			protected:
+				bus& bus;
+				devices::i2c i2c;
 
-			static const unsigned char REGISTER_OFFSET = 8;
-			static const unsigned char VERSION_IMPLEMENTED = 4;
+				static const unsigned char REGISTER_OFFSET = 8;
+				static const unsigned char VERSION_IMPLEMENTED = 4;
 
-			unsigned char manufacturer;
-			unsigned char type;
-			unsigned char version;
-			unsigned char daisy_link_version;
+				unsigned char manufacturer;
+				unsigned char type;
+				unsigned char version;
+				unsigned char daisy_link_version;
 
-			unsigned int position_on_chain;
-			unsigned int length_of_chain;
-			unsigned int socket_number;
+				unsigned int position_on_chain;
+				unsigned int length_of_chain;
+				unsigned int socket_number;
 
-			module(unsigned char socket_number, unsigned char manufacturer, unsigned char type, unsigned char min_version_supported, unsigned char max_version_supported);
-			virtual ~module();
+				module(unsigned char socket_number, unsigned char manufacturer, unsigned char type, unsigned char min_version_supported, unsigned char max_version_supported);
+				virtual ~module();
 
-			unsigned char read_register(unsigned char address);
-			void write_register(unsigned char address, unsigned char value);
-			void read_registers(unsigned char address, unsigned char* buffer, unsigned int length);
-			void write_registers(unsigned char address, const unsigned char* buffer, unsigned int length);
-			void write_read(const unsigned char* write_buffer, unsigned int write_length, unsigned char* read_buffer, unsigned int read_length);
+				unsigned char read_register(unsigned char address);
+				void write_register(unsigned char address, unsigned char value);
+				void read_registers(unsigned char address, unsigned char* buffer, unsigned int length);
+				void write_registers(unsigned char address, const unsigned char* buffer, unsigned int length);
+				void write_read(const unsigned char* write_buffer, unsigned int write_length, unsigned char* read_buffer, unsigned int read_length);
 
-		public:
-			unsigned int get_position_on_chain() const;
-			unsigned int get_length_of_chain() const;
-			unsigned int get_socket_number() const;
+			public:
+				unsigned int get_position_on_chain() const;
+				unsigned int get_length_of_chain() const;
+				unsigned int get_socket_number() const;
+				bool has_signaled_interrupt();
 		};
 	}
 }
