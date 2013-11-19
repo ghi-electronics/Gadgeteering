@@ -22,6 +22,9 @@
     <ClCompile Include="..\..\..\Core\Devices.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Mainboards\FEZLynxS4.cpp">
+      <Filter>Mainboards</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Modules\Accelerometer.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -31,7 +34,7 @@
     <ClCompile Include="..\..\..\Modules\ADS7830.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Modules\ALFATLink.cpp">
+    <ClCompile Include="..\..\..\Modules\ALFATOEMLink.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Modules\Barometer.cpp">
@@ -46,7 +49,7 @@
     <ClCompile Include="..\..\..\Modules\ButtonS7.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Modules\CharDisplay.cpp">
+    <ClCompile Include="..\..\..\Modules\CharacterDisplay.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Modules\ColorSense.cpp">
@@ -73,13 +76,10 @@
     <ClCompile Include="..\..\..\Modules\FLASH.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Modules\FMRadio.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Modules\GasSense.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Modules\Gyroscope.cpp">
+    <ClCompile Include="..\..\..\Modules\Gyro.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Modules\HubAP5.cpp">
@@ -106,7 +106,7 @@
     <ClCompile Include="..\..\..\Modules\LEDStrip.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Modules\LightSensor.cpp">
+    <ClCompile Include="..\..\..\Modules\LightSense.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Modules\Load.cpp">
@@ -118,13 +118,13 @@
     <ClCompile Include="..\..\..\Modules\Moisture.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Modules\MotionSensor.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Modules\MotorDriverL298.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Modules\MultiColorLED.cpp">
+    <ClCompile Include="..\..\..\Modules\MulticolorLED.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\PIR.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Modules\Potentiometer.cpp">
@@ -133,10 +133,13 @@
     <ClCompile Include="..\..\..\Modules\PulseCount.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Modules\RelayX1.cpp">
+    <ClCompile Include="..\..\..\Modules\RadioFM1.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Modules\RelayX16.cpp">
+    <ClCompile Include="..\..\..\Modules\RelayISOx16.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\RelayX1.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Modules\RotaryH1.cpp">
@@ -145,7 +148,10 @@
     <ClCompile Include="..\..\..\Modules\RS232.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Modules\TemperatureHumidity.cpp">
+    <ClCompile Include="..\..\..\Modules\SerialUSB.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\TempHumidity.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Modules\Thermocouple.cpp">
@@ -160,14 +166,8 @@
     <ClCompile Include="..\..\..\Modules\Tunes.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Modules\USBSerial.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Modules\WiFiRN171.cpp">
       <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Mainboards\FEZLynxS4.cpp">
-      <Filter>Mainboards</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +195,10 @@
     <ClInclude Include="..\..\..\Core\Devices.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Mainboards\FEZLynxS4.h">
+      <Filter>Mainboards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Gadgeteering.h" />
     <ClInclude Include="..\..\..\Modules\Accelerometer.h">
       <Filter>Modules</Filter>
     </ClInclude>
@@ -204,7 +208,7 @@
     <ClInclude Include="..\..\..\Modules\ADS7830.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Modules\ALFATLink.h">
+    <ClInclude Include="..\..\..\Modules\ALFATOEMLink.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\Barometer.h">
@@ -219,7 +223,7 @@
     <ClInclude Include="..\..\..\Modules\ButtonS7.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Modules\CharDisplay.h">
+    <ClInclude Include="..\..\..\Modules\CharacterDisplay.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\ColorSense.h">
@@ -246,13 +250,10 @@
     <ClInclude Include="..\..\..\Modules\FLASH.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Modules\FMRadio.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Modules\GasSense.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Modules\Gyroscope.h">
+    <ClInclude Include="..\..\..\Modules\Gyro.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\HubAP5.h">
@@ -279,7 +280,7 @@
     <ClInclude Include="..\..\..\Modules\LEDStrip.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Modules\LightSensor.h">
+    <ClInclude Include="..\..\..\Modules\LightSense.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\Load.h">
@@ -291,13 +292,13 @@
     <ClInclude Include="..\..\..\Modules\Moisture.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Modules\MotionSensor.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Modules\MotorDriverL298.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Modules\MultiColorLED.h">
+    <ClInclude Include="..\..\..\Modules\MulticolorLED.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\PIR.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\Potentiometer.h">
@@ -306,10 +307,13 @@
     <ClInclude Include="..\..\..\Modules\PulseCount.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Modules\RelayX1.h">
+    <ClInclude Include="..\..\..\Modules\RadioFM1.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Modules\RelayX16.h">
+    <ClInclude Include="..\..\..\Modules\RelayISOx16.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\RelayX1.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\RotaryH1.h">
@@ -318,7 +322,10 @@
     <ClInclude Include="..\..\..\Modules\RS232.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Modules\TemperatureHumidity.h">
+    <ClInclude Include="..\..\..\Modules\SerialUSB.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\TempHumidity.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\Thermocouple.h">
@@ -333,16 +340,9 @@
     <ClInclude Include="..\..\..\Modules\Tunes.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Modules\USBSerial.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Modules\WiFiRN171.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Mainboards\FEZLynxS4.h">
-      <Filter>Mainboards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Gadgeteering.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
