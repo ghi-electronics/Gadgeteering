@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,14 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _TOUCHC8_H_
-#define _TOUCHC8_H_
+#pragma once
 
 #include "../Gadgeteering.h"
 
-namespace gadgeteering {
-	namespace modules {
-		class TouchC8
+namespace gadgeteering
+{
+	namespace modules
+	{
+		class touch_c8
 		{
 			static const unsigned char I2C_ADDRESS = 0x2B;
 			static const unsigned char IRQ_SRC = 0x0;
@@ -31,41 +32,37 @@ namespace gadgeteering {
 			static const unsigned char WHL_POS_LSB = 0x4;
 			static const unsigned char WHEELS = 8;
 
-			interfaces::digital_output* reset;
-			devices::i2c* device;
+			const socket& sock;
+			interfaces::digital_output reset_port;
+			devices::i2c device;
 
-			void Reset();
-			void ConfigureSPM();
-			void WriteSPM(unsigned char address, const unsigned char data[9]);
+			void reset();
+			void configure_spm();
+			void write_spm(unsigned char address, const unsigned char data[9]);
 
 			public:
-				typedef unsigned char Button;
-				class Buttons
+				typedef unsigned char button;
+				struct buttons
 				{
-					public:
-						static const Button A = 0x2;
-						static const Button B = 0x4;
-						static const Button C = 0x8;
+					static const button A = 0x2;
+					static const button B = 0x4;
+					static const button C = 0x8;
 				};
 
-				typedef unsigned char Direction;
-				class Directions
+				typedef unsigned char direction;
+				struct directions
 				{
-					public:
-						static const Direction Clockwise = 0;
-						static const Direction CounterClockwise = 1;
+					static const direction CLOCKWISE = 0;
+					static const direction COUNTER_CLOCKWISE = 1;
 				};
 
-				TouchC8(unsigned char socketNumber);
-				~TouchC8();
+				touch_c8(unsigned char socket_number);
 
-				bool IsButtonPressed(Button button);
-				bool IsWheelPressed();
-				bool IsProximityDetected();
-				double GetWheelPosition();
-				Direction GetWheelDirection();
+				bool is_button_pressed(button b);
+				bool is_wheel_pressed();
+				bool is_proximity_detected();
+				double get_wheel_position();
+				direction get_wheel_direction();
 		};
 	}
 }
-
-#endif

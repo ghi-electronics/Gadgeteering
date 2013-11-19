@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,14 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _TOUCHL12_H_
-#define _TOUCHL12_H_
+#pragma once
 
 #include "../Gadgeteering.h"
 
-namespace gadgeteering {
-	namespace modules {
-		class TouchL12 {
+namespace gadgeteering
+{
+	namespace modules
+	{
+		class touch_l12
+		{ 
 			static const unsigned char I2C_ADDRESS = 0x2B;
 			static const unsigned char IRQ_SRC = 0x0;
 			static const unsigned char CAP_STAT_MSB = 0x1;
@@ -30,30 +32,27 @@ namespace gadgeteering {
 			static const unsigned char WHL_POS_LSB = 0x4;
 			static const unsigned char WHEELS = 12;
 
-			interfaces::digital_output* reset;
-			devices::i2c* device;
+			const socket& sock;
+			interfaces::digital_output reset_port;
+			devices::i2c device;
 
-			void Reset();
-			void ConfigureSPM();
-			void WriteSPM(unsigned char address, const unsigned char data[9]);
+			void reset();
+			void configure_spm();
+			void write_spm(unsigned char address, const unsigned char data[9]);
 
 			public:
-				typedef unsigned char Direction;
-				class Directions
+				typedef unsigned char direction;
+				struct directions
 				{
-					public:
-						static const Direction Left = 0;
-						static const Direction Right = 1;
+					static const direction LEFT = 0;
+					static const direction RIGHT = 1;
 				};
 
-				TouchL12(unsigned char socketNumber);
-				~TouchL12();
+				touch_l12(unsigned char socket_number);
 
-				bool IsSliderPressed();
-				double GetSliderPosition();
-				Direction GetSliderDirection();
+				bool is_slider_pressed();
+				double get_slider_position();
+				direction get_slider_direction();
 		};
 	}
 }
-
-#endif
