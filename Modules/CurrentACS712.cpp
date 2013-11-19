@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,51 +20,29 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-CurrentACS712::CurrentACS712(unsigned char socketNumber)
+current_acs712::current_acs712(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::A)), ain(this->sock, 5)
 {
-	socket* t_socket = mainboard->getSocket(socketNumber);
-	t_socket->ensureTypeIsSupported(socket::types::A);
 
-    this->ain = new analog_input(socket, socket::pins::Five);
 }
 
-CurrentACS712::~CurrentACS712()
+double current_acs712::read_ac_current()
 {
-	delete this->ain;
+	double read = 0.0;
+
+	for (int i = 0; i < current_acs712::AC_SAMPLE_COUNT; i++)
+		read += this->ain.read_proportion();
+
+	read /= current_acs712::AC_SAMPLE_COUNT;
+
+	return 21.2 * read - 13.555;
 }
 
-double CurrentACS712::Read_AC_Current()
+double current_acs712::read_dc_current()
 {
-    double read = 0.0;
-    double calculation = 0.0;
+	double calculation = this->read_ac_current();
 
-    for (int i = 0; i < CurrentACS712::AC_SAMPLE_COUNT; i++)
-    {
-        read += ain->readProportion();
-    }
+	if (calculation < 0)
+		calculation *= -1;
 
-    read /= CurrentACS712::AC_SAMPLE_COUNT;
-    calculation = 21.2 * read - 13.555;
-
-    return calculation;
-}
-
-double CurrentACS712::Read_DC_Current()
-{
-    double read = 0.0;
-    double calculation = 0.0;
-
-    for (int i = 0; i < CurrentACS712::AC_SAMPLE_COUNT; i++)
-    {
-        read = ain->readProportion();
-        read = 21.3 * read - 13.555;
-        read = read < 0 ? read * -1 : read;
-
-        if (calculation < read)
-            calculation = read;
-    }
-
-    calculation /= 1.41421356;
-
-    return calculation;
+	return calculation / 1.41421356;
 }
