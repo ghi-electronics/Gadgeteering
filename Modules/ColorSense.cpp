@@ -20,68 +20,50 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-ColorSense::ColorSense(unsigned char socketNumber)
+color_sense::color_sense(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::X)), led(this->sock, 3), i2c(this->sock.pins[5], this->sock.pins[4], color_sense::I2C_ADDRESS)
 {
-	socket* t_socket = mainboard->getSocket(socketNumber);
-	t_socket->ensureTypeIsSupported(socket::types::X);
-
-	this->LEDControl = new digital_output(socket, socket::pins::Three, false);
-
-	I2CBus* bus = mainboard->getI2CBus(t_socket->pins[5], t_socket->pins[4]);
-	this->softwareI2C = bus->getI2CDevice(ColorSense::COLOR_ADDRESS);
-
-
-	this->softwareI2C->writeRegister(0x80, 0x03);
+	this->i2c.write_register(0x80, 0x03);
 }
 
-ColorSense::~ColorSense()
+void color_sense::set_led_state(bool state)
 {
-	delete this->LEDControl;
-	delete this->softwareI2C;
+	this->led.write(state);
 }
 
-
-void ColorSense::ToggleOnboardLED(bool LEDState)
+color_sense::color_data color_sense::read_color_channels()
 {
-	this->LEDControl->write(LEDState);
-}
+	color_data result;
 
-ColorSense::ColorChannels ColorSense::ReadColorChannels()
-{
-	ColorChannels returnData;
-
-	unsigned char TransmitBuffer = 0x00;
+	unsigned char command = 0x00;
 	unsigned char read;
-	unsigned int a, b;
 
-	TransmitBuffer = 0x90; // Send COMMAND to access Green Color Channel register for chip
-	softwareI2C->writeRead(&TransmitBuffer, 1, &read, 1, &a, &b);
-	returnData.Green = read;
-	TransmitBuffer = 0x91;
-	softwareI2C->writeRead(&TransmitBuffer, 1, &read, 1, &a, &b);
-	returnData.Green |= (unsigned int)(read) << 8;
-	//returnData.Green = 256 * (uint)readWord(TransmitBuffer)[0] + returnData.Green;
+	command = 0x90;
+	this->i2c.write_read(&command, 1, &read, 1);
+	result.green = read;
+	command = 0x91;
+	this->i2c.write_read(&command, 1, &read, 1);
+	result.green |= (unsigned int)(read) << 8;
 
-	TransmitBuffer = 0x92; // Send COMMAND to access Red Color Channel register for chip
-	softwareI2C->writeRead(&TransmitBuffer, 1, &read, 1, &a, &b);
-	returnData.Red = read;
-	TransmitBuffer = 0x93;
-	softwareI2C->writeRead(&TransmitBuffer, 1, &read, 1, &a, &b);
-	returnData.Red |= (unsigned int)(read) << 8;
+	command = 0x92;
+	this->i2c.write_read(&command, 1, &read, 1);
+	result.red = read;
+	command = 0x93;
+	this->i2c.write_read(&command, 1, &read, 1);
+	result.red |= (unsigned int)(read) << 8;
 
-	TransmitBuffer = 0x94; // Send COMMAND to access Blue Color Channel register for chip
-	softwareI2C->writeRead(&TransmitBuffer, 1, &read, 1, &a, &b);
-	returnData.Blue = read;
-	TransmitBuffer = 0x95;
-	softwareI2C->writeRead(&TransmitBuffer, 1, &read, 1, &a, &b);
-	returnData.Blue |= (unsigned int)(read) << 8;
+	command = 0x94;
+	this->i2c.write_read(&command, 1, &read, 1);
+	result.blue = read;
+	command = 0x95;
+	this->i2c.write_read(&command, 1, &read, 1);
+	result.blue |= (unsigned int)(read) << 8;
 
-	TransmitBuffer = 0x96; // Send COMMAND to access Clear Channel register for chip
-	softwareI2C->writeRead(&TransmitBuffer, 1, &read, 1, &a, &b);
-	returnData.Clear = read;
-	TransmitBuffer = 0x97;
-	softwareI2C->writeRead(&TransmitBuffer, 1, &read, 1, &a, &b);
-	returnData.Clear |= (unsigned int)(read) << 8;
+	command = 0x96;
+	this->i2c.write_read(&command, 1, &read, 1);
+	result.clear = read;
+	command = 0x97;
+	this->i2c.write_read(&command, 1, &read, 1);
+	result.clear |= (unsigned int)(read) << 8;
 
-	return returnData;
+	return result;
 }

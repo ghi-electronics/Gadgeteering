@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,37 +14,35 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _COLORSENSE_H_
-#define _COLORSENSE_H_
+#pragma once
 
 #include "../Gadgeteering.h"
 
-namespace gadgeteering {
-	namespace modules {
-		using namespace gadgeteering::interfaces;
+namespace gadgeteering
+{
+	namespace modules
+	{
+		class color_sense
+		{
+			static const unsigned char I2C_ADDRESS = 0x39;
 
-		class ColorSense {
-			static const unsigned char COLOR_ADDRESS = 0x39;
-
-			digital_output* LEDControl;
-			I2CDevice* softwareI2C;
+			const socket& sock;
+			interfaces::digital_output led;
+			devices::i2c i2c;
 
 			public:
-				struct ColorChannels
+				struct color_data
 				{
-					unsigned int Green;
-					unsigned int Red;
-					unsigned int Blue;
-					unsigned int Clear;
+					unsigned int green;
+					unsigned int red;
+					unsigned int blue;
+					unsigned int clear;
 				};
 
-				ColorSense(unsigned char socketNumber);
-				~ColorSense();
+				color_sense(unsigned char socket_number);
 
-				void ToggleOnboardLED(bool LEDState);
-				ColorChannels ReadColorChannels();
+				void set_led_state(bool state);
+				color_data read_color_channels();
 		};
 	}
 }
-
-#endif
