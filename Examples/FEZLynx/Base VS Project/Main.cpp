@@ -13,11 +13,11 @@ using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
 using namespace gadgeteering::modules;
 
-struct multi_color_led : public daisy_link_module
+struct multi_color_led : public daisy_link::module
 {
 	bool next;
 
-	multi_color_led(unsigned char num) : daisy_link_module(num, 0x10, 0x01, 0x01, 0x01)
+	multi_color_led(unsigned char num) : daisy_link::module(num, 0x10, 0x01, 0x01, 0x01)
 	{
 		this->next = false;
 	}
@@ -45,15 +45,28 @@ struct multi_color_led : public daisy_link_module
 
 int main(int argc, char** argv)
 {
-	fez_lynx_s4 board(false);
-	vector<multi_color_led*> leds;
-
-	for (int i = 0; i < 9; i++)
-		leds.push_back(new multi_color_led(1));
+	fez_lynx_s4 board;
+	hub_ap5 hub(0);
+	led_strip led(hub.socket_3);
 
 	while (true)
-		for (auto& i : leds)
-			i->tick();
+	{
+		led.turn_all_on();
+		system::sleep(100);
+		led.turn_all_off();
+		system::sleep(100);
+		cout << hub.read_analog(analog_channels::ANALOG_0) << endl;
+	}
+
+
+	//vector<multi_color_led*> leds;
+	//
+	//for (int i = 0; i < 9; i++)
+	//	leds.push_back(new multi_color_led(1));
+	//
+	//while (true)
+	//	for (auto& i : leds)
+	//		i->tick();
 
 	return 0;
 }

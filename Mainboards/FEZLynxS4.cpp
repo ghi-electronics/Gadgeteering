@@ -31,14 +31,8 @@ base_mainboard* gadgeteering::mainboard = NULL;
 #define FTDI_CHANNEL(cpu_pin_number) ((cpu_pin_number & 0x70) >> 4)
 #define FTDI_PIN(cpu_pin_number) (cpu_pin_number & 0x0F)
 
-#define IS_EXTENDER_PIN(cpu_pin_number) ((cpu_pin_number & 0x80) != 0x00)
-#define EXTENDER_PORT(cpu_pin_number) ((cpu_pin_number & 0x70) >> 4)
-#define EXTENDER_PIN(cpu_pin_number) (cpu_pin_number & 0x0F)
-
-fez_lynx_s4::fez_lynx_s4(bool extender_present) : base_mainboard(3.3)
+fez_lynx_s4::fez_lynx_s4() : base_mainboard(3.3)
 {
-	this->extender_present = extender_present;
-
 	this->channels[0].open("A");
 	this->channels[1].open("B");
 	this->channels[2].open("C");
@@ -55,23 +49,11 @@ fez_lynx_s4::fez_lynx_s4(bool extender_present) : base_mainboard(3.3)
 
 	const socket& sock = mainboard->get_socket(0);
 
-	if (this->extender_present)
-	{
-		this->extender = new io60p16(sock);
-		this->extender_analog_converter = new ads_7830(sock);
-	}
-
 	this->analog_converter = new ads_7830(sock, 0x49);
 }
 
 fez_lynx_s4::~fez_lynx_s4()
 {
-	if (this->extender_present)
-	{
-		delete this->extender;
-		delete this->extender_analog_converter;
-	}
-
 	delete this->analog_converter;
 }
 
@@ -155,140 +137,6 @@ void fez_lynx_s4::create_sockets()
 	s0.i2c = i2c_channels::I2C_0;
 
 	this->sockets[0] = s0;
-
-
-	if (this->extender_present)
-	{
-		socket s11(11, socket::types::Y | socket::types::X | socket::types::A);
-		s11.pins[3] = fez_lynx_s4::pins::P5_0;
-		s11.pins[4] = fez_lynx_s4::pins::P5_1;
-		s11.pins[5] = fez_lynx_s4::pins::P5_2;
-		s11.pins[6] = fez_lynx_s4::pins::P5_3;
-		s11.pins[7] = fez_lynx_s4::pins::P5_4;
-		s11.pins[8] = fez_lynx_s4::pins::P5_5;
-		s11.pins[9] = fez_lynx_s4::pins::P5_6;
-
-		s11.analog3 = analog_channels::ANALOG_6;
-		s11.analog4 = analog_channels::ANALOG_7;
-		s11.analog5 = analog_channels::ANALOG_8;
-
-		this->analog_channel_to_pin_map[s11.analog3] = make_pair(s11.pins[3], 0);
-		this->analog_channel_to_pin_map[s11.analog4] = make_pair(s11.pins[4], 1);
-		this->analog_channel_to_pin_map[s11.analog5] = make_pair(s11.pins[5], 2);
-
-		this->sockets[11] = s11;
-
-
-		socket s12(12, socket::types::Y | socket::types::X | socket::types::A);
-		s12.pins[3] = fez_lynx_s4::pins::P4_0;
-		s12.pins[4] = fez_lynx_s4::pins::P4_1;
-		s12.pins[5] = fez_lynx_s4::pins::P4_2;
-		s12.pins[6] = fez_lynx_s4::pins::P4_3;
-		s12.pins[7] = fez_lynx_s4::pins::P4_4;
-		s12.pins[8] = fez_lynx_s4::pins::P4_5;
-		s12.pins[9] = fez_lynx_s4::pins::P4_6;
-
-		s12.analog3 = analog_channels::ANALOG_9;
-		s12.analog4 = analog_channels::ANALOG_10;
-		s12.analog5 = analog_channels::ANALOG_11;
-
-		this->analog_channel_to_pin_map[s12.analog3] = make_pair(s12.pins[3], 3);
-		this->analog_channel_to_pin_map[s12.analog4] = make_pair(s12.pins[4], 4);
-		this->analog_channel_to_pin_map[s12.analog5] = make_pair(s12.pins[5], 5);
-
-		this->sockets[12] = s12;
-
-
-		socket s13(13, socket::types::Y | socket::types::X);
-		s13.pins[3] = fez_lynx_s4::pins::P3_0;
-		s13.pins[4] = fez_lynx_s4::pins::P3_1;
-		s13.pins[5] = fez_lynx_s4::pins::P3_2;
-		s13.pins[6] = fez_lynx_s4::pins::P3_3;
-		s13.pins[7] = fez_lynx_s4::pins::P3_4;
-		s13.pins[8] = fez_lynx_s4::pins::P3_5;
-		s13.pins[9] = fez_lynx_s4::pins::P3_6;
-		this->sockets[13] = s13;
-
-
-		socket s14(14, socket::types::Y | socket::types::P | socket::types::X);
-		s14.pins[3] = fez_lynx_s4::pins::P2_0;
-		s14.pins[4] = fez_lynx_s4::pins::P2_1;
-		s14.pins[5] = fez_lynx_s4::pins::P2_2;
-		s14.pins[6] = fez_lynx_s4::pins::P2_3;
-		s14.pins[7] = fez_lynx_s4::pins::P7_4;
-		s14.pins[8] = fez_lynx_s4::pins::P7_5;
-		s14.pins[9] = fez_lynx_s4::pins::P7_6;
-
-		this->pwm_channel_to_pin_map[s14.pwm7] = s14.pins[7];
-		this->pwm_channel_to_pin_map[s14.pwm8] = s14.pins[8];
-		this->pwm_channel_to_pin_map[s14.pwm9] = s14.pins[9];
-
-		this->sockets[14] = s14;
-
-
-		socket s15(15, socket::types::Y | socket::types::P | socket::types::X);
-		s15.pins[3] = fez_lynx_s4::pins::P1_4;
-		s15.pins[4] = fez_lynx_s4::pins::P1_5;
-		s15.pins[5] = fez_lynx_s4::pins::P1_6;
-		s15.pins[6] = fez_lynx_s4::pins::P1_7;
-		s15.pins[7] = fez_lynx_s4::pins::P7_1;
-		s15.pins[8] = fez_lynx_s4::pins::P7_2;
-		s15.pins[9] = fez_lynx_s4::pins::P7_3;
-
-		this->pwm_channel_to_pin_map[s15.pwm7] = s15.pins[7];
-		this->pwm_channel_to_pin_map[s15.pwm8] = s15.pins[8];
-		this->pwm_channel_to_pin_map[s15.pwm9] = s15.pins[9];
-
-		this->sockets[15] = s15;
-
-
-		socket s16(16, socket::types::Y | socket::types::P | socket::types::X);
-		s16.pins[3] = fez_lynx_s4::pins::P1_0;
-		s16.pins[4] = fez_lynx_s4::pins::P1_1;
-		s16.pins[5] = fez_lynx_s4::pins::P1_2;
-		s16.pins[6] = fez_lynx_s4::pins::P1_3;
-		s16.pins[7] = fez_lynx_s4::pins::P6_6;
-		s16.pins[8] = fez_lynx_s4::pins::P6_7;
-		s16.pins[9] = fez_lynx_s4::pins::P7_0;
-
-		this->pwm_channel_to_pin_map[s16.pwm7] = s16.pins[7];
-		this->pwm_channel_to_pin_map[s16.pwm8] = s16.pins[8];
-		this->pwm_channel_to_pin_map[s16.pwm9] = s16.pins[9];
-
-		this->sockets[16] = s16;
-
-
-		socket s17(17, socket::types::Y | socket::types::P | socket::types::X);
-		s16.pins[3] = fez_lynx_s4::pins::P0_4;
-		s16.pins[4] = fez_lynx_s4::pins::P0_5;
-		s16.pins[5] = fez_lynx_s4::pins::P0_6;
-		s16.pins[6] = fez_lynx_s4::pins::P0_7;
-		s16.pins[7] = fez_lynx_s4::pins::P6_3;
-		s16.pins[8] = fez_lynx_s4::pins::P6_4;
-		s16.pins[9] = fez_lynx_s4::pins::P6_5;
-
-		this->pwm_channel_to_pin_map[s17.pwm7] = s17.pins[7];
-		this->pwm_channel_to_pin_map[s17.pwm8] = s17.pins[8];
-		this->pwm_channel_to_pin_map[s17.pwm9] = s17.pins[9];
-
-		this->sockets[17] = s17;
-
-
-		socket s18(18, socket::types::Y | socket::types::P | socket::types::X);
-		s18.pins[3] = fez_lynx_s4::pins::P0_0;
-		s18.pins[4] = fez_lynx_s4::pins::P0_1;
-		s18.pins[5] = fez_lynx_s4::pins::P0_2;
-		s18.pins[6] = fez_lynx_s4::pins::P0_3;
-		s18.pins[7] = fez_lynx_s4::pins::P6_0;
-		s18.pins[8] = fez_lynx_s4::pins::P6_1;
-		s18.pins[9] = fez_lynx_s4::pins::P6_2;
-
-		this->pwm_channel_to_pin_map[s18.pwm7] = s18.pins[7];
-		this->pwm_channel_to_pin_map[s18.pwm8] = s18.pins[8];
-		this->pwm_channel_to_pin_map[s18.pwm9] = s18.pins[9];
-
-		this->sockets[18] = s18;
-	}
 }
 
 socket& fez_lynx_s4::register_socket(socket s)
@@ -315,14 +163,7 @@ void fez_lynx_s4::set_io_mode(cpu_pin pin, gadgeteering::io_mode new_io_mode, ga
 	if (pin == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
-	if (IS_EXTENDER_PIN(pin))
-	{
-		this->extender->set_io_mode(EXTENDER_PORT(pin), EXTENDER_PIN(pin), new_io_mode, new_resistor_mode);
-	}
-	else
-	{
-		this->channels[FTDI_CHANNEL(pin)].set_pin_direction(FTDI_PIN(pin), new_io_mode);
-	}
+	this->channels[FTDI_CHANNEL(pin)].set_pin_direction(FTDI_PIN(pin), new_io_mode);
 }
 
 void fez_lynx_s4::write_digital(cpu_pin pin, bool value)
@@ -330,14 +171,7 @@ void fez_lynx_s4::write_digital(cpu_pin pin, bool value)
 	if (pin == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
-	if (IS_EXTENDER_PIN(pin))
-	{
-		this->extender->write_digital(EXTENDER_PORT(pin), EXTENDER_PIN(pin), value);
-	}
-	else
-	{
-		this->channels[FTDI_CHANNEL(pin)].set_pin_state(FTDI_PIN(pin), value);
-	}
+	this->channels[FTDI_CHANNEL(pin)].set_pin_state(FTDI_PIN(pin), value);
 }
 
 bool fez_lynx_s4::read_digital(cpu_pin pin)
@@ -345,14 +179,7 @@ bool fez_lynx_s4::read_digital(cpu_pin pin)
 	if (pin == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
-	if (IS_EXTENDER_PIN(pin))
-	{
-		return this->extender->read_digital(EXTENDER_PORT(pin), EXTENDER_PIN(pin));
-	}
-	else
-	{
-		return this->channels[FTDI_CHANNEL(pin)].get_pin_state(FTDI_PIN(pin));
-	}
+	return this->channels[FTDI_CHANNEL(pin)].get_pin_state(FTDI_PIN(pin));
 }
 
 void fez_lynx_s4::write_analog(analog_out_channel channel, double voltage_proportion)
@@ -367,29 +194,15 @@ double fez_lynx_s4::read_analog(analog_channel channel)
 
 	pair<cpu_pin, unsigned char> mapping = this->analog_channel_to_pin_map[channel];
 
-	ads_7830* converter = IS_EXTENDER_PIN(mapping.first) ? this->extender_analog_converter : this->analog_converter;
-
 	if (channel != analog_channels::ANALOG_5)
 		this->set_io_mode(mapping.first, io_modes::DIGITAL_INPUT, resistor_modes::FLOATING);
 	
-	return converter->get_reading(mapping.second);
+	return this->analog_converter->get_reading(mapping.second);
 }
 
 void fez_lynx_s4::set_pwm(pwm_channel channel, double duty_cycle, double frequency)
 {
-	if (channel == pwm_channels::NONE)
-		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
-
-	cpu_pin pin = this->pwm_channel_to_pin_map[channel];
-
-	if (IS_EXTENDER_PIN(pin))
-	{
-		this->extender->set_pwm(EXTENDER_PORT(pin), EXTENDER_PIN(pin), duty_cycle, frequency);
-	}
-	else
-	{
-		panic(errors::PWM_NOT_SUPPORTED);
-	}
+	panic(errors::PWM_NOT_SUPPORTED);
 }
 
 void fez_lynx_s4::spi_begin(spi_channel channel, spi_configuration& config)

@@ -29,6 +29,7 @@ namespace gadgeteering
 		{
 			unsigned char socket_start;
 
+			const socket& sock;
 			io60p16 io60_chip;
 			ads_7830 analog_chip;
 

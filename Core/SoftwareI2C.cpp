@@ -60,6 +60,11 @@ void software_i2c::wait_scl()
 		;
 }
 
+void software_i2c::delay()
+{
+
+}
+
 bool software_i2c::write_bit(bool bit)
 {
 	if (bit)
