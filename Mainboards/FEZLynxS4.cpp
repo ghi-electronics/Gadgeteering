@@ -155,6 +155,7 @@ const socket& fez_lynx_s4::get_socket(unsigned char number)
 
 void fez_lynx_s4::set_debug_led(bool state)
 {
+	this->set_io_mode(fez_lynx_s4::pins::AD3, io_modes::DIGITAL_OUTPUT, resistor_modes::NONE);
 	this->write_digital(fez_lynx_s4::pins::AD3, state);
 }
 
