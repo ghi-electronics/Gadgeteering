@@ -400,7 +400,7 @@ fez_lynx_s4::ftdi_channel::~ftdi_channel()
 void fez_lynx_s4::ftdi_channel::open(const char* serial_number)
 {
 	if (FT_OpenEx(const_cast<char*>(serial_number), FT_OPEN_BY_SERIAL_NUMBER, &this->handle) != FT_OK)
-		panic(errors::MAINBOARD_ERROR, 1);
+		panic_specific(errors::MAINBOARD_ERROR, 1);
 
 	FT_ResetDevice(this->handle);
 
@@ -482,7 +482,7 @@ void fez_lynx_s4::ftdi_channel::sync_mpsse()
 			return;
 	}
 
-	panic(errors::MAINBOARD_ERROR, 0);
+	panic_specific(errors::MAINBOARD_ERROR, 0);
 }
 
 void fez_lynx_s4::ftdi_channel::set_pin_direction(unsigned char pin, io_mode mode, bool output_state)
