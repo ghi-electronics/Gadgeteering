@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,34 +16,28 @@ limitations under the License.
 
 #include "RelayX1.h"
 
-namespace gadgeteering
+using namespace gadgeteering;
+using namespace gadgeteering::interfaces;
+using namespace gadgeteering::modules;
+
+relay_x1::relay_x1(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::X)), output(this->sock, 5)
 {
-	namespace modules
-	{
-		RelayX1::RelayX1(int socket) : Module()
-		{
-			Socket *sock = mainboard->getSocket(socket);
-			sock->ensureTypeIsSupported(socket::types::X);
+	this->enabled = false;
+}
 
-			this->output = new interfaces::digital_output(sock->pins[5]);
-			enabled = false;
-		}
+void relay_x1::turn_on()
+{
+	this->enabled = true;
+	this->output.write(true);
+}
 
-		void RelayX1::EnableRelay()
-		{
-			enabled = true;
-			this->output->write(true);
-		}
+void relay_x1::turn_off()
+{
+	this->enabled = false;
+	this->output.write(false);
+}
 
-		void RelayX1::DisableRelay()
-		{
-			enabled = false;
-			this->output->write(false);
-		}
-
-		bool RelayX1::RelayState()
-		{
-			return enabled;
-		}
-	}
+bool relay_x1::is_on()
+{
+	return this->enabled;
 }

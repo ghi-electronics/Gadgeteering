@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 #include "MaxO.h"
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -22,161 +23,135 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-MaxO::MaxO(unsigned char socketNumber)
+maxo::maxo(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::S)), enable(this->sock, 3, false), clr(this->sock, 4, true), spi(this->sock.spi, spi_configuration(false, 0, 0, false, true, 1000))
 {
-	Socket t_socket =*mainboard->getSocket(socketNumber);
-	socket.ensureTypeIsSupported(socket::types::S);
-
-	this->spi = new SPIDevice(socket.getSPIBus(), socket.pins[5], new SPIConfiguration(false, 0, 0, false, true, 1000));
-	this->Enable = new digital_output(socket.pins[3], false);
-	this->CLR = new digital_output(socket.pins[4], true);
-
-	this->reSized = false;
-	this->numBoards = 0;
+	this->resized = false;
+	this->num_boards = 0;
 	this->data = NULL;
 }
 
-MaxO::~MaxO()
+maxo::~maxo()
 {
-	delete this->spi;
-	delete this->Enable;
-	delete this->CLR;
 	if (this->data)
-		delete [] this->data;
+		delete[] this->data;
 }
 
-void MaxO::SetNumBoards(int boards)
+void maxo::set_number_of_boards(unsigned int boards)
 {
-    if (!reSized)
-    {
-        numBoards = boards;
-		length = numBoards * 4;
-        data = new unsigned char[numBoards * 4];
-        reSized = true;
-    }
-    else
-    {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
-    }
+	if (!this->resized)
+	{
+		this->num_boards = boards;
+		this->length = this->num_boards * 4;
+		this->data = new unsigned char[this->num_boards * 4];
+		this->resized = true;
+	}
+	else
+	{
+		panic(errors::MODULE_ERROR);
+	}
 }
 
-int MaxO::GetArraySize()
+unsigned int maxo::get_array_size()
 {
-    return length;
+	return this->length;
 }
 
-void MaxO::Clear()
+void maxo::clear()
 {
-    if (!reSized)
-    {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
-    }
+	if (!resized)
+		panic(errors::MODULE_ERROR);
 
-    Enable->write(true);
-    CLR->write(false);
+	this->enable.write(true);
+	this->clr.write(false);
 
-    System::Sleep(10);
-    unsigned char clear = 0x00;
-    spi->write(&clear, 1, true);
+	system::sleep(10);
+	unsigned char clear = 0x00;
+	this->spi.write(&clear, 1, true);
 
-    CLR->write(true);
-    Enable->write(false);
+	this->clr.write(true);
+	this->enable.write(false);
 
-    for (unsigned int i = 0; i < this->length; i++)
-        data[i] = 0x0;
+	for (unsigned int i = 0; i < this->length; i++)
+		this->data[i] = 0x0;
 }
 
-void MaxO::WriteArray(unsigned char* arr, unsigned int arrLength)
+void maxo::write_array(unsigned char* arr, unsigned int length)
 {
-    if (!reSized)
-    {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
-    }
+	if (!resized)
+		panic(errors::MODULE_ERROR);
 
-    if (arrLength != this->length)
-    {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
-    }
+	if (length != this->length)
+		panic(errors::MODULE_ERROR);
 
-    Enable->write(true);
+	this->enable.write(true);
 
-	unsigned char* reversedArr = new unsigned char[arrLength];
-		memcpy(reversedArr, arr, arrLength);
+	unsigned char* reversed = new unsigned char[length];
+	memcpy(reversed, arr, length);
 
-        for (unsigned int i = 0; i < arrLength; i++)
-        {
-            reversedArr[i] = arr[this->length - i - 1];//(byte)(~reversedArr[i]);
-        }
+	for (unsigned int i = 0; i < length; i++)
+		reversed[i] = arr[this->length - i - 1];
 
-        spi->write(reversedArr, arrLength, true);
-		memcpy(data, arr, arrLength);
-		delete [] reversedArr;
+	this->spi.write(reversed, length, true);
+	memcpy(this->data, arr, length);
+	delete[] reversed;
 
-    Enable->write(false);
+	this->enable.write(false);
 }
 
-void MaxO::WritePin(int _board, int _pin, bool _value)
+void maxo::write_pin(unsigned int board, unsigned int pin, bool value)
 {
-    if (!reSized)
-    {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
-    }
+	if (!resized)
+		panic(errors::MODULE_ERROR);
 
-    // check to see if the pin is inside our range
-    int length = ((_board) * 4);// +_pin;
-    int position = ((_board - 1) * 4) + _pin;
+	// check to see if the pin is inside our range
+	unsigned int length = board * 4;
+	unsigned int position = ((board - 1) * 4) + pin;
 
-    if (length > (int)this->length)
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
+	if (length > this->length)
+		panic(errors::MODULE_ERROR);
 
-    // make a "dummy" to turn our pin on or off
-    unsigned char* dummy = new unsigned char[this->length];
+	// make a "dummy" to turn our pin on or off
+	unsigned char* dummy = new unsigned char[this->length];
 
-	memcpy(dummy, data, this->length);
+	memcpy(dummy, this->data, this->length);
 
-    // find exact bit position
-    int blockPos = /*dummy.Length - */(((_board - 1) * 4) + (_pin / 8));
-    //blockPos--;
-    if (_value)
-    {
-        dummy[blockPos] = (unsigned char)(data[blockPos] | (1 << ((_pin % 8) /*- 1*/)));
-        WriteArray(dummy, this->length);
-    }
-    else
-    {
-        dummy[blockPos] = (unsigned char)(data[blockPos] & ~(1 << ((_pin % 8) /*- 1*/)));
-        WriteArray(dummy, this->length);
-    }
+	// find exact bit position
+	int block_pos = /*dummy.Length - */(((board - 1) * 4) + (pin / 8));
+	//block_pos--;
+	if (value)
+	{
+		dummy[block_pos] = (unsigned char)(this->data[block_pos] | (1 << ((pin % 8) /*- 1*/)));
+		write_array(dummy, this->length);
+	}
+	else
+	{
+		dummy[block_pos] = (unsigned char)(this->data[block_pos] & ~(1 << ((pin % 8) /*- 1*/)));
+		write_array(dummy, this->length);
+	}
 
-	delete [] dummy;
+	delete[] dummy;
 }
 
-unsigned char* MaxO::Read()
+unsigned char* maxo::read()
 {
-    if (!reSized)
-    {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
-    }
+	if (!resized)
+		panic(errors::MODULE_ERROR);
 
-    return data;
+	return this->data;
 }
 
-void MaxO::EnableOutputs()
+void maxo::enable_outputs()
 {
-    if (!reSized)
-    {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
-    }
+	if (!resized)
+		panic(errors::MODULE_ERROR);
 
-    Enable->write(false);
+	this->enable.write(false);
 }
 
-void MaxO::DisableOutputs()
+void maxo::disable_outputs()
 {
-    if (!reSized)
-    {
-        mainboard->panic(Exceptions::ERR_MODULE_ERROR);
-    }
+	if (!resized)
+		panic(errors::MODULE_ERROR);
 
-    Enable->write(true);
+	this->enable.write(true);
 }

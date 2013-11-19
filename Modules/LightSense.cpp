@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,31 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "LightSensor.h"
+#include "LightSense.h"
 
 using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-LightSensor::LightSensor(unsigned char socketNumber)
+light_sense::light_sense(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::A)), input(this->sock, 3)
 {
-	socket* t_socket = mainboard->getSocket(socketNumber);
-	t_socket->ensureTypeIsSupported(socket::types::A);
 
-    this->input = new analog_input(socket, socket::pins::Three);
 }
 
-LightSensor::~LightSensor()
+double light_sense::read_voltage()
 {
-    delete this->input;
+	return this->input.read();
 }
 
-double LightSensor::ReadLightSensorVoltage()
+double light_sense::read_percentage()
 {
-    return input->read();
+	return this->input.read_proportion() * 100.0;
 }
 
-double LightSensor::ReadLightSensorPercentage()
+unsigned int light_sense::get_illuminance()
 {
-    return (input->read() / 3.3 * 100);
+	return static_cast<unsigned int>(this->input.read_proportion() * light_sense::MAX_ILLUMINANCE);
 }

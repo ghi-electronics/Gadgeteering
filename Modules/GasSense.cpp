@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,40 +16,27 @@ limitations under the License.
 
 #include "GasSense.h"
 
-namespace gadgeteering
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
+
+gas_sense::gas_sense(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::A)), input(this->sock, 3), output(this->sock, 4)
 {
-	namespace modules
-	{
-		GasSense::GasSense(int socket) : Module()
-		{
-			Socket *sock = mainboard->getSocket(socket);
 
-			sock->ensureTypeIsSupported(socket::types::A);
+}
 
-			this->input = new interfaces::analog_input(sock->pins[3]);
-			this->output = new interfaces::digital_output(sock->pins[4]);
-		}
+gas_sense::~gas_sense()
+{
+	this->set_heating_element(false);
+}
 
-		double GasSense::GetGasReading(int samples)
-		{
-			double reading = 0;
 
-			for(int i = 0; i < samples; i++)
-			{
-				reading += (double)(this->input->read());
-			}
+double gas_sense::read_voltage()
+{
+	return this->input.read();
+}
 
-			return (reading / samples);
-		}
-
-		void GasSense::SetHeatingElement(bool state)
-		{
-			this->output->write(state);
-		}
-
-		GasSense::~GasSense()
-		{
-			this->SetHeatingElement(false);
-		}
-	}
+void gas_sense::set_heating_element(bool state)
+{
+	this->output.write(state);
 }

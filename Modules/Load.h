@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,29 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _LOAD_H_
-#define _LOAD_H_
+#pragma once
 
 #include "../Gadgeteering.h"
 
-namespace gadgeteering {
-	namespace modules {
-		using namespace gadgeteering::interfaces;
+namespace gadgeteering
+{
+	namespace modules
+	{
+		class load
+		{
+			const socket& sock;
 
-		class Load {
 			public:
-				digital_output* P1;
-				digital_output* P2;
-				digital_output* P3;
-				digital_output* P4;
-				digital_output* P5;
-				digital_output* P6;
-				digital_output* P7;
+				interfaces::digital_output p1;
+				interfaces::digital_output p2;
+				interfaces::digital_output p3;
+				interfaces::digital_output p4;
+				interfaces::digital_output p5;
+				interfaces::digital_output p6;
+				interfaces::digital_output p7;
 
-				Load(unsigned char socketNumber);
-				~Load();
+				load(unsigned char socket_number);
 		};
 	}
 }
-
-#endif

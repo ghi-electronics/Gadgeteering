@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,26 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "MotionSensor.h"
+#include "PIR.h"
 
 using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-MotionSensor::MotionSensor(unsigned char socketNumber)
+pir::pir(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::X)), input(this->sock, 3, resistor_modes::PULL_UP)
 {
-	socket* t_socket = mainboard->getSocket(socketNumber);
-	t_socket->ensureTypeIsSupported(socket::types::X);
 
-    this->input = new digital_input(socket, socket::pins::Three, resistor_modes::PULL_UP);
 }
 
-MotionSensor::~MotionSensor()
+bool pir::is_motion_detected()
 {
-	delete this->input;
-}
-
-bool MotionSensor::isMotionDetected()
-{
-	return this->input->read();
+	return this->input.read();
 }

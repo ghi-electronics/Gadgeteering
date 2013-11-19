@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _RELAYX16_H_
-#define _RELAYX16_H_
+#pragma once
 
 #include "../Gadgeteering.h"
 
@@ -23,54 +22,50 @@ namespace gadgeteering
 {
 	namespace modules
 	{
-		class RelayX16 : protected Module
+		class relay_iso_x16
 		{
-			protected:
-				unsigned short regData;
+			unsigned short reg_data;
 
-				interfaces::digital_output *data;
-				interfaces::digital_output *clock;
-				interfaces::digital_output *latch;
-				interfaces::digital_output *enable;
-				interfaces::digital_output *clear;
+			const socket& sock;
+			interfaces::digital_output data;
+			interfaces::digital_output clock;
+			interfaces::digital_output enable;
+			interfaces::digital_output latch;
+			interfaces::digital_output clear;
 
-				void writeRegisterData();
+			void write_data();
 
 			public:
-				RelayX16(int socket);
+				relay_iso_x16(unsigned char socket_number);
 
-				void disableAllRelays();
-				void enableAllRelays();
+				void disable_all_relays();
+				void enable_all_relays();
 
-				void enableRelays(unsigned short relays);
-				void disableRelays(unsigned short relays);
+				void enable_relays(unsigned short relay_mask);
+				void disable_relays(unsigned short relay_mask);
 
-				void enableOutput();
-				void disableOutput();
+				void enable_output();
+				void disable_output();
 
-				class Relays
+				struct relays
 				{
-					Relays();
-					public:
-						static const unsigned short Relay_1 = 1;
-						static const unsigned short Relay_2 = 2;
-						static const unsigned short Relay_3 = 4;
-						static const unsigned short Relay_4 = 8;
-						static const unsigned short Relay_5 = 16;
-						static const unsigned short Relay_6 = 32;
-						static const unsigned short Relay_7 = 64;
-						static const unsigned short Relay_8 = 128;
-						static const unsigned short Relay_9 = 256;
-						static const unsigned short Relay_10 = 512;
-						static const unsigned short Relay_11 = 1024;
-						static const unsigned short Relay_12 = 2048;
-						static const unsigned short Relay_13 = 4096;
-						static const unsigned short Relay_14 = 8192;
-						static const unsigned short Relay_15 = 16384;
-						static const unsigned short Relay_16 = 32768;
+					static const unsigned short RELAY_1 = 1;
+					static const unsigned short RELAY_2 = 2;
+					static const unsigned short RELAY_3 = 4;
+					static const unsigned short RELAY_4 = 8;
+					static const unsigned short RELAY_5 = 16;
+					static const unsigned short RELAY_6 = 32;
+					static const unsigned short RELAY_7 = 64;
+					static const unsigned short RELAY_8 = 128;
+					static const unsigned short RELAY_9 = 256;
+					static const unsigned short RELAY_10 = 512;
+					static const unsigned short RELAY_11 = 1024;
+					static const unsigned short RELAY_12 = 2048;
+					static const unsigned short RELAY_13 = 4096;
+					static const unsigned short RELAY_14 = 8192;
+					static const unsigned short RELAY_15 = 16384;
+					static const unsigned short RELAY_16 = 32768;
 				};
 		};
 	}
 }
-
-#endif

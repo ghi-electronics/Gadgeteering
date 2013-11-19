@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,42 +20,37 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-Breakout::Breakout(unsigned char socketNumber)
-{
-	this->t_socket = mainboard->getSocket(socketNumber);
-}
-
-Breakout::~Breakout()
+breakout::breakout(unsigned char socket_number) : sock(mainboard->get_socket(socket_number))
 {
 
 }
 
-interfaces::digital_input* Breakout::Setupdigital_input(Socket::Pin pin, resistor_mode resistor_mode)
+interfaces::digital_input breakout::setup_digital_input(unsigned char pin_number, resistor_mode resistor_mode)
 {
-	return new interfaces::digital_input(this->socket, pin, resistor_mode);
+	return interfaces::digital_input(this->sock, pin_number, resistor_mode);
 }
 
-interfaces::digital_output* Breakout::Setupdigital_output(Socket::Pin pin, bool initialState)
+interfaces::digital_output breakout::setup_digital_output(unsigned char pin_number, bool initial_state)
 {
-	return new interfaces::digital_output(this->socket, pin, initialState);
+	return interfaces::digital_output(this->sock, pin_number, initial_state);
 }
 
-interfaces::DigitalIO* Breakout::SetupDigitalIO(Socket::Pin pin)
+interfaces::digital_io breakout::setup_digital_io(unsigned char pin_number)
 {
-	return new interfaces::DigitalIO(this->socket, pin);
+	return interfaces::digital_io(this->sock, pin_number);
 }
 
-interfaces::analog_input* Breakout::Setupanalog_input(Socket::Pin pin)
+interfaces::analog_input breakout::setup_analog_input(unsigned char pin_number)
 {
-	return new interfaces::analog_input(this->socket, pin);
+	return interfaces::analog_input(this->sock, pin_number);
 }
 
-interfaces::analog_output* Breakout::Setupanalog_output(Socket::Pin pin)
+interfaces::analog_output breakout::setup_analog_output(unsigned char pin_number)
 {
-	return new interfaces::analog_output(this->socket, pin);
+	return interfaces::analog_output(this->sock, pin_number);
 }
 
-interfaces::pwm_output* Breakout::Setuppwm_output(Socket::Pin pin)
+interfaces::pwm_output breakout::setup_pwm_output(unsigned char pin_number)
 {
-	return new interfaces::pwm_output(this->socket, pin);
+	return interfaces::pwm_output(this->sock, pin_number);
 }

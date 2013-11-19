@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,41 +14,38 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _MAXO_H_
-#define _MAXO_H_
+#pragma once
 
 #include "../Gadgeteering.h"
 
-namespace gadgeteering {
-	namespace modules {
-		using namespace gadgeteering::interfaces;
-
-		class MaxO {
-			SPIDevice* spi;
-
-			digital_output* Enable;
-			digital_output* CLR;
+namespace gadgeteering
+{
+	namespace modules
+	{
+		class maxo
+		{
+			const socket& sock;
+			interfaces::digital_output clr;
+			interfaces::digital_output enable;
+			devices::spi spi;
 
 			unsigned char* data;
 			unsigned int length;
-			bool reSized;
-
-			int numBoards;
+			bool resized;
+			unsigned int num_boards;
 
 			public:
-				MaxO(unsigned char socketNumber);
-				~MaxO();
+				maxo(unsigned char socket_number);
+				~maxo();
 
-				void SetNumBoards(int boards);
-				int GetArraySize();
-				void Clear();
-				void WriteArray(unsigned char* arr, unsigned int length);
-				void WritePin(int _board, int _pin, bool _value);
-				unsigned char* Read();
-				void EnableOutputs();
-				void DisableOutputs();
+				void set_number_of_boards(unsigned int boards);
+				unsigned int get_array_size();
+				void clear();
+				void write_array(unsigned char* arr, unsigned int length);
+				void write_pin(unsigned int board, unsigned int pin, bool value);
+				unsigned char* read();
+				void enable_outputs();
+				void disable_outputs();
 		};
 	}
 }
-
-#endif
