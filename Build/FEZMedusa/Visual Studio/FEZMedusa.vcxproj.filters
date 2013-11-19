@@ -178,6 +178,9 @@
     <ClCompile Include="..\..\..\Modules\WiFiRN171.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Modules\HD44780.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Core\Types.h">
@@ -359,6 +362,9 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\WiFiRN171.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\HD44780.h">
       <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>

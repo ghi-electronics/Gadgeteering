@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,105 +14,82 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "CharDisplay.h"
+#include "CharacterDisplay.h"
 
 using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-CharDisplay::CharDisplay(unsigned char socketNumber)
+character_display::character_display(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::Y)), backlight(this->sock, 8, true), lcd_rs(this->sock, 4, false), lcd_e(this->sock, 3, false), lcd_d4(this->sock, 5, false), lcd_d5(this->sock, 7, false), lcd_d6(this->sock, 9, false), lcd_d7(this->sock, 6, false)
 {
-	this->t_socket = mainboard->getSocket(socketNumber);
-	this->t_socket->ensureTypeIsSupported(socket::types::Y);
+	this->send_command(0x33);
+	this->send_command(0x32);
+	this->send_command(character_display::DISP_ON);
 
-    this->lcdRS = new digital_output(socket, socket::pins::Four, false);
-    this->lcdE = new digital_output(socket, socket::pins::Three, false);
-    this->lcdD4 = new digital_output(socket, socket::pins::Five, false);
-    this->lcdD5 = new digital_output(socket, socket::pins::Seven, false);
-    this->lcdD6 = new digital_output(socket, socket::pins::Nine, false);
-    this->lcdD7 = new digital_output(socket, socket::pins::Six, false);
+	this->clear();
 
-    this->backlight = new digital_output(socket, socket::pins::Eight, true);
-
-    this->sendCommand(0x33);
-    this->sendCommand(0x32);
-    this->sendCommand(CharDisplay::DISP_ON);
-
-    this->clear();
-
-	System::Sleep(3);
+	system::sleep(3);
 }
 
-CharDisplay::~CharDisplay()
+void character_display::send_nibble(unsigned char b)
 {
-    delete this->lcdRS;
-    delete this->lcdE;
-    delete this->lcdD4;
-    delete this->lcdD5;
-    delete this->lcdD6;
-    delete this->lcdD7;
-    delete this->backlight;
+	this->lcd_d7.write((b & 0x8) != 0);
+	this->lcd_d6.write((b & 0x4) != 0);
+	this->lcd_d5.write((b & 0x2) != 0);
+	this->lcd_d4.write((b & 0x1) != 0);
+
+	this->lcd_e.write(true);
+	this->lcd_e.write(false);
+
+	system::sleep(1);
 }
 
-void CharDisplay::sendNibble(unsigned char b)
+void character_display::send_byte(unsigned char b)
 {
-    this->lcdD7->write((b & 0x8) != 0);
-    this->lcdD6->write((b & 0x4) != 0);
-    this->lcdD5->write((b & 0x2) != 0);
-    this->lcdD4->write((b & 0x1) != 0);
-
-    this->lcdE->write(true);
-	this->lcdE->write(false);
-
-	System::Sleep(1);
+	this->send_nibble(static_cast<unsigned char>(b >> 4));
+	this->send_nibble(b);
 }
 
-void CharDisplay::sendByte(unsigned char b)
+void character_display::send_command(unsigned char c)
 {
-    this->sendNibble((char)(b >> 4));
-    this->sendNibble(b);
+	this->lcd_rs.write(false); //set LCD to data mode
+	this->send_byte(c);
+
+	system::sleep(2);
+
+	this->lcd_rs.write(true); //set LCD to data mode
 }
 
-void CharDisplay::sendCommand(unsigned char c)
-{
-    this->lcdRS->write(false); //set LCD to data mode
-	this->sendByte(c);
-
-	System::Sleep(2);
-
-    this->lcdRS->write(true); //set LCD to data mode
-}
-
-void CharDisplay::print(const char* string)
+void character_display::print(const char* string)
 {
 	while (*string != '\0')
 		this->print(*(string++));
 }
 
-void CharDisplay::print(char character)
+void character_display::print(char character)
 {
-	this->sendByte(character);
+	this->send_byte(character);
 }
 
-void CharDisplay::clear()
+void character_display::clear()
 {
-    this->sendCommand(CharDisplay::CLR_DISP);
-	System::Sleep(2);
+	this->send_command(character_display::CLR_DISP);
+	system::sleep(2);
 }
 
-void CharDisplay::cursorHome()
+void character_display::cursor_home()
 {
-    this->sendCommand(CharDisplay::CUR_HOME);
-	System::Sleep(2);
+	this->send_command(character_display::CUR_HOME);
+	system::sleep(2);
 }
 
-void CharDisplay::setCursor(unsigned char row, unsigned char col)
+void character_display::set_cursor(unsigned char row, unsigned char col)
 {
-    char offsets[] = { 0x00, 0x40, 0x14, 0x54 };
-    this->sendCommand(CharDisplay::SET_CURSOR | offsets[row] | col);
+	char offsets[] = { 0x00, 0x40, 0x14, 0x54 };
+	this->send_command(character_display::SET_CURSOR | offsets[row] | col);
 }
 
-void CharDisplay::setBacklight(bool state)
+void character_display::set_backlight(bool state)
 {
-    this->backlight->write(state);
+	this->backlight.write(state);
 }

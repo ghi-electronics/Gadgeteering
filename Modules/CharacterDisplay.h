@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,49 +14,46 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _CHARDISPLAY_H_
-#define _CHARDISPLAY_H_
+#pragma once
 
 #include "../Gadgeteering.h"
 
-namespace gadgeteering {
-	namespace modules {
-		using namespace gadgeteering::interfaces;
+namespace gadgeteering
+{
+	namespace modules
+	{
+		class character_display
+		{
+			const socket& sock;
 
-		class CharDisplay {
-			socket* socket;
-
-			digital_output* lcdRS;
-			digital_output* lcdE;
-
-			digital_output* lcdD4;
-			digital_output* lcdD5;
-			digital_output* lcdD6;
-			digital_output* lcdD7;
-
-			digital_output* backlight;
+			interfaces::digital_output lcd_rs;
+			interfaces::digital_output lcd_e;
+			
+			interfaces::digital_output lcd_d4;
+			interfaces::digital_output lcd_d5;
+			interfaces::digital_output lcd_d6;
+			interfaces::digital_output lcd_d7;
+			
+			interfaces::digital_output backlight;
 
 			static const unsigned char DISP_ON = 0xC;
 			static const unsigned char CLR_DISP = 1;
 			static const unsigned char CUR_HOME = 2;
 			static const unsigned char SET_CURSOR = 0x80;
 
-			void sendNibble(unsigned char b);
-			void sendByte(unsigned char b);
-			void sendCommand(unsigned char c);
+			void send_nibble(unsigned char b);
+			void send_byte(unsigned char b);
+			void send_command(unsigned char c);
 
 			public:
-				CharDisplay(unsigned char socketNumber);
-				~CharDisplay();
+				character_display(unsigned char socket_number);
 
 				void print(const char* string);
 				void print(char character);
 				void clear();
-				void cursorHome();
-				void setCursor(unsigned char row, unsigned char col);
-				void setBacklight(bool state);
+				void cursor_home();
+				void set_cursor(unsigned char row, unsigned char col);
+				void set_backlight(bool state);
 		};
 	}
 }
-
-#endif

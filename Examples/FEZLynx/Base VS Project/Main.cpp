@@ -7,6 +7,7 @@
 
 #include <Modules/HubAP5.h>
 #include <Modules/LEDStrip.h>
+#include <Modules/CharacterDisplay.h>
 
 using namespace std;
 using namespace gadgeteering;
@@ -46,17 +47,25 @@ struct multi_color_led : public daisy_link::module
 int main(int argc, char** argv)
 {
 	fez_lynx_s4 board;
-	hub_ap5 hub(0);
-	led_strip led(hub.socket_3);
+	character_display char_disp(1);
 
-	while (true)
-	{
-		led.turn_all_on();
-		system::sleep(100);
-		led.turn_all_off();
-		system::sleep(100);
-		cout << hub.read_analog(analog_channels::ANALOG_0) << endl;
-	}
+	char_disp.set_backlight(true);
+	char_disp.clear();
+	char_disp.cursor_home();
+	char_disp.print("Hello, World!");
+
+
+	//hub_ap5 hub(0);
+	//led_strip led(hub.socket_3);
+	//
+	//while (true)
+	//{
+	//	led.turn_all_on();
+	//	system::sleep(100);
+	//	led.turn_all_off();
+	//	system::sleep(100);
+	//	cout << hub.read_analog(analog_channels::ANALOG_0) << endl;
+	//}
 
 
 	//vector<multi_color_led*> leds;

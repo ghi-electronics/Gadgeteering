@@ -49,6 +49,7 @@
     <ClCompile Include="..\..\..\Modules\FLASH.cpp" />
     <ClCompile Include="..\..\..\Modules\GasSense.cpp" />
     <ClCompile Include="..\..\..\Modules\Gyro.cpp" />
+    <ClCompile Include="..\..\..\Modules\HD44780.cpp" />
     <ClCompile Include="..\..\..\Modules\HubAP5.cpp" />
     <ClCompile Include="..\..\..\Modules\IO60P16.cpp" />
     <ClCompile Include="..\..\..\Modules\Joystick.cpp" />
@@ -112,6 +113,7 @@
     <ClInclude Include="..\..\..\Modules\FLASH.h" />
     <ClInclude Include="..\..\..\Modules\GasSense.h" />
     <ClInclude Include="..\..\..\Modules\Gyro.h" />
+    <ClInclude Include="..\..\..\Modules\HD44780.h" />
     <ClInclude Include="..\..\..\Modules\HubAP5.h" />
     <ClInclude Include="..\..\..\Modules\IO60P16.h" />
     <ClInclude Include="..\..\..\Modules\Joystick.h" />
