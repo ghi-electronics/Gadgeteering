@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,18 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _FLASH_H_
-#define _FLASH_H_
+#pragma once
 
 #include "../Gadgeteering.h"
 
-namespace gadgeteering {
-	namespace modules {
-		using namespace gadgeteering::interfaces;
-
-		class FLASH {
-			SPIDevice* spi;
-			digital_output* statusLED;
+namespace gadgeteering
+{
+	namespace modules
+	{
+		class flash
+		{
+			const socket& sock;
+			devices::spi spi;
+			interfaces::digital_output status_led;
 
 			static const unsigned long MAX_ADDRESS = 0x400000;
 			static const unsigned char CMD_GET_IDENTIFICATION = 0x9F;
@@ -33,6 +34,7 @@ namespace gadgeteering {
 			static const unsigned char CMD_ERASE_BLOCK = 0xD8;
 			static const unsigned char CMD_ERASE_CHIP = 0xC7;
 			static const unsigned char CMD_WRITE_SECTOR = 0x2;
+			static const unsigned char CMD_READ_SECTOR = 0x3;
 			static const unsigned char CMD_WRITE_ENABLE = 0x6;
 			static const unsigned char CMD_READ_STATUS = 0x5;
 
@@ -45,20 +47,17 @@ namespace gadgeteering {
 			static const unsigned char ID_DEVICE_1 = 0x16;
 
 			public:
-				FLASH(unsigned char socketNumber);
-				~FLASH();
+				flash(unsigned char socket_number);
 
-				bool WriteEnable();
-				void GetIdentification(unsigned char received[4]);
-				bool WriteInProgress();
-				void EraseChip();
-				bool EraseBlock(unsigned int block, unsigned int number);
-				bool EraseSector(unsigned int sector, unsigned int number);
-				bool WriteData(unsigned long address, const unsigned char* data, unsigned int length);
-				bool ReadData(unsigned long address, unsigned char* data, unsigned int length);
-				bool ReadData_FastMode(unsigned long address, unsigned char* data, unsigned int length);
+				bool write_enable();
+				void get_indentification(unsigned char received[4]);
+				bool write_in_progress();
+				void erase_chip();
+				bool erase_block(unsigned int block, unsigned int number);
+				bool erase_sector(unsigned int sector, unsigned int number);
+				bool write_data(unsigned long address, const unsigned char* data, unsigned int length);
+				bool read_data(unsigned long address, unsigned char* data, unsigned int length);
+				bool read_data_fast(unsigned long address, unsigned char* data, unsigned int length);
 		};
 	}
 }
-
-#endif

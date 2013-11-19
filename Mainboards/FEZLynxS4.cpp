@@ -583,10 +583,13 @@ void fez_lynx_s4::ftdi_channel::spi_read_write(const unsigned char* write_buffer
 
 	if (write_buffer)
 		memcpy(this->buffer + 3, write_buffer, count);
+	else
+		memset(this->buffer + 3, 0x00, count);
 
 	this->buffer[1] = (count - 1) & 0xFF;
 	this->buffer[2] = ((count - 1) >> 8) & 0xFF;
 
+	mainboard->set_io_mode(config.chip_select, io_modes::DIGITAL_OUTPUT, resistor_modes::NONE);
 	mainboard->write_digital(config.chip_select, config.cs_active_state);
 	if (config.cs_setup_time != 0)
 		system::sleep(config.cs_setup_time);
@@ -600,7 +603,15 @@ void fez_lynx_s4::ftdi_channel::spi_read_write(const unsigned char* write_buffer
 	} while (received < count && status == FT_OK);
 
 	if (read_buffer)
+	{
 		status |= FT_Read(handle, read_buffer, count, &received);
+	}
+	else
+	{
+		read_buffer = new unsigned char[count];
+		status |= FT_Read(handle, read_buffer, count, &received);
+		delete[] read_buffer;
+	}
 
 	if (deselect_after)
 	{

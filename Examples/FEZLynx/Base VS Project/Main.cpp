@@ -8,6 +8,7 @@
 #include <Modules/HubAP5.h>
 #include <Modules/LEDStrip.h>
 #include <Modules/CharacterDisplay.h>
+#include <Modules/FLASH.h>
 
 using namespace std;
 using namespace gadgeteering;
@@ -47,12 +48,26 @@ struct multi_color_led : public daisy_link::module
 int main(int argc, char** argv)
 {
 	fez_lynx_s4 board;
-	character_display char_disp(1);
+	flash f(4);
 
-	char_disp.set_backlight(true);
-	char_disp.clear();
-	char_disp.cursor_home();
-	char_disp.print("Hello, World!");
+	unsigned char id_data[4];
+	f.get_indentification(id_data);
+
+	f.erase_sector(0, 1);
+
+	unsigned char write_data[4] = { 0xDE, 0xAD, 0xBE, 0xEF };
+	f.write_data(0x4, write_data, 4);
+
+	unsigned char read_data[4];
+	f.read_data(0x4, read_data, 4);
+
+
+	//character_display char_disp(1);
+	//
+	//char_disp.set_backlight(true);
+	//char_disp.clear();
+	//char_disp.cursor_home();
+	//char_disp.print("Hello, World!");
 
 
 	//hub_ap5 hub(0);
