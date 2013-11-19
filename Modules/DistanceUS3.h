@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _DISTANCEUS3_H_
-#define _DISTANCEUS3_H_
+#pragma once
 
 #include "../Gadgeteering.h"
 
@@ -23,31 +22,26 @@ namespace gadgeteering
 {
 	namespace modules
 	{
-		class DistanceUS3 : protected Module
+		class distance_us3
 		{
-			protected:
-				interfaces::digital_input *Echo;
-				interfaces::digital_output *Trigger;
+			const socket& sock;
+			interfaces::digital_input echo;
+			interfaces::digital_output trigger;
 
-				int TicksPerMicrosecond;
+			static const short ACCEPTABLE_ERROR_RATE = 10;
 
-				static const short AcceptableErrorRate = 10;
+			static const short MIN_DISTANCE = 2;
+			static const short MAX_DISTANCE = 400;
 
-				static const short MIN_DISTANCE = 2;
-				static const short MAX_DISTANCE = 400;
-
-				static const short MaxFlag = -1;
-				static const short MinFlag = -2;
-
-				int GetDistanceHelper();
+			int get_distance_helper();
 
 			public:
-				DistanceUS3(int socket);
-				~DistanceUS3();
+				static const int MAX_FLAG = -1;
+				static const int MIN_FLAG = -2;
 
-				int getDistanceInCentimeters(int samples = 1);
+				distance_us3(unsigned char socket_number);
+
+				int get_distance_in_centimeters(unsigned int samples = 1);
 		};
 	}
 }
-
-#endif

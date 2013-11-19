@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,100 +16,77 @@ limitations under the License.
 
 #include "DistanceUS3.h"
 
-namespace gadgeteering
+using namespace gadgeteering;
+using namespace gadgeteering::interfaces;
+using namespace gadgeteering::modules;
+
+distance_us3::distance_us3(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::X)), echo(this->sock, 3), trigger(this->sock, 4)
 {
-	namespace modules
+
+}
+
+int distance_us3::get_distance_in_centimeters(unsigned int samples)
+{
+	int measured_value = 0;
+	int measured_average = 0;
+	int error_count = 0;
+
+	for (unsigned int i = 0; i < samples; i++)
 	{
-		DistanceUS3::DistanceUS3(int socket) : Module()
+		measured_value = this->get_distance_helper();
+
+		if (measured_value != distance_us3::MAX_FLAG || measured_value != distance_us3::MIN_FLAG)
 		{
-			Socket *sock = mainboard->getSocket(socket);
-			sock->ensureTypeIsSupported(socket::types::X | socket::types::Y);
+			measured_average += measured_value;
+		}
+		else
+		{
+			error_count++;
+			i--;
 
-			Echo = new interfaces::digital_input(sock->pins[3]);
-			Trigger = new interfaces::digital_output(sock->pins[4]);
-
-			TicksPerMicrosecond = 12;
+			if (error_count > ACCEPTABLE_ERROR_RATE)
+				panic(errors::MODULE_ERROR);
 		}
 
-		DistanceUS3::~DistanceUS3()
-		{
+	}
 
-		}
+	return measured_average / samples;
+}
 
-		int DistanceUS3::getDistanceInCentimeters(int samples)
-		{
-			int measuredValue = 0;
-            int measuredAverage = 0;
-            int errorCount = 0;
+int distance_us3::get_distance_helper()
+{
+	this->trigger.write(true);
+	system::sleep(10);
+	this->trigger.write(false);
 
-            for (int i = 0; i < samples; i++)
-            {
-                measuredValue = GetDistanceHelper();
+	int error = 0;
+	while (!this->echo.read())
+	{
+		error++;
+		if (error > 1000)
+			break;
 
-                if (measuredValue != MaxFlag || measuredValue != MinFlag)
-                {
-                    measuredAverage += measuredValue;
-                }
-                else
-                {
-                    errorCount++;
-                    i--;
+		system::sleep(0);
+	}
 
-                    if (errorCount > AcceptableErrorRate)
-                    {
-						mainboard->panic(Exceptions::ERR_MODULE_ERROR);
-                    }
-                }
+	unsigned long start = system::time_elapsed();
 
-            }
+	while (this->echo.read())
+		;
 
-            measuredAverage /= samples;
-            return measuredAverage;
-		}
+	unsigned long time = (system::time_elapsed() - start) * 1000;
 
-		int DistanceUS3::GetDistanceHelper()
-		{
-			long start = 0;
-            int microseconds = 0;
-            long time = 0;
-            int distance = 0;
+	int distance = (time / 58) + 2;
 
-            Trigger->write(true);
-            System::Sleep(10);
-            Trigger->write(false);
-
-            int error = 0;
-            while (!Echo->read())
-            {
-                error++;
-                if (error > 1000)
-                    break;
-
-                System::Sleep(0);
-            }
-
-			start = System::TimeElapsed();
-
-            while (Echo->read());
-
-            time = (System::TimeElapsed() - start);
-
-            microseconds = (int)time ;// TicksPerMicrosecond;
-
-            distance = (microseconds / 58);
-            distance += 2;
-
-            if (distance < MAX_DISTANCE)
-            {
-                if (distance >= MIN_DISTANCE)
-                    return distance;
-                else
-                    return MinFlag;
-            }
-            else
-            {
-                return MaxFlag;
-            }
-		}
+	if (distance < distance_us3::MAX_DISTANCE)
+	{
+		if (distance >= distance_us3::MIN_DISTANCE)
+			return distance;
+		else
+			return distance_us3::MIN_FLAG;
+	}
+	else
+	{
+		return distance_us3::MAX_FLAG;
 	}
 }
