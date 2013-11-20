@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "MultiColorLED.h"
+#include "MulticolorLED.h"
 
 using namespace gadgeteering;
 using namespace gadgeteering::modules;
