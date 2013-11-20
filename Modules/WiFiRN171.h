@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,22 +20,23 @@ namespace gadgeteering
 {
 	namespace modules
 	{
-		class WiFiRN171 : protected Module
+		class wifi_rn171
 		{
-			private:
-				bool DeviceReady;
-				devices::serial *serial;
+			bool device_ready;
+			const socket& sock;
+			devices::serial serial;
 
-				void CommandModeStart();
-				void CommandModeExit();
-				void CommandModeWrite(const char* command);
+			void command_mode_start();
+			void command_mode_exit();
+			void command_mode_write(const char* command);
 
 			public:
-				WiFiRN171(int socket, int baud = 9600);
+				wifi_rn171(unsigned char socket_number);
 
-				void CreateAccessPoint(const char *SSID);
-				void EnableStaticIP(const char *IP, const char *Gateway, const char *Netmask);
-				void EnableDHCP();
+				void set_baud_rate(unsigned int new_rate);
+				void create_access_point(const char* ssid);
+				void enable_static_ip(const char* ip, const char* gateway, const char* netmask);
+				void enable_dhcp();
 		};
 	}
 }

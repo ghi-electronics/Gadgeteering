@@ -59,7 +59,7 @@ void motor_driver_l298::move_motor(motor motor_side, int new_speed)
 			new_speed *= -1; //Replacement for System.Math.Abs()
 			/////////////////////////////////////////////////////////////////////////////
 			// Quick fix for current PWM issue
-			double fix = (double)((100 - new_speed) / 100.0);
+			double fix = static_cast<double>((100 - new_speed) / 100.0);
 			if (fix >= 1.0)
 				fix = 0.99;
 			if (fix <= 0.0)
@@ -75,7 +75,7 @@ void motor_driver_l298::move_motor(motor motor_side, int new_speed)
 
 			/////////////////////////////////////////////////////////////////////////////
 			// Quick fix for current PWM issue
-			double fix = (double)(new_speed / 100.0);
+			double fix = static_cast<double>(new_speed / 100.0);
 			if (fix >= 1.0)
 				fix = 0.99;
 			if (fix <= 0.0)
@@ -108,7 +108,7 @@ void motor_driver_l298::move_motor(motor motor_side, int new_speed)
 			new_speed *= -1; //Replacement for System.Math.Abs()
 			/////////////////////////////////////////////////////////////////////////////
 			// Quick fix for current PWM issue
-			double fix = (double)((100 - new_speed) / 100.0);
+			double fix = static_cast<double>((100 - new_speed) / 100.0);
 			if (fix >= 1.0)
 				fix = 0.99;
 			if (fix <= 0.0)
@@ -124,7 +124,7 @@ void motor_driver_l298::move_motor(motor motor_side, int new_speed)
 
 			/////////////////////////////////////////////////////////////////////////////
 			// Quick fix for current PWM issue
-			double fix = (double)(new_speed / 100.0);
+			double fix = static_cast<double>(new_speed / 100.0);
 			if (fix >= 1.0)
 				fix = 0.99;
 			if (fix <= 0.0)

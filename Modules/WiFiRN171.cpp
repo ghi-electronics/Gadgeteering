@@ -16,58 +16,59 @@ limitations under the License.
 
 #include "WiFiRN171.h"
 
-
-#include <stdio.h>
 #include <string.h>
 
-using namespace std;
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
 
-namespace gadgeteering
+wifi_rn171::wifi_rn171(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::U)), serial(this->sock, serial_configuration(9600, serial_configuration::parities::NONE, serial_configuration::stop_bits::ONE, 8))
 {
-	namespace modules
+
+}
+
+void wifi_rn171::set_baud_rate(unsigned int new_rate)
+{
+	this->serial.config.baud_rate = new_rate;
+}
+
+void wifi_rn171::enable_dhcp()
+{
+	this->command_mode_start();
+	this->command_mode_write("set ip dhcp 1");
+	this->command_mode_exit();
+}
+
+void wifi_rn171::create_access_point(const char* ssid)
+{
+	const char* command = "set wlan ssid ";
+
+	char* full_command = new char[strlen(command) + strlen(ssid)];
+	strcat(full_command, command);
+	strcat(full_command + strlen(command), ssid);
+
+	this->command_mode_start();
+	this->command_mode_write(full_command);
+	this->command_mode_write("set ip dhcp 4");
+	this->command_mode_exit();
+}
+
+void wifi_rn171::command_mode_start()
+{
+	this->serial.write("$$$", 3);
+
+	unsigned long timeout = system::time_elapsed() + 250;
+	while (timeout > system::time_elapsed())
 	{
-		WiFiRN171::WiFiRN171(int socket, int baud)
-		{
-			serial = mainboard->getSerialDevice(baud, 0, 1, 8, mainboard->getSocket(socket), 7, 9);
-		}
 
-		void WiFiRN171::EnableDHCP()
-		{
-			this->CommandModeStart();
-			this->CommandModeWrite("set ip dhcp 1");
-			this->CommandModeExit();
-		}
-
-		void WiFiRN171::CreateAccessPoint(const char *SSID)
-		{
-			char *command = "set wlan ssid ";
-			//strcat(command,SSID);
-
-			this->CommandModeStart();
-			this->CommandModeWrite(command);
-			this->CommandModeWrite("set ip dhcp 4");
-			this->CommandModeExit();
-		}
-
-		void WiFiRN171::CommandModeStart()
-		{
-			serial->write("$$$", 3);
-
-			unsigned long timeout = System::TimeElapsed() + 250;
-
-			while (timeout > System::TimeElapsed())
-			{
-
-			}
-		}
-
-		void WiFiRN171::CommandModeExit()
-		{
-
-		}
-
-		void WiFiRN171::CommandModeWrite(const char *command)
-		{
-		}
 	}
+}
+
+void wifi_rn171::command_mode_exit()
+{
+
+}
+
+void wifi_rn171::command_mode_write(const char* command)
+{
+
 }
