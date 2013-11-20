@@ -551,7 +551,7 @@ void system::random_seed(int seed)
 	randomSeed(seed);
 }
 
-void system::throw_error(error_type error, unsigned char specific_error)
+void system::throw_error(error_type error, int specific_error)
 {
 	Serial.begin(9600);
 	while (true)
@@ -563,7 +563,7 @@ void system::throw_error(error_type error, unsigned char specific_error)
 	}
 }
 
-void system::throw_error(error_type error, const char* file, int line, unsigned char specific_error)
+void system::throw_error(error_type error, const char* file, int line, int specific_error)
 {
 	Serial.begin(9600);
 	while (true)
