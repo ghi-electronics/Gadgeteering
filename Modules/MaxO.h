@@ -22,7 +22,7 @@ namespace gadgeteering
 {
 	namespace modules
 	{
-		class maxo
+		class max_o
 		{
 			const socket& sock;
 			interfaces::digital_output clr;
@@ -35,8 +35,8 @@ namespace gadgeteering
 			unsigned int num_boards;
 
 			public:
-				maxo(unsigned char socket_number);
-				~maxo();
+				max_o(unsigned char socket_number);
+				~max_o();
 
 				void set_number_of_boards(unsigned int boards);
 				unsigned int get_array_size();

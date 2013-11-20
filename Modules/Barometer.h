@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,57 +14,52 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _BAROMETER_H_
-#define _BAROMETER_H_
+#pragma once
 
 #include "../Gadgeteering.h"
 
-namespace gadgeteering {
-	namespace modules {
-		using namespace gadgeteering::interfaces;
-
-		class Barometer {
+namespace gadgeteering
+{
+	namespace modules
+	{
+		class barometer
+		{
 			static const unsigned char ADC_ADDRESS = 0x77;
 			static const unsigned char EEPROM_ADDR = 0x50;
 
-			typedef unsigned char Register;
-
-			struct Registers
+			struct registers
 			{
-				static const Register COEFF = 0x10;
-				static const Register DATD1 = 0xFF;
-				static const Register DATD2 = 0xF0;
+				static const unsigned char COEFF = 0x10;
+				static const unsigned char DATD1 = 0xFF;
+				static const unsigned char DATD2 = 0xF0;
 			};
 
-			struct Coefficients
+			struct coefficients
 			{
 				int C1, C2, C3, C4, C5, C6, C7;
 				int A, B, C, D;
 			};
 
-			digital_output* XCLR;
-			I2CDevice* i2c;
+			const socket& sock;
+			interfaces::digital_output xclr;
+			devices::i2c i2c;
 
-			Coefficients Coeff;
+			coefficients coeff;
 
-			void ReadFactoryCalibrationData(socket* socket);
+			void read_factor_calibration_data();
 
 			public:
-				struct SensorData
+				struct sensor_data
 				{
-					double Temperature;
-					double Pressure;
+					double temperature;
+					double pressure;
 
-					SensorData(double temperature, double pressure) : Temperature(temperature), Pressure(pressure)
-{ };
+					sensor_data(double temperature, double pressure);
 				};
 
-				Barometer(unsigned char socketNumber);
-				~Barometer();
+				barometer(unsigned char socket_number);
 
-				SensorData RequestMeasurement();
+				sensor_data request_measurement();
 		};
 	}
 }
-
-#endif

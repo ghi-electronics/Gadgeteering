@@ -23,20 +23,20 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-maxo::maxo(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::S)), enable(this->sock, 3, false), clr(this->sock, 4, true), spi(this->sock.spi, spi_configuration(false, 0, 0, false, true, 1000))
+max_o::max_o(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::S)), enable(this->sock, 3, false), clr(this->sock, 4, true), spi(this->sock.spi, spi_configuration(false, 0, 0, false, true, 1000))
 {
 	this->resized = false;
 	this->num_boards = 0;
 	this->data = NULL;
 }
 
-maxo::~maxo()
+max_o::~max_o()
 {
 	if (this->data)
 		delete[] this->data;
 }
 
-void maxo::set_number_of_boards(unsigned int boards)
+void max_o::set_number_of_boards(unsigned int boards)
 {
 	if (!this->resized)
 	{
@@ -51,12 +51,12 @@ void maxo::set_number_of_boards(unsigned int boards)
 	}
 }
 
-unsigned int maxo::get_array_size()
+unsigned int max_o::get_array_size()
 {
 	return this->length;
 }
 
-void maxo::clear()
+void max_o::clear()
 {
 	if (!resized)
 		panic(errors::MODULE_ERROR);
@@ -75,7 +75,7 @@ void maxo::clear()
 		this->data[i] = 0x0;
 }
 
-void maxo::write_array(unsigned char* arr, unsigned int length)
+void max_o::write_array(unsigned char* arr, unsigned int length)
 {
 	if (!resized)
 		panic(errors::MODULE_ERROR);
@@ -98,7 +98,7 @@ void maxo::write_array(unsigned char* arr, unsigned int length)
 	this->enable.write(false);
 }
 
-void maxo::write_pin(unsigned int board, unsigned int pin, bool value)
+void max_o::write_pin(unsigned int board, unsigned int pin, bool value)
 {
 	if (!resized)
 		panic(errors::MODULE_ERROR);
@@ -132,7 +132,7 @@ void maxo::write_pin(unsigned int board, unsigned int pin, bool value)
 	delete[] dummy;
 }
 
-unsigned char* maxo::read()
+unsigned char* max_o::read()
 {
 	if (!resized)
 		panic(errors::MODULE_ERROR);
@@ -140,7 +140,7 @@ unsigned char* maxo::read()
 	return this->data;
 }
 
-void maxo::enable_outputs()
+void max_o::enable_outputs()
 {
 	if (!resized)
 		panic(errors::MODULE_ERROR);
@@ -148,7 +148,7 @@ void maxo::enable_outputs()
 	this->enable.write(false);
 }
 
-void maxo::disable_outputs()
+void max_o::disable_outputs()
 {
 	if (!resized)
 		panic(errors::MODULE_ERROR);
