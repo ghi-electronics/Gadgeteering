@@ -33,6 +33,7 @@
     <ClCompile Include="..\..\..\Modules\ALFATOEMLink.cpp" />
     <ClCompile Include="..\..\..\Modules\AMPM35.cpp" />
     <ClCompile Include="..\..\..\Modules\Barometer.cpp" />
+    <ClCompile Include="..\..\..\Modules\Bluetooth.cpp" />
     <ClCompile Include="..\..\..\Modules\BreadBoardX1.cpp" />
     <ClCompile Include="..\..\..\Modules\Breakout.cpp" />
     <ClCompile Include="..\..\..\Modules\BreakoutTB10.cpp" />
@@ -108,6 +109,7 @@
     <ClInclude Include="..\..\..\Modules\ALFATOEMLink.h" />
     <ClInclude Include="..\..\..\Modules\AMPM35.h" />
     <ClInclude Include="..\..\..\Modules\Barometer.h" />
+    <ClInclude Include="..\..\..\Modules\Bluetooth.h" />
     <ClInclude Include="..\..\..\Modules\BreadBoardX1.h" />
     <ClInclude Include="..\..\..\Modules\Breakout.h" />
     <ClInclude Include="..\..\..\Modules\BreakoutTB10.h" />
