@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,186 +20,170 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-PulseCount::PulseCount(unsigned char socketNumber)
+pulse_count::pulse_count(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::Y)), cs(this->sock, 6, true), miso(this->sock, 8, resistor_modes::FLOATING), mosi(this->sock, 7, false), clock(this->sock, 9, false)
 {
-socket* t_socket = mainboard->getSocket(socketNumber);
-t_socket->ensureTypeIsSupported(socket::types::Y);
-
-	CS = new digital_output(socket, socket::pins::Six, true);
-    MISO = new digital_input(socket, socket::pins::Eight, resistor_modes::FLOATING);
-    MOSI = new digital_output(socket, socket::pins::Seven, false);
-    CLOCK = new digital_output(socket, socket::pins::Nine, false);
-
-	Initialize();
+	this->initialize();
 }
 
-PulseCount::~PulseCount()
+void pulse_count::initialize()
 {
-	delete CS;
-	delete MISO;
-	delete MOSI;
-	delete CLOCK;
+	// Clear MDR0 register
+	this->write_one_byte(commands::LS7366_CLEAR | registers::LS7366_MDR0);
+
+	// Clear MDR1 register
+	this->write_one_byte(commands::LS7366_CLEAR | registers::LS7366_MDR1);
+
+	// Clear STR register
+	this->write_one_byte(commands::LS7366_CLEAR | registers::LS7366_STR);
+
+	// Clear CNTR
+	this->write_one_byte(commands::LS7366_CLEAR | registers::LS7366_CNTR);
+
+	// Clear ORT (write CNTR into OTR)
+	this->write_one_byte(commands::LS7366_LOAD | registers::LS7366_OTR);
+
+	// Configure MDR0 register
+	this->write_two_bytes(commands::LS7366_WRITE        // write command
+				| registers::LS7366_MDR0,       // to MDR0
+				mdr0_mode::LS7366_MDR0_QUAD1   // none quadrature mode
+				| mdr0_mode::LS7366_MDR0_FREER   // modulo-n counting
+				| mdr0_mode::LS7366_MDR0_DIDX
+				//| mdr0_mode::LS7366_MDR0_LDOTR
+				| mdr0_mode::LS7366_MDR0_FFAC2);
+
+	// Configure MDR1 register
+	this->write_two_bytes(commands::LS7366_WRITE        // write command
+				| registers::LS7366_MDR1,       // to MDR1
+				mdr1_mode::LS7366_MDR1_2BYTE   // 2 unsigned char counter mode
+				| mdr1_mode::LS7366_MDR1_ENCNT);   // enable counting
 }
 
-void PulseCount::Initialize()
+unsigned char pulse_count::read_one_byte(unsigned char reg)
 {
-    // Clear MDR0 register
-    Write1Byte((unsigned char)Commands::LS7366_CLEAR | (unsigned char)Registers::LS7366_MDR0);
+	this->ls7366_1b_wr[0] = reg;
 
-    // Clear MDR1 register
-    Write1Byte((unsigned char)Commands::LS7366_CLEAR | (unsigned char)Registers::LS7366_MDR1);
-
-    // Clear STR register
-    Write1Byte((unsigned char)Commands::LS7366_CLEAR | (unsigned char)Registers::LS7366_STR);
-
-    // Clear CNTR
-    Write1Byte((unsigned char)Commands::LS7366_CLEAR | (unsigned char)Registers::LS7366_CNTR);
-
-    // Clear ORT (write CNTR into OTR)
-    Write1Byte((unsigned char)Commands::LS7366_LOAD | (unsigned char)Registers::LS7366_OTR);
-
-    // Configure MDR0 register
-    Write2Bytes((unsigned char)Commands::LS7366_WRITE        // write command
-                        | (unsigned char)Registers::LS7366_MDR0,       // to MDR0
-                        (unsigned char)MDR0Mode::LS7366_MDR0_QUAD1   // none quadrature mode
-                        | (unsigned char)MDR0Mode::LS7366_MDR0_FREER   // modulo-n counting
-                        | (unsigned char)MDR0Mode::LS7366_MDR0_DIDX
-        //| (unsigned char)MDR0Mode::LS7366_MDR0_LDOTR
-                        | (unsigned char)MDR0Mode::LS7366_MDR0_FFAC2);
-
-    // Configure MDR1 register
-    Write2Bytes((unsigned char)Commands::LS7366_WRITE        // write command
-                        | (unsigned char)Registers::LS7366_MDR1,       // to MDR1
-                        (unsigned char)MDR1Mode::LS7366_MDR1_2BYTE   // 2 unsigned char counter mode
-                        | (unsigned char)MDR1Mode::LS7366_MDR1_ENCNT);   // enable counting
+	this->software_spi_write_read(this->ls7366_1b_wr, 1, this->ls7366_2b_rd, 2);
+	return this->ls7366_2b_rd[1];
 }
 
-unsigned char PulseCount::Return1Byte(unsigned char reg)
+unsigned short pulse_count::read_two_bytes(unsigned char reg)
 {
-    LS7366_1B_wr[0] = reg;
+	int result = 0;
+	this->ls7366_1b_wr[0] = reg;
 
-    SoftwareSPI_WriteRead(LS7366_1B_wr, 1, LS7366_2B_rd, 2);
-    return LS7366_2B_rd[1];
+	this->software_spi_write_read(this->ls7366_1b_wr, 1, this->ls7366_4b_rd, 4);
+	result = (this->ls7366_4b_rd[1] * 256) + this->ls7366_4b_rd[2];
+
+	return result;
 }
 
-unsigned short PulseCount::Return2Bytes(unsigned char reg)
+void pulse_count::write_one_byte(unsigned char reg)
 {
-    int result = 0;
-    LS7366_1B_wr[0] = reg;
+	this->ls7366_1b_wr[0] = reg;
 
-    SoftwareSPI_WriteRead(LS7366_1B_wr, 1, LS7366_4B_rd, 4);
-    result = (LS7366_4B_rd[1] * 256) + LS7366_4B_rd[2];
-
-    return result;
+	this->software_spi_write_read(this->ls7366_1b_wr, 1, NULL, 0);
 }
 
-void PulseCount::Write1Byte(unsigned char reg)
+void pulse_count::write_two_bytes(unsigned char reg, unsigned char cmd)
 {
-    LS7366_1B_wr[0] = reg;
-
-    SoftwareSPI_WriteRead(LS7366_1B_wr, 1, NULL, 0);
+	this->ls7366_2b_wr[0] = reg;
+	this->ls7366_2b_wr[1] = cmd;
+	this->software_spi_write_read(this->ls7366_2b_wr, 2, NULL, 0);
 }
 
-void PulseCount::Write2Bytes(unsigned char reg, unsigned char cmd)
+void pulse_count::software_spi_write_read(const unsigned char* write, unsigned int write_length, unsigned char* read, unsigned int read_length)
 {
-    LS7366_2B_wr[0] = reg;
-    LS7366_2B_wr[1] = cmd;
-    SoftwareSPI_WriteRead(LS7366_2B_wr, 2, NULL, 0);
+	int write_len = write_length;
+	int read_len = 0;
+
+	if (read != NULL)
+	{
+		read_len = read_length;
+
+		for (int i = 0; i < read_len; i++)
+		{
+			read[i] = 0;
+		}
+	}
+
+	int loop_len = (write_len < read_len ? read_len : write_len);
+
+	unsigned char w = 0;
+
+	this->cs.write(false);
+
+	// per unsigned char
+	for (int len = 0; len < loop_len; len++)
+	{
+		if (len < write_len)
+			w = write[len];
+
+		unsigned char mask = 0x80;
+
+		// per bit
+		for (int i = 0; i < 8; i++)
+		{
+			this->clock.write(false);
+
+			if ((w & mask) == mask)
+				this->mosi.write(true);
+			else
+				this->mosi.write(false);
+
+			this->clock.write(true);
+
+			if (true == this->miso.read())
+			if (read != NULL)
+				read[len] |= mask;
+
+			mask >>= 1;
+		}
+
+		this->mosi.write(false);
+		this->clock.write(false);
+	}
+
+	system::sleep(20);
+	this->cs.write(true);
 }
 
-void PulseCount::SoftwareSPI_WriteRead(const unsigned char* write, unsigned int writeLength, unsigned char* read, unsigned int readLength)
+long pulse_count::read_encoders()
 {
-    int writeLen = writeLength;
-    int readLen = 0;
+	int ret_val = this->read_two_bytes(commands::LS7366_READ | registers::LS7366_CNTR);
+	if ((this->read_status_reg() & 0x1) > 0) // native number
+	{
+		ret_val = ~ret_val;
+		ret_val &= 0x7FFF;
+		ret_val *= (-1);
 
-    if (read != NULL)
-    {
-        readLen = readLength;
 
-        for (int i = 0; i < readLen; i++)
-        {
-            read[i] = 0;
-        }
-    }
+	}
+	else
+	{
 
-    int loopLen = (writeLen < readLen ? readLen : writeLen);
-
-    unsigned char w = 0;
-
-    CS->write(false);
-
-    // per unsigned char
-    for (int len = 0; len < loopLen; len++)
-    {
-        if (len < writeLen)
-            w = write[len];
-
-        unsigned char mask = 0x80;
-
-        // per bit
-        for (int i = 0; i < 8; i++)
-        {
-            CLOCK->write(false);
-
-            if ((w & mask) == mask)
-                MOSI->write(true);
-            else
-                MOSI->write(false);
-
-            CLOCK->write(true);
-
-            if (true == MISO->read())
-                if (read != NULL)
-                    read[len] |= mask;
-
-            mask >>= 1;
-        }
-
-        MOSI->write(false);
-        CLOCK->write(false);
-    }
-
-    System::Sleep(20);
-    CS->write(true);
+	}
+	return ret_val;
 }
 
-long PulseCount::ReadEncoders()
+unsigned char pulse_count::read_status_reg()
 {
-    int retVal = Return2Bytes((unsigned char)Commands::LS7366_READ | (unsigned char)Registers::LS7366_CNTR);
-    if ((ReadStatusReg() & 0x1)>0) // native number
-    {
-        retVal = ~retVal;
-        retVal &= 0x7FFF;
-        retVal *= (-1);
+	unsigned char ret_val = this->read_one_byte(static_cast<unsigned char>(commands::LS7366_READ | registers::LS7366_STR));//Return1Bytes((unsigned char)((unsigned char)commands::LS7366_READ | (unsigned char)registers::LS7366_STR));
 
-
-    }
-    else
-    {
-
-    }
-    return retVal;
+	return ret_val;
 }
 
-unsigned char PulseCount::ReadStatusReg()
+pulse_count::direction pulse_count::read_direction()
 {
-    unsigned char retVal = Return1Byte((unsigned char)((unsigned char)Commands::LS7366_READ | (unsigned char)Registers::LS7366_STR));//Return1Bytes((unsigned char)((unsigned char)Commands::LS7366_READ | (unsigned char)Registers::LS7366_STR));
-
-    return retVal;
+	unsigned char dir = static_cast<unsigned char>((this->read_status_reg() & 0x2) >> 1);
+	return dir == 1 ? directions::DOWN : directions::UP;
 }
 
-PulseCount::Direction PulseCount::ReadDirection()
+void pulse_count::set_count_mode(unsigned char mode)
 {
-    unsigned char dir = (unsigned char)((ReadStatusReg() & 0x2)>> 1);
-    return dir == 1 ? Directions::DOWN : Directions::UP;
+	this->write_two_bytes(commands::LS7366_WRITE | registers::LS7366_MDR0, mode);
 }
 
-void PulseCount::SetCountMode(unsigned char mode)
+void pulse_count::clear_register()
 {
-	Write2Bytes((unsigned char)Commands::LS7366_WRITE | (unsigned char)Registers::LS7366_MDR0, mode);
-}
-
-void PulseCount::ClearRegister()
-{
-	Write1Byte((unsigned char)Commands::LS7366_CLEAR | (unsigned char)Registers::LS7366_CNTR);
+	this->write_one_byte(commands::LS7366_CLEAR | registers::LS7366_CNTR);
 }
