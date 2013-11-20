@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,191 +14,179 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "FMRadio.h"
+#include "RadioFM1.h"
 
 using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-const double FMRadio::MAX_CHANNEL = 107.5;
-const double FMRadio::MIN_CHANNEL = 87.5;
-const double FMRadio::INVALID_CHANNEL = -1.0;
+const double radio_fm1::MAX_CHANNEL = 107.5;
+const double radio_fm1::MIN_CHANNEL = 87.5;
+const double radio_fm1::INVALID_CHANNEL = -1.0;
 
-FMRadio::FMRadio(unsigned char socketNumber)
+radio_fm1::radio_fm1(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::Y)), i2c(this->sock.i2c, radio_fm1::I2C_ADDRESS), reset_pin(this->sock, 5), sen_pin(this->sock, 4, true)
 {
-	socket* t_socket = mainboard->getSocket(socketNumber);
-	//t_socket->ensureTypeIsSupported(socket::types::Y);
+	this->reset_pin.write(true);
 
-	this->resetPin = new digital_output(socket, 5, false);
-	this->senPin = new digital_input(socket, 4, true);
-	this->i2c = t_socket->getI2CDevice(FMRadio::I2C_ADDRESS);
+	system::sleep(100);
 
-	this->resetPin->write(true);
-
-	System::Sleep(100);
-
-	this->ReadRegisters();
+	this->read_registers();
 	this->registers[0x07] = 0x8100; //Enable the oscillator
-	this->UpdateRegisters();
+	this->update_registers();
 
-	System::Sleep(500); //Wait for clock to settle - from AN230 page 9
+	system::sleep(500); //Wait for clock to settle - from AN230 page 9
 
-	this->ReadRegisters();
-	this->registers[Registers::POWERCFG] = 0x4001; //Enable the IC
-	this->registers[Registers::SYSCONFIG1] &= ~(1 << FMRadio::BIT_RDS); //Disable RDS
-	this->registers[Registers::SYSCONFIG2] &= 0xFFCF; //Force 200kHz Channel spacing for USA
-	this->registers[Registers::SYSCONFIG2] &= 0xFFF0; //Clear Volume bits
-	this->registers[Registers::SYSCONFIG2] |= 0x000F; //Set Volume to lowest
-	this->UpdateRegisters();
+	this->read_registers();
+	this->registers[registers::POWERCFG] = 0x4001; //Enable the IC
+	this->registers[registers::SYSCONFIG1] &= ~(1 << radio_fm1::BIT_RDS); //Disable RDS
+	this->registers[registers::SYSCONFIG2] &= 0xFFCF; //Force 200kHz Channel spacing for USA
+	this->registers[registers::SYSCONFIG2] &= 0xFFF0; //clear new_volume bits
+	this->registers[registers::SYSCONFIG2] |= 0x000F; //Set new_volume to lowest
+	this->update_registers();
 
-	System::Sleep(110); //Max powerup time, from datasheet page 13
+	system::sleep(110); //Max powerup time, from datasheet page 13
 
-	this->SetChannel(FMRadio::MIN_CHANNEL);
-	this->SetVolume(FMRadio::MIN_VOLUME);
+	this->set_channel(radio_fm1::MIN_CHANNEL);
+	this->set_volume(radio_fm1::MIN_VOLUME);
 }
 
-FMRadio::~FMRadio()
-{
-	delete this->resetPin;
-}
-
-void FMRadio::ReadRegisters()
+void radio_fm1::read_registers()
 {
 	unsigned char data[32];
 
-	this->i2c->read(data, 32);
+	this->i2c.read(data, 32);
 
 	for (int i = 0, x = 0xA; i < 12; i += 2, ++x)
-		this->registers[x] = (unsigned short)((data[i] << 8) | (data[i + 1]));
+		this->registers[x] = static_cast<unsigned short>((data[i] << 8) | (data[i + 1]));
 
 	for (int i = 12, x = 0x0; i < 32; i += 2, ++x)
-		this->registers[x] = (unsigned short)((data[i] << 8) | (data[i + 1]));
+		this->registers[x] = static_cast<unsigned short>((data[i] << 8) | (data[i + 1]));
 }
 
-void FMRadio::UpdateRegisters()
+void radio_fm1::update_registers()
 {
-    unsigned char data[12];
+	unsigned char data[12];
 
-    for (int x = 0x02, i = 0; x < 0x08; ++x, i += 2)
-    {
-        data[i] = (unsigned char)(this->registers[x] >> 8);
-        data[i + 1] = (unsigned char)(this->registers[x] & 0x00FF);
-    }
-    this->i2c->write(data, 12);
+	for (int x = 0x02, i = 0; x < 0x08; ++x, i += 2)
+	{
+		data[i] = static_cast<unsigned char>(this->registers[x] >> 8);
+		data[i + 1] = static_cast<unsigned char>(this->registers[x] & 0x00FF);
+	}
+	this->i2c.write(data, 12);
 }
 
-void FMRadio::IncreaseVolume()
+void radio_fm1::increase_volume()
 {
-	this->SetVolume(this->volume + 1);
+	this->set_volume(this->volume + 1);
 }
 
-void FMRadio::DecreaseVolume()
+void radio_fm1::decrease_volume()
 {
-	this->SetVolume(this->volume - 1);
+	this->set_volume(this->volume - 1);
 }
 
-void FMRadio::SetVolume(unsigned short Volume)
+void radio_fm1::set_volume(unsigned short new_volume)
 {
-	if (Volume > FMRadio::MAX_VOLUME) Volume = FMRadio::MAX_VOLUME;
+	if (new_volume > radio_fm1::MAX_VOLUME) new_volume = radio_fm1::MAX_VOLUME;
 
-    this->ReadRegisters();
-    this->registers[Registers::SYSCONFIG2] &= 0xFFF0; //Clear Volume bits
-    this->registers[Registers::SYSCONFIG2] |= Volume; //Set Volume to lowest
-    this->UpdateRegisters();
+	this->read_registers();
+	this->registers[registers::SYSCONFIG2] &= 0xFFF0; //clear new_volume bits
+	this->registers[registers::SYSCONFIG2] |= new_volume; //Set new_volume to lowest
+	this->update_registers();
 
-	this->volume = Volume;
+	this->volume = new_volume;
 }
 
-unsigned short FMRadio::GetVolume()
+unsigned short radio_fm1::get_volume()
 {
 	return this->volume;
 }
 
-void FMRadio::SetChannel(double newChannel)
+void radio_fm1::set_channel(double new_channel)
 {
-	if (newChannel > FMRadio::MAX_CHANNEL) newChannel = FMRadio::MAX_CHANNEL;
-	if (newChannel < FMRadio::MIN_CHANNEL) newChannel = FMRadio::MIN_CHANNEL;
+	if (new_channel > radio_fm1::MAX_CHANNEL) new_channel = radio_fm1::MAX_CHANNEL;
+	if (new_channel < radio_fm1::MIN_CHANNEL) new_channel = radio_fm1::MIN_CHANNEL;
 
-	newChannel *= 10;
-    newChannel -= 875;
-    newChannel /= 2;
+	new_channel *= 10;
+	new_channel -= 875;
+	new_channel /= 2;
 
-    this->ReadRegisters();
-    this->registers[Registers::CHANNEL] &= 0xFE00; //Clear out the Channel bits
-    this->registers[Registers::CHANNEL] |= (unsigned short)newChannel; //Mask in the new Channel
-    this->registers[Registers::CHANNEL] |= (1 << FMRadio::BIT_TUNE); //Set the TUNE bit to start
-    this->UpdateRegisters();
+	this->read_registers();
+	this->registers[registers::CHANNEL] &= 0xFE00; //clear out the Channel bits
+	this->registers[registers::CHANNEL] |= (unsigned short)new_channel; //Mask in the new Channel
+	this->registers[registers::CHANNEL] |= (1 << radio_fm1::BIT_TUNE); //Set the TUNE bit to start
+	this->update_registers();
 
-    //Poll to see if STC is set
-    while (true)
-    {
-        this->ReadRegisters();
-        if ((this->registers[Registers::STATUSRSSI] & (1 << FMRadio::BIT_STC)) != 0)
-            break; //Tuning complete!
-    }
+	//Poll to see if STC is set
+	while (true)
+	{
+		this->read_registers();
+		if ((this->registers[registers::STATUSRSSI] & (1 << radio_fm1::BIT_STC)) != 0)
+			break; //Tuning complete!
+	}
 
-    this->ReadRegisters();
-    this->registers[Registers::CHANNEL] &= 0x7FFF; //Clear the tune after a tune has completed
-    this->UpdateRegisters();
+	this->read_registers();
+	this->registers[registers::CHANNEL] &= 0x7FFF; //clear the tune after a tune has completed
+	this->update_registers();
 
-    //Wait for the si4703 to clear the STC as well
-    while (true)
-    {
-        this->ReadRegisters();
-        if ((this->registers[Registers::STATUSRSSI] & (1 << FMRadio::BIT_STC)) == 0)
-            break; //Tuning complete!
-    }
+	//Wait for the si4703 to clear the STC as well
+	while (true)
+	{
+		this->read_registers();
+		if ((this->registers[registers::STATUSRSSI] & (1 << radio_fm1::BIT_STC)) == 0)
+			break; //Tuning complete!
+	}
 }
 
-double FMRadio::GetChannel()
+double radio_fm1::get_channel()
 {
-    this->ReadRegisters();
+	this->read_registers();
 
-    int Channel = this->registers[Registers::READCHAN] & 0x03FF;
+	int chan = this->registers[registers::READCHAN] & 0x03FF;
 
-    return (Channel * 2.0 + 875.0) / 10.0;
+	return (chan * 2.0 + 875.0) / 10.0;
 }
 
-double FMRadio::Seek(SeekDirection direction)
+double radio_fm1::seek(seek_direction direction)
 {
-  this->ReadRegisters();
+	this->read_registers();
 
-  //Set Seek mode wrap bit
-  this->registers[Registers::POWERCFG] &= 0xFBFF;
-
-
-  if (direction == SeekDirections::Backward)
-    this->registers[Registers::POWERCFG] &= 0xFDFF; //Seek down is the default upon reset
-  else
-    this->registers[Registers::POWERCFG] |= 1 << FMRadio::BIT_SEEKUP; //Set the bit to Seek up
+	//Set seek mode wrap bit
+	this->registers[registers::POWERCFG] &= 0xFBFF;
 
 
-    this->registers[Registers::POWERCFG] |= (1 << FMRadio::BIT_SEEK); //Start Seek
-    this->UpdateRegisters();
+	if (direction == seek_directions::BACKWARD)
+		this->registers[registers::POWERCFG] &= 0xFDFF; //seek down is the default upon reset
+	else
+		this->registers[registers::POWERCFG] |= 1 << radio_fm1::BIT_SEEKUP; //Set the bit to seek up
 
-    //Poll to see if STC is set
-    while (true)
-    {
-      this->ReadRegisters();
-      if ((this->registers[Registers::STATUSRSSI] & (1 << FMRadio::BIT_STC)) != 0)
-        break;
-    }
 
-  this->ReadRegisters();
-  int valueSFBL = this->registers[Registers::STATUSRSSI] & (1 << FMRadio::BIT_SFBL);
-  this->registers[Registers::POWERCFG] &= 0xFEFF; //Clear the Seek bit after Seek has completed
-  this->UpdateRegisters();
+	this->registers[registers::POWERCFG] |= (1 << radio_fm1::BIT_SEEK); //Start seek
+	this->update_registers();
 
-  //Wait for the si4703 to clear the STC as well
-  while (true)
-  {
-    this->ReadRegisters();
-    if ((this->registers[Registers::STATUSRSSI] & (1 << FMRadio::BIT_STC)) == 0)
-      break;
-  }
+	//Poll to see if STC is set
+	while (true)
+	{
+		this->read_registers();
+		if ((this->registers[registers::STATUSRSSI] & (1 << radio_fm1::BIT_STC)) != 0)
+			break;
+	}
 
-  if (valueSFBL > 0) //The bit was set indicating we hit a band limit or failed to find a station
-    return FMRadio::INVALID_CHANNEL;
+	this->read_registers();
+	int val = this->registers[registers::STATUSRSSI] & (1 << radio_fm1::BIT_SFBL);
+	this->registers[registers::POWERCFG] &= 0xFEFF; //clear the seek bit after seek has completed
+	this->update_registers();
 
-  return this->GetChannel();
+	//Wait for the si4703 to clear the STC as well
+	while (true)
+	{
+		this->read_registers();
+		if ((this->registers[registers::STATUSRSSI] & (1 << radio_fm1::BIT_STC)) == 0)
+			break;
+	}
+
+	if (val > 0) //The bit was set indicating we hit a band limit or failed to find a station
+		return radio_fm1::INVALID_CHANNEL;
+
+	return this->get_channel();
 }

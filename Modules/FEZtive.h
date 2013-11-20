@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _FEZTIVE_H_
-#define _FEZTIVE_H_
+#pragma once
 
 #include "../Gadgeteering.h"
 
@@ -23,66 +22,63 @@ namespace gadgeteering
 {
 	namespace modules
 	{
-		class FEZtive : protected Module
+		class feztive
 		{
-			private:
-				interfaces::SPIDevice *spi;
-				interfaces::SPIConfiguration *spi_config;
-				Socket *sock;
+			const socket& sock;
+			devices::spi spi;
 
-				Color *LEDs;
-				char *_zeros;
-				int ledLength;
-				int _zeroLength;
+			color* leds;
+			unsigned char* zeros;
+			unsigned int led_len;
+			unsigned int zero_len;
 
-				void GetColorForRender(Color color, unsigned char* r, unsigned char* g, unsigned char* b);
+			void get_color_for_render(color c, unsigned char& r, unsigned char& g, unsigned char& b);
 
 			public:
-				FEZtive(int socket);
+				feztive(unsigned char socket_number);
+				~feztive();
 
-				void Initialize(int numLEDS = 80, unsigned int spiClockRateKHZ = 1000);
-
-				/// <summary>
-				/// Sets all LEDs to the passed in Color structure
-				/// </summary>
-				/// <param name="color">Color to set all LEDs to. Color values must be between 0-127.</param>
-				void SetAll(Color color);
+				void initialize(int num_leds = 80, unsigned int spi_clock = 1000);
 
 				/// <summary>
-				/// Sets all LEDs to the passed in array of Color structures and resends the colors
+				/// Sets all leds to the passed in color structure
 				/// </summary>
-				/// <param name="colorArr">An array of Color structures to set every LED to. Color values must be between 0-127.</param>
-				void SetAll(Color *colorArr);
+				/// <param name="c">color to set all leds to. color values must be between 0-127.</param>
+				void set_all(color c);
 
 				/// <summary>
-				/// Sets the specified LED to the passed in color and resends the colors
+				/// Sets all leds to the passed in array of color structures and resends the colors
 				/// </summary>
-				/// <param name="color">Color to set the LED to. Color values must be between 0-127.</param>
-				/// <param name="numLED">The LED to set the color of</param>
-				void SetLED(Color color, int numLED, bool redraw = true);
+				/// <param name="arr">An array of color structures to set every LED to. color values must be between 0-127.</param>
+				void set_all(color* arr);
+
+				/// <summary>
+				/// Sets the specified LED to the passed in c and resends the colors
+				/// </summary>
+				/// <param name="c">color to set the LED to. color values must be between 0-127.</param>
+				/// <param name="num_led">The LED to set the c of</param>
+				void set_led(color c, int num_led, bool redraw = true);
 
 				/// <summary>
 				/// Returns an array of the current colors displayed by this module
 				/// </summary>
-				/// <returns>Array of Color structures that the current module is holding</returns>
-				Color *GetCurrentColors();
+				/// <returns>Array of color structures that the current module is holding</returns>
+				color* get_current_colors();
 
 				/// <summary>
-				/// Turns all LEDs off (Black)
+				/// Turns all leds off (Black)
 				/// </summary>
-				void Clear();
+				void clear();
 
 				/// <summary>
-				/// Redraws all of the colors. Only to be used after a change was made to the Color array.
+				/// Redraws all of the colors. Only to be used after a change was made to the color array.
 				/// </summary>
-				void Redraw();
+				void redraw();
 
 				/// <summary>
 				/// Returns a randomly generated color
 				/// </summary>
-				Color GenerateRandomColor();
+				color generate_random_color();
 		};
 	}
 }
-
-#endif

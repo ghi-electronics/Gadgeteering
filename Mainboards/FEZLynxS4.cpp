@@ -591,7 +591,7 @@ void fez_lynx_s4::ftdi_channel::spi_read_write(const unsigned char* write_buffer
 
 	mainboard->set_io_mode(config.chip_select, io_modes::DIGITAL_OUTPUT, resistor_modes::NONE);
 	mainboard->write_digital(config.chip_select, config.cs_active_state);
-	if (config.cs_setup_time != 0)
+	if (config.uses_chip_select && config.cs_setup_time != 0)
 		system::sleep(config.cs_setup_time);
 
 	status |= FT_Write(handle, this->buffer, count + 3, &sent);
@@ -613,7 +613,7 @@ void fez_lynx_s4::ftdi_channel::spi_read_write(const unsigned char* write_buffer
 		delete[] read_buffer;
 	}
 
-	if (deselect_after)
+	if (config.uses_chip_select && deselect_after)
 	{
 		if (config.cs_hold_time != 0)
 			system::sleep(config.cs_hold_time);

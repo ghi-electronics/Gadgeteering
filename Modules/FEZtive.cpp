@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,136 +16,140 @@ limitations under the License.
 
 #include "FEZtive.h"
 
-#include <string.h>
-
 using namespace gadgeteering;
 using namespace gadgeteering::modules;
 
-FEZtive::FEZtive(int socket)
+feztive::feztive(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::S)), spi(this->sock.spi, spi_configuration(true, 0, 0, false, true, 1000, false))
 {
-	this->sock = mainboard->getSocket(socket);
-	this->sock->ensureTypeIsSupported(Gadgeteering::socket::types::S);
+	this->leds = NULL;
+	this->zeros = NULL;
 }
 
-void FEZtive::Initialize(int numLEDS, unsigned int spiClockRateKHZ)
+feztive::~feztive() 
 {
-	this->spi_config = new interfaces::SPIConfiguration(true, 0, 0, false, true, spiClockRateKHZ);
-	this->spi = new interfaces::SPIDevice(mainboard->getSPIBus(this->sock),0,this->spi_config);
+	if (this->leds)
+		delete[] this->leds;
+	if (this->zeros)
+		delete[] this->zeros;
+}
 
-	ledLength = numLEDS;
-    LEDs = new Color[numLEDS];
+void feztive::initialize(int num_leds, unsigned int spi_clock)
+{
+	this->spi.config.clock_rate = spi_clock;
 
-	for (int i = 0; i < numLEDS; i++)
-    {
-        LEDs[i] = Color(0, 0, 0);
-    }
+	this->led_len = num_leds;
+	this->leds = new color[num_leds];
 
-	_zeroLength = 3 * ((numLEDS + 63) / 64);
-	_zeros = new char[_zeroLength];
-
-	for(unsigned int i = 0; i < strlen(_zeros); i++)
+	for (int i = 0; i < num_leds; i++)
 	{
-		_zeros[i] = 0x00;
+		this->leds[i] = color(0, 0, 0);
+	}
+
+	this->zero_len = 3 * ((num_leds + 63) / 64);
+	this->zeros = new unsigned char[this->zero_len];
+
+	for (unsigned int i = 0; i < this->zero_len; i++)
+	{
+		this->zeros[i] = 0x00;
 	}
 }
 
-void FEZtive::SetAll(Color color)
+void feztive::set_all(color c)
 {
 	unsigned char colorarr[3];
 
-	for(int i = 0; i < 3; i++)
+	for (int i = 0; i < 3; i++)
 		colorarr[i] = 0;
 
-	//Clear();
+	//clear();
 
-	spi->write((unsigned char*)_zeros, 1);
+	this->spi.write(this->zeros, 1);
 
-	for (int i = 0; i < ledLength; i += 2)
+	for (unsigned int i = 0; i < this->led_len; i += 2)
 	{
-		LEDs[i] = color;
-		LEDs[i + 1] = color;
+		this->leds[i] = c;
+		this->leds[i + 1] = c;
 
-		this->GetColorForRender(LEDs[i], colorarr + 2, colorarr + 1, colorarr);
-		spi->write(colorarr, 3);
-		this->GetColorForRender(LEDs[i + 1], colorarr + 2, colorarr + 1, colorarr);
-		spi->write(colorarr, 3);
+		this->get_color_for_render(this->leds[i], colorarr[2], colorarr[1], colorarr[0]);
+		this->spi.write(colorarr, 3);
+		this->get_color_for_render(this->leds[i + 1], colorarr[2], colorarr[1], colorarr[0]);
+		this->spi.write(colorarr, 3);
 	}
 
-	spi->write((unsigned char*)_zeros, 1, true);
+	this->spi.write(this->zeros, 1, true);
 }
 
-void FEZtive::SetAll(Color *colorArr)
+void feztive::set_all(color *arr)
 {
-	unsigned char color[3];
+	unsigned char c[3];
 
-	spi->write((unsigned char*)_zeros, 1);
+	this->spi.write(this->zeros, 1);
 
-	for (int i = 0; i < ledLength; i += 2)
+	for (unsigned int i = 0; i < this->led_len; i += 2)
 	{
-		SetLED(colorArr[i], i);
-		SetLED(colorArr[i + 1], i + 1);
+		this->set_led(arr[i], i);
+		this->set_led(arr[i + 1], i + 1);
 
-		this->GetColorForRender(LEDs[i], color + 2, color + 1, color);
-		spi->write(color, 1);
-		this->GetColorForRender(LEDs[i + 1], color + 2, color + 1, color);
-		spi->write(color, 1);
+		this->get_color_for_render(this->leds[i], c[2], c[1], c[0]);
+		this->spi.write(c, 1);
+		this->get_color_for_render(this->leds[i + 1], c[2], c[1], c[0]);
+		this->spi.write(c, 1);
 	}
 
-	spi->write((unsigned char*)_zeros, 1, true);
+	this->spi.write(this->zeros, 1, true);
 }
 
-void FEZtive::SetLED(Color color, int numLED, bool redraw)
+void feztive::set_led(color c, int num_led, bool redraw)
 {
-	LEDs[numLED] = color;
+	this->leds[num_led] = c;
 
-	if(redraw)
-		Redraw();
+	if (redraw)
+		this->redraw();
 }
 
-Color *FEZtive::GetCurrentColors()
+color *feztive::get_current_colors()
 {
-	return LEDs;
+	return this->leds;
 }
 
-void FEZtive::Clear()
+void feztive::clear()
 {
-	SetAll(Color(0,0,0));
+	this->set_all(color(0, 0, 0));
 }
 
-void FEZtive::Redraw()
+void feztive::redraw()
 {
-	unsigned char color[3];
+	unsigned char c[3];
 
-	spi->write((unsigned char*)_zeros, 1);
+	this->spi.write(this->zeros, 1);
 
-	for (int i = 0; i < ledLength; i += 2)
+	for (unsigned int i = 0; i < this->led_len; i += 2)
 	{
-		this->GetColorForRender(LEDs[i], color + 2, color + 1, color);
-		spi->write(color, 3);
-		this->GetColorForRender(LEDs[i + 1], color + 2, color + 1, color);
-		spi->write(color, 3);
+		this->get_color_for_render(this->leds[i], c[2], c[1], c[0]);
+		this->spi.write(c, 3);
+		this->get_color_for_render(this->leds[i + 1], c[2], c[1], c[0]);
+		this->spi.write(c, 3);
 	}
 
-	spi->write((unsigned char*)_zeros, 1, true);
+	this->spi.write(this->zeros, 1, true);
 }
 
-void FEZtive::GetColorForRender(Color color, unsigned char* g, unsigned char* r, unsigned char* b)
+void feztive::get_color_for_render(color c, unsigned char& g, unsigned char& r, unsigned char& b)
 {
-	*g = (0x80 | color.green);
-	*r = (0x80 | color.red);
-	*b = (0x80 | color.blue);
+	g = (0x80 | c.green);
+	r = (0x80 | c.red);
+	b = (0x80 | c.blue);
 }
 
-Color FEZtive::GenerateRandomColor()
+color feztive::generate_random_color()
 {
-	Color randomColor;
-	System::RandomNumberSeed(ledLength ? ledLength : 1337);
+	color c;
 
-	unsigned char r = (System::RandomNumber(0, 127) / System::RandomNumber(1,4));
-	unsigned char g = (System::RandomNumber(0, 127) / System::RandomNumber(1,4));
-	unsigned char b = (System::RandomNumber(0, 127) / System::RandomNumber(1,4));
+	system::random_seed(static_cast<int>(system::time_elapsed()));
 
-	randomColor.Set(r, g, b);
+	c.red = (system::random_number(0, 127) / system::random_number(1, 4));
+	c.green = (system::random_number(0, 127) / system::random_number(1, 4));
+	c.blue = (system::random_number(0, 127) / system::random_number(1, 4));
 
-	return randomColor;
+	return c;
 }

@@ -99,6 +99,8 @@ namespace gadgeteering
 				void read_registers(unsigned char address, unsigned char* buffer, unsigned int length);
 				void write_registers(unsigned char address, const unsigned char* buffer, unsigned int length);
 				void write_read(const unsigned char* write_buffer, unsigned int write_length, unsigned char* read_buffer, unsigned int read_length);
+				void write(const unsigned char* write_buffer, unsigned int write_length);
+				void read(unsigned char* read_buffer, unsigned int read_length);
 
 			public:
 				unsigned int get_position_on_chain() const;

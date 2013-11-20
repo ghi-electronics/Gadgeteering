@@ -377,9 +377,12 @@ void fez_medusa_mini::spi_read_write(spi_channel channel, const unsigned char* w
 	SPI.setClockDivider(static_cast<int>(84000.0 / config.clock_rate));
 #endif
 
-	mainboard->write_digital(config.chip_select, config.cs_active_state);
-	if (config.cs_setup_time != 0)
-		system::sleep(config.cs_setup_time);
+	if (config.uses_chip_select)
+	{
+		mainboard->write_digital(config.chip_select, config.cs_active_state);
+		if (config.cs_setup_time != 0)
+			system::sleep(config.cs_setup_time);
+	}
 
 	if (write_buffer && read_buffer)
 	{
@@ -397,7 +400,7 @@ void fez_medusa_mini::spi_read_write(spi_channel channel, const unsigned char* w
 			SPI.transfer(write_buffer[i]);
 	}
 
-	if (deselect_after)
+	if (config.uses_chip_select && deselect_after)
 	{
 		if (config.cs_hold_time != 0)
 			system::sleep(config.cs_hold_time);

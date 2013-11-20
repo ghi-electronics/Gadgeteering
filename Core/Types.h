@@ -180,8 +180,10 @@ namespace gadgeteering
 		//Gets the clock rate, in KHz.
 		unsigned int clock_rate;
 
+		bool uses_chip_select;
+
 		spi_configuration();
-		spi_configuration(bool cs_active_state, unsigned int cs_setup_time, unsigned int cs_hold_time, bool clock_idle_state, bool clock_edge, unsigned int clock_rate);
+		spi_configuration(bool cs_active_state, unsigned int cs_setup_time, unsigned int cs_hold_time, bool clock_idle_state, bool clock_edge, unsigned int clock_rate, bool uses_chip_select = true);
 	};
 
 	struct serial_configuration

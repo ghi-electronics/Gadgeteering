@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,295 +20,272 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-MultiColorLED::MultiColorLED(unsigned char socketNumber) : DaisyLinkModule(socketNumber, MultiColorLED::GHI_DAISYLINK_MANUFACTURER, MultiColorLED::GHI_DAISYLINK_TYPE_MULTICOLORLED, MultiColorLED::GHI_DAISYLINK_VERSION_MULTICOLORLED, MultiColorLED::GHI_DAISYLINK_VERSION_MULTICOLORLED)
+multicolor_led::multicolor_led(unsigned char socket_number) : daisy_link::module(socket_number, multicolor_led::GHI_DAISYLINK_MANUFACTURER, multicolor_led::GHI_DAISYLINK_TYPE_MULTICOLORLED, multicolor_led::GHI_DAISYLINK_VERSION_MULTICOLORLED, multicolor_led::GHI_DAISYLINK_VERSION_MULTICOLORLED)
 {
-	this->GreenBlueSwapped = false;
+	this->green_blue_swapped = false;
 
-	TurnOff();
+	this->turn_off();
 }
 
-MultiColorLED::~MultiColorLED()
+bool multicolor_led::swap_green_blue()
 {
+	this->green_blue_swapped = true;
 
+	return this->green_blue_swapped;
 }
 
-void MultiColorLED::GetAll(unsigned char socketNumber, MultiColorLED** leds, unsigned int* count)
+void multicolor_led::turn_blue()
 {
-	int chainLength;
-    chainLength = GetLengthOfChain(socketNumber);
-    if (chainLength == 0)
-	{
-		leds = NULL;
-		*count = 0;
-	}
-
-	*count = chainLength;
-    leds = new MultiColorLED*[chainLength];
-    for (int i = 0; i < chainLength; i++)
-    {
-        leds[i] = new MultiColorLED(socketNumber);
-    }
+	this->send_command(color::BLUE, modes::Constant);
 }
 
-bool MultiColorLED::SwapGreenBlue()
+void multicolor_led::turn_red()
 {
-	this->GreenBlueSwapped = true;
-
-	return this->GreenBlueSwapped;
+	this->send_command(color::RED, modes::Constant);
 }
 
-void MultiColorLED::TurnBlue()
+void multicolor_led::turn_green()
 {
-    SendCommand(Color::BLUE, Modes::Constant);
+	this->send_command(color::GREEN, modes::Constant);
 }
 
-void MultiColorLED::TurnRed()
+void multicolor_led::turn_off()
 {
-    SendCommand(Color::RED, Modes::Constant);
+	this->send_command(color::BLACK, modes::Constant);
 }
 
-void MultiColorLED::TurnGreen()
+void multicolor_led::turn_white()
 {
-    SendCommand(Color::GREEN, Modes::Constant);
+	this->send_command(color::WHITE, modes::Constant);
 }
 
-void MultiColorLED::TurnOff()
+void multicolor_led::turn_color(color c)
 {
-    SendCommand(Color::BLACK, Modes::Constant);
+	this->send_command(c, modes::Constant);
 }
 
-void MultiColorLED::TurnWhite()
+void multicolor_led::set_red_intensity(unsigned char intensity)
 {
-    SendCommand(Color::WHITE, Modes::Constant);
+	color current_color = this->get_current_color();
+	current_color.red = intensity;
+	this->send_command(current_color);
 }
 
-void MultiColorLED::TurnColor(Color color)
+void multicolor_led::set_red_intensity(int intensity)
 {
-    SendCommand(color, Modes::Constant);
+	if (intensity < 0) intensity = 0;
+	if (intensity > 255) intensity = 255;
+	this->set_red_intensity(static_cast<unsigned char>(intensity));
 }
 
-void MultiColorLED::SetRedIntensity(unsigned char intensity)
+void multicolor_led::set_green_intensity(unsigned char intensity)
 {
-    Color currentColor = GetCurrentColor();
-    currentColor.red = intensity;
-    SendCommand(currentColor);
+	color current_color = this->get_current_color();
+	current_color.green = intensity;
+	this->send_command(current_color);
 }
 
-void MultiColorLED::SetRedIntensity(int intensity)
+void multicolor_led::set_green_intensity(int intensity)
 {
-    if (intensity < 0) intensity = 0;
-    if (intensity > 255) intensity = 255;
-    SetRedIntensity((unsigned char)intensity);
+	if (intensity < 0) intensity = 0;
+	if (intensity > 255) intensity = 255;
+	set_green_intensity(static_cast<unsigned char>(intensity));
 }
 
-void MultiColorLED::SetGreenIntensity(unsigned char intensity)
+void multicolor_led::set_blue_intensity(unsigned char intensity)
 {
-    Color currentColor = GetCurrentColor();
-    currentColor.green = intensity;
-    SendCommand(currentColor);
+	color current_color = this->get_current_color();
+	current_color.blue = intensity;
+	this->send_command(current_color);
 }
 
-void MultiColorLED::SetGreenIntensity(int intensity)
+void multicolor_led::set_blue_intensity(int intensity)
 {
-    if (intensity < 0) intensity = 0;
-    if (intensity > 255) intensity = 255;
-    SetGreenIntensity((unsigned char)intensity);
+	if (intensity < 0) intensity = 0;
+	if (intensity > 255) intensity = 255;
+	set_blue_intensity(static_cast<unsigned char>(intensity));
 }
 
-void MultiColorLED::SetBlueIntensity(unsigned char intensity)
+void multicolor_led::add_red()
 {
-    Color currentColor = GetCurrentColor();
-    currentColor.blue = intensity;
-    SendCommand(currentColor);
+	color current_color = this->get_current_color();
+	current_color.red = 255;
+	this->send_command(current_color);
 }
 
-void MultiColorLED::SetBlueIntensity(int intensity)
+void multicolor_led::remove_red()
 {
-    if (intensity < 0) intensity = 0;
-    if (intensity > 255) intensity = 255;
-    SetBlueIntensity((unsigned char)intensity);
+	color current_color = this->get_current_color();
+	current_color.red = 0;
+	this->send_command(current_color);
 }
 
-void MultiColorLED::AddRed()
+void multicolor_led::add_green()
 {
-    Color currentColor = GetCurrentColor();
-    currentColor.red = 255;
-    SendCommand(currentColor);
+	color current_color = this->get_current_color();
+	current_color.green = 255;
+	this->send_command(current_color);
 }
 
-void MultiColorLED::RemoveRed()
+void multicolor_led::remove_green()
 {
-    Color currentColor = GetCurrentColor();
-    currentColor.red = 0;
-    SendCommand(currentColor);
+	color current_color = this->get_current_color();
+	current_color.green = 0;
+	this->send_command(current_color);
 }
 
-void MultiColorLED::AddGreen()
+void multicolor_led::add_blue()
 {
-    Color currentColor = GetCurrentColor();
-    currentColor.green = 255;
-    SendCommand(currentColor);
+	color current_color = this->get_current_color();
+	current_color.blue = 255;
+	this->send_command(current_color);
 }
 
-void MultiColorLED::RemoveGreen()
+void multicolor_led::remove_blue()
 {
-    Color currentColor = GetCurrentColor();
-    currentColor.green = 0;
-    SendCommand(currentColor);
+	color current_color = this->get_current_color();
+	current_color.blue = 0;
+	this->send_command(current_color);
 }
 
-void MultiColorLED::AddBlue()
+color multicolor_led::get_current_color()
 {
-    Color currentColor = GetCurrentColor();
-    currentColor.blue = 255;
-    SendCommand(currentColor);
+	// NOTE: THE COLOR RETURNED IS THE COLOR YOU WANT IT TO BE. THIS IS NOT AFFECTED BY THE COLOR SWAP.
+	unsigned char c1 = this->read_register(static_cast<unsigned char>(daisy_link::module::REGISTER_OFFSET + registers::Color1));
+	unsigned char c2 = this->read_register(static_cast<unsigned char>(daisy_link::module::REGISTER_OFFSET + registers::Color1 + 1));
+	unsigned char c3 = this->read_register(static_cast<unsigned char>(daisy_link::module::REGISTER_OFFSET + registers::Color1 + 2));
+
+	return green_blue_swapped ? color(c1, c3, c2) : color(c1, c2, c3);
 }
 
-void MultiColorLED::RemoveBlue()
+void multicolor_led::blink_once(color c)
 {
-    Color currentColor = GetCurrentColor();
-    currentColor.blue = 0;
-    SendCommand(currentColor);
+	this->send_command(c, 1000, color::BLACK, 0, modes::blink_onceInt);
 }
 
-Color MultiColorLED::GetCurrentColor()
+void multicolor_led::blink_once(color c, unsigned int blink_time)
 {
-    // NOTE: THE COLOR RETURNED IS THE COLOR YOU WANT IT TO BE. THIS IS NOT EFFECTED BY THE COLOR SWAP.
-    unsigned char c1 = Read((unsigned char)(DaisyLinkModule::OFFSET + Registers::Color1));
-    unsigned char c2 = Read((unsigned char)(DaisyLinkModule::OFFSET + Registers::Color1 + 1));
-    unsigned char c3 = Read((unsigned char)(DaisyLinkModule::OFFSET + Registers::Color1 + 2));
-
-    return GreenBlueSwapped ? Color(c1, c3, c2) : Color(c1, c2, c3);
+	this->send_command(c, blink_time, color::BLACK, 0, modes::blink_onceInt);
 }
 
-void MultiColorLED::BlinkOnce(Color color)
+void multicolor_led::blink_once(color blink_color, unsigned int blink_time, color end_color)
 {
-    SendCommand(color, 1000, Color::BLACK, 0, Modes::BlinkOnceInt);
+	this->send_command(blink_color, blink_time, end_color, 0, modes::blink_onceInt);
 }
 
-void MultiColorLED::BlinkOnce(Color color, unsigned int blinkTime)
+void multicolor_led::blink_repeatedly(color c)
 {
-    SendCommand(color, blinkTime, Color::BLACK, 0, Modes::BlinkOnceInt);
+	this->send_command(c, 1000, color::BLACK, 1000, modes::blink_repeatedly);
 }
 
-void MultiColorLED::BlinkOnce(Color blinkColor, unsigned int blinkTime, Color endColor)
+void multicolor_led::blink_repeatedly(color color_1, unsigned int blink_time_1, color color_2, unsigned int blink_time_2)
 {
-    SendCommand(blinkColor, blinkTime, endColor, 0, Modes::BlinkOnceInt);
+	this->send_command(color_1, blink_time_1, color_2, blink_time_2, modes::blink_repeatedly);
 }
 
-void MultiColorLED::BlinkRepeatedly(Color color)
+void multicolor_led::fade_once(color c)
 {
-    SendCommand(color, 1000, Color::BLACK, 1000, Modes::BlinkRepeatedly);
+	this->send_command(c, 1000, color::BLACK, 0, modes::fade_onceInt);
 }
 
-void MultiColorLED::BlinkRepeatedly(Color color1, unsigned int blinkTime1, Color color2, unsigned int blinkTime2)
+void multicolor_led::fade_once(color c, unsigned int fadeTime)
 {
-    SendCommand(color1, blinkTime1, color2, blinkTime2, Modes::BlinkRepeatedly);
+	this->send_command(c, fadeTime, color::BLACK, 0, modes::fade_onceInt);
 }
 
-void MultiColorLED::FadeOnce(Color color)
+void multicolor_led::fade_once(color from_color, unsigned int fadeTime, color to_color)
 {
-    SendCommand(color, 1000, Color::BLACK, 0, Modes::FadeOnceInt);
+	this->send_command(from_color, fadeTime, to_color, 0, modes::fade_onceInt);
 }
 
-void MultiColorLED::FadeOnce(Color color, unsigned int fadeTime)
+void multicolor_led::fade_repeatedly(color c)
 {
-    SendCommand(color, fadeTime, Color::BLACK, 0, Modes::FadeOnceInt);
+	this->send_command(c, 1000, color::BLACK, 1000, modes::fade_repeatedly);
 }
 
-void MultiColorLED::FadeOnce(Color fromColor, unsigned int fadeTime, Color toColor)
+void multicolor_led::fade_repeatedly(color color_1, unsigned int fade_time_1, color color_2, unsigned int fade_time_2)
 {
-    SendCommand(fromColor, fadeTime, toColor, 0, Modes::FadeOnceInt);
+	this->send_command(color_1, fade_time_1, color_2, fade_time_2, modes::fade_repeatedly);
 }
 
-void MultiColorLED::FadeRepeatedly(Color color)
-{
-    SendCommand(color, 1000, Color::BLACK, 1000, Modes::FadeRepeatedly);
-}
-
-void MultiColorLED::FadeRepeatedly(Color color1, unsigned int fadeTime1, Color color2, unsigned int fadeTime2)
-{
-    SendCommand(color1, fadeTime1, color2, fadeTime2, Modes::FadeRepeatedly);
-}
-
-void MultiColorLED::SendCommand(Color color1, unsigned int blinkTime1, Color color2, unsigned int blinkTime2, Mode mode)
+void multicolor_led::send_command(color color_1, unsigned int blink_time_1, color color_2, unsigned int blink_time_2, mode mode)
 {
 	//10000 ticks in a millisecond, from the .net version
-    long time1 = blinkTime1 * 10000 / 1000;
-    long time2 = blinkTime2 * 10000 / 1000;
+	long time1 = blink_time_1 * 10000 / 1000;
+	long time2 = blink_time_2 * 10000 / 1000;
 
-    // send the parameters with mode off to avoid side effects of previous mode
-    if (GreenBlueSwapped)
-    {
-		unsigned char data[17] = {(unsigned char)(DaisyLinkModule::OFFSET + Registers::Configuration), (unsigned char)Modes::Off, 0x00,
-                    color1.red, color1.blue, color1.green,
-                    color2.red, color2.blue, color2.green,
-                    (unsigned char)(time1 >> 0), (unsigned char)(time1 >> 8), (unsigned char)(time1 >> 16), (unsigned char)(time1 >> 24),
-					(unsigned char)(time2 >> 0), (unsigned char)(time2 >> 8), (unsigned char)(time2 >> 16), (unsigned char)(time2 >> 24)};
+	// send the parameters with mode off to avoid side effects of previous mode
+	if (this->green_blue_swapped)
+	{
+		unsigned char data[17] = { static_cast<unsigned char>(daisy_link::module::REGISTER_OFFSET + registers::Configuration), static_cast<unsigned char>(modes::Off), 0x00,
+			color_1.red, color_1.blue, color_1.green,
+			color_2.red, color_2.blue, color_2.green,
+			static_cast<unsigned char>(time1 >> 0), static_cast<unsigned char>(time1 >> 8), static_cast<unsigned char>(time1 >> 16), static_cast<unsigned char>(time1 >> 24),
+			static_cast<unsigned char>(time2 >> 0), static_cast<unsigned char>(time2 >> 8), static_cast<unsigned char>(time2 >> 16), static_cast<unsigned char>(time2 >> 24) };
 
-        Write(data, 17);
-    }
-    else
-    {
-		unsigned char data[17] = {(unsigned char)(DaisyLinkModule::OFFSET + Registers::Configuration), (unsigned char)Modes::Off, 0x00,
-                    color1.red, color1.green, color1.blue,
-                    color2.red, color2.green, color2.blue,
-                    (unsigned char)(time1 >> 0), (unsigned char)(time1 >> 8), (unsigned char)(time1 >> 16), (unsigned char)(time1 >> 24),
-					(unsigned char)(time2 >> 0), (unsigned char)(time2 >> 8), (unsigned char)(time2 >> 16), (unsigned char)(time2 >> 24)};
-        Write(data, 17);
-    }
-    // now activate the correct mode
-	unsigned char data[3] = {(unsigned char)(DaisyLinkModule::OFFSET + Registers::Configuration), (unsigned char)mode, 0x1};
-    Write(data, 3);
+		this->write(data, 17);
+	}
+	else
+	{
+		unsigned char data[17] = { static_cast<unsigned char>(daisy_link::module::REGISTER_OFFSET + registers::Configuration), static_cast<unsigned char>(modes::Off), 0x00,
+			color_1.red, color_1.green, color_1.blue,
+			color_2.red, color_2.green, color_2.blue,
+			static_cast<unsigned char>(time1 >> 0), static_cast<unsigned char>(time1 >> 8), static_cast<unsigned char>(time1 >> 16), static_cast<unsigned char>(time1 >> 24),
+			static_cast<unsigned char>(time2 >> 0), static_cast<unsigned char>(time2 >> 8), static_cast<unsigned char>(time2 >> 16), static_cast<unsigned char>(time2 >> 24) };
+		this->write(data, 17);
+	}
+	// now activate the correct mode
+	unsigned char data[3] = { static_cast<unsigned char>(daisy_link::module::REGISTER_OFFSET + registers::Configuration), static_cast<unsigned char>(mode), 0x1 };
+	this->write(data, 3);
 }
 
-void MultiColorLED::SendCommand(Color color, Mode mode)
+void multicolor_led::send_command(color c, mode mode)
 {
-    // send the parameters with mode off to avoid side effects of previous mode
-    if (GreenBlueSwapped)
-    {
-		unsigned char data[6] = {(unsigned char)(DaisyLinkModule::OFFSET + Registers::Configuration), (unsigned char)Modes::Off, 0x0, color.red, color.blue, color.green};
-        Write(data, 6);
-    }
-    else
-    {
-		unsigned char data[6] = {(unsigned char)(DaisyLinkModule::OFFSET + Registers::Configuration), (unsigned char)Modes::Off, 0x0, color.red, color.green, color.blue};
-        Write(data, 6);
-    }
-    // now activate the correct mode
-	unsigned char data[3] = {(unsigned char)(DaisyLinkModule::OFFSET + Registers::Configuration), (unsigned char)mode, 0x1};
-    Write(data, 3);
+	// send the parameters with mode off to avoid side effects of previous mode
+	if (this->green_blue_swapped)
+	{
+		unsigned char data[6] = { static_cast<unsigned char>(daisy_link::module::REGISTER_OFFSET + registers::Configuration), static_cast<unsigned char>(modes::Off), 0x0, c.red, c.blue, c.green };
+		this->write(data, 6);
+	}
+	else
+	{
+		unsigned char data[6] = { static_cast<unsigned char>(daisy_link::module::REGISTER_OFFSET + registers::Configuration), static_cast<unsigned char>(modes::Off), 0x0, c.red, c.green, c.blue };
+		this->write(data, 6);
+	}
+	// now activate the correct mode
+	unsigned char data[3] = { static_cast<unsigned char>(daisy_link::module::REGISTER_OFFSET + registers::Configuration), static_cast<unsigned char>(mode), 0x1 };
+	this->write(data, 3);
 }
 
-void MultiColorLED::SendCommand(Color color)
+void multicolor_led::send_command(color c)
 {
-    Mode currentMode = (Mode)Read((unsigned char)(DaisyLinkModule::OFFSET + Registers::Configuration));
-    if (currentMode == Modes::Off)
-    {
-        if (GreenBlueSwapped)
-        {
-		unsigned char data[6] = {(unsigned char)(DaisyLinkModule::OFFSET + Registers::Configuration), (unsigned char)Modes::Constant, 0x1, color.red,
-			color.blue, color.green};
-            Write(data, 6);
-        }
-        else
-        {
-		unsigned char data[6] = {(unsigned char)(DaisyLinkModule::OFFSET + Registers::Configuration), (unsigned char)Modes::Constant, 0x1, color.red,
-			color.green, color.blue};
-            Write(data, 6);
-        }
-    }
-    else
-    {
-        if (GreenBlueSwapped)
-        {
-			unsigned char data[4] = {(unsigned char)(DaisyLinkModule::OFFSET + Registers::Color1), color.red, color.blue, color.green};
-            Write(data, 4);
-        }
-        else
-        {
-			unsigned char data[4] = {(unsigned char)(DaisyLinkModule::OFFSET + Registers::Color1), color.red, color.green, color.blue};
-            Write(data, 4);
-        }
-    }
+	mode current_mode = static_cast<mode>(this->read_register(static_cast<unsigned char>(daisy_link::module::REGISTER_OFFSET + registers::Configuration)));
+	if (current_mode == modes::Off)
+	{
+		if (this->green_blue_swapped)
+		{
+			unsigned char data[6] = { static_cast<unsigned char>(daisy_link::module::REGISTER_OFFSET + registers::Configuration), static_cast<unsigned char>(modes::Constant), 0x1, c.red,
+				c.blue, c.green };
+			this->write(data, 6);
+		}
+		else
+		{
+			unsigned char data[6] = { static_cast<unsigned char>(daisy_link::module::REGISTER_OFFSET + registers::Configuration), static_cast<unsigned char>(modes::Constant), 0x1, c.red,
+				c.green, c.blue };
+			this->write(data, 6);
+		}
+	}
+	else
+	{
+		if (green_blue_swapped)
+		{
+			unsigned char data[4] = { static_cast<unsigned char>(daisy_link::module::REGISTER_OFFSET + registers::Color1), c.red, c.blue, c.green };
+			this->write(data, 4);
+		}
+		else
+		{
+			unsigned char data[4] = { static_cast<unsigned char>(daisy_link::module::REGISTER_OFFSET + registers::Color1), c.red, c.green, c.blue };
+			this->write(data, 4);
+		}
+	}
 }

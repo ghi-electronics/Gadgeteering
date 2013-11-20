@@ -24,7 +24,7 @@ spi_configuration::spi_configuration()
 }
 
 
-spi_configuration::spi_configuration(bool cs_active_state, unsigned int cs_setup_time, unsigned int cs_hold_time, bool clock_idle_state, bool clock_edge, unsigned int clock_rate)
+spi_configuration::spi_configuration(bool cs_active_state, unsigned int cs_setup_time, unsigned int cs_hold_time, bool clock_idle_state, bool clock_edge, unsigned int clock_rate, bool uses_chip_select)
 {
 	this->cs_active_state = cs_active_state;
 	this->cs_setup_time = cs_setup_time;
@@ -32,6 +32,7 @@ spi_configuration::spi_configuration(bool cs_active_state, unsigned int cs_setup
 	this->clock_idle_state = clock_idle_state;
 	this->clock_edge = clock_edge;
 	this->clock_rate = clock_rate;
+	this->uses_chip_select = uses_chip_select;
 }
 
 serial_configuration::serial_configuration()

@@ -213,6 +213,16 @@ void module::write_read(const unsigned char* write_buffer, unsigned int write_le
 	this->i2c.write_read(write_buffer, write_length, read_buffer, read_length);
 }
 
+void module::write(const unsigned char* write_buffer, unsigned int write_length)
+{
+	this->i2c.write(write_buffer, write_length);
+}
+
+void module::read(unsigned char* read_buffer, unsigned int read_length)
+{
+	this->i2c.read(read_buffer, read_length);
+}
+
 unsigned int module::get_position_on_chain() const
 {
 	return this->position_on_chain;
