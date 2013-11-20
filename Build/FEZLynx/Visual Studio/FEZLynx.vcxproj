@@ -31,6 +31,7 @@
     <ClCompile Include="..\..\..\Modules\AccelG248.cpp" />
     <ClCompile Include="..\..\..\Modules\ADS7830.cpp" />
     <ClCompile Include="..\..\..\Modules\ALFATOEMLink.cpp" />
+    <ClCompile Include="..\..\..\Modules\AMPM35.cpp" />
     <ClCompile Include="..\..\..\Modules\Barometer.cpp" />
     <ClCompile Include="..\..\..\Modules\BreadBoardX1.cpp" />
     <ClCompile Include="..\..\..\Modules\Breakout.cpp" />
@@ -45,6 +46,7 @@
     <ClCompile Include="..\..\..\Modules\DAQ8B.cpp" />
     <ClCompile Include="..\..\..\Modules\DisplayN18.cpp" />
     <ClCompile Include="..\..\..\Modules\DistanceUS3.cpp" />
+    <ClCompile Include="..\..\..\Modules\DL40.cpp" />
     <ClCompile Include="..\..\..\Modules\Extender.cpp" />
     <ClCompile Include="..\..\..\Modules\FEZtive.cpp" />
     <ClCompile Include="..\..\..\Modules\FLASH.cpp" />
@@ -65,9 +67,11 @@
     <ClCompile Include="..\..\..\Modules\Moisture.cpp" />
     <ClCompile Include="..\..\..\Modules\MotorDriverL298.cpp" />
     <ClCompile Include="..\..\..\Modules\MulticolorLED.cpp" />
+    <ClCompile Include="..\..\..\Modules\ParallelCNC.cpp" />
     <ClCompile Include="..\..\..\Modules\PIR.cpp" />
     <ClCompile Include="..\..\..\Modules\Potentiometer.cpp" />
     <ClCompile Include="..\..\..\Modules\PulseCount.cpp" />
+    <ClCompile Include="..\..\..\Modules\PulseInOut.cpp" />
     <ClCompile Include="..\..\..\Modules\RadioFM1.cpp" />
     <ClCompile Include="..\..\..\Modules\ReflectorR3.cpp" />
     <ClCompile Include="..\..\..\Modules\RelayISOx16.cpp" />
@@ -84,6 +88,7 @@
     <ClCompile Include="..\..\..\Modules\Tunes.cpp" />
     <ClCompile Include="..\..\..\Modules\USBSerialSP.cpp" />
     <ClCompile Include="..\..\..\Modules\WiFiRN171.cpp" />
+    <ClCompile Include="..\..\..\Modules\XBeeAdapter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Core\DaisyLink.h" />
@@ -100,6 +105,7 @@
     <ClInclude Include="..\..\..\Modules\AccelG248.h" />
     <ClInclude Include="..\..\..\Modules\ADS7830.h" />
     <ClInclude Include="..\..\..\Modules\ALFATOEMLink.h" />
+    <ClInclude Include="..\..\..\Modules\AMPM35.h" />
     <ClInclude Include="..\..\..\Modules\Barometer.h" />
     <ClInclude Include="..\..\..\Modules\BreadBoardX1.h" />
     <ClInclude Include="..\..\..\Modules\Breakout.h" />
@@ -114,6 +120,7 @@
     <ClInclude Include="..\..\..\Modules\DAQ8B.h" />
     <ClInclude Include="..\..\..\Modules\DisplayN18.h" />
     <ClInclude Include="..\..\..\Modules\DistanceUS3.h" />
+    <ClInclude Include="..\..\..\Modules\DL40.h" />
     <ClInclude Include="..\..\..\Modules\Extender.h" />
     <ClInclude Include="..\..\..\Modules\FEZtive.h" />
     <ClInclude Include="..\..\..\Modules\FLASH.h" />
@@ -134,9 +141,11 @@
     <ClInclude Include="..\..\..\Modules\Moisture.h" />
     <ClInclude Include="..\..\..\Modules\MotorDriverL298.h" />
     <ClInclude Include="..\..\..\Modules\MulticolorLED.h" />
+    <ClInclude Include="..\..\..\Modules\ParallelCNC.h" />
     <ClInclude Include="..\..\..\Modules\PIR.h" />
     <ClInclude Include="..\..\..\Modules\Potentiometer.h" />
     <ClInclude Include="..\..\..\Modules\PulseCount.h" />
+    <ClInclude Include="..\..\..\Modules\PulseInOut.h" />
     <ClInclude Include="..\..\..\Modules\RadioFM1.h" />
     <ClInclude Include="..\..\..\Modules\ReflectorR3.h" />
     <ClInclude Include="..\..\..\Modules\RelayISOx16.h" />
@@ -153,6 +162,7 @@
     <ClInclude Include="..\..\..\Modules\Tunes.h" />
     <ClInclude Include="..\..\..\Modules\USBSerialSP.h" />
     <ClInclude Include="..\..\..\Modules\WiFiRN171.h" />
+    <ClInclude Include="..\..\..\Modules\XBeeAdapter.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3EA9B711-BF72-4D1C-AEDE-A1FEEAF83AFA}</ProjectGuid>
