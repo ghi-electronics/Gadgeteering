@@ -22,18 +22,18 @@ namespace gadgeteering
 {
 	namespace modules
 	{
-		class current_acs712
+		class current
 		{
 			static const unsigned int AC_SAMPLE_COUNT = 400;
 
 			const socket& sock;
 			interfaces::analog_input ain;
 
-			public:
-				current_acs712(unsigned char socket_number);
+		public:
+			current(unsigned char socket_number);
 
-				double read_ac_current();
-				double read_dc_current();
+			double get_current_reading();
+			double get_current_peak();
 		};
 	}
 }

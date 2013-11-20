@@ -14,26 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#pragma once
+#include "Current.h"
 
-#include "../Gadgeteering.h"
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-namespace gadgeteering
+current::current(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::A)), ain(this->sock, 4)
 {
-	namespace modules
+
+}
+
+double current::get_current_reading()
+{
+	return this->ain.read() * 30.0;
+}
+
+double current::get_current_peak()
+{
+	double max = 0;
+	double current = 0;
+
+	for (unsigned int i = 0; i < 200; i++)
 	{
-		class current_acs712
-		{
-			static const unsigned int AC_SAMPLE_COUNT = 400;
-
-			const socket& sock;
-			interfaces::analog_input ain;
-
-			public:
-				current_acs712(unsigned char socket_number);
-
-				double read_ac_current();
-				double read_dc_current();
-		};
+		current = this->ain.read();
+		if (max < current)
+			max = current;
 	}
+
+	return max * 30;
 }

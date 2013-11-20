@@ -193,6 +193,9 @@
     <ClCompile Include="..\..\..\Modules\USBSerialSP.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Modules\Current.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Core\Types.h">
@@ -389,6 +392,9 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\USBSerialSP.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\Current.h">
       <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>

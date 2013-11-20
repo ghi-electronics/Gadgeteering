@@ -40,6 +40,7 @@
     <ClCompile Include="..\..\..\Modules\CharacterDisplay.cpp" />
     <ClCompile Include="..\..\..\Modules\ColorSense.cpp" />
     <ClCompile Include="..\..\..\Modules\Compass.cpp" />
+    <ClCompile Include="..\..\..\Modules\Current.cpp" />
     <ClCompile Include="..\..\..\Modules\CurrentACS712.cpp" />
     <ClCompile Include="..\..\..\Modules\DAQ8B.cpp" />
     <ClCompile Include="..\..\..\Modules\DisplayN18.cpp" />
@@ -108,6 +109,7 @@
     <ClInclude Include="..\..\..\Modules\CharacterDisplay.h" />
     <ClInclude Include="..\..\..\Modules\ColorSense.h" />
     <ClInclude Include="..\..\..\Modules\Compass.h" />
+    <ClInclude Include="..\..\..\Modules\Current.h" />
     <ClInclude Include="..\..\..\Modules\CurrentACS712.h" />
     <ClInclude Include="..\..\..\Modules\DAQ8B.h" />
     <ClInclude Include="..\..\..\Modules\DisplayN18.h" />
