@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,36 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "Tunes.h"
+#include "tunes.h"
 
 using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-Tunes::Tunes(unsigned char socketNumber)
+tunes::tunes(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::P)), pwm(this->sock, 9)
 {
-	socket* t_socket = mainboard->getSocket(socketNumber);
-	t_socket->ensureTypeIsSupported(socket::types::P);
 
-	this->pwm = new pwm_output(socket, this->PWM_PIN);
 }
 
-Tunes::~Tunes()
+void tunes::set(double frequency, double duty_cycle)
 {
-	delete this->pwm;
+	this->pwm.set(frequency, duty_cycle);
 }
 
-void Tunes::set(double frequency, double dutyCycle)
+void tunes::set_frequency(double frequency)
 {
-	this->pwm->set(frequency, dutyCycle);
+	this->pwm.set_frequency(frequency);
 }
 
-void Tunes::setFrequency(double frequency)
+void tunes::set_duty_cycle(double duty_cycle)
 {
-	this->pwm->setFrequency(frequency);
-}
-
-void Tunes::setDutyCycle(double dutyCycle)
-{
-	this->pwm->setDutyCycle(dutyCycle);
+	this->pwm.set_duty_cycle(duty_cycle);
 }

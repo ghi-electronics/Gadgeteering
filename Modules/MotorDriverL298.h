@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _MOTORL298_H_
-#define _MOTORL298_H_
+#pragma once
 
 #include "../Gadgeteering.h"
 
@@ -23,35 +22,32 @@ namespace gadgeteering
 {
 	namespace modules
 	{
-		class MotorDriverL298 : protected Module
+		class motor_driver_l298
 		{
-			private:
-				interfaces::pwm_output *m_Pwm1;
-				interfaces::pwm_output *m_Pwm2;
+			const socket& sock;
 
-				interfaces::digital_output *m_Direction1;
-				interfaces::digital_output *m_Direction2;
+			interfaces::pwm_output pwm1;
+			interfaces::pwm_output pwm2;
 
-				int m_lastSpeed1;
-				int m_lastSpeed2;
+			interfaces::digital_output direction1;
+			interfaces::digital_output direction2;
 
-				int freq;
+			int last_speed_1;
+			int last_speed_2;
+
+			int freq;
 
 			public:
-				typedef unsigned char Motor;
-				class Motors
+				typedef unsigned char motor;
+				struct motors
 				{
-					public:
-						static const Motor Motor1 = 0;
-						static const Motor Motor2 = 1;
+					static const motor MOTOR_1 = 0;
+					static const motor MOTOR_2 = 1;
 				};
 
-				MotorDriverL298(unsigned char socket);
-				~MotorDriverL298();
+				motor_driver_l298(unsigned char socket);
 
-				void MoveMotor(Motor _motorSide, int _newSpeed);
+				void move_motor(motor motor_side, int new_speed);
 		};
 	}
 }
-
-#endif
