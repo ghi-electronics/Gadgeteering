@@ -22,19 +22,19 @@ namespace gadgeteering
 {
 	namespace modules
 	{
-		class rfid
+		class rfid_reader
 		{
 			static const int ID_LENGTH = 12;
 
 			const socket& sock;
 			devices::serial serial;
-			unsigned char read_buffer[rfid::ID_LENGTH];
+			unsigned char read_buffer[rfid_reader::ID_LENGTH];
 			unsigned int found;
 
 			unsigned char ascii_to_num(char upper, char lower);
 
 			public:
-				rfid(unsigned char socket_number);
+				rfid_reader(unsigned char socket_number);
 
 				bool check_id(unsigned char buffer[10]);
 		};

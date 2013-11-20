@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "RFID.h"
+#include "RFIDReader.h"
 
 #include <string>
 
@@ -22,12 +22,12 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-rfid::rfid(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::U)), serial(this->sock.serial, serial_configuration(9600, serial_configuration::parities::NONE, serial_configuration::stop_bits::TWO, 8))
+rfid_reader::rfid_reader(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::U)), serial(this->sock.serial, serial_configuration(9600, serial_configuration::parities::NONE, serial_configuration::stop_bits::TWO, 8))
 {
 	this->found = 0;
 }
 
-unsigned char rfid::ascii_to_num(char upper, char lower)
+unsigned char rfid_reader::ascii_to_num(char upper, char lower)
 {
 	unsigned char high, low;
 
@@ -47,15 +47,15 @@ unsigned char rfid::ascii_to_num(char upper, char lower)
 	return num;
 }
 
-bool rfid::check_id(unsigned char buffer[10])
+bool rfid_reader::check_id(unsigned char buffer[10])
 {
 	int bytes_to_read = this->serial.available();
 
 	if (bytes_to_read > 0)
 	{
-		this->found += this->serial.read(this->read_buffer + this->found, rfid::ID_LENGTH - this->found);
+		this->found += this->serial.read(this->read_buffer + this->found, rfid_reader::ID_LENGTH - this->found);
 
-		if (this->found == rfid::ID_LENGTH)
+		if (this->found == rfid_reader::ID_LENGTH)
 		{
 			if (this->read_buffer[0] != 2)
 				return false;

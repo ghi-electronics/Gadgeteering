@@ -211,7 +211,7 @@
     <ClCompile Include="..\..\..\Modules\XBeeAdapter.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Modules\RFID.cpp">
+    <ClCompile Include="..\..\..\Modules\RFIDReader.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
@@ -430,7 +430,7 @@
     <ClInclude Include="..\..\..\Modules\XBeeAdapter.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Modules\RFID.h">
+    <ClInclude Include="..\..\..\Modules\RFIDReader.h">
       <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>

@@ -76,7 +76,7 @@
     <ClCompile Include="..\..\..\Modules\ReflectorR3.cpp" />
     <ClCompile Include="..\..\..\Modules\RelayISOx16.cpp" />
     <ClCompile Include="..\..\..\Modules\RelayX1.cpp" />
-    <ClCompile Include="..\..\..\Modules\RFID.cpp" />
+    <ClCompile Include="..\..\..\Modules\RFIDReader.cpp" />
     <ClCompile Include="..\..\..\Modules\RotaryH1.cpp" />
     <ClCompile Include="..\..\..\Modules\RS232.cpp" />
     <ClCompile Include="..\..\..\Modules\RS485.cpp" />
@@ -151,7 +151,7 @@
     <ClInclude Include="..\..\..\Modules\ReflectorR3.h" />
     <ClInclude Include="..\..\..\Modules\RelayISOx16.h" />
     <ClInclude Include="..\..\..\Modules\RelayX1.h" />
-    <ClInclude Include="..\..\..\Modules\RFID.h" />
+    <ClInclude Include="..\..\..\Modules\RFIDReader.h" />
     <ClInclude Include="..\..\..\Modules\RotaryH1.h" />
     <ClInclude Include="..\..\..\Modules\RS232.h" />
     <ClInclude Include="..\..\..\Modules\RS485.h" />
