@@ -22,19 +22,16 @@ namespace gadgeteering
 {
 	namespace modules
 	{
-		class breakout
+		class usb_serial_sp
 		{
 			const socket& sock;
 
 			public:
-				breakout(unsigned char socket_number);
+				devices::serial serial;
 
-				interfaces::digital_input setup_digital_input(unsigned char pin_number, resistor_mode resistor_mode = resistor_modes::FLOATING);
-				interfaces::digital_output setup_digital_output(unsigned char pin_number, bool initial_state = false);
-				interfaces::digital_io setup_digital_io(unsigned char pin_number);
-				interfaces::analog_input setup_analog_input(unsigned char pin_number);
-				interfaces::analog_output setup_analog_output(unsigned char pin_number);
-				interfaces::pwm_output setup_pwm_output(unsigned char pin_number);
+				usb_serial_sp(unsigned char socket_number);
+
+				void configure(serial_configuration config);
 		};
 	}
 }

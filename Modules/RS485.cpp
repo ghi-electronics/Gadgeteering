@@ -14,24 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#pragma once
+#include "RS485.h"
 
-#include "../Gadgeteering.h"
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-namespace gadgeteering
+rs_485::rs_485(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::U)), serial(this->sock.serial, serial_configuration())
 {
-	namespace modules
-	{
-		class serial_usb
-		{
-			const socket& sock;
 
-			public:
-				devices::serial serial;
+}
 
-				serial_usb(unsigned char socket_number);
-
-				void configure(serial_configuration config);
-		};
-	}
+void rs_485::configure(serial_configuration config)
+{
+	this->serial.config = config;
 }

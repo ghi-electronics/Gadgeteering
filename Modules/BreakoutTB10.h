@@ -22,12 +22,12 @@ namespace gadgeteering
 {
 	namespace modules
 	{
-		class breakout
+		class breakout_tb10
 		{
 			const socket& sock;
 
 			public:
-				breakout(unsigned char socket_number);
+				breakout_tb10(unsigned char socket_number);
 
 				interfaces::digital_input setup_digital_input(unsigned char pin_number, resistor_mode resistor_mode = resistor_modes::FLOATING);
 				interfaces::digital_output setup_digital_output(unsigned char pin_number, bool initial_state = false);

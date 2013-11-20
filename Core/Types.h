@@ -212,8 +212,7 @@ namespace gadgeteering
 			static const stop_bit TWO = 3;
 		};
 
-		serial_configuration();
-		serial_configuration(unsigned int baud_rate, partity parity, stop_bit stop_bits, unsigned char data_bits);
+		serial_configuration(unsigned int baud_rate = 9600, partity parity = parities::EVEN, stop_bit stop_bits = stop_bits::ONE, unsigned char data_bits = 8);
 	};
 
 	namespace errors

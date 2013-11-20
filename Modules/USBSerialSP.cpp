@@ -14,24 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#pragma once
+#include "USBSerialSP.h"
 
-#include "../Gadgeteering.h"
+using namespace gadgeteering;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
 
-namespace gadgeteering
+usb_serial_sp::usb_serial_sp(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::U)), serial(this->sock.serial, serial_configuration())
 {
-	namespace modules
-	{
-		class serial_usb
-		{
-			const socket& sock;
 
-			public:
-				devices::serial serial;
+}
 
-				serial_usb(unsigned char socket_number);
-
-				void configure(serial_configuration config);
-		};
-	}
+void usb_serial_sp::configure(serial_configuration config)
+{
+	this->serial.config = config;
 }

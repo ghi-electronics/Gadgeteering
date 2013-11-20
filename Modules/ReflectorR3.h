@@ -22,19 +22,26 @@ namespace gadgeteering
 {
 	namespace modules
 	{
-		class breakout
+		class reflector_r3
 		{
 			const socket& sock;
+			interfaces::analog_input left;
+			interfaces::analog_input center;
+			interfaces::analog_input right;
+			interfaces::digital_output center_switch;
 
 			public:
-				breakout(unsigned char socket_number);
+				typedef unsigned char reflector;
+				struct reflectors
+				{
+					static const reflector LEFT = 0;
+					static const reflector RIGHT = 1;
+					static const reflector CENTER = 2;
+				};
 
-				interfaces::digital_input setup_digital_input(unsigned char pin_number, resistor_mode resistor_mode = resistor_modes::FLOATING);
-				interfaces::digital_output setup_digital_output(unsigned char pin_number, bool initial_state = false);
-				interfaces::digital_io setup_digital_io(unsigned char pin_number);
-				interfaces::analog_input setup_analog_input(unsigned char pin_number);
-				interfaces::analog_output setup_analog_output(unsigned char pin_number);
-				interfaces::pwm_output setup_pwm_output(unsigned char pin_number);
+				reflector_r3(unsigned char socket_number);
+
+				double read(reflector r);
 		};
 	}
 }

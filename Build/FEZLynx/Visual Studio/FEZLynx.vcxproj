@@ -32,13 +32,16 @@
     <ClCompile Include="..\..\..\Modules\ADS7830.cpp" />
     <ClCompile Include="..\..\..\Modules\ALFATOEMLink.cpp" />
     <ClCompile Include="..\..\..\Modules\Barometer.cpp" />
+    <ClCompile Include="..\..\..\Modules\BreadBoardX1.cpp" />
     <ClCompile Include="..\..\..\Modules\Breakout.cpp" />
+    <ClCompile Include="..\..\..\Modules\BreakoutTB10.cpp" />
     <ClCompile Include="..\..\..\Modules\Button.cpp" />
     <ClCompile Include="..\..\..\Modules\ButtonS7.cpp" />
     <ClCompile Include="..\..\..\Modules\CharacterDisplay.cpp" />
     <ClCompile Include="..\..\..\Modules\ColorSense.cpp" />
     <ClCompile Include="..\..\..\Modules\Compass.cpp" />
     <ClCompile Include="..\..\..\Modules\CurrentACS712.cpp" />
+    <ClCompile Include="..\..\..\Modules\DAQ8B.cpp" />
     <ClCompile Include="..\..\..\Modules\DisplayN18.cpp" />
     <ClCompile Include="..\..\..\Modules\DistanceUS3.cpp" />
     <ClCompile Include="..\..\..\Modules\Extender.cpp" />
@@ -65,16 +68,20 @@
     <ClCompile Include="..\..\..\Modules\Potentiometer.cpp" />
     <ClCompile Include="..\..\..\Modules\PulseCount.cpp" />
     <ClCompile Include="..\..\..\Modules\RadioFM1.cpp" />
+    <ClCompile Include="..\..\..\Modules\ReflectorR3.cpp" />
     <ClCompile Include="..\..\..\Modules\RelayISOx16.cpp" />
     <ClCompile Include="..\..\..\Modules\RelayX1.cpp" />
     <ClCompile Include="..\..\..\Modules\RotaryH1.cpp" />
     <ClCompile Include="..\..\..\Modules\RS232.cpp" />
+    <ClCompile Include="..\..\..\Modules\RS485.cpp" />
     <ClCompile Include="..\..\..\Modules\SerialUSB.cpp" />
+    <ClCompile Include="..\..\..\Modules\SPlus.cpp" />
     <ClCompile Include="..\..\..\Modules\TempHumidity.cpp" />
     <ClCompile Include="..\..\..\Modules\Thermocouple.cpp" />
     <ClCompile Include="..\..\..\Modules\TouchC8.cpp" />
     <ClCompile Include="..\..\..\Modules\TouchL12.cpp" />
     <ClCompile Include="..\..\..\Modules\Tunes.cpp" />
+    <ClCompile Include="..\..\..\Modules\USBSerialSP.cpp" />
     <ClCompile Include="..\..\..\Modules\WiFiRN171.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -93,13 +100,16 @@
     <ClInclude Include="..\..\..\Modules\ADS7830.h" />
     <ClInclude Include="..\..\..\Modules\ALFATOEMLink.h" />
     <ClInclude Include="..\..\..\Modules\Barometer.h" />
+    <ClInclude Include="..\..\..\Modules\BreadBoardX1.h" />
     <ClInclude Include="..\..\..\Modules\Breakout.h" />
+    <ClInclude Include="..\..\..\Modules\BreakoutTB10.h" />
     <ClInclude Include="..\..\..\Modules\Button.h" />
     <ClInclude Include="..\..\..\Modules\ButtonS7.h" />
     <ClInclude Include="..\..\..\Modules\CharacterDisplay.h" />
     <ClInclude Include="..\..\..\Modules\ColorSense.h" />
     <ClInclude Include="..\..\..\Modules\Compass.h" />
     <ClInclude Include="..\..\..\Modules\CurrentACS712.h" />
+    <ClInclude Include="..\..\..\Modules\DAQ8B.h" />
     <ClInclude Include="..\..\..\Modules\DisplayN18.h" />
     <ClInclude Include="..\..\..\Modules\DistanceUS3.h" />
     <ClInclude Include="..\..\..\Modules\Extender.h" />
@@ -126,16 +136,20 @@
     <ClInclude Include="..\..\..\Modules\Potentiometer.h" />
     <ClInclude Include="..\..\..\Modules\PulseCount.h" />
     <ClInclude Include="..\..\..\Modules\RadioFM1.h" />
+    <ClInclude Include="..\..\..\Modules\ReflectorR3.h" />
     <ClInclude Include="..\..\..\Modules\RelayISOx16.h" />
     <ClInclude Include="..\..\..\Modules\RelayX1.h" />
     <ClInclude Include="..\..\..\Modules\RotaryH1.h" />
     <ClInclude Include="..\..\..\Modules\RS232.h" />
+    <ClInclude Include="..\..\..\Modules\RS485.h" />
     <ClInclude Include="..\..\..\Modules\SerialUSB.h" />
+    <ClInclude Include="..\..\..\Modules\SPlus.h" />
     <ClInclude Include="..\..\..\Modules\TempHumidity.h" />
     <ClInclude Include="..\..\..\Modules\Thermocouple.h" />
     <ClInclude Include="..\..\..\Modules\TouchC8.h" />
     <ClInclude Include="..\..\..\Modules\TouchL12.h" />
     <ClInclude Include="..\..\..\Modules\Tunes.h" />
+    <ClInclude Include="..\..\..\Modules\USBSerialSP.h" />
     <ClInclude Include="..\..\..\Modules\WiFiRN171.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
