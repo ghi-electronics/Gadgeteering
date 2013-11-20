@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,141 +20,140 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-accelerometer::accelerometer(unsigned char socket_number)
+accelerometer::accelerometer(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::I)), i2c(this->sock, 0x1D)
 {
-    socket* t_socket = mainboard->getSocket(socket_number);
-    t_socket->ensureTypeIsSupported(socket::types::I);
-
-	this->i2c = t_socket->getI2CDevice(0x1D);
-	this->OperatingMode = Modes::Measurement;
-	this->MeasurementRange = Ranges::TwoG;
-}
-
-accelerometer::~accelerometer()
-{
-	delete this->i2c;
+	this->operating_mode = modes::MEASUREMENT;
+	this->measurement_range = ranges::TWO_G;
 }
 
 unsigned char accelerometer::read_byte(unsigned char reg)
 {
-    return this->i2c->read_register(reg);
+	return this->i2c.read_register(reg);
 }
 
 void accelerometer::read(unsigned char reg, unsigned char* read_buffer, unsigned int count)
 {
-    this->i2c->write_read(&reg, 1, readBuffer, count);
+	this->i2c.write_read(&reg, 1, read_buffer, count);
 }
 
 void accelerometer::write(unsigned char reg, unsigned char value)
 {
-    this->i2c->write_register(reg, value);
+	this->i2c.write_register(reg, value);
 }
 
-accelerometer::acceleration accelerometer::RequestMeasurement()
+accelerometer::acceleration accelerometer::request_measurement()
 {
 	unsigned char data[3];
-    this->read(registers::XOUT8, data, 3);
+	this->read(registers::XOUT8, data, 3);
 
-    // Decode Two's Complement values.
-    int x = ((((data[0] >> 7) == 1) ? -128 : 0) + (data[0] & 0x7F)) + offsets.X;
-    int y = ((((data[1] >> 7) == 1) ? -128 : 0) + (data[1] & 0x7F)) + offsets.Y;
-    int z = ((((data[2] >> 7) == 1) ? -128 : 0) + (data[2] & 0x7F)) + offsets.Z;
+	// Decode Two's Complement values.
+	int x = ((((data[0] >> 7) == 1) ? -128 : 0) + (data[0] & 0x7F)) + this->offsets.x;
+	int y = ((((data[1] >> 7) == 1) ? -128 : 0) + (data[1] & 0x7F)) + this->offsets.y;
+	int z = ((((data[2] >> 7) == 1) ? -128 : 0) + (data[2] & 0x7F)) + this->offsets.z;
 
-	mainboard->print(data[0]);
-	mainboard->print(" ");
-	mainboard->print(data[1]);
-	mainboard->print(" ");
-	mainboard->print(data[2]);
-	mainboard->print("\n");
-
-    return Acceleration(ConvertDataToG(x), ConvertDataToG(y), ConvertDataToG(z));
+	return acceleration(this->convert_data_to_g(x), this->convert_data_to_g(y), this->convert_data_to_g(z));
 }
 
-double accelerometer::ConvertDataToG(int data)
+double accelerometer::convert_data_to_g(int data)
 {
-    switch (this->MeasurementRange)
-    {
-        case Ranges::TwoG: return ((double)data / 128) * 2;
-        case Ranges::FourG: return ((double)data / 128) * 4;
-		case Ranges::EightG: return ((double)data / 128) * 8;
-    }
-	mainboard->panic(Exceptions::ERR_MODULE_ERROR);
+	switch (this->measurement_range)
+	{
+		case ranges::TWO_G: return (static_cast<double>(data) / 128.0) * 2;
+		case ranges::FOUR_G: return (static_cast<double>(data) / 128.0) * 4;
+		case ranges::EIGHT_G: return (static_cast<double>(data) / 128.0) * 8;
+	}
+	panic(errors::MODULE_ERROR);
 	return 0;
 }
 
-void accelerometer::EnableThresholdDetection(double threshold, bool enableX, bool enableY, bool enableZ, bool absolute, bool detectFreefall, bool autoReset)
+void accelerometer::enable_threshold_detection(double threshold, bool enable_x, bool enable_y, bool enable_z, bool absolute, bool detect_free_fall, bool auto_reset)
 {
-    OperatingMode = Modes::LevelDetection;
-    MeasurementRange = Ranges::EightG;
+	operating_mode = modes::LEVEL_DETECTION;
+	measurement_range = ranges::EIGHT_G;
 
-    unsigned char b = 0x00;
-    b |= (unsigned char)((enableX ? 0 : 1) << 3);
-    b |= (unsigned char)((enableY ? 0 : 1) << 4);
-    b |= (unsigned char)((enableZ ? 0 : 1) << 5);
-    b |= (unsigned char)((absolute ? 0 : 1) << 6);
-    Write(Registers::CTL1, b);
+	unsigned char b = 0x00;
+	b |= static_cast<unsigned char>((enable_x ? 0 : 1) << 3);
+	b |= static_cast<unsigned char>((enable_y ? 0 : 1) << 4);
+	b |= static_cast<unsigned char>((enable_z ? 0 : 1) << 5);
+	b |= static_cast<unsigned char>((absolute ? 0 : 1) << 6);
+	this->write(registers::CTL1, b);
 
-    b = 0x00;
-    b |= (unsigned char)((detectFreefall ? 1 : 0));
-    Write(Registers::CTL2, b);
+	b = 0x00;
+	b |= static_cast<unsigned char>((detect_free_fall ? 1 : 0));
+	this->write(registers::CTL2, b);
 
-    if (absolute)
-    {
+	if (absolute)
+	{
 		double val = (threshold / 8.0) * 128.0;
-        int thresholdValue = val < 0 ? -(int)(val) : (int)(val);
-        Write(Registers::LDTH, (unsigned char)(thresholdValue & 0x7F));
-    }
-    else
-    {
+		int thresholdValue = val < 0 ? -static_cast<int>(val) : static_cast<int>(val);
+		this->write(registers::LDTH, static_cast<unsigned char>(thresholdValue & 0x7F));
+	}
+	else
+	{
 
-        unsigned char thresholdValue = (unsigned char)((threshold / 8.0) * 128.0);
-        Write(Registers::LDTH, (unsigned char)(thresholdValue));
-    }
+		unsigned char thresholdValue = static_cast<unsigned char>((threshold / 8.0) * 128.0);
+		this->write(registers::LDTH, static_cast<unsigned char>(thresholdValue));
+	}
 
-    // Clear the interrupts
-    ResetThresholdDetection();
+	// Clear the interrupts
+	this->reset_threshold_detection();
 }
 
 void accelerometer::reset_threshold_detection()
 {
-    // Clear the interrupts
-    Write(Registers::INTRST, 0x03);
-    Write(Registers::INTRST, 0x00);
+	// Clear the interrupts
+	this->write(registers::INTRST, 0x03);
+	this->write(registers::INTRST, 0x00);
 }
 
-void accelerometer::calibrate(Acceleration referenceAcceleration)
+void accelerometer::calibrate(acceleration reference)
 {
-    OperatingMode = Modes::Measurement;
+	operating_mode = modes::MEASUREMENT;
 
 	unsigned char data[3];
-    Read(Registers::XOUT8, data, 3);
+	this->read(registers::XOUT8, data, 3);
 
-    // Decode Two's Complement values.
-    int x = ((((data[0] >> 7) == 1) ? -128 : 0) + (data[0] & 0x7F));
-    int y = ((((data[1] >> 7) == 1) ? -128 : 0) + (data[1] & 0x7F));
-    int z = ((((data[2] >> 7) == 1) ? -128 : 0) + (data[2] & 0x7F));
+	// Decode Two's Complement values.
+	int x = ((((data[0] >> 7) == 1) ? -128 : 0) + (data[0] & 0x7F));
+	int y = ((((data[1] >> 7) == 1) ? -128 : 0) + (data[1] & 0x7F));
+	int z = ((((data[2] >> 7) == 1) ? -128 : 0) + (data[2] & 0x7F));
 
-    double gravityValue = 0;
+	double gravity_value = 0;
 
-    switch (MeasurementRange)
-    {
-	case Ranges::TwoG:
-            gravityValue = 64;
-            break;
-	case Ranges::FourG:
-            gravityValue = 32;
-            break;
-	case Ranges::EightG:
-            gravityValue = 16;
-            break;
-    }
+	switch (measurement_range)
+	{
+		case ranges::TWO_G:
+			gravity_value = 64;
+			break;
+		case ranges::FOUR_G:
+			gravity_value = 32;
+			break;
+		case ranges::EIGHT_G:
+			gravity_value = 16;
+			break;
+	}
 
-    offsets.X = -x + (int)(gravityValue * referenceAcceleration.X);
-    offsets.Y = -y + (int)(gravityValue * referenceAcceleration.Y);
-    offsets.Z = -z + (int)(gravityValue * referenceAcceleration.Z);
+	this->offsets.x = -x + static_cast<int>(gravity_value * reference.x);
+	this->offsets.y = -y + static_cast<int>(gravity_value * reference.y);
+	this->offsets.z = -z + static_cast<int>(gravity_value * reference.z);
 }
 
 void accelerometer::calibrate()
 {
-    Calibrate(Acceleration(0, 0, 1));
+	this->calibrate(acceleration(0, 0, 1));
+}
+
+accelerometer::acceleration::acceleration(double x, double y, double z) : x(x), y(y), z(z)
+{
+
+}
+
+accelerometer::calibration_offsets::calibration_offsets() : x(0), y(0), z(0)
+{
+
+}
+
+accelerometer::calibration_offsets::calibration_offsets(int x, int y, int z) : x(x), y(y), z(z)
+{
+
 }
