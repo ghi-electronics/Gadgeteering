@@ -20,60 +20,48 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-Thermocouple::Thermocouple(unsigned char socketNumber)
+thermocouple::thermocouple(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::X)), miso(this->sock, 3, resistor_modes::PULL_UP), clk(this->sock, 4), cs(this->sock, 5)
 {
-	socket* t_socket = mainboard->getSocket(socketNumber);
-	t_socket->ensureTypeIsSupported(socket::types::X);
 
-	_miso = new digital_input(socket, socket::pins::Three, resistor_modes::PULL_UP);
-	_clk = new digital_output(socket, socket::pins::Four, false);
-	_cs = new digital_output(socket, socket::pins::Five, true);
 }
 
-Thermocouple::~Thermocouple()
+unsigned long thermocouple::read_data()
 {
-	delete this->_miso;
-	delete this->_clk;
-	delete this->_cs;
-}
-
-unsigned long Thermocouple::ReadData()
-{
-	long bitCount;
+	long bit_count;
 	unsigned long data = 0;
 
-	_cs->write(false);
+	this->cs.write(false);
 	{
-		for (bitCount = 31; bitCount >= 0; bitCount--)
-{
-			_clk->write(true);
-			System::Sleep(1);
-			if (_miso->read())
-{
-				data |= (unsigned long)(1L << (unsigned long)bitCount);
+		for (bit_count = 31; bit_count >= 0; bit_count--)
+		{
+			this->clk.write(true);
+			system::sleep(1);
+			if (this->miso.read())
+			{
+				data |= static_cast<unsigned long>(1L << static_cast<unsigned long>(bit_count));
 			}
 
-			_clk->write(false);
-			System::Sleep(1);
+			this->clk.write(false);
+			system::sleep(1);
 		}
 	}
-	_cs->write(true);
+	this->cs.write(true);
 
 	return data;
 }
 
-short Thermocouple::GetExternalTemp_Celsius()
+short thermocouple::get_external_temp_celsius()
 {
-	return (ReadData() >> 20) & 0xFFF;
+	return (read_data() >> 20) & 0xFFF;
 }
 
-short Thermocouple::GetExternalTemp_Fahrenheit()
+short thermocouple::get_external_temp_fahrenheit()
 {
-	return (short)((GetExternalTemp_Celsius() * 1.8) + 32);
+	return static_cast<short>((get_external_temp_celsius() * 1.8) + 32);
 }
 
-unsigned char Thermocouple::GetInternalTemp_Celsius()
+unsigned char thermocouple::get_internal_temp_celsius()
 {
-	unsigned long value = ReadData();
-	return (unsigned char)((value >> 8) & 0xFF); // get byte 2
+	unsigned long value = this->read_data();
+	return static_cast<unsigned char>((value >> 8) & 0xFF); // get byte 2
 }

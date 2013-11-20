@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,35 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef _THERMOCOUPLE_H_
-#define _THERMOCOUPLE_H_
+#pragma once
 
 #include "../Gadgeteering.h"
 
-namespace gadgeteering {
-	namespace modules {
-		using namespace gadgeteering::interfaces;
-
-		class Thermocouple {
+namespace gadgeteering
+{
+	namespace modules
+	{
+		class thermocouple
+		{
 			static const unsigned char ERROR_NOCONECT = 0x01;
 			static const unsigned char ERROR_SHORTGND = 0x02;
 			static const unsigned char ERROR_SHORTVCC = 0x04;
 
-			digital_input* _miso;
-			digital_output* _clk;
-			digital_output* _cs;
+			const socket& sock;
+			interfaces::digital_input miso;
+			interfaces::digital_output clk;
+			interfaces::digital_output cs;
 
-			unsigned long ReadData();
+			unsigned long read_data();
 
 			public:
-				Thermocouple(unsigned char socketNumber);
-				~Thermocouple();
+				thermocouple(unsigned char socket_number);
 
-				short GetExternalTemp_Celsius();
-				short GetExternalTemp_Fahrenheit();
-				unsigned char GetInternalTemp_Celsius();
+				short get_external_temp_celsius();
+				short get_external_temp_fahrenheit();
+				unsigned char get_internal_temp_celsius();
 		};
 	}
 }
-
-#endif

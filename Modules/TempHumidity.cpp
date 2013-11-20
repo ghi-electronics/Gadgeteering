@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,296 +14,280 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "TemperatureHumidity.h"
+#include "TempHumidity.h"
 
 using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-TemperatureHumidity::TemperatureHumidity(unsigned char socketNumber)
+temp_humidity::temp_humidity(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::X)), data(this->sock, 3), sck(this->sock, 4)
 {
-	socket* t_socket = mainboard->getSocket(socketNumber);
-	t_socket->ensureTypeIsSupported(socket::types::X);
-
-    this->_data = new DigitalIO(socket, socket::pins::Three);
-	this->_sck = new digital_output(socket, socket::pins::Four);
-	this->_data->setio_mode(io_modes::DIGITAL_OUTPUT);
-	this->_data->setresistor_mode(resistor_modes::PULL_UP);
+	this->data.set_io_mode(io_modes::DIGITAL_OUTPUT);
+	this->data.set_resistor_mode(resistor_modes::PULL_UP);
 }
 
-TemperatureHumidity::~TemperatureHumidity()
+void temp_humidity::take_measurements(double& temperature, double& humidity)
 {
-    delete this->_data;
-	delete this->_sck;
+	unsigned int raw_rh_reading;
+
+	// Wait for SHT10 sensor to start-up and get to sleep mode
+	system::sleep(11);
+
+	temperature = 0;
+	humidity = 0;
+	raw_rh_reading = 0;
+
+	this->reset_communication();
+
+	this->sht_transmission_start();
+	temperature = this->translate_temperature(sht_measure_temperature());
+
+	this->sht_transmission_start();
+	raw_rh_reading = this->sht_measure_rh();
+	humidity = this->translate_rh(raw_rh_reading);
+
+	// Correct RH reading based on temperature
+	humidity = (temperature - 25) * (0.01 + 0.00008 * raw_rh_reading) + humidity;
 }
 
-void TemperatureHumidity::TakeMeasurements(double* temperature, double* humidity)
+void temp_humidity::sht_transmission_start()
 {
-    double temperatureReading;
-    unsigned int rawRHReading;
-    double rhReading;
+	this->data.write(true);
 
-    // Wait for SHT10 sensor to start-up and get to sleep mode
-    System::Sleep(11);
-
-    temperatureReading = 0;
-    rhReading = 0;
-    rawRHReading = 0;
-
-    this->ResetCommuncation();
-
-    this->SHT_TransmissionStart();
-    temperatureReading = TranslateTemperature(SHT_MeasureTemperature());
-
-    SHT_TransmissionStart();
-    rawRHReading = SHT_MeasureRH();
-    rhReading = TranslateRH(rawRHReading);
-
-    // Correct RH reading based on temperature
-    rhReading = (temperatureReading - 25) * (0.01 + 0.00008 * rawRHReading) + rhReading;
-
-    *temperature = temperatureReading;
-    *humidity = rhReading;
+	this->sck.write(true);
+	this->data.write(false);
+	this->sck.write(false);
+	this->sck.write(true);
+	this->data.write(true);
+	this->sck.write(false);
 }
 
-void TemperatureHumidity::SHT_TransmissionStart()
-{
-	_data->write(true);
-
-    _sck->write(true);
-    _data->write(false);
-    _sck->write(false);
-    _sck->write(true);
-    _data->write(true);
-    _sck->write(false);
-}
-
-unsigned int TemperatureHumidity::SHT_MeasureTemperature()
-{
-    bool ack;
-    bool reading[16];
-
-    _data->write(false);
-
-    // 3 x SCK pulses: Address 000
-    _sck->write(true);   //A2 : 0
-    _sck->write(false);  //
-
-    _sck->write(true);   //A1 : 0
-    _sck->write(false);  //
-
-    _sck->write(true);   //A2 : 0
-    _sck->write(false);  //
-
-    // Command = 00011
-    _sck->write(true);  //C4 : 0
-    _sck->write(false); //
-
-    _sck->write(true);  //C3 : 0
-    _sck->write(false); //
-
-    _sck->write(true);  //C0 : 0
-    _sck->write(false);
-
-    _data->write(true); //C1 : 1
-    _sck->write(true);
-    _sck->write(false);
-    _data->write(false);
-
-    _data->write(true); //C0 : 1
-    _sck->write(true);
-
-
-    _sck->write(false); // Complete SCK clock
-
-    // ACK : DATA should have been pulled low by the sensor, until next SCK falling edge
-    _sck->write(true);
-    ack = _data->read();
-
-    // Complete 9th SCK Clock. Sensor should release DATA line (and pulled-up by internal pull-up)
-    _sck->write(false);
-
-    //TEMP
-    if (ack)
-		mainboard->panic(Exceptions::ERR_MODULE_ERROR);
-
-    //It will take up to 80ms to read. Sensor will
-    // pull DATA line low when ready
-    // TODO make this blocking (interrupt?)
-    while (_data->read())
-    {
-        System::Sleep(10);
-    }
-
-    // Read first byte in
-    for (unsigned int i = 0; i < 8; i++)
-    {
-
-        reading[i] = _data->read();
-        _sck->write(true);
-        _sck->write(false);
-    }
-
-    //  ACKnoledge receipt of first byte
-    _data->write(false);
-
-    // ACK Clock
-
-    _sck->write(true);
-    _sck->write(false);
-
-    // Read second byte in
-    for (unsigned int i = 8; i < 16; i++)
-    {
-
-        reading[i] = _data->read();
-        _sck->write(true);
-        _sck->write(false);
-    }
-
-    //  Skip CRC by keeping ACK high
-    _data->write(true);
-
-	unsigned int temp = 0;
-
-    for (unsigned int i = 0; i < 16; i++)
-    {
-        if (reading[i]) temp += 1 << (16 - 1 - i);
-    }
-
-	return temp;
-}
-
-unsigned int TemperatureHumidity::SHT_MeasureRH()
+unsigned int temp_humidity::sht_measure_temperature()
 {
 	bool ack;
-    bool reading[16];
+	bool reading[16];
 
-    _data->write(false);
+	this->data.write(false);
 
-    // 3 x SCK pulses: Address 000
-    _sck->write(true);   //A2 : 0
-    _sck->write(false);  //
+	// 3 x SCK pulses: Address 000
+	this->sck.write(true);   //A2 : 0
+	this->sck.write(false);  //
 
-    _sck->write(true);   //A1 : 0
-    _sck->write(false);  //
+	this->sck.write(true);   //A1 : 0
+	this->sck.write(false);  //
 
-    _sck->write(true);   //A2 : 0
-    _sck->write(false);  //
+	this->sck.write(true);   //A2 : 0
+	this->sck.write(false);  //
 
-    // Command = 00101
-    _sck->write(true);  //C4 : 0
-    _sck->write(false); //
+	// Command = 00011
+	this->sck.write(true);  //C4 : 0
+	this->sck.write(false); //
 
-    _sck->write(true);  //C3 : 0
-    _sck->write(false); //
+	this->sck.write(true);  //C3 : 0
+	this->sck.write(false); //
 
-    _data->write(true); //C2 : 1
-    _sck->write(true);
-    _sck->write(false);
-    _data->write(false);
+	this->sck.write(true);  //C0 : 0
+	this->sck.write(false);
 
-    _sck->write(true);  //C1 : 0
-    _sck->write(false);
+	this->data.write(true); //C1 : 1
+	this->sck.write(true);
+	this->sck.write(false);
+	this->data.write(false);
 
-    _data->write(true); //C0 : 1
-    _sck->write(true);
-
-    _sck->write(false); // Complete SCK clock
-
-    // ACK : DATA should have been pulled low by the sensor, until next SCK falling edge
-    _sck->write(true);
-    ack = _data->read();
-
-    // Complete 9th SCK Clock. Sensor should release DATA line (and pulled-up by internal pull-up)
-    _sck->write(false);
+	this->data.write(true); //C0 : 1
+	this->sck.write(true);
 
 
-    //It will take up to 80ms to read. Sensor will
-    // pull DATA line low when ready
-    // TODO: make this use a blocking call (e.g. an interrupt?)
-    while (_data->read())
-    {
-        System::Sleep(10);
-    }
+	this->sck.write(false); // Complete SCK clock
 
-    // Read first byte in
-    for (unsigned int i = 0; i < 8; i++)
-    {
-        reading[i] = _data->read();
-        _sck->write(true);
-        _sck->write(false);
-    }
+	// ACK : DATA should have been pulled low by the sensor, until next SCK falling edge
+	this->sck.write(true);
+	ack = this->data.read();
 
-    //  ACKnoledge receipt of first byte
-    _data->write(false);
+	// Complete 9th SCK Clock. Sensor should release DATA line (and pulled-up by internal pull-up)
+	this->sck.write(false);
 
-    // ACK Clock
-    _sck->write(true);
-    _sck->write(false);
+	//TEMP
+	if (ack)
+		panic(errors::MODULE_ERROR);
 
-    // Read second byte in
-    for (unsigned int i = 8; i < 16; i++)
-    {
-        reading[i] = _data->read();
-        _sck->write(true);
-        _sck->write(false);
-    }
+	//It will take up to 80ms to read. Sensor will
+	// pull DATA line low when ready
+	// TODO make this blocking (interrupt?)
+	while (this->data.read())
+	{
+		system::sleep(10);
+	}
 
-    //  Skip CRC by keeping ACK high
-    _data->write(true);
+	// Read first byte in
+	for (unsigned int i = 0; i < 8; i++)
+	{
+
+		reading[i] = this->data.read();
+		this->sck.write(true);
+		this->sck.write(false);
+	}
+
+	//  ACKnoledge receipt of first byte
+	this->data.write(false);
+
+	// ACK Clock
+
+	this->sck.write(true);
+	this->sck.write(false);
+
+	// Read second byte in
+	for (unsigned int i = 8; i < 16; i++)
+	{
+
+		reading[i] = this->data.read();
+		this->sck.write(true);
+		this->sck.write(false);
+	}
+
+	//  Skip CRC by keeping ACK high
+	this->data.write(true);
 
 	unsigned int temp = 0;
 
-    for (unsigned int i = 0; i < 16; i++)
-    {
-        if (reading[i]) temp += 1 << (16 - 1 - i);
-    }
+	for (unsigned int i = 0; i < 16; i++)
+	{
+		if (reading[i]) temp += 1 << (16 - 1 - i);
+	}
 
 	return temp;
 }
 
-void TemperatureHumidity::ResetCommuncation()
+unsigned int temp_humidity::sht_measure_rh()
+{
+	bool ack;
+	bool reading[16];
+
+	this->data.write(false);
+
+	// 3 x SCK pulses: Address 000
+	this->sck.write(true);   //A2 : 0
+	this->sck.write(false);  //
+
+	this->sck.write(true);   //A1 : 0
+	this->sck.write(false);  //
+
+	this->sck.write(true);   //A2 : 0
+	this->sck.write(false);  //
+
+	// Command = 00101
+	this->sck.write(true);  //C4 : 0
+	this->sck.write(false); //
+
+	this->sck.write(true);  //C3 : 0
+	this->sck.write(false); //
+
+	this->data.write(true); //C2 : 1
+	this->sck.write(true);
+	this->sck.write(false);
+	this->data.write(false);
+
+	this->sck.write(true);  //C1 : 0
+	this->sck.write(false);
+
+	this->data.write(true); //C0 : 1
+	this->sck.write(true);
+
+	this->sck.write(false); // Complete SCK clock
+
+	// ACK : DATA should have been pulled low by the sensor, until next SCK falling edge
+	this->sck.write(true);
+	ack = this->data.read();
+
+	// Complete 9th SCK Clock. Sensor should release DATA line (and pulled-up by internal pull-up)
+	this->sck.write(false);
+
+
+	//It will take up to 80ms to read. Sensor will
+	// pull DATA line low when ready
+	// TODO: make this use a blocking call (e.g. an interrupt?)
+	while (this->data.read())
+	{
+		system::sleep(10);
+	}
+
+	// Read first byte in
+	for (unsigned int i = 0; i < 8; i++)
+	{
+		reading[i] = this->data.read();
+		this->sck.write(true);
+		this->sck.write(false);
+	}
+
+	//  ACKnoledge receipt of first byte
+	this->data.write(false);
+
+	// ACK Clock
+	this->sck.write(true);
+	this->sck.write(false);
+
+	// Read second byte in
+	for (unsigned int i = 8; i < 16; i++)
+	{
+		reading[i] = this->data.read();
+		this->sck.write(true);
+		this->sck.write(false);
+	}
+
+	//  Skip CRC by keeping ACK high
+	this->data.write(true);
+
+	unsigned int temp = 0;
+
+	for (unsigned int i = 0; i < 16; i++)
+	{
+		if (reading[i]) temp += 1 << (16 - 1 - i);
+	}
+
+	return temp;
+}
+
+void temp_humidity::reset_communication()
 {
 
-    //if (!_data.Active) _data.Active = true;
-    _data->write(true);
+	//if (!this->data.Active) this->data.Active = true;
+	this->data.write(true);
 
-    _sck->write(true);
-    _sck->write(false);  //0
+	this->sck.write(true);
+	this->sck.write(false);  //0
 
-    _sck->write(true);
-    _sck->write(false);  //0
+	this->sck.write(true);
+	this->sck.write(false);  //0
 
-    _sck->write(true);
-    _sck->write(false);  //0
+	this->sck.write(true);
+	this->sck.write(false);  //0
 
-    _sck->write(true);
-    _sck->write(false);  //0
+	this->sck.write(true);
+	this->sck.write(false);  //0
 
-    _sck->write(true);
-    _sck->write(false);  //0
+	this->sck.write(true);
+	this->sck.write(false);  //0
 
-    _sck->write(true);
-    _sck->write(false);  //0
+	this->sck.write(true);
+	this->sck.write(false);  //0
 
-    _sck->write(true);
-    _sck->write(false);  //0
+	this->sck.write(true);
+	this->sck.write(false);  //0
 
-    _sck->write(true);
-    _sck->write(false);  //0
+	this->sck.write(true);
+	this->sck.write(false);  //0
 
-    _sck->write(true);
-    _sck->write(false);  //0
+	this->sck.write(true);
+	this->sck.write(false);  //0
 
 }
 
-double TemperatureHumidity::TranslateRH(unsigned int rawRH)
+double temp_humidity::translate_rh(unsigned int raw_rh)
 {
-    return -2.0468 + 0.0367 * rawRH - 1.5955E-6 * rawRH * rawRH;
+	return -2.0468 + 0.0367 * raw_rh - 1.5955E-6 * raw_rh * raw_rh;
 }
 
-double TemperatureHumidity::TranslateTemperature(unsigned int rawTemp)
+double temp_humidity::translate_temperature(unsigned int rawTemp)
 {
-    return -39.65 + 0.01 * rawTemp;
+	return -39.65 + 0.01 * rawTemp;
 }
