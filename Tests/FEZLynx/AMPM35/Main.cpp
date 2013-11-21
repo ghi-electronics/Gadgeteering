@@ -1,11 +1,8 @@
-#include <iostream>
-
 #include <Gadgeteering.h>
 
 #include <Mainboards/FEZLynxS4.h>
-#include <Modules/REPLACME.h>
+#include <Modules\AMPM35.h>
 
-using namespace std;
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
 using namespace gadgeteering::modules;

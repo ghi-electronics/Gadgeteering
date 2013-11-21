@@ -1,11 +1,10 @@
-#include <iostream>
-
 #include <Gadgeteering.h>
 
 #include <Mainboards/FEZLynxS4.h>
-#include <Modules/REPLACME.h>
+#include <Modules/Moisture.h>
 
-using namespace std;
+#include <iostream>
+
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
 using namespace gadgeteering::modules;
@@ -13,6 +12,13 @@ using namespace gadgeteering::modules;
 int main(int argc, char** argv)
 {
 	fez_lynx_s4 board;
+	moisture sensor(1);
+
+	while(true)
+	{
+		std::cout << "Moisture level: " << sensor.get_moisture_reading(2) << std::endl;
+		system::sleep(100);
+	}
 
 	return 0;
 }
