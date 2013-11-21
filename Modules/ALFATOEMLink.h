@@ -91,6 +91,7 @@ namespace gadgeteering
 				void generate_handles();
 				char get_handle();
 				void free_handle(char handle);
+				response_code remove_directory(const char* path);
 				response_code read_response_code();
 
 				static void int_to_hex(unsigned int source, unsigned char* destination);
@@ -121,6 +122,7 @@ namespace gadgeteering
 					private:
 						bool closed;
 						char handle;
+						const char* file_name;
 						alfat_oem_link& alfat;
 
 						file(alfat_oem_link& parent, const char* path, mode m);

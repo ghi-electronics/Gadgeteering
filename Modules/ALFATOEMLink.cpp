@@ -300,6 +300,31 @@ alfat_oem_link::response_code alfat_oem_link::read_response_code()
 	return (result[0] == '!' && result[3] == '\n') ? HEX_TO_UCHAR(result + 1) : response_codes::INVALID_RESPONSE;
 }
 
+alfat_oem_link::response_code alfat_oem_link::remove_directory(const char* path)
+{
+	unsigned int path_len = static_cast<unsigned int>(strlen(path));
+
+	if (this->current_drive == alfat_oem_link::drives::SD)
+	{
+		char command[4] = { 'D', ' ', 'M', ':' };
+		this->send_write_header(4 + path_len + 1);
+		this->write_to_device(command, 4, false, false);
+	}
+	else
+	{
+		char command[5] = { 'D', ' ', 'U', this->current_drive == alfat_oem_link::drives::USB0 ? '0' : '1', ':' };
+		this->send_write_header(5 + path_len + 1);
+		this->write_to_device(command, 5, false, false);
+	}
+
+	this->write_to_device(path, path_len, false, false);
+
+	char lf = '\n';
+	this->write_to_device(&lf, 1, false, true);
+
+	return this->read_response_code();
+}
+
 void alfat_oem_link::int_to_hex(unsigned int source, unsigned char* destination)
 {
 	for (int i = 0; i < 8; i++)
@@ -318,7 +343,7 @@ unsigned int alfat_oem_link::hex_to_int(const unsigned char* source)
 
 
 
-alfat_oem_link::file::file(alfat_oem_link& parent, const char* path, alfat_oem_link::file::mode mode) : alfat(parent)
+alfat_oem_link::file::file(alfat_oem_link& parent, const char* path, alfat_oem_link::file::mode mode) : alfat(parent), file_name(path)
 {
 	this->closed = false;
 	this->handle = this->alfat.get_handle();
@@ -327,13 +352,13 @@ alfat_oem_link::file::file(alfat_oem_link& parent, const char* path, alfat_oem_l
 
 	if (this->alfat.current_drive == alfat_oem_link::drives::SD)
 	{
-		char command[7] = { 'O', ' ', this->handle, (char)mode, '>', 'M', ':' };
+		char command[7] = { 'O', ' ', this->handle, static_cast<char>(mode), '>', 'M', ':' };
 		this->alfat.send_write_header(7 + path_len + 1);
 		this->alfat.write_to_device(command, 7, false, false);
 	}
 	else
 	{
-		char command[8] = { 'O', ' ', this->handle, (char)mode, '>', 'U', this->alfat.current_drive == alfat_oem_link::drives::USB0 ? '0' : '1', ':' };
+		char command[8] = { 'O', ' ', this->handle, static_cast<char>(mode), '>', 'U', this->alfat.current_drive == alfat_oem_link::drives::USB0 ? '0' : '1', ':' };
 		this->alfat.send_write_header(8 + path_len + 1);
 		this->alfat.write_to_device(command, 8, false, false);
 	}
@@ -353,12 +378,37 @@ alfat_oem_link::file::~file()
 
 alfat_oem_link::response_code alfat_oem_link::file::rename(const char* new_name)
 {
-	return response_codes::SUCCESS;
+	unsigned int path_len = static_cast<unsigned int>(strlen(this->file_name));
+
+	if (this->alfat.current_drive == alfat_oem_link::drives::SD)
+	{
+		char command[4] = { 'A', ' ', 'M', ':' };
+		this->alfat.send_write_header(4 + path_len + 1);
+		this->alfat.write_to_device(command, 4, false, false);
+	}
+	else
+	{
+		char command[5] = { 'A', ' ', 'U', this->alfat.current_drive == alfat_oem_link::drives::USB0 ? '0' : '1', ':' };
+		this->alfat.send_write_header(5 + path_len + 1);
+		this->alfat.write_to_device(command, 5, false, false);
+	}
+
+	this->alfat.write_to_device(this->file_name, path_len, false, false);
+
+	char sep = '>';
+	this->alfat.write_to_device(&sep, 1, false, false);
+
+	this->alfat.write_to_device(new_name, static_cast<unsigned int>(strlen(new_name)), false, false);
+
+	char lf = '\n';
+	this->alfat.write_to_device(&lf, 1, false, true);
+
+	return this->alfat.read_response_code();
 }
 
 alfat_oem_link::response_code alfat_oem_link::file::remove()
 {
-	return response_codes::SUCCESS;
+	return this->alfat.remove_directory(this->file_name);
 }
 
 alfat_oem_link::response_code alfat_oem_link::file::close()
@@ -386,7 +436,12 @@ alfat_oem_link::response_code alfat_oem_link::file::flush()
 
 alfat_oem_link::response_code alfat_oem_link::file::seek(unsigned int position)
 {
-	return response_codes::SUCCESS;
+	unsigned char frame[13] = { 'P', ' ', this->handle, '>', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, '\n' };
+	alfat_oem_link::int_to_hex(position, frame + 4);
+
+	this->alfat.write_to_device(reinterpret_cast<char*>(frame), 13);
+
+	return this->alfat.read_response_code();
 }
 
 alfat_oem_link::response_code alfat_oem_link::file::write(const unsigned char* buffer, unsigned int count, unsigned int* actual_written)
