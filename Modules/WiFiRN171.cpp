@@ -23,7 +23,7 @@ using namespace gadgeteering::modules;
 
 wifi_rn171::wifi_rn171(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::U)), serial(this->sock, serial_configuration(9600, serial_configuration::parities::NONE, serial_configuration::stop_bits::ONE, 8))
 {
-	internal_buffer_index = 0;
+	this->internal_buffer_index = 0;
 	this->on_connection = NULL;
 	this->on_disconnection = NULL;
 	this->on_data_received = NULL;
@@ -86,15 +86,15 @@ void wifi_rn171::check_for_events(unsigned char* buffer, unsigned int buffer_siz
 	unsigned int read = 0;
 	unsigned int index = 0;
 	unsigned int iterations = 0;
-	unsigned int available = serial.available;
+	unsigned int available = this->serial.available;
 
 	if(available <= 0)
 		return;
 
 	if(available <= buffer_size)
-		read += serial.read(buffer, available);
+		read += this->serial.read(buffer, available);
 	else
-		read += serial.read(buffer, buffer_size);
+		read += this->serial.read(buffer, buffer_size);
 
 	char* str_pos;
 
