@@ -23,7 +23,10 @@ using namespace gadgeteering::modules;
 
 wifi_rn171::wifi_rn171(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::U)), serial(this->sock, serial_configuration(9600, serial_configuration::parities::NONE, serial_configuration::stop_bits::ONE, 8))
 {
-
+	internal_buffer_index = 0;
+	this->on_connection = NULL;
+	this->on_disconnection = NULL;
+	this->on_data_received = NULL;
 }
 
 void wifi_rn171::set_baud_rate(unsigned int new_rate)
@@ -76,4 +79,39 @@ void wifi_rn171::command_mode_exit()
 void wifi_rn171::command_mode_write(const char* command)
 {
 
+}
+
+void wifi_rn171::check_for_events(unsigned char* buffer, unsigned int buffer_size)
+{
+	unsigned int read = 0;
+	unsigned int index = 0;
+	unsigned int iterations = 0;
+	unsigned int available = serial.available;
+
+	if(available <= 0)
+		return;
+
+	if(available <= buffer_size)
+		read += serial.read(buffer, available);
+	else
+		read += serial.read(buffer, buffer_size);
+
+	char* str_pos;
+
+	if((str_pos = strstr(reinterpret_cast<char*>(buffer), "*")) != NULL)
+	{
+		char* sub_str_pos;
+
+		if((strlen(str_pos) > 5) && ((sub_str_pos = strstr(reinterpret_cast<char*>(buffer), "*OPEN*")) != NULL))
+		{
+			this->on_connection(*this);
+		}
+
+		if((strlen(str_pos) > 5) && ((sub_str_pos = strstr(reinterpret_cast<char*>(buffer), "*CLOSE*")) != NULL))
+		{
+			this->on_disconnection(*this);
+		}
+
+		this->on_data_received(*this, reinterpret_cast<char*>(buffer), read);
+	}
 }
