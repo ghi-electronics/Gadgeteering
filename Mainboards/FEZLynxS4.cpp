@@ -49,7 +49,7 @@ fez_lynx_s4::fez_lynx_s4() : base_mainboard(3.3)
 
 	const socket& sock = mainboard->get_socket(0);
 
-	this->analog_converter = new ads_7830(sock, 0x49);
+	this->analog_converter = new ads_7830(sock, 0x48);
 }
 
 fez_lynx_s4::~fez_lynx_s4()
@@ -59,7 +59,7 @@ fez_lynx_s4::~fez_lynx_s4()
 
 void fez_lynx_s4::create_sockets()
 {
-	socket s1(1, socket::types::Y | socket::types::A);
+	socket s1(1, socket::types::Y | socket::types::A | socket::types::X);
 	s1.pins[3] = fez_lynx_s4::pins::DD4;
 	s1.pins[4] = fez_lynx_s4::pins::DD5;
 	s1.pins[5] = fez_lynx_s4::pins::AD4;
