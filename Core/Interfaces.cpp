@@ -22,9 +22,9 @@ limitations under the License.
 using namespace gadgeteering;
 using namespace gadgeteering::interfaces;
 
-digital_output::digital_output(const socket& socket, socket_pin_number pin_number, bool initial_state) : sock(socket), sock_pin(pin_number), pin(sock.pins[pin_number])
+digital_output::digital_output(const socket& sock, socket_pin_number pin_number, bool initial_state) : sock(sock), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
-	if (socket.pins[pin_number] == UNCONNECTED_PIN)
+	if (sock.pins[pin_number] == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	if (!this->sock.digital_output_indirector)
@@ -51,9 +51,9 @@ void digital_output::write(bool value)
 	}
 }
 
-digital_input::digital_input(const socket& socket, socket_pin_number pin_number, resistor_mode new_resistor_mode) : sock(socket), sock_pin(pin_number), pin(sock.pins[pin_number])
+digital_input::digital_input(const socket& sock, socket_pin_number pin_number, resistor_mode new_resistor_mode) : sock(sock), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
-	if (socket.pins[pin_number] == UNCONNECTED_PIN)
+	if (sock.pins[pin_number] == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	if (!this->sock.digital_input_indirector)
@@ -99,9 +99,9 @@ resistor_mode digital_input::get_resistor_mode()
 	return this->current_resistor_mode;
 }
 
-digital_io::digital_io(const socket& socket, socket_pin_number pin_number) : sock(socket), sock_pin(pin_number), pin(sock.pins[pin_number])
+digital_io::digital_io(const socket& sock, socket_pin_number pin_number) : sock(sock), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
-	if (socket.pins[pin_number] == UNCONNECTED_PIN)
+	if (sock.pins[pin_number] == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
 	this->current_resistor_mode = resistor_modes::NONE;
@@ -180,15 +180,15 @@ io_mode digital_io::get_io_mode()
 	return this->current_io_state;
 }
 
-analog_input::analog_input(const socket& socket, socket_pin_number pin_number) : sock(socket), sock_pin(pin_number), pin(sock.pins[pin_number])
+analog_input::analog_input(const socket& sock, socket_pin_number pin_number) : sock(sock), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
 	if (!this->sock.analog_input_indirector)
 	{
 		switch (pin_number)
 		{
-			case 3: this->channel = socket.analog3;
-			case 4: this->channel = socket.analog4;
-			case 5: this->channel = socket.analog5;
+			case 3: this->channel = sock.analog3;
+			case 4: this->channel = sock.analog4;
+			case 5: this->channel = sock.analog5;
 		}
 
 		if (this->channel == analog_channels::NONE)
@@ -196,7 +196,7 @@ analog_input::analog_input(const socket& socket, socket_pin_number pin_number) :
 	}
 	else
 	{
-		if (socket.pins[pin_number] == UNCONNECTED_PIN)
+		if (sock.pins[pin_number] == UNCONNECTED_PIN)
 			panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
 	}
 }
@@ -218,18 +218,18 @@ double analog_input::read_proportion()
 	}
 }
 
-analog_output::analog_output(const socket& socket, socket_pin_number pin_number) : sock(socket), sock_pin(pin_number), pin(sock.pins[pin_number])
+analog_output::analog_output(const socket& sock, socket_pin_number pin_number) : sock(sock), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
 	if (!this->sock.analog_output_indirector)
 	{
-		if (pin_number != 5 || socket.analog_out == analog_out_channels::NONE)
+		if (pin_number != 5 || sock.analog_out == analog_out_channels::NONE)
 			panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
 
-		this->channel = socket.analog_out;
+		this->channel = sock.analog_out;
 	}
 	else
 	{
-		if (pin_number != 5 || socket.pins[pin_number] == UNCONNECTED_PIN)
+		if (pin_number != 5 || sock.pins[pin_number] == UNCONNECTED_PIN)
 			panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
 	}
 }
@@ -251,15 +251,15 @@ void analog_output::write_proportion(double value)
 	}
 }
 
-pwm_output::pwm_output(const socket& socket, socket_pin_number pin_number) : sock(socket), sock_pin(pin_number), pin(sock.pins[pin_number])
+pwm_output::pwm_output(const socket& sock, socket_pin_number pin_number) : sock(sock), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
 	if (!this->sock.pwm_output_indirector)
 	{
 		switch (pin_number)
 		{
-			case 7: this->channel = socket.pwm7;
-			case 8: this->channel = socket.pwm8;
-			case 9: this->channel = socket.pwm9;
+			case 7: this->channel = sock.pwm7;
+			case 8: this->channel = sock.pwm8;
+			case 9: this->channel = sock.pwm9;
 		}
 
 		if (this->channel == pwm_channels::NONE)
@@ -267,7 +267,7 @@ pwm_output::pwm_output(const socket& socket, socket_pin_number pin_number) : soc
 	}
 	else
 	{
-		if (socket.pins[pin_number] == UNCONNECTED_PIN)
+		if (sock.pins[pin_number] == UNCONNECTED_PIN)
 			panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
 	}
 

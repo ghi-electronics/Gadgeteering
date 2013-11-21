@@ -34,7 +34,7 @@ namespace gadgeteering
 
 			public:
 				ads_7830(unsigned char socket_number, unsigned char address = 0x48);
-				ads_7830(const socket& socket, unsigned char address = 0x48);
+				ads_7830(const socket& sock, unsigned char address = 0x48);
 
 				double get_reading(unsigned char channel);
 		};

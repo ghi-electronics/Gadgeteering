@@ -25,9 +25,9 @@ breakout::breakout(unsigned char socket_number) : sock(mainboard->get_socket(soc
 
 }
 
-interfaces::digital_input breakout::setup_digital_input(unsigned char pin_number, resistor_mode resistor_mode)
+interfaces::digital_input breakout::setup_digital_input(unsigned char pin_number, resistor_mode initial_resistor_mode)
 {
-	return interfaces::digital_input(this->sock, pin_number, resistor_mode);
+	return interfaces::digital_input(this->sock, pin_number, initial_resistor_mode);
 }
 
 interfaces::digital_output breakout::setup_digital_output(unsigned char pin_number, bool initial_state)

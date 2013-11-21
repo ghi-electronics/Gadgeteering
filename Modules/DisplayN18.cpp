@@ -193,9 +193,9 @@ unsigned short display_n18::rgb_to_short(unsigned char r, unsigned char g, unsig
 	return red | green | blue;
 }
 
-void display_n18::clear(unsigned short color)
+void display_n18::clear(unsigned short back_color)
 {
-	this->fill_rect(0, 0, display_n18::WIDTH, display_n18::HEIGHT, color);
+	this->fill_rect(0, 0, display_n18::WIDTH, display_n18::HEIGHT, back_color);
 }
 
 void display_n18::draw(const unsigned short* data, int x, int y, int width, int height)
@@ -223,19 +223,19 @@ void display_n18::draw(const unsigned char* data, int x, int y, int width, int h
 	this->write_data(data, width * height * 2);
 }
 
-void display_n18::set_pixel(int x, int y, unsigned short color)
+void display_n18::set_pixel(int x, int y, unsigned short fore_color)
 {
-	this->draw(reinterpret_cast<unsigned char*>(&color), x, y, 1, 1);
+	this->draw(reinterpret_cast<unsigned char*>(&fore_color), x, y, 1, 1);
 }
 
-void display_n18::fill_rect(int x, int y, int width, int height, unsigned short color)
+void display_n18::fill_rect(int x, int y, int width, int height, unsigned short fore_color)
 {
 	this->set_clipping_area((unsigned char)x, (unsigned char)y, (unsigned char)width - 1, (unsigned char)height);
 	this->write_command(0x2C);
 
 	unsigned short* buffer = new unsigned short[width * display_n18::STEP];
 	for (int j = 0; j < width * display_n18::STEP; j++)
-		buffer[j] = color;
+		buffer[j] = fore_color;
 
 	this->rs_pin.write(true);
 
@@ -250,15 +250,15 @@ void display_n18::fill_rect(int x, int y, int width, int height, unsigned short 
 	delete[] buffer;
 }
 
-void display_n18::draw_rect(int x, int y, int width, int height, unsigned short color)
+void display_n18::draw_rect(int x, int y, int width, int height, unsigned short fore_color)
 {
-	this->draw_line(x, y, x + width, y, color);
-	this->draw_line(x, y + height, x + width, y + height, color);
-	this->draw_line(x, y, x, y + height, color);
-	this->draw_line(x + width, y, x + width, y + height, color);
+	this->draw_line(x, y, x + width, y, fore_color);
+	this->draw_line(x, y + height, x + width, y + height, fore_color);
+	this->draw_line(x, y, x, y + height, fore_color);
+	this->draw_line(x + width, y, x + width, y + height, fore_color);
 }
 
-void display_n18::fill_circle(int x, int y, int radius, unsigned short color)
+void display_n18::fill_circle(int x, int y, int radius, unsigned short fore_color)
 {
 	int f = 1 - radius;
 	int dd_f_x = 1;
@@ -267,7 +267,7 @@ void display_n18::fill_circle(int x, int y, int radius, unsigned short color)
 	int y1 = radius;
 
 	for (int i = y - radius; i <= y + radius; i++)
-		this->set_pixel(x, i, color);
+		this->set_pixel(x, i, fore_color);
 
 	while (x1 < y1)
 	{
@@ -284,19 +284,19 @@ void display_n18::fill_circle(int x, int y, int radius, unsigned short color)
 
 		for (int i = y - y1; i <= y + y1; i++)
 		{
-			this->set_pixel(x + x1, i, color);
-			this->set_pixel(x - x1, i, color);
+			this->set_pixel(x + x1, i, fore_color);
+			this->set_pixel(x - x1, i, fore_color);
 		}
 
 		for (int i = y - x1; i <= y + x1; i++)
 		{
-			this->set_pixel(x + y1, i, color);
-			this->set_pixel(x - y1, i, color);
+			this->set_pixel(x + y1, i, fore_color);
+			this->set_pixel(x - y1, i, fore_color);
 		}
 	}
 }
 
-void display_n18::draw_circle(int x, int y, int radius, unsigned short color)
+void display_n18::draw_circle(int x, int y, int radius, unsigned short fore_color)
 {
 	int f = 1 - radius;
 	int dd_f_x = 1;
@@ -304,10 +304,10 @@ void display_n18::draw_circle(int x, int y, int radius, unsigned short color)
 	int x1 = 0;
 	int y1 = radius;
 
-	this->set_pixel(x, y + radius, color);
-	this->set_pixel(x, y - radius, color);
-	this->set_pixel(x + radius, y, color);
-	this->set_pixel(x - radius, y, color);
+	this->set_pixel(x, y + radius, fore_color);
+	this->set_pixel(x, y - radius, fore_color);
+	this->set_pixel(x + radius, y, fore_color);
+	this->set_pixel(x - radius, y, fore_color);
 
 	while (x1 < y1)
 	{
@@ -322,19 +322,19 @@ void display_n18::draw_circle(int x, int y, int radius, unsigned short color)
 		dd_f_x += 2;
 		f += dd_f_x;
 
-		this->set_pixel(x + x1, y + y1, color);
-		this->set_pixel(x - x1, y + y1, color);
-		this->set_pixel(x + x1, y - y1, color);
-		this->set_pixel(x - x1, y - y1, color);
+		this->set_pixel(x + x1, y + y1, fore_color);
+		this->set_pixel(x - x1, y + y1, fore_color);
+		this->set_pixel(x + x1, y - y1, fore_color);
+		this->set_pixel(x - x1, y - y1, fore_color);
 
-		this->set_pixel(x + y1, y + x1, color);
-		this->set_pixel(x - y1, y + x1, color);
-		this->set_pixel(x + y1, y - x1, color);
-		this->set_pixel(x - y1, y - x1, color);
+		this->set_pixel(x + y1, y + x1, fore_color);
+		this->set_pixel(x - y1, y + x1, fore_color);
+		this->set_pixel(x + y1, y - x1, fore_color);
+		this->set_pixel(x - y1, y - x1, fore_color);
 	}
 }
 
-void display_n18::draw_line(int x0, int y0, int x1, int y1, unsigned short color)
+void display_n18::draw_line(int x0, int y0, int x1, int y1, unsigned short fore_color)
 {
 	if (x0 == x1)
 	{
@@ -350,7 +350,7 @@ void display_n18::draw_line(int x0, int y0, int x1, int y1, unsigned short color
 
 		unsigned short data[display_n18::STEP_Y];
 		for (int i = 0; i < display_n18::STEP_Y; i++)
-			data[i] = color;
+			data[i] = fore_color;
 
 		for (unsigned char thisY = y0; thisY < y1; thisY += display_n18::STEP_Y)
 			this->write_data(reinterpret_cast<unsigned char*>(data), (y1 - thisY >= display_n18::STEP_Y ? display_n18::STEP_Y : y1 - thisY) * 2);
@@ -372,7 +372,7 @@ void display_n18::draw_line(int x0, int y0, int x1, int y1, unsigned short color
 
 		unsigned short data[display_n18::STEP_X];
 		for (int i = 0; i < display_n18::STEP_X; i++)
-			data[i] = color;
+			data[i] = fore_color;
 
 		for (unsigned char thisX = x0; thisX < x1; thisX += display_n18::STEP_X)
 			this->write_data(reinterpret_cast<unsigned char*>(data), (x1 - thisX >= display_n18::STEP_X ? display_n18::STEP_X : x1 - thisX) * 2);
@@ -419,9 +419,9 @@ void display_n18::draw_line(int x0, int y0, int x1, int y1, unsigned short color
 	for (; x0 < x1; x0++)
 	{
 		if (steep)
-			this->set_pixel(y0, x0, color);
+			this->set_pixel(y0, x0, fore_color);
 		else
-			this->set_pixel(x0, y0, color);
+			this->set_pixel(x0, y0, fore_color);
 
 		err -= dy;
 
@@ -561,8 +561,8 @@ void display_n18::draw_character(int x, int y, const char character, unsigned sh
 	}
 
 	for (int i = 0; i < display_n18::CHAR_HEIGHT; i++)
-	for (int k = 0; k < font_size; k++)
-		horizontal[i * font_size + k] = back_color;
+		for (int k = 0; k < font_size; k++)
+			horizontal[i * font_size + k] = back_color;
 
 	for (int k = 0; k < font_size; k++)
 		this->draw(horizontal, x + display_n18::CHAR_WIDTH * font_size + k, y, 1, display_n18::CHAR_HEIGHT * font_size);

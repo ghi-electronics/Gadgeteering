@@ -45,7 +45,7 @@ namespace gadgeteering
 					static const motor MOTOR_2 = 1;
 				};
 
-				motor_driver_l298(unsigned char socket);
+				motor_driver_l298(unsigned char socket_number);
 
 				void move_motor(motor motor_side, int new_speed);
 		};

@@ -32,7 +32,7 @@ namespace gadgeteering
 			public:
 				unsigned char address;
 
-				i2c(const socket& socket, unsigned char address);
+				i2c(const socket& sock, unsigned char address);
 				i2c(i2c_channel channel, unsigned char address);
 				i2c(cpu_pin sda, cpu_pin scl, unsigned char address, bool use_resistors = true);
 				~i2c();
@@ -84,7 +84,7 @@ namespace gadgeteering
 			public:
 				serial_configuration config;
 
-				serial(const socket& socket, serial_configuration configuration);
+				serial(const socket& sock, serial_configuration configuration);
 				serial(serial_channel channel, serial_configuration configuration);
 				~serial();
 

@@ -59,18 +59,18 @@ namespace gadgeteering
 
 				static unsigned short rgb_to_short(unsigned char r, unsigned char g, unsigned char b);
 
-				void clear(unsigned short color = 0x0000);
+				void clear(unsigned short back_color = 0x0000);
 				void draw(const unsigned char* data, int x, int y, int width, int height);
 				void draw(const unsigned short* data, int x, int y, int width, int height);
-				void set_pixel(int x, int y, unsigned short color);
+				void set_pixel(int x, int y, unsigned short fore_color);
 
-				void fill_rect(int x, int y, int width, int height, unsigned short color);
-				void draw_rect(int x, int y, int width, int height, unsigned short color);
+				void fill_rect(int x, int y, int width, int height, unsigned short fore_color);
+				void draw_rect(int x, int y, int width, int height, unsigned short fore_color);
 
-				void fill_circle(int x, int y, int radius, unsigned short color);
-				void draw_circle(int x, int y, int radius, unsigned short color);
+				void fill_circle(int x, int y, int radius, unsigned short fore_color);
+				void draw_circle(int x, int y, int radius, unsigned short fore_color);
 
-				void draw_line(int x0, int y0, int x1, int y1, unsigned short color);
+				void draw_line(int x0, int y0, int x1, int y1, unsigned short fore_color);
 
 				void draw_character(int x, int y, const char character, unsigned short fore_color, unsigned short back_color, unsigned char font_size = 1);
 				void draw_strong(int x, int y, const char* str, unsigned short fore_color, unsigned short back_color, unsigned char font_size = 1);

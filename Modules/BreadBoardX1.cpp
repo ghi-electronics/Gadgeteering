@@ -25,9 +25,9 @@ bread_board_x1::bread_board_x1(unsigned char socket_number) : sock(mainboard->ge
 
 }
 
-interfaces::digital_input bread_board_x1::setup_digital_input(unsigned char pin_number, resistor_mode resistor_mode)
+interfaces::digital_input bread_board_x1::setup_digital_input(unsigned char pin_number, resistor_mode initial_resistor_mode)
 {
-	return interfaces::digital_input(this->sock, pin_number, resistor_mode);
+	return interfaces::digital_input(this->sock, pin_number, initial_resistor_mode);
 }
 
 interfaces::digital_output bread_board_x1::setup_digital_output(unsigned char pin_number, bool initial_state)

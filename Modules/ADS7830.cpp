@@ -24,9 +24,9 @@ ads_7830::ads_7830(unsigned char socket_number, unsigned char address) : sock(ma
 
 }
 
-ads_7830::ads_7830(const socket& socket, unsigned char address) : sock(socket), chip(this->sock.i2c, address)
+ads_7830::ads_7830(const socket& sock, unsigned char address) : sock(sock), chip(this->sock.i2c, address)
 {
-	socket.ensure_type(socket::types::I);
+	sock.ensure_type(socket::types::I);
 }
 
 double ads_7830::get_reading(unsigned char channel)
