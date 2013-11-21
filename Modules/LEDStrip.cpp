@@ -36,21 +36,21 @@ led_strip::~led_strip()
 
 void led_strip::turn_on_led(unsigned char led, bool only_led)
 {
-	if (led < 1 || led > 7)
+	if (led > 6)
 		panic(errors::MODULE_ERROR);
 
 	if (only_led)
 		this->turn_all_off();
 
-	this->ports[led - 1]->write(true);
+	this->ports[led]->write(true);
 }
 
 void led_strip::turn_off_led(unsigned char led)
 {
-	if (led < 1 || led > 7)
+	if (led > 6)
 		panic(errors::MODULE_ERROR);
 
-	this->ports[led - 1]->write(false);
+	this->ports[led]->write(false);
 }
 
 void led_strip::turn_all_on()
@@ -67,17 +67,17 @@ void led_strip::turn_all_off()
 
 void led_strip::set(unsigned char led, bool state)
 {
-	if (led < 1 || led > 7)
+	if (led > 6)
 		panic(errors::MODULE_ERROR);
 
-	this->ports[led - 1]->write(state);
+	this->ports[led]->write(state);
 }
 
 void led_strip::animate(unsigned int switch_time, bool clockwise, bool turn_on, bool remain_on)
 {
 	if (clockwise)
 	{
-		for (int i = 1; i <= 7; i++)
+		for (int i = 0; i < 7; i++)
 		{
 			if (turn_on)
 				this->turn_on_led(i, !remain_on);
@@ -89,7 +89,7 @@ void led_strip::animate(unsigned int switch_time, bool clockwise, bool turn_on, 
 	}
 	else
 	{
-		for (int i = 7; i >= 1; i--)
+		for (int i = 6; i >= 0; i--)
 		{
 			if (turn_on)
 				this->turn_on_led(i, !remain_on);
