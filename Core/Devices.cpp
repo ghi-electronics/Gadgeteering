@@ -36,12 +36,12 @@ i2c::i2c(i2c_channel channel, unsigned char address)
 	mainboard->i2c_begin(this->channel);
 }
 
-i2c::i2c(const socket& socket, unsigned char address)
+i2c::i2c(const socket& sock, unsigned char address)
 {
-	if (socket.i2c == i2c_channels::NONE)
+	if (sock.i2c == i2c_channels::NONE)
 		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
-	this->channel = socket.i2c;
+	this->channel = sock.i2c;
 	this->address = address;
 	this->soft_i2c = NULL;
 
@@ -217,13 +217,13 @@ serial::serial(serial_channel channel, serial_configuration configuration)
 	mainboard->serial_begin(this->channel, config);
 }
 
-serial::serial(const socket& socket, serial_configuration configuration)
+serial::serial(const socket& sock, serial_configuration configuration)
 {
-	if (socket.serial == serial_channels::NONE)
+	if (sock.serial == serial_channels::NONE)
 		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	this->config = configuration;
-	this->channel = socket.serial;
+	this->channel = sock.serial;
 	mainboard->serial_begin(this->channel, config);
 }
 

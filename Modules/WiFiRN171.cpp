@@ -44,15 +44,20 @@ void wifi_rn171::enable_dhcp()
 void wifi_rn171::create_access_point(const char* ssid)
 {
 	const char* command = "set wlan ssid ";
+	size_t command_len = strlen(command);
+	size_t ssid_len = strlen(ssid);
 
-	char* full_command = new char[strlen(command) + strlen(ssid)];
-	strcat(full_command, command);
-	strcat(full_command + strlen(command), ssid);
+	char* full_command = new char[command_len + ssid_len + 1];
+	memcpy(full_command, command, command_len);
+	memcpy(full_command + command_len, ssid, ssid_len);
+	full_command[command_len + ssid_len] = '\0';
 
 	this->command_mode_start();
 	this->command_mode_write(full_command);
 	this->command_mode_write("set ip dhcp 4");
 	this->command_mode_exit();
+
+	delete[] full_command;
 }
 
 void wifi_rn171::command_mode_start()

@@ -41,7 +41,7 @@ namespace gadgeteering
 				hub_ap5& hub;
 
 				public:
-					indirected_digital_input(const socket& socket, hub_ap5& hub);
+					indirected_digital_input(const socket& sock, hub_ap5& hub);
 
 					virtual bool read(socket_pin_number pin_number);
 					virtual void set_input(socket_pin_number pin_number, resistor_mode mode);
@@ -53,7 +53,7 @@ namespace gadgeteering
 				hub_ap5& hub;
 
 				public:
-					indirected_digital_output(const socket& socket, hub_ap5& hub);
+					indirected_digital_output(const socket& sock, hub_ap5& hub);
 
 					virtual void write(socket_pin_number pin_number, bool value);
 					virtual void set_output(socket_pin_number pin_number);
@@ -65,7 +65,7 @@ namespace gadgeteering
 				hub_ap5& hub;
 
 				public:
-					indirected_digital_io(const socket& socket, hub_ap5& hub);
+					indirected_digital_io(const socket& sock, hub_ap5& hub);
 
 					virtual void write(socket_pin_number pin_number, bool value);
 					virtual bool read(socket_pin_number pin_number);
@@ -78,7 +78,7 @@ namespace gadgeteering
 				hub_ap5& hub;
 
 				public:
-					indirected_analog_input(const socket& socket, hub_ap5& hub);
+					indirected_analog_input(const socket& sock, hub_ap5& hub);
 
 					virtual double read(socket_pin_number pin_number);
 			};
@@ -89,7 +89,7 @@ namespace gadgeteering
 				hub_ap5& hub;
 
 				public:
-					indirected_pwm_output(const socket& socket, hub_ap5& hub);
+					indirected_pwm_output(const socket& sock, hub_ap5& hub);
 
 					virtual void set(socket_pin_number pin_number, double duty_cycle, double frequency);
 			};

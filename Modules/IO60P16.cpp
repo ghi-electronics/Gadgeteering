@@ -38,12 +38,12 @@ io60p16::io60p16(unsigned char socket_number)
 			this->resistors[i][j] = 0x00;
 }
 
-io60p16::io60p16(const socket& socket, socket_pin_number sda, socket_pin_number scl)
+io60p16::io60p16(const socket& sock, socket_pin_number sda, socket_pin_number scl)
 {
-	if (sda == 8 && scl == 9 && socket.i2c != i2c_channels::NONE)
-		this->chip = new devices::i2c(socket.i2c, 0x20);
+	if (sda == 8 && scl == 9 && sock.i2c != i2c_channels::NONE)
+		this->chip = new devices::i2c(sock.i2c, 0x20);
 	else
-		this->chip = new devices::i2c(socket.pins[sda], socket.pins[scl], 0x20);
+		this->chip = new devices::i2c(sock.pins[sda], sock.pins[scl], 0x20);
 
 	for (int i = 0; i < 8; i++)
 	{

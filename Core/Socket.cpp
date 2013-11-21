@@ -81,8 +81,12 @@ socket::~socket()
 		delete this->pwm_output_indirector;
 }
 
-void socket::ensure_type(type type) const
+void socket::ensure_type(type t) const
 {
-	if ((this->type_mask & type) == 0)
+	if ((t & types::X) != 0)
+		if ((this->type_mask & (types::X | types::Y)) == 0)
+			panic(errors::MODULE_IS_ON_INVALID_SOCKET_TYPE);
+
+	if ((this->type_mask & t) == 0)
 		panic(errors::MODULE_IS_ON_INVALID_SOCKET_TYPE);
 }

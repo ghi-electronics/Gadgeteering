@@ -29,7 +29,7 @@ namespace gadgeteering
 			public:
 				breakout_tb10(unsigned char socket_number);
 
-				interfaces::digital_input setup_digital_input(unsigned char pin_number, resistor_mode resistor_mode = resistor_modes::FLOATING);
+				interfaces::digital_input setup_digital_input(unsigned char pin_number, resistor_mode initial_resistor_mode = resistor_modes::FLOATING);
 				interfaces::digital_output setup_digital_output(unsigned char pin_number, bool initial_state = false);
 				interfaces::digital_io setup_digital_io(unsigned char pin_number);
 				interfaces::analog_input setup_analog_input(unsigned char pin_number);

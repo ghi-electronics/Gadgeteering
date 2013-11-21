@@ -8,9 +8,7 @@
 
 # Build results
 
-[Dd]ebug/
-[Rr]elease/
-x64/
+[Bb]uild/
 [Bb]in/
 [Oo]bj/
 
@@ -21,6 +19,7 @@ x64/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+*.idb
 *_i.c
 *_p.c
 *.ilk
