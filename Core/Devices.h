@@ -89,7 +89,7 @@ namespace gadgeteering
 				~serial();
 
 				void write(const unsigned char* buffer, unsigned int length);
-				void write(const char* buffer, unsigned int length);
+				void write(const char* buffer, unsigned int length = 0);
 				unsigned int read(unsigned char* buffer, unsigned int length);
 				unsigned int available();
 		};

@@ -39,10 +39,12 @@ namespace gadgeteering
 				typedef void(*on_state_changed_handler)(bluetooth& sender, state s);
 				typedef void(*on_data_received_handler)(bluetooth& sender, char* data, unsigned int length);
 				typedef void(*on_pin_requested_handler)(bluetooth& sender);
+				typedef void(*on_device_inquired_handler)(bluetooth& sender, char* mac_addres, char* name);
 
 				on_state_changed_handler on_state_changed;
 				on_data_received_handler on_data_received;
 				on_pin_requested_handler on_pin_requested;
+				on_device_inquired_handler on_device_inquired;
 
 				class host
 				{

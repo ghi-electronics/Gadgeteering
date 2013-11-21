@@ -19,6 +19,8 @@ limitations under the License.
 #include "Mainboard.h"
 #include "System.h"
 
+#include <cstring>
+
 using namespace gadgeteering;
 using namespace gadgeteering::devices;
 
@@ -237,6 +239,9 @@ void serial::write(const unsigned char* buffer, unsigned int length)
 
 void serial::write(const char* buffer, unsigned int length) 
 { 
+	if (length == 0)
+		length = static_cast<unsigned int>(strlen(buffer));
+
 	this->write(reinterpret_cast<const unsigned char*>(buffer), length); 
 }
 
