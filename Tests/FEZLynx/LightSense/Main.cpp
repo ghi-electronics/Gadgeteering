@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 		std::cout << "Light sensor percent: " << sensor.read_percentage() << std::endl;
 		std::cout << "Light sensor voltage input: " << sensor.read_voltage() << std::endl << std::endl;
 
-		system::sleep(100);
+		system::sleep(500);
 	}
 
 	return 0;
