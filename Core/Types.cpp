@@ -35,10 +35,10 @@ spi_configuration::spi_configuration(bool cs_active_state, unsigned int cs_setup
 	this->uses_chip_select = uses_chip_select;
 }
 
-serial_configuration::serial_configuration(unsigned int baud_rate, serial_configuration::partity parity, serial_configuration::stop_bit stop_bits, unsigned char data_bits)
+serial_configuration::serial_configuration(unsigned int baud_rate, serial_configuration::parity parity, serial_configuration::stop_bit stop_bits, unsigned char data_bits)
 {
 	this->baud_rate = baud_rate;
-	this->parity = parity;
+	this->data_parity = parity;
 	this->stop_bits = stop_bits;
 	this->data_bits = data_bits;
 }

@@ -793,7 +793,7 @@ DWORD fez_lynx_s4::ftdi_channel::serial_write(const unsigned char* buffer, DWORD
 	FT_STATUS status = FT_OK;
 
 	status |= FT_SetBaudRate(this->handle, config.baud_rate);
-	status |= FT_SetDataCharacteristics(this->handle, config.data_bits, config.stop_bits, config.parity);
+	status |= FT_SetDataCharacteristics(this->handle, config.data_bits, config.stop_bits, config.data_parity);
 	status |= FT_SetFlowControl(this->handle, FT_FLOW_NONE, 0x00, 0x00);
 
 	status |= FT_Write(this->handle, const_cast<unsigned char*>(buffer), count, &sent);
@@ -812,7 +812,7 @@ DWORD fez_lynx_s4::ftdi_channel::serial_read(unsigned char* buffer, DWORD count,
 	FT_STATUS status = FT_OK;
 
 	status |= FT_SetBaudRate(this->handle, config.baud_rate);
-	status |= FT_SetDataCharacteristics(this->handle, config.data_bits, config.stop_bits, config.parity);
+	status |= FT_SetDataCharacteristics(this->handle, config.data_bits, config.stop_bits, config.data_parity);
 	status |= FT_SetFlowControl(this->handle, FT_FLOW_NONE, 0x00, 0x00);
 
 	status |= FT_GetQueueStatus(this->handle, &available);
