@@ -1,0 +1,23 @@
+medusa.name=FEZ Medusa
+medusa.vid.0=0x2341
+medusa.pid.0=0x0043
+medusa.upload.tool=arduino:avrdude
+medusa.upload.protocol=arduino
+medusa.upload.maximum_size=32256
+medusa.upload.maximum_data_size=2048
+medusa.upload.speed=57600
+
+medusa.bootloader.tool=arduino:avrdude
+medusa.bootloader.low_fuses=0xFF
+medusa.bootloader.high_fuses=0xDE
+medusa.bootloader.extended_fuses=0x05
+medusa.bootloader.unlock_bits=0x3F
+medusa.bootloader.lock_bits=0x0F
+medusa.bootloader.path=optiboot
+medusa.bootloader.file=optiboot_medusa.hex
+
+medusa.build.mcu=atmega328p
+medusa.build.f_cpu=12000000L
+medusa.build.board=AVR_MEDUSA
+medusa.build.core=arduino:arduino
+medusa.build.variant=arduino:standard

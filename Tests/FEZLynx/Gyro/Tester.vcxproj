@@ -42,10 +42,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup>
-    <IncludePath>$(SolutionDir)..\..\..\;$(SolutionDir)..\..\..\Build\FEZLynx\Headers\Windows;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)..\..\..\;$(SolutionDir)..\..\..\Dist\FEZLynx\Headers\Windows;$(IncludePath)</IncludePath>
     <OutDir>Output\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>Build\$(Platform)\$(Configuration)\</IntDir>
-    <LibraryPath>$(SolutionDir)..\..\..\Build\FEZLynx\Output\Windows\$(Platform)\$(Configuration);$(SolutionDir)..\..\..\Build\FEZLynx\Libraries\Windows\$(Platform);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)..\..\..\Dist\FEZLynx\Output\Windows\$(Platform)\$(Configuration);$(SolutionDir)..\..\..\Dist\FEZLynx\Libraries\Windows\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <LinkIncremental>true</LinkIncremental>

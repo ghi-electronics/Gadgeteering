@@ -17,8 +17,8 @@ limitations under the License.
 #include "FEZLynxS4.h"
 
 #include <iostream>
-#include <cstring>
 #include <iostream>
+#include <string.h>
 #include <stdlib.h>
 
 using namespace std;
