@@ -86,7 +86,7 @@ void wifi_rn171::check_for_events(unsigned char* buffer, unsigned int buffer_siz
 	unsigned int read = 0;
 	unsigned int index = 0;
 	unsigned int iterations = 0;
-	unsigned int available = this->serial.available;
+	unsigned int available = this->serial.available();
 
 	if(available <= 0)
 		return;

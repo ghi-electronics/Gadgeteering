@@ -17,6 +17,7 @@ limitations under the License.
 #include "RFIDReader.h"
 
 #include <string>
+#include <cstring>
 
 using namespace gadgeteering;
 using namespace gadgeteering::modules;

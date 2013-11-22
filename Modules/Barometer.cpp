@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "barometer.h"
+#include "Barometer.h"
 
 using namespace gadgeteering;
 using namespace gadgeteering::modules;
