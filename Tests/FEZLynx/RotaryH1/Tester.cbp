@@ -14,11 +14,11 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="../../../../gadgeteering" />
-					<Add directory="../../../Build/FEZLynx/Headers/Linux" />
+					<Add directory="../../../Dist/FEZLynx/Headers/Linux" />
 				</Compiler>
 				<Linker>
-					<Add library="../../../Build/FEZLynx/Output/Linux/x64/libgadgeteering-dbg.a" />
-					<Add library="../../../Build/FEZLynx/Libraries/Linux/x86_64/libftd2xx.so" />
+					<Add library="../../../Dist/FEZLynx/Output/Linux/x64/libgadgeteering-dbg.a" />
+					<Add library="../../../Dist/FEZLynx/Libraries/Linux/x86_64/libftd2xx.so" />
 				</Linker>
 			</Target>
 			<Target title="Release">
