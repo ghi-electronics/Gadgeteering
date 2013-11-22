@@ -20,7 +20,7 @@ limitations under the License.
 #define NULL 0
 #endif
 
-namespace gadgeteering 
+namespace gadgeteering
 {
 	typedef unsigned char io_mode;
 	typedef unsigned char resistor_mode;
@@ -39,21 +39,42 @@ namespace gadgeteering
 
 	static const cpu_pin UNCONNECTED_PIN = 0xFF;
 
-	struct io_modes 
+    /// @brief Struct containing GPIO pin modes
+	struct io_modes
 	{
+        /// @brief No IO mode
 		static const io_mode NONE = 0;
+
+		/// @brief Digitial output mode
 		static const io_mode DIGITAL_OUTPUT = 1;
+
+		/// @brief Digital input mode
 		static const io_mode DIGITAL_INPUT = 2;
 	};
 
-	struct resistor_modes 
+    /// @brief Struct containing resistor modes for a GPIO pin
+	struct resistor_modes
 	{
+        /// @brief No resistor mode
 		static const resistor_mode NONE = 0;
+
+		/// @brief Pull-up resistor mode
+		/// This mode (if supported by the mainboard) will force a pin
+		/// to a default HIGH state.
 		static const resistor_mode PULL_UP = 1;
+
+		/// @brief Pull-down resistor mode
+		/// This mode (if supported by the mainboard) will force a pin
+		/// to a default LOW state.
 		static const resistor_mode PULL_DOWN = 2;
+
+		/// @brief Floating resistor mode
+		/// This mode forces neither pull-up or pull-down resistor
+		/// modes.
 		static const resistor_mode FLOATING = 3;
 	};
 
+    /// @brief Struct containing possible SPI channels
 	struct spi_channels
 	{
 		static const spi_channel SPI_0 = 0;
@@ -65,6 +86,7 @@ namespace gadgeteering
 		static const serial_channel NONE = 0xFF;
 	};
 
+    /// @brief Struct containing possible I2C channels
 	struct i2c_channels
 	{
 		static const i2c_channel I2C_0 = 0;
@@ -76,6 +98,7 @@ namespace gadgeteering
 		static const serial_channel NONE = 0xFF;
 	};
 
+    /// @brief Struct containing possible Serial (UART) channels
 	struct serial_channels
 	{
 		static const serial_channel SERIAL_0 = 0;
@@ -87,6 +110,7 @@ namespace gadgeteering
 		static const serial_channel NONE = 0xFF;
 	};
 
+    /// @brief Struct containing possible Analog channels
 	struct analog_channels
 	{
 		static const analog_channel ANALOG_0 = 0;
@@ -105,6 +129,7 @@ namespace gadgeteering
 		static const analog_channel NONE = 0xFF;
 	};
 
+    /// @brief Struct containing possible Analog output channels
 	struct analog_out_channels
 	{
 		static const analog_channel ANALOG_0 = 0;
@@ -116,6 +141,7 @@ namespace gadgeteering
 		static const analog_channel NONE = 0xFF;
 	};
 
+    /// @brief Struct containing possible PWM output channels
 	struct pwm_channels
 	{
 		static const pwm_channel PWM_0 = 0;
@@ -141,6 +167,7 @@ namespace gadgeteering
 		static const pwm_channel NONE = 0xFF;
 	};
 
+    /// @brief Struct containing 8-bit RBG color values
 	struct color
 	{
 		unsigned char red;
@@ -157,27 +184,28 @@ namespace gadgeteering
 		static const color BLACK;
 	};
 
+    /// @brief Contains configuration for a SPI transaction
 	struct spi_configuration
 	{
-		//The pin SPIBus will toggle for the transaction
+		///The pin SPIBus will toggle for the transaction
 		cpu_pin chip_select;
 
-		//Whether or not the chip select pin is high when the chip is selected.
+		///Whether or not the chip select pin is high when the chip is selected.
 		bool cs_active_state;
 
-		//The amount of time (in milliseconds) that will elapse between when the device is selected and when the clock data transmission will start.
+		///The amount of time (in milliseconds) that will elapse between when the device is selected and when the clock data transmission will start.
 		unsigned int cs_setup_time;
 
-		//The amount of time (in milliseconds) that the chip-select port must remain in the active state before the device is unselected.
+		///The amount of time (in milliseconds) that the chip-select port must remain in the active state before the device is unselected.
 		unsigned int cs_hold_time;
 
-		//Whether or not the clock is high when the device is idle. True is high, false is low.
+		///Whether or not the clock is high when the device is idle. True is high, false is low.
 		bool clock_idle_state;
 
-		//The sampling clock edge. True if sampled on the rising edge, false on the falling edge.
+		///The sampling clock edge. True if sampled on the rising edge, false on the falling edge.
 		bool clock_edge;
 
-		//Gets the clock rate, in KHz.
+		///The clock rate, in KHz.
 		unsigned int clock_rate;
 
 		bool uses_chip_select;
@@ -186,6 +214,7 @@ namespace gadgeteering
 		spi_configuration(bool cs_active_state, unsigned int cs_setup_time, unsigned int cs_hold_time, bool clock_idle_state, bool clock_edge, unsigned int clock_rate, bool uses_chip_select = true);
 	};
 
+    /// @brief Contains configuration for a Serial (UART) transaction
 	struct serial_configuration
 	{
 		typedef unsigned char partity;
@@ -215,6 +244,7 @@ namespace gadgeteering
 		serial_configuration(unsigned int baud_rate = 9600, partity parity = parities::EVEN, stop_bit stop_bits = stop_bits::ONE, unsigned char data_bits = 8);
 	};
 
+    /// @brief Contains default error codes
 	namespace errors
 	{
 		static const error_type ONLY_ONE_MAINBOARD_ALLOWED = 0;

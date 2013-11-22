@@ -56,7 +56,7 @@ color::color(unsigned char r, unsigned char g, unsigned char b)
 	this->green = g;
 	this->blue = b;
 }
-		
+
 const color color::RED(0xFF, 0x00, 0x00);
 const color color::GREEN(0x00, 0xFF, 0x00);
 const color color::BLUE(0x00, 0x00, 0xFF);
