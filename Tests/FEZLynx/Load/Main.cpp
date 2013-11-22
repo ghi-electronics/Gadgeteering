@@ -18,32 +18,33 @@ int main(int argc, char** argv)
 	while(true)
 	{
 		load_module.p1.write(true);
-		system::sleep(100);
+		system::sleep(2000);
 		load_module.p1.write(false);
 		
 		load_module.p2.write(true);
-		system::sleep(100);
+		system::sleep(2000);
 		load_module.p2.write(false);
 
 		load_module.p3.write(true);
-		system::sleep(100);
+		system::sleep(2000);
 		load_module.p3.write(false);
 
 		load_module.p4.write(true);
-		system::sleep(100);
+		system::sleep(2000);
 		load_module.p4.write(false);
 
 		load_module.p5.write(true);
-		system::sleep(100);
+		system::sleep(2000);
 		load_module.p5.write(false);
 
 		load_module.p6.write(true);
-		system::sleep(100);
+		system::sleep(2000);
 		load_module.p6.write(false);
 
 		load_module.p7.write(true);
-		system::sleep(100);
+		system::sleep(2000);
 		load_module.p7.write(false);
 	}
+
 	return 0;
 }

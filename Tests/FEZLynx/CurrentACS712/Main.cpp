@@ -1,10 +1,11 @@
+#include <iostream>
+
 #include <Gadgeteering.h>
 
 #include <Mainboards/FEZLynxS4.h>
 #include <Modules/CurrentACS712.h>
 
-#include <iostream>
-
+using namespace std;
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
 using namespace gadgeteering::modules;
@@ -16,8 +17,7 @@ int main(int argc, char** argv)
 
 	while(true)
 	{
-		std::cout << "AC Current: " << sensor.read_ac_current() << std::endl;
-		std::cout << "DC Current: " << sensor.read_dc_current() << std::endl;
+		cout << sensor.read_ac_current() << " " << sensor.read_dc_current() << endl;
 
 		system::sleep(100);
 	}

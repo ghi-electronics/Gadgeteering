@@ -1,17 +1,14 @@
-#include <Gadgeteering.h>
-
-#include <Gadgeteering.h>
-#include <Mainboards\FEZLynxS4.h>
-#include <Modules\HubAP5.h>
-#include <Modules\Thermocouple.h>
-#include <Core\System.h>
 #include <iostream>
 
+#include <Gadgeteering.h>
+
+#include <Mainboards\FEZLynxS4.h>
+#include <Modules\Thermocouple.h>
+
+using namespace std;
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
 using namespace gadgeteering::modules;
-using namespace gadgeteering::interfaces;
-using namespace gadgeteering::system;
 
 int main()
 {
@@ -20,9 +17,10 @@ int main()
 
 	while(true)
 	{
-		std::cout << "External temp: " << therm.get_external_temp_celsius() << "C" << std::endl;
-		std::cout << "Internal temp: " << therm.get_internal_temp_celsius() << "C" << std::endl;
+		cout << therm.get_external_temp_celsius() << " " << therm.get_internal_temp_celsius() << endl;
 
-		sleep(100);
+		system::sleep(100);
 	}
+
+	return 0;
 }

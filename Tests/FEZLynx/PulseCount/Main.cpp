@@ -17,9 +17,9 @@ int main(int argc, char** argv)
 
 	while(true)
 	{
-		cout << "Current count: " << counter.read_encoders() << endl;
+		cout << counter.read_encoders() << " " << static_cast<int>(counter.read_direction()) << endl;
 		system::sleep(500);
 	}
-
+	
 	return 0;
 }

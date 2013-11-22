@@ -186,9 +186,9 @@ analog_input::analog_input(const socket& sock, socket_pin_number pin_number) : s
 	{
 		switch (pin_number)
 		{
-			case 3: this->channel = sock.analog3;
-			case 4: this->channel = sock.analog4;
-			case 5: this->channel = sock.analog5;
+			case 3: this->channel = sock.analog3; break;
+			case 4: this->channel = sock.analog4; break;
+			case 5: this->channel = sock.analog5; break;
 		}
 
 		if (this->channel == analog_channels::NONE)
@@ -257,9 +257,9 @@ pwm_output::pwm_output(const socket& sock, socket_pin_number pin_number) : sock(
 	{
 		switch (pin_number)
 		{
-			case 7: this->channel = sock.pwm7;
-			case 8: this->channel = sock.pwm8;
-			case 9: this->channel = sock.pwm9;
+			case 7: this->channel = sock.pwm7; break;
+			case 8: this->channel = sock.pwm8; break;
+			case 9: this->channel = sock.pwm9; break;
 		}
 
 		if (this->channel == pwm_channels::NONE)

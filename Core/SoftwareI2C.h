@@ -30,8 +30,10 @@ namespace gadgeteering
 
 		void clear_scl();
 		bool read_scl();
+		void release_scl();
 		void clear_sda();
 		bool read_sda();
+		void release_sda();
 
 		void wait_scl();
 		void delay();

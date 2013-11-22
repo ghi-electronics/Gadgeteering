@@ -20,10 +20,16 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-accelerometer::accelerometer(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::I)), i2c(this->sock, 0x1D)
+accelerometer::accelerometer(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::I)), i2c(this->sock, 0x1D, false), int1(this->sock, 3, resistor_modes::NONE)
 {
 	this->operating_mode = modes::MEASUREMENT;
 	this->measurement_range = ranges::TWO_G;
+	this->write(registers::MCTL, 0x40 | (0x01 << 2) | 1);
+}
+
+bool accelerometer::is_interrupted()
+{
+	return this->int1.read();
 }
 
 unsigned char accelerometer::read_byte(unsigned char reg)

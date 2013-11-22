@@ -1,10 +1,11 @@
+#include <iostream>
+
 #include <Gadgeteering.h>
 
 #include <Mainboards/FEZLynxS4.h>
 #include <Modules/Potentiometer.h>
 
-#include <iostream>
-
+using namespace std;
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
 using namespace gadgeteering::modules;
@@ -16,8 +17,7 @@ int main(int argc, char** argv)
 
 	while(true)
 	{
-		std::cout << "Raw reading: " << pot.read_voltage() << std::endl;
-		std::cout << "Percent: " << pot.read_percentage() << std::endl;
+		cout << pot.read_percentage() << endl;
 
 		system::sleep(100);
 	}

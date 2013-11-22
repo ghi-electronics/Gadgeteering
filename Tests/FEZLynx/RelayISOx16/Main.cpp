@@ -20,13 +20,13 @@ int main(int argc, char** argv)
 	system::sleep(500);
 	relays.disable_all_relays();
 
-	while(true)
+	while (true)
 	{
 		relays.enable_relays((1 << index));
 		system::sleep(100);
 		relays.disable_relays((1 << index));
-		
-		if(++index >= 16)
+
+		if (++index >= 16)
 			index = 0;
 	}
 

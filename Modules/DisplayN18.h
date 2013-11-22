@@ -24,14 +24,14 @@ namespace gadgeteering
 	{
 		class display_n18
 		{
-#ifndef LYNX
+#ifdef Arduino_h
 			static const unsigned char STEP_X = 4;
 			static const unsigned char STEP_Y = 5;
 			static const unsigned char STEP = 1;
 #else
 			static const unsigned char STEP_X = 128;
 			static const unsigned char STEP_Y = 160;
-			static const unsigned char STEP = 160;
+			static const unsigned char STEP = 4;
 #endif
 
 			const socket& sock;

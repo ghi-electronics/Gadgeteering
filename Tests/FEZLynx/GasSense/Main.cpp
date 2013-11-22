@@ -1,10 +1,11 @@
+#include <iostream>
+
 #include <Gadgeteering.h>
 
 #include <Mainboards/FEZLynxS4.h>
 #include <Modules/GasSense.h>
 
-#include <iostream>
-
+using namespace std;
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
 using namespace gadgeteering::modules;
@@ -17,10 +18,9 @@ int main(int argc, char** argv)
 	sensor.set_heating_element(true);
 
 	while(true)
-	{
-		std::cout << "Sensor voltage: " << sensor.read_voltage() << std::endl;
-		std::cout << "Sensor percent: " << sensor.read_voltage() << std::endl;
-	}
+		cout << sensor.read_voltage() << endl;
+
+	sensor.set_heating_element(false);
 
 	return 0;
 }

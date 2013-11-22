@@ -5,6 +5,7 @@
 
 #include <iostream>
 
+using namespace std;
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
 using namespace gadgeteering::modules;
@@ -12,12 +13,12 @@ using namespace gadgeteering::modules;
 int main(int argc, char** argv)
 {
 	fez_lynx_s4 board;
-	barometer bar(1);
+	barometer bar(2);
 
 	while(true)
 	{
 		barometer::sensor_data data = bar.request_measurement();
-		std::cout << "Temp: " << data.temperature << " Pressure: " << data.pressure << std::endl;
+		cout << "Temp: " << data.temperature << " Pressure: " << data.pressure << endl;
 	}
 
 	return 0;

@@ -13,24 +13,23 @@ using namespace gadgeteering::modules;
 int main(int argc, char** argv)
 {
 	fez_lynx_s4 board;
-	multicolor_led led(3);
+	multicolor_led led1(1);
+	multicolor_led led2(1);
 
 	while(true)
 	{
-		for(int i = 0; i < 128; i++)
-			led.set_blue_intensity(i);
-
-		led.set_blue_intensity(0);
-		
-		for(int i = 0; i < 128; i++)
-			led.set_green_intensity(i);
-
-		led.set_green_intensity(0);
-		
-		for(int i = 0; i < 128; i++)
-			led.set_red_intensity(i);
-
-		led.set_red_intensity(0);
+		led1.turn_blue();
+		led2.turn_blue();
+		system::sleep(500);
+		led1.turn_green();
+		led2.turn_green();
+		system::sleep(500);
+		led1.turn_red();
+		led2.turn_red();
+		system::sleep(500);
+		led1.turn_white();
+		led2.turn_white();
+		system::sleep(500);
 	}
 	return 0;
 }

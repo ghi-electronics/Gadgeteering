@@ -36,16 +36,23 @@ i2c::i2c(i2c_channel channel, unsigned char address)
 	mainboard->i2c_begin(this->channel);
 }
 
-i2c::i2c(const socket& sock, unsigned char address)
+i2c::i2c(const socket& sock, unsigned char address, bool uses_hardware_i2c)
 {
-	if (sock.i2c == i2c_channels::NONE)
+	if (sock.i2c == i2c_channels::NONE && uses_hardware_i2c)
 		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
 	this->channel = sock.i2c;
 	this->address = address;
-	this->soft_i2c = NULL;
 
-	mainboard->i2c_begin(this->channel);
+	if (uses_hardware_i2c)
+	{
+		mainboard->i2c_begin(this->channel);
+		this->soft_i2c = NULL;
+	}
+	else
+	{
+		this->soft_i2c = new software_i2c(sock.pins[8], sock.pins[9], true);
+	}
 }
 
 i2c::i2c(cpu_pin sda, cpu_pin scl, unsigned char address, bool use_resistors)

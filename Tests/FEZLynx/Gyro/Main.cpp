@@ -1,10 +1,11 @@
+#include <iostream>
+
 #include <Gadgeteering.h>
 
 #include <Mainboards/FEZLynxS4.h>
 #include <Modules/Gyro.h>
 
-#include <iostream>
-
+using namespace std;
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
 using namespace gadgeteering::modules;
@@ -18,7 +19,7 @@ int main(int argc, char** argv)
 	{
 		gyro::sensor_data data = gyroscope.request_measurement();
 
-		std::cout << "X: " << data.x << " Y: " << data.y << " Z: " << data.z << " Temp: " << data.temperature << std::endl;
+		cout << "X: " << data.x << " Y: " << data.y << " Z: " << data.z << " Temp: " << data.temperature << endl;
 
 		system::sleep(100);
 	}

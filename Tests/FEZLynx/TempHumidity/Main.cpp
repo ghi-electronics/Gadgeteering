@@ -1,10 +1,11 @@
+#include <iostream>
+
 #include <Gadgeteering.h>
 
 #include <Mainboards/FEZLynxS4.h>
 #include <Modules/TempHumidity.h>
 
-#include <iostream>
-
+using namespace std;
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
 using namespace gadgeteering::modules;
@@ -20,7 +21,7 @@ int main(int argc, char** argv)
 	{
 		sensor.take_measurements(temp, humid);
 
-		std::cout << "Temp: "  << temp << " Humidity: " << humid << std::endl;
+		cout << "Temp: "  << temp << " Humidity: " << humid << endl;
 	}
 
 	return 0;

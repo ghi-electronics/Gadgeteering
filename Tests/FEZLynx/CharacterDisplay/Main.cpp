@@ -19,7 +19,7 @@ int main(int argc, char** argv)
 
 	disp.clear();
 	disp.cursor_home();
-	disp.print("Sample Output");
+	disp.print("Hello, World!");
 	system::sleep(500);
 
 	disp.set_cursor(0x00,0x01);
@@ -27,6 +27,7 @@ int main(int argc, char** argv)
 	system::sleep(500);
 
 	disp.set_backlight(false);
+	system::sleep(2000);
 
 	return 0;
 }
