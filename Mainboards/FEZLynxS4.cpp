@@ -33,10 +33,17 @@ base_mainboard* gadgeteering::mainboard = NULL;
 
 fez_lynx_s4::fez_lynx_s4() : base_mainboard(3.3)
 {
+#ifdef _WIN32
 	this->channels[0].open("A");
 	this->channels[1].open("B");
 	this->channels[2].open("C");
 	this->channels[3].open("D");
+#else
+    this->channels[0].open_by_index(0);
+    this->channels[1].open_by_index(1);
+    this->channels[2].open_by_index(2);
+    this->channels[3].open_by_index(3);
+#endif
 
 	this->channels[0].set_mode(ftdi_channel::modes::MPSSE);
 	this->channels[1].set_mode(ftdi_channel::modes::MPSSE);
@@ -314,20 +321,19 @@ void system::sleep_micro(unsigned long microseconds)
 	::Sleep(microseconds / 1000);
 #else
 	timespec t_Sleep;
-	timespec t_Remaining;
 
-	int seconds = 0;
+	t_Sleep.tv_nsec = (microseconds * 1000) % 1000000000;
+	t_Sleep.tv_sec = (microseconds * 1000) / 1000000000;
 
-	while (microseconds > 1000000)
+	while(true)
 	{
-		seconds++;
-		microseconds -= 1000000;
+        int ret_val = nanosleep(&t_Sleep, &t_Sleep);
+
+        if(ret_val == EINTR)
+            continue;
+        else
+            return;
 	}
-
-	t_Sleep.tv_nsec = (microseconds * 1000);
-	t_Sleep.tv_sec = seconds;
-
-	nanosleep(&t_Sleep, &t_Remaining);
 #endif
 }
 
@@ -407,10 +413,20 @@ void fez_lynx_s4::ftdi_channel::open(const char* serial_number)
 	this->serial_number = serial_number;
 }
 
+void fez_lynx_s4::ftdi_channel::open_by_index(unsigned int index)
+{
+	if (FT_Open(index, &this->handle) != FT_OK)
+		panic_specific(errors::MAINBOARD_ERROR, 1);
+
+	FT_ResetDevice(this->handle);
+
+	this->serial_number = serial_number;
+}
+
 bool fez_lynx_s4::ftdi_channel::set_mode(mode mode)
 {
 	FT_STATUS status = FT_OK;
-	DWORD to_read = 0, to_send = 0;
+	DWORD to_read = 0;
 	DWORD read = 0, sent = 0;
 
 	if (this->current_mode == mode)
@@ -420,35 +436,47 @@ bool fez_lynx_s4::ftdi_channel::set_mode(mode mode)
 
 	status |= FT_ResetDevice(this->handle);
 
-	do
-	{
-		status |= FT_GetQueueStatus(this->handle, &to_read);
-		if (status == FT_OK && to_read > 0)
-			status |= FT_Read(this->handle, this->buffer, to_read, &read);
-	} while (to_read != 0);
+	if(mode == modes::MPSSE)
+    {
+        do
+        {
+            status |= FT_GetQueueStatus(this->handle, &to_read);
+            if (status == FT_OK && to_read > 0)
+                status |= FT_Read(this->handle, this->buffer, to_read, &read);
+        } while (to_read != 0);
+    }
+    else
+        status |= FT_Purge(this->handle, FT_PURGE_RX);
 
-	status |= FT_SetLatencyTimer(this->handle, 2);
-	status |= FT_SetBitMode(this->handle, 0x00, 0x00);
+    status |= FT_SetLatencyTimer(this->handle, 2);
+    status |= FT_SetTimeouts(this->handle, 2000, 2000);
+    status |= FT_SetBitMode(this->handle, 0x00, 0x00);
 
 	if (mode == modes::MPSSE)
 	{
 		status |= FT_SetBitMode(this->handle, 0x00, modes::MPSSE);
+        system::sleep(20);
+
+		this->sync_mpsse();
 
 		this->buffer[0] = fez_lynx_s4::ftdi_channel::MPSSE_SET_PIN_STATE; this->buffer[1] = this->current_pin_state; this->buffer[2] = this->current_pin_direction;
 		this->buffer[3] = fez_lynx_s4::ftdi_channel::MPSSE_DISABLE_CLOCK_DIVIDE_FIVE; this->buffer[4] = fez_lynx_s4::ftdi_channel::MPSSE_DISABLE_ADAPTIVE_CLOCK;
 		status |= FT_Write(this->handle, this->buffer, 5, &sent);
 
-		this->sync_mpsse();
+        system::sleep(20);
 	}
 	else if (mode == modes::BITBANG)
 	{
 		status |= FT_SetBitMode(this->handle, this->current_pin_direction, modes::BITBANG);
+        system::sleep(20);
 
 		status |= FT_Write(this->handle, &this->current_pin_state, 1, &sent);
 	}
 	else if (mode == modes::SERIAL)
 	{
 		status |= FT_SetChars(this->handle, false, 0, false, 0);
+
+        system::sleep(20);
 	}
 
 	if (status == FT_OK)
@@ -639,8 +667,8 @@ bool fez_lynx_s4::ftdi_channel::i2c_read(unsigned char* buffer, DWORD length, bo
 		this->i2c_start();
 
 	for (DWORD i = 0; i < length; i++)
-	if (buffer[i] = this->i2c_read_byte())
-		read++;
+        if ((buffer[i] = this->i2c_read_byte()))
+            read++;
 
 	if (send_stop)
 		this->i2c_stop();
@@ -711,7 +739,7 @@ void fez_lynx_s4::ftdi_channel::i2c_stop()
 
 bool fez_lynx_s4::ftdi_channel::i2c_write_byte(BYTE data)
 {
-	DWORD sent = 0, read = 0;
+	DWORD sent = 0;
 	FT_STATUS status = FT_OK;
 
 	this->set_pin_direction(fez_lynx_s4::ftdi_channel::DO_PIN, io_modes::DIGITAL_OUTPUT, false);
@@ -719,6 +747,9 @@ bool fez_lynx_s4::ftdi_channel::i2c_write_byte(BYTE data)
 	this->buffer[0] = fez_lynx_s4::ftdi_channel::MPSSE_CLOCK_BYTES_OUT_MSB_RISE; this->buffer[1] = 0x00; this->buffer[2] = 0x00; this->buffer[3] = data;
 
 	status = FT_Write(this->handle, this->buffer, 4, &sent);
+
+	if(status != FT_OK)
+        system::throw_error(0x40, 0x00);
 
 	this->set_pin_direction(fez_lynx_s4::ftdi_channel::DO_PIN, io_modes::DIGITAL_INPUT);
 
@@ -739,9 +770,11 @@ BYTE fez_lynx_s4::ftdi_channel::i2c_read_byte()
 
 	this->buffer[0] = fez_lynx_s4::ftdi_channel::MPSSE_CLOCK_BYTES_IN_MSB_RISE; this->buffer[1] = 0x00; this->buffer[2] = 0x00;
 
-	status = FT_Write(this->handle, this->buffer, 3, &sent);
+	status |= FT_Write(this->handle, this->buffer, 3, &sent);
+	status |= FT_Read(this->handle, &read_in, 1, &read);
 
-	status = FT_Read(this->handle, &read_in, 1, &read);
+	if(status != FT_OK)
+        system::throw_error(0x41, 0x00);
 
 	this->set_pin_direction(fez_lynx_s4::ftdi_channel::DO_PIN, io_modes::DIGITAL_INPUT);
 
@@ -767,6 +800,9 @@ DWORD fez_lynx_s4::ftdi_channel::serial_write(const unsigned char* buffer, DWORD
 
 	status |= FT_Write(this->handle, const_cast<unsigned char*>(buffer), count, &sent);
 
+	if(status != FT_OK)
+        system::throw_error(0x50, 0x00);
+
 	return sent;
 }
 
@@ -784,12 +820,18 @@ DWORD fez_lynx_s4::ftdi_channel::serial_read(unsigned char* buffer, DWORD count,
 	status |= FT_GetQueueStatus(this->handle, &available);
 	status |= FT_Read(this->handle, buffer, available > count ? count : available, &read);
 
+	if(status != FT_OK)
+        system::throw_error(0x51, 0x00);
+
 	return read;
 }
 
 DWORD fez_lynx_s4::ftdi_channel::serial_available()
 {
 	DWORD available = 0;
-	FT_GetQueueStatus(this->handle, &available);
+
+	if(FT_GetQueueStatus(this->handle, &available) != FT_OK)
+        system::throw_error(0x52, 0x00);
+
 	return available;
 }

@@ -30,6 +30,7 @@ limitations under the License.
 	#include <WinTypes.h>
 	#include <ftd2xx.h>
 	#include <sys/time.h>
+	#include <errno.h>
 #endif
 
 namespace gadgeteering
@@ -54,6 +55,7 @@ namespace gadgeteering
 					~ftdi_channel();
 
 					void open(const char* serial_number);
+					void open_by_index(unsigned int index);
 
 					bool set_mode(mode mode);
 
@@ -121,10 +123,10 @@ namespace gadgeteering
 			};
 
 			std::map<unsigned char, socket> sockets;
-			std::map<analog_channel, std::pair<cpu_pin, unsigned char>> analog_channel_to_pin_map;
+			std::map< analog_channel, std::pair<cpu_pin, unsigned char> > analog_channel_to_pin_map;
 			std::map<analog_channel, cpu_pin> pwm_channel_to_pin_map;
             ftdi_channel channels[4];
-           
+
 			modules::ads_7830* analog_converter;
 
 			void create_sockets();
@@ -168,7 +170,7 @@ namespace gadgeteering
 					static const cpu_pin DD6 = 16 * 3 + 6;
 					static const cpu_pin DD7 = 16 * 3 + 7;
 				};
-				
+
 				fez_lynx_s4();
 				virtual ~fez_lynx_s4();
 
