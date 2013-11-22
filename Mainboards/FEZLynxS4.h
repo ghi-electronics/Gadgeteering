@@ -113,7 +113,6 @@ namespace gadgeteering
 					bool i2c_write_byte(BYTE data);
 					BYTE i2c_read_byte();
 
-					const char* serial_number;
 					bool i2c_started;
 					FT_HANDLE handle;
 					BYTE buffer[ftdi_channel::MAX_BUFFER_SIZE];
