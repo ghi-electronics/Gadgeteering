@@ -182,23 +182,15 @@ io_mode digital_io::get_io_mode()
 
 analog_input::analog_input(const socket& sock, socket_pin_number pin_number) : sock(sock), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
-	if (!this->sock.analog_input_indirector)
+	switch (pin_number)
 	{
-		switch (pin_number)
-		{
-			case 3: this->channel = sock.analog3; break;
-			case 4: this->channel = sock.analog4; break;
-			case 5: this->channel = sock.analog5; break;
-		}
+		case 3: this->channel = sock.analog3; break;
+		case 4: this->channel = sock.analog4; break;
+		case 5: this->channel = sock.analog5; break;
+	}
 
-		if (this->channel == analog_channels::NONE)
-			panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
-	}
-	else
-	{
-		if (sock.pins[pin_number] == UNCONNECTED_PIN)
-			panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
-	}
+	if (this->channel == analog_channels::NONE)
+		panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
 }
 
 double analog_input::read()
@@ -220,18 +212,10 @@ double analog_input::read_proportion()
 
 analog_output::analog_output(const socket& sock, socket_pin_number pin_number) : sock(sock), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
-	if (!this->sock.analog_output_indirector)
-	{
-		if (pin_number != 5 || sock.analog_out == analog_out_channels::NONE)
-			panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
+	if (pin_number != 5 || sock.analog_out == analog_out_channels::NONE)
+		panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
 
-		this->channel = sock.analog_out;
-	}
-	else
-	{
-		if (pin_number != 5 || sock.pins[pin_number] == UNCONNECTED_PIN)
-			panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
-	}
+	this->channel = sock.analog_out;
 }
 
 void analog_output::write(double value)
@@ -247,29 +231,21 @@ void analog_output::write_proportion(double value)
 	}
 	else
 	{
-		this->sock.analog_output_indirector->write(this->sock_pin, value);
+		this->sock.analog_output_indirector->write(this->channel, value);
 	}
 }
 
 pwm_output::pwm_output(const socket& sock, socket_pin_number pin_number) : sock(sock), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
-	if (!this->sock.pwm_output_indirector)
+	switch (pin_number)
 	{
-		switch (pin_number)
-		{
-			case 7: this->channel = sock.pwm7; break;
-			case 8: this->channel = sock.pwm8; break;
-			case 9: this->channel = sock.pwm9; break;
-		}
+		case 7: this->channel = sock.pwm7; break;
+		case 8: this->channel = sock.pwm8; break;
+		case 9: this->channel = sock.pwm9; break;
+	}
 
-		if (this->channel == pwm_channels::NONE)
-			panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
-	}
-	else
-	{
-		if (sock.pins[pin_number] == UNCONNECTED_PIN)
-			panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
-	}
+	if (this->channel == pwm_channels::NONE)
+		panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
 
 	this->set(0, 0);
 }
@@ -285,7 +261,7 @@ void pwm_output::set(double frequency, double duty_cycle)
 	}
 	else
 	{
-		this->sock.pwm_output_indirector->set(this->sock_pin, duty_cycle, frequency);
+		this->sock.pwm_output_indirector->set(this->channel, this->duty_cycle, this->frequency);
 	}
 }
 

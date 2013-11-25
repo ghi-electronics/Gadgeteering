@@ -22,5 +22,7 @@ int main(int argc, char** argv)
 	int high, low;
 	pulse.read_channel(1, high, low);
 
+	cout << high << " " << low << endl;
+
 	return 0;
 }

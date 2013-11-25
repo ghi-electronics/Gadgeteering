@@ -47,19 +47,19 @@ namespace gadgeteering
 		class analog_input
 		{
 			public:
-				virtual double read(socket_pin_number pin_number) = 0;
+				virtual double read(analog_channel channel) = 0;
 		};
 
 		class analog_output
 		{
 			public:
-				virtual void write(socket_pin_number pin_number, double voltage) = 0;
+				virtual void write(analog_out_channel channel, double voltage) = 0;
 		};
 
 		class pwm_output
 		{
 			public:
-				virtual void set(socket_pin_number pin_number, double duty_cycle, double frequency) = 0;
+				virtual void set(pwm_channel channel, double duty_cycle, double frequency) = 0;
 		};
 	}
 

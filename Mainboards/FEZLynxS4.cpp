@@ -589,7 +589,7 @@ void fez_lynx_s4::ftdi_channel::spi_read_write(const unsigned char* write_buffer
 
 	this->set_mode(fez_lynx_s4::ftdi_channel::modes::MPSSE);
 
-	ULONG divisor = 30000000 / config.clock_rate + 1;
+	ULONG divisor = 60000 / config.clock_rate + 1;
 
 	this->buffer[0] = fez_lynx_s4::ftdi_channel::MPSSE_DISABLE_THREE_PHASE_CLOCK;
 	this->buffer[1] = fez_lynx_s4::ftdi_channel::MPSSE_SET_DIVISOR; this->buffer[2] = divisor & 0xFF; this->buffer[3] = (divisor >> 8) & 0xFF;
@@ -609,10 +609,13 @@ void fez_lynx_s4::ftdi_channel::spi_read_write(const unsigned char* write_buffer
 	this->buffer[1] = (count - 1) & 0xFF;
 	this->buffer[2] = ((count - 1) >> 8) & 0xFF;
 
-	mainboard->set_io_mode(config.chip_select, io_modes::DIGITAL_OUTPUT, resistor_modes::NONE);
-	mainboard->write_digital(config.chip_select, config.cs_active_state);
-	if (config.uses_chip_select && config.cs_setup_time != 0)
-		system::sleep(config.cs_setup_time);
+	if (config.uses_chip_select)
+	{
+		mainboard->set_io_mode(config.chip_select, io_modes::DIGITAL_OUTPUT, resistor_modes::NONE);
+		mainboard->write_digital(config.chip_select, config.cs_active_state);
+		if (config.cs_setup_time != 0)
+			system::sleep(config.cs_setup_time);
+	}
 
 	status |= FT_Write(handle, this->buffer, count + 3, &sent);
 	sent -= 3;

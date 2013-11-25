@@ -13,7 +13,7 @@ using namespace gadgeteering::modules;
 int main(int argc, char** argv)
 {
 	fez_lynx_s4 board;
-	compass comp(2);
+	compass comp(3);
 
 	while(true)
 	{

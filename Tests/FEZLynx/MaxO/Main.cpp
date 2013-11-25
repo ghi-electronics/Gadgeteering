@@ -21,10 +21,10 @@ int main(int argc, char** argv)
 	maxo.enable_outputs();
 
 	for(int i = 0; i < 32; i++)
-		maxo.write_pin(1, i + 1, true);
+		maxo.write_pin(1, i, true);
 	
 	for(int i = 0; i < 32; i++)
-		maxo.write_pin(1, i + 1, false);
+		maxo.write_pin(1, i, false);
 
 	maxo.disable_outputs();
 

@@ -13,7 +13,7 @@ using namespace gadgeteering::modules;
 int main(int argc, char** argv)
 {
 	fez_lynx_s4 board;
-	io60p16 io(2);
+	io60p16 io(1);
 
 	io.set_io_mode(2, 2, io_modes::DIGITAL_OUTPUT, resistor_modes::NONE);
 

@@ -22,7 +22,7 @@ using namespace gadgeteering::interfaces;
 
 motor_driver_l298::motor_driver_l298(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::P)), pwm1(this->sock, 7), pwm2(this->sock, 8), direction1(this->sock, 9), direction2(this->sock, 6)
 {
-	this->freq = 50000;
+	this->freq = 25000;
 	this->last_speed_1 = 0;
 	this->last_speed_2 = 0;
 

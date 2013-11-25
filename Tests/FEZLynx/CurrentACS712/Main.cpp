@@ -16,11 +16,7 @@ int main(int argc, char** argv)
 	current_acs712 sensor(1);
 
 	while(true)
-	{
 		cout << sensor.read_ac_current() << " " << sensor.read_dc_current() << endl;
-
-		system::sleep(100);
-	}
 
 	return 0;
 }

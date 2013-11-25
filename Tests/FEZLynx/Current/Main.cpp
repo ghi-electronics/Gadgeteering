@@ -17,7 +17,7 @@ int main(int argc, char** argv)
 
 	while(true)
 	{
-		cout << sensor.get_current_peak() << " " << sensor.get_current_reading() << endl;
+		cout << sensor.get_current_reading() << endl;
 
 		system::sleep(100);
 	}

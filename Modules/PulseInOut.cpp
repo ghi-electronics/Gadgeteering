@@ -45,32 +45,32 @@ void pulse_in_out::read_channel(int input_id, int& high_time, int& low_time)
 	low_time *= 10;
 }
 
-void pulse_in_out::set_pulse(int pwm_id, unsigned int period_micro, unsigned int high_time_micro)
+void pulse_in_out::set_pulse(int pwm_id, unsigned long period_micro, unsigned long high_time_micro)
 {
 	unsigned char register_period = static_cast<unsigned char>(pulse_in_out::REGISTER_PERIOD_PWM012_FREQUENCY - pulse_in_out::REGISTER_OFFSET);
-	unsigned char register_highTime = static_cast<unsigned char>(pulse_in_out::REGISTER_PWM_PULSE - pulse_in_out::REGISTER_OFFSET + (pwm_id - 1) * 4);
+	unsigned char register_high_time = static_cast<unsigned char>(pulse_in_out::REGISTER_PWM_PULSE - pulse_in_out::REGISTER_OFFSET + (pwm_id - 1) * 4);
 
 	unsigned char d1[5] = { static_cast<unsigned char>(register_period + 0 + daisy_link::module::REGISTER_OFFSET), static_cast<unsigned char>(period_micro),
 							static_cast<unsigned char>(period_micro >> 8),
-							static_cast<unsigned char>(0),
-							static_cast<unsigned char>(0) };
-	unsigned char d2[5] = { static_cast<unsigned char>(register_highTime + 0 + daisy_link::module::REGISTER_OFFSET), static_cast<unsigned char>(high_time_micro),
+							static_cast<unsigned char>(period_micro >> 16),
+							static_cast<unsigned char>(period_micro >> 24) };
+	unsigned char d2[5] = { static_cast<unsigned char>(register_high_time + 0 + daisy_link::module::REGISTER_OFFSET), static_cast<unsigned char>(high_time_micro),
 							static_cast<unsigned char>(high_time_micro >> 8),
-							static_cast<unsigned char>(0),
-							static_cast<unsigned char>(0) };
+							static_cast<unsigned char>(period_micro >> 16),
+							static_cast<unsigned char>(period_micro >> 24) };
 
 	this->write(d1, 5);
 	this->write(d2, 5);
 }
 
-void pulse_in_out::set_pulse(int pwm_id, unsigned short high_time_micro)
+void pulse_in_out::set_pulse(int pwm_id, unsigned long high_time_micro)
 {
 	unsigned char reg = static_cast<unsigned char>(pulse_in_out::REGISTER_PWM_PULSE - pulse_in_out::REGISTER_OFFSET + (pwm_id - 1) * 4);
 
 	unsigned char d1[5] = { static_cast<unsigned char>(reg + 0 + daisy_link::module::REGISTER_OFFSET), static_cast<unsigned char>(high_time_micro),
 							static_cast<unsigned char>(high_time_micro >> 8),
-							static_cast<unsigned char>(0),
-							static_cast<unsigned char>(0) };
+							static_cast<unsigned char>(high_time_micro >> 16),
+							static_cast<unsigned char>(high_time_micro >> 24) };
 
 	this->write(d1, 5);
 }

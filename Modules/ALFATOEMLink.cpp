@@ -28,6 +28,8 @@ using namespace gadgeteering::interfaces;
 
 alfat_oem_link::alfat_oem_link(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::S)), busy_pin(this->sock, 4), reset_pin(this->sock, 3), spi(this->sock.spi, spi_configuration(false, 1, 1, false, true, 6000), this->sock, 6)
 {
+	this->handles = NULL;
+
 	this->generate_handles();
 
 	this->reset();
@@ -94,7 +96,7 @@ void alfat_oem_link::generate_handles()
 	last->handle = NIBBLE_TO_HEX(0);
 	last->next = NULL;
 
-	for (unsigned char i = 0; i < 15; i++)
+	for (unsigned char i = 1; i < 16; i++)
 	{
 		last->next = new node();
 		last->next->handle = NIBBLE_TO_HEX(i);
@@ -110,12 +112,14 @@ void alfat_oem_link::clear_handles()
 
 	node* current = this->handles;
 	node* next = NULL;
+
 	while (current)
 	{
 		next = current->next;
 		delete current;
 		current = next;
 	}
+
 	this->handles = NULL;
 }
 
@@ -220,18 +224,18 @@ void alfat_oem_link::write_to_device(const char* command, unsigned int length, b
 
 void alfat_oem_link::read_from_device(unsigned char* buffer, unsigned int count)
 {
-	unsigned char readFrame[3] = { 0x02, 0x00, 0x00 };
-	unsigned char readResult[3];
+	unsigned char read_frame[3] = { 0x02, 0x00, 0x00 };
+	unsigned char read_result[3];
 	unsigned int available = 0;
 
 	do
 	{
-		readFrame[1] = count & 0xFF;
-		readFrame[2] = (count >> 8) & 0xFF;
+		read_frame[1] = count & 0xFF;
+		read_frame[2] = (count >> 8) & 0xFF;
 
-		this->spi.write_read(readFrame, readResult, 3, false);
+		this->spi.write_read(read_frame, read_result, 3, false);
 
-		available = readResult[1] | (readResult[2] << 8);
+		available = read_result[1] | (read_result[2] << 8);
 
 		if (available == 0)
 		{
@@ -266,8 +270,12 @@ char alfat_oem_link::get_handle()
 
 	while (current)
 	{
-		if (current->handle != 0xFF)
-			return current->handle;
+		if (current->handle != 'G')
+		{
+			char new_handle = current->handle;
+			current->handle = 'G';
+			return new_handle;
+		}
 
 		current = current->next;
 	}
@@ -480,7 +488,7 @@ alfat_oem_link::response_code alfat_oem_link::file::read(unsigned char* buffer, 
 		return response_codes::SUCCESS;
 	}
 
-	unsigned char frame[14] = { 'R', ' ', this->handle, 0x00, '>', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, '\n' };
+	unsigned char frame[14] = { 'R', ' ', this->handle, '^', '>', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, '\n' };
 	alfat_oem_link::int_to_hex(count, frame + 5);
 
 	this->alfat.write_to_device(reinterpret_cast<char*>(frame), 14);
