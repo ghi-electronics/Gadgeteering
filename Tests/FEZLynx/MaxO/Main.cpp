@@ -14,6 +14,7 @@ int main(int argc, char** argv)
 {
 	fez_lynx_s4 board;
 	max_o maxo(4);
+
 	maxo.set_number_of_boards(1);
 
 	maxo.clear();

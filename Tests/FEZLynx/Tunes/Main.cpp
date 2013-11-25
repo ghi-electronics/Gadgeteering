@@ -3,6 +3,7 @@
 #include <Gadgeteering.h>
 
 #include <Mainboards/FEZLynxS4.h>
+#include <Modules/HubAP5.h>
 #include <Modules/Tunes.h>
 
 using namespace std;
@@ -13,6 +14,10 @@ using namespace gadgeteering::modules;
 int main(int argc, char** argv)
 {
 	fez_lynx_s4 board;
-	tunes piezo(); //You will need to use a Hub AP5 or IO60P16 module in order to access PWM output
+	hub_ap5 hub(0);
+	tunes piezo(hub.socket_4);
+	
+	piezo.set(500, 0.5);
+	
 	return 0;
 }
