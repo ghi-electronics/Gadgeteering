@@ -46,10 +46,22 @@
     <ClCompile Include="..\..\..\Modules\ALFATOEMLink.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Modules\AMPM35.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Modules\Barometer.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Modules\Bluetooth.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\BreadBoardX1.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Modules\Breakout.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\BreakoutTB10.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Modules\Button.cpp">
@@ -67,13 +79,22 @@
     <ClCompile Include="..\..\..\Modules\Compass.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Modules\Current.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Modules\CurrentACS712.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\DAQ8B.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Modules\DisplayN18.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Modules\DistanceUS3.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\DL40.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Modules\Extender.cpp">
@@ -89,6 +110,9 @@
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Modules\Gyro.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\HD44780.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Modules\HubAP5.cpp">
@@ -133,6 +157,9 @@
     <ClCompile Include="..\..\..\Modules\MulticolorLED.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Modules\ParallelCNC.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Modules\PIR.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -142,7 +169,13 @@
     <ClCompile Include="..\..\..\Modules\PulseCount.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Modules\PulseInOut.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Modules\RadioFM1.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\ReflectorR3.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Modules\RelayISOx16.cpp">
@@ -151,13 +184,22 @@
     <ClCompile Include="..\..\..\Modules\RelayX1.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Modules\RFIDReader.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Modules\RotaryH1.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Modules\RS232.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Modules\RS485.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Modules\SerialUSB.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Modules\SPlus.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Modules\TempHumidity.cpp">
@@ -175,10 +217,13 @@
     <ClCompile Include="..\..\..\Modules\Tunes.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Modules\USBSerialSP.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Modules\WiFiRN171.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Modules\HD44780.cpp">
+    <ClCompile Include="..\..\..\Modules\XBeeAdapter.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
@@ -232,10 +277,22 @@
     <ClInclude Include="..\..\..\Modules\ALFATOEMLink.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Modules\AMPM35.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Modules\Barometer.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Modules\Bluetooth.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\BreadBoardX1.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Modules\Breakout.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\BreakoutTB10.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\Button.h">
@@ -253,13 +310,22 @@
     <ClInclude Include="..\..\..\Modules\Compass.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Modules\Current.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Modules\CurrentACS712.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\DAQ8B.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\DisplayN18.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\DistanceUS3.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\DL40.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\Extender.h">
@@ -275,6 +341,9 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\Gyro.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\HD44780.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\HubAP5.h">
@@ -319,6 +388,9 @@
     <ClInclude Include="..\..\..\Modules\MulticolorLED.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Modules\ParallelCNC.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Modules\PIR.h">
       <Filter>Modules</Filter>
     </ClInclude>
@@ -328,7 +400,13 @@
     <ClInclude Include="..\..\..\Modules\PulseCount.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Modules\PulseInOut.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Modules\RadioFM1.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\ReflectorR3.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\RelayISOx16.h">
@@ -337,13 +415,22 @@
     <ClInclude Include="..\..\..\Modules\RelayX1.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Modules\RFIDReader.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Modules\RotaryH1.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\RS232.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Modules\RS485.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Modules\SerialUSB.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Modules\SPlus.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Modules\TempHumidity.h">
@@ -361,10 +448,13 @@
     <ClInclude Include="..\..\..\Modules\Tunes.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Modules\USBSerialSP.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Modules\WiFiRN171.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Modules\HD44780.h">
+    <ClInclude Include="..\..\..\Modules\XBeeAdapter.h">
       <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>
