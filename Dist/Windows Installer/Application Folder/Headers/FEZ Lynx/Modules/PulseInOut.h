@@ -25,7 +25,7 @@ namespace gadgeteering
 		class pulse_in_out : public daisy_link::module
 		{
 			static const unsigned char GHI_DAISYLINK_MANUFACTURER = 0x10;
-			static const unsigned char GHI_DAISYLINK_TYPE_PULSE = 0x01;
+			static const unsigned char GHI_DAISYLINK_TYPE_PULSE = 0x06;
 			static const unsigned char GHI_DAISYLINK_VERSION_PULSE = 0x01;
 
 			static const int REGISTER_OFFSET = 8;
@@ -44,8 +44,8 @@ namespace gadgeteering
 				pulse_in_out(unsigned char socket_number);
 
 				void read_channel(int input_id, int& high_time, int& low_time);
-				void set_pulse(int pwm_id, unsigned int period_micro, unsigned int high_time_micro);
-				void set_pulse(int pwm_id, unsigned short high_time_micro);
+				void set_pulse(int pwm_id, unsigned long period_micro, unsigned long high_time_micro);
+				void set_pulse(int pwm_id, unsigned long high_time_micro);
 		};
 	}
 }

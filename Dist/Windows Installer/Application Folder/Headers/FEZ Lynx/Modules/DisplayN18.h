@@ -24,14 +24,14 @@ namespace gadgeteering
 	{
 		class display_n18
 		{
-#ifndef LYNX
+#ifdef Arduino_h
 			static const unsigned char STEP_X = 4;
 			static const unsigned char STEP_Y = 5;
 			static const unsigned char STEP = 1;
 #else
-			static const unsigned char STEP_X = 128;
-			static const unsigned char STEP_Y = 160;
-			static const unsigned char STEP = 160;
+			static const unsigned char STEP_X = 4;
+			static const unsigned char STEP_Y = 5;
+			static const unsigned char STEP = 12;
 #endif
 
 			const socket& sock;
@@ -73,7 +73,7 @@ namespace gadgeteering
 				void draw_line(int x0, int y0, int x1, int y1, unsigned short fore_color);
 
 				void draw_character(int x, int y, const char character, unsigned short fore_color, unsigned short back_color, unsigned char font_size = 1);
-				void draw_strong(int x, int y, const char* str, unsigned short fore_color, unsigned short back_color, unsigned char font_size = 1);
+				void draw_string(int x, int y, const char* str, unsigned short fore_color, unsigned short back_color, unsigned char font_size = 1);
 
 				void setup_draw(int x, int y, int width, int height);
 				void send_draw_data(const unsigned char* data, unsigned int length, bool is_end = false);

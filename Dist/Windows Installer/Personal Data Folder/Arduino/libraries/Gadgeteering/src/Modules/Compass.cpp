@@ -37,7 +37,7 @@ const double compass::atan_q2 = .16667838148816337184521798e4F;
 const double compass::atan_q1 = .207933497444540981287275926e4F;
 const double compass::atan_q0 = .89678597403663861962481162e3F;
 
-compass::compass(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::I)), i2c(this->sock.i2c, 0x1E)
+compass::compass(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::I)), i2c(this->sock.i2c, 0x1E), data_ready(this->sock, 3, resistor_modes::NONE)
 {
 
 }
@@ -50,10 +50,28 @@ void compass::set_gain(unsigned char gain)
 compass::sensor_data compass::request_measurement()
 {
 	this->i2c.write_register(registers::MR, modes::SINGLE_MODE);
+	
+	while (!this->data_ready.read())
+		system::sleep(250);
 
-	system::sleep(2000);
+	int raw_x, raw_y, raw_z;
 
-	return sensor_data(0, 0, 0, 0);
+	this->i2c.read_registers(registers::DXRA, this->read_buffer_48, 6);
+
+	raw_x = (this->read_buffer_48[0] << 8) | this->read_buffer_48[1];
+	raw_z = (this->read_buffer_48[2] << 8) | this->read_buffer_48[3];
+	raw_y = (this->read_buffer_48[4] << 8) | this->read_buffer_48[5];
+
+	raw_x = (((raw_x >> 15) == 1) ? -32767 : 0) + (raw_x & 0x7FFF);
+	raw_z = (((raw_z >> 15) == 1) ? -32767 : 0) + (raw_z & 0x7FFF);
+	raw_y = (((raw_y >> 15) == 1) ? -32767 : 0) + (raw_y & 0x7FFF);
+
+	if (raw_x == -4096 || raw_y == -4096 || raw_z == -4096)
+		return sensor_data(0, 0, 0, 0);
+
+	double angle = this->atan2(static_cast<double>(raw_y), static_cast<double>(raw_x)) * (180.0 / 3.14159265) + 180.0;
+
+	return sensor_data(angle, raw_x, raw_y, raw_z);
 }
 
 double compass::atan2(double y, double x)

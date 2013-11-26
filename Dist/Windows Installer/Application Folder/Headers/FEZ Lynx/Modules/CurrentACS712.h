@@ -24,7 +24,7 @@ namespace gadgeteering
 	{
 		class current_acs712
 		{
-			static const unsigned int AC_SAMPLE_COUNT = 400;
+			static const unsigned int AC_SAMPLE_COUNT = 10;
 
 			const socket& sock;
 			interfaces::analog_input ain;

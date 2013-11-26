@@ -20,7 +20,7 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-display_n18::display_n18(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::S)), reset_pin(this->sock, 3), backlight_pin(this->sock, 4, true), rs_pin(this->sock, 5), spi(this->sock.spi, spi_configuration(false, 0, 0, false, true, 8000), this->sock, 6)
+display_n18::display_n18(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::S)), reset_pin(this->sock, 3), backlight_pin(this->sock, 4, true), rs_pin(this->sock, 5), spi(this->sock.spi, spi_configuration(false, 0, 0, false, true, 12000), this->sock, 6)
 {
 	this->initialize();
 }
@@ -230,7 +230,7 @@ void display_n18::set_pixel(int x, int y, unsigned short fore_color)
 
 void display_n18::fill_rect(int x, int y, int width, int height, unsigned short fore_color)
 {
-	this->set_clipping_area((unsigned char)x, (unsigned char)y, (unsigned char)width - 1, (unsigned char)height);
+	this->set_clipping_area(static_cast<unsigned char>(x), static_cast<unsigned char>(y), static_cast<unsigned char>(width - 1), static_cast<unsigned char>(height));
 	this->write_command(0x2C);
 
 	unsigned short* buffer = new unsigned short[width * display_n18::STEP];
@@ -240,11 +240,11 @@ void display_n18::fill_rect(int x, int y, int width, int height, unsigned short 
 	this->rs_pin.write(true);
 
 	int i;
-	for (i = display_n18::STEP; i <= height; i += display_n18::STEP)
+	for (i = 0; i < height; i += display_n18::STEP)
 		this->write_data(reinterpret_cast<unsigned char*>(buffer), width * display_n18::STEP * 2);
 
 	i -= display_n18::STEP;
-	if (height - i > 0)
+	if (i < height)
 		this->write_data(reinterpret_cast<unsigned char*>(buffer), width * (height - i) * 2);
 
 	delete[] buffer;
@@ -252,10 +252,10 @@ void display_n18::fill_rect(int x, int y, int width, int height, unsigned short 
 
 void display_n18::draw_rect(int x, int y, int width, int height, unsigned short fore_color)
 {
-	this->draw_line(x, y, x + width, y, fore_color);
-	this->draw_line(x, y + height, x + width, y + height, fore_color);
-	this->draw_line(x, y, x, y + height, fore_color);
-	this->draw_line(x + width, y, x + width, y + height, fore_color);
+	this->draw_line(x, y, x + width, y, fore_color); //top
+	this->draw_line(x, y + height, x + width, y + height, fore_color); //bottom
+	this->draw_line(x, y, x, y + height, fore_color); //left
+	this->draw_line(x + width, y, x + width, y + height, fore_color); //right
 }
 
 void display_n18::fill_circle(int x, int y, int radius, unsigned short fore_color)
@@ -345,15 +345,15 @@ void display_n18::draw_line(int x0, int y0, int x1, int y1, unsigned short fore_
 			y1 = temp;
 		}
 
-		this->set_clipping_area((unsigned char)x0, (unsigned char)y0, 1, (unsigned char)y1 - y0 - 1);
+		this->set_clipping_area(static_cast<unsigned char>(x0), static_cast<unsigned char>(y0), 0, static_cast<unsigned char>(y1 - y0 - 1));
 		this->write_command(0x2C);
 
-		unsigned short data[display_n18::STEP_Y];
-		for (int i = 0; i < display_n18::STEP_Y; i++)
+		unsigned short data[display_n18::STEP];
+		for (int i = 0; i < display_n18::STEP; i++)
 			data[i] = fore_color;
 
-		for (unsigned char thisY = y0; thisY < y1; thisY += display_n18::STEP_Y)
-			this->write_data(reinterpret_cast<unsigned char*>(data), (y1 - thisY >= display_n18::STEP_Y ? display_n18::STEP_Y : y1 - thisY) * 2);
+		for (unsigned char thisY = y0; thisY < y1; thisY += display_n18::STEP)
+			this->write_data(reinterpret_cast<unsigned char*>(data), (thisY + display_n18::STEP <= y1 ? display_n18::STEP : y1 - thisY) * 2);
 
 		return;
 	}
@@ -367,15 +367,15 @@ void display_n18::draw_line(int x0, int y0, int x1, int y1, unsigned short fore_
 			x1 = temp;
 		}
 
-		this->set_clipping_area((unsigned char)x0, (unsigned char)x0, (unsigned char)x1 - x0 - 1, 1);
+		this->set_clipping_area(static_cast<unsigned char>(x0), static_cast<unsigned char>(y0), static_cast<unsigned char>(x1 - x0 - 1), 0);
 		this->write_command(0x2C);
 
-		unsigned short data[display_n18::STEP_X];
-		for (int i = 0; i < display_n18::STEP_X; i++)
+		unsigned short data[display_n18::STEP];
+		for (int i = 0; i < display_n18::STEP; i++)
 			data[i] = fore_color;
 
-		for (unsigned char thisX = x0; thisX < x1; thisX += display_n18::STEP_X)
-			this->write_data(reinterpret_cast<unsigned char*>(data), (x1 - thisX >= display_n18::STEP_X ? display_n18::STEP_X : x1 - thisX) * 2);
+		for (unsigned char thisX = x0; thisX < x1; thisX += display_n18::STEP)
+			this->write_data(reinterpret_cast<unsigned char*>(data), (thisX + display_n18::STEP <= x1 ? display_n18::STEP : x1 - thisX) * 2);
 
 		return;
 	}
@@ -439,7 +439,7 @@ void display_n18::draw_line(int x0, int y0, int x1, int y1, unsigned short fore_
 
 PROGMEM prog_char characters[95 * 5] = {
 #else
-unsigned char characters[95][5] = {
+unsigned char characters[95 * 5] = {
 #endif
 	0x00, 0x00, 0x00, 0x00, 0x00, /* Space	0x20 */
 	0x00, 0x00, 0x4f, 0x00, 0x00, /* ! */
@@ -552,7 +552,7 @@ void display_n18::draw_character(int x, int y, const char character, unsigned sh
 #ifdef Arduino_h
 				horizontal[j * font_size + k] = pgm_read_byte_near(characters + (character - 32) * 5 + i) & (1 << j) ? fore_color : back_color;
 #else
-				horizontal[j * font_size + k] = characters[character][i] & (1 << j) ? fore_color : back_color;
+				horizontal[j * font_size + k] = characters[(character - 32) * 5 + i] & (1 << j) ? fore_color : back_color;
 #endif
 		}
 
@@ -561,8 +561,8 @@ void display_n18::draw_character(int x, int y, const char character, unsigned sh
 	}
 
 	for (int i = 0; i < display_n18::CHAR_HEIGHT; i++)
-		for (int k = 0; k < font_size; k++)
-			horizontal[i * font_size + k] = back_color;
+	for (int k = 0; k < font_size; k++)
+		horizontal[i * font_size + k] = back_color;
 
 	for (int k = 0; k < font_size; k++)
 		this->draw(horizontal, x + display_n18::CHAR_WIDTH * font_size + k, y, 1, display_n18::CHAR_HEIGHT * font_size);
@@ -570,7 +570,7 @@ void display_n18::draw_character(int x, int y, const char character, unsigned sh
 	delete[] horizontal;
 }
 
-void display_n18::draw_strong(int x, int y, const char* str, unsigned short fore_color, unsigned short back_color, unsigned char font_size)
+void display_n18::draw_string(int x, int y, const char* str, unsigned short fore_color, unsigned short back_color, unsigned char font_size)
 {
 	if (*str == '\0')
 		return;

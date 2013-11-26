@@ -26,6 +26,7 @@ namespace gadgeteering
 		{
 			const socket& sock;
 			devices::i2c i2c;
+			interfaces::digital_input data_ready;
 
 			unsigned char read_buffer_8[1];
 			unsigned char write_buffer_8[1];

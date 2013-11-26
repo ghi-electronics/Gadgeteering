@@ -59,16 +59,19 @@ namespace gadgeteering
 		static const resistor_mode NONE = 0;
 
 		/// @brief Pull-up resistor mode
+		///
 		/// This mode (if supported by the mainboard) will force a pin
 		/// to a default HIGH state.
 		static const resistor_mode PULL_UP = 1;
 
 		/// @brief Pull-down resistor mode
+		///
 		/// This mode (if supported by the mainboard) will force a pin
 		/// to a default LOW state.
 		static const resistor_mode PULL_DOWN = 2;
 
 		/// @brief Floating resistor mode
+		///
 		/// This mode forces neither pull-up or pull-down resistor
 		/// modes.
 		static const resistor_mode FLOATING = 3;
@@ -170,78 +173,135 @@ namespace gadgeteering
     /// @brief Struct containing 8-bit RBG color values
 	struct color
 	{
+        /// Intensity of red in the color value (0-255)
 		unsigned char red;
+
+		/// Intensity of green in the color value (0-255)
 		unsigned char green;
+
+		/// Intensity of blue in the color value (0-255)
 		unsigned char blue;
 
+        /// @brief The default color constructor
 		color();
+
+		/// @brief The color constructor allowing you to set RGB values (0-255)
 		color(unsigned char r, unsigned char g, unsigned char b);
 
+        /// @brief The constant value for the color red
 		static const color RED;
+
+		/// @brief The constant value for the color green
 		static const color GREEN;
+
+		/// @brief The constant value for the color blue
 		static const color BLUE;
+
+		/// @brief The constant value for the color white
 		static const color WHITE;
+
+		/// @brief The constant value for no color
 		static const color BLACK;
 	};
 
     /// @brief Contains configuration for a SPI transaction
 	struct spi_configuration
 	{
-		///The pin SPIBus will toggle for the transaction
+		/// The pin SPIBus will toggle for the transaction
 		cpu_pin chip_select;
 
-		///Whether or not the chip select pin is high when the chip is selected.
+		/// Whether or not the chip select pin is high when the chip is selected.
 		bool cs_active_state;
 
-		///The amount of time (in milliseconds) that will elapse between when the device is selected and when the clock data transmission will start.
+		/// The amount of time (in milliseconds) that will elapse between when the device is selected and when the clock data transmission will start.
 		unsigned int cs_setup_time;
 
-		///The amount of time (in milliseconds) that the chip-select port must remain in the active state before the device is unselected.
+		/// The amount of time (in milliseconds) that the chip-select port must remain in the active state before the device is unselected.
 		unsigned int cs_hold_time;
 
-		///Whether or not the clock is high when the device is idle. True is high, false is low.
+		/// Whether or not the clock is high when the device is idle. True is high, false is low.
 		bool clock_idle_state;
 
-		///The sampling clock edge. True if sampled on the rising edge, false on the falling edge.
+		/// The sampling clock edge. True if sampled on the rising edge, false on the falling edge.
 		bool clock_edge;
 
-		///The clock rate, in KHz.
+		/// The clock rate, in KHz.
 		unsigned int clock_rate;
 
+        /// Whether or not the chip select pin should be toggled by the bus.
+        /// This is primarily used on systems that toggle hardware SPI chip select pins during transmission
 		bool uses_chip_select;
 
+        /// @brief The default spi_configuration constructor
 		spi_configuration();
+
+		/// @brief A spi_configuration constructor
+		/// @param cs_active_state Whether or not the chip select pin is high when the chip is selected.
+		/// @param cs_setup_time The amount of time (in milliseconds) that will elapse between when the device is selected and when the clock data transmission will start.
+		/// @param cs_hold_time The amount of time (in milliseconds) that the chip-select port must remain in the active state before the device is unselected.
+		/// @param clock_idle_state Whether or not the clock is high when the device is idle. True is high, false is low.
+		/// @param clock_edge The sampling clock edge. True if sampled on the rising edge, false on the falling edge.
+		/// @param clock_rate The clock rate, in KHz.
+		/// @param uses_chip_select Whether or not the chip select pin should be toggled by the bus.
 		spi_configuration(bool cs_active_state, unsigned int cs_setup_time, unsigned int cs_hold_time, bool clock_idle_state, bool clock_edge, unsigned int clock_rate, bool uses_chip_select = true);
 	};
 
     /// @brief Contains configuration for a Serial (UART) transaction
 	struct serial_configuration
 	{
-		typedef unsigned char partity;
+		typedef unsigned char parity;
 		typedef unsigned char stop_bit;
 
+        /// The speed at which data will be sent (in bits-per-second)
 		unsigned int baud_rate;
-		partity parity;
+
+		/// The parity that will be used to detect erroneous communications
+		parity data_parity;
+
+		/// The number of bits that will be used to detect and signify the end of a character
 		stop_bit stop_bits;
+
+		/// The number of data bits in each character
 		unsigned char data_bits;
 
+        /// @brief Contains definitions of the available parities
 		struct parities
 		{
-			static const partity EVEN = 0;
-			static const partity ODD = 1;
-			static const partity MARK = 2;
-			static const partity SPACE = 3;
-			static const partity NONE = 4;
+            /// Arrange transmitted data with an even parity
+			static const parity EVEN = 0;
+
+            /// Arrange transmitted data with an odd parity
+			static const parity ODD = 1;
+
+            /// Arrange transmitted data with parity bit on the mark signal condition
+			static const parity MARK = 2;
+
+            /// Arrange transmitted data with parity bit on the space signal condition
+			static const parity SPACE = 3;
+
+            /// Arrange transmitted data with no parity
+			static const parity NONE = 4;
 		};
 
+        /// @brief Contains definitions of the available stop bit conditions
 		struct stop_bits
 		{
+            /// Uses one bit to signify the end of a character. This is the default for most electronic devices.
 			static const stop_bit ONE = 1;
+
+			/// Uses one and a half bits to signify the end of a character.
 			static const stop_bit ONE_POINT_FIVE = 2;
+
+			/// Uses two bits to signify the end of a character.
 			static const stop_bit TWO = 3;
 		};
 
-		serial_configuration(unsigned int baud_rate = 9600, partity parity = parities::EVEN, stop_bit stop_bits = stop_bits::ONE, unsigned char data_bits = 8);
+        /// @brief The serial_configuration constructor
+        /// @param baud_rate The speed at which data will be sent (in bits-per-second)
+        /// @param parity The parity that will be used to detect erroneous communications (Default: Even)
+        /// @param stop_bits The number of bits that will be used to detect and signify the end of a character
+        /// @param data_bits The number of data bits in each character
+		serial_configuration(unsigned int baud_rate = 9600, parity parity = parities::EVEN, stop_bit stop_bits = stop_bits::ONE, unsigned char data_bits = 8);
 	};
 
     /// @brief Contains default error codes
@@ -263,7 +323,11 @@ namespace gadgeteering
 		static const error_type INVALID_CHANNEL = 13;
 		static const error_type INVALID_SOCKET_NUMBER = 14;
 		static const error_type SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL = 15;
+
+		/// Generic mainboard error. You should supply a specific error code as well
 		static const error_type MAINBOARD_ERROR = 16;
+
+		/// Generic module error. You should supply a specific error code as well
 		static const error_type MODULE_ERROR = 17;
 	}
 }

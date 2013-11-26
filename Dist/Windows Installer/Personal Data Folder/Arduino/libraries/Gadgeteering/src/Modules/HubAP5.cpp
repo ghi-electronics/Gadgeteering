@@ -77,9 +77,9 @@ hub_ap5::indirected_analog_input::indirected_analog_input(const socket& sock, hu
 
 }
 
-double hub_ap5::indirected_analog_input::read(socket_pin_number pin_number)
+double hub_ap5::indirected_analog_input::read(analog_channel channel)
 {
-	return this->hub.read_analog(this->sock.pins[pin_number]);
+	return this->hub.read_analog(channel);
 }
 
 hub_ap5::indirected_pwm_output::indirected_pwm_output(const socket& sock, hub_ap5& hub) : sock(sock), hub(hub)
@@ -87,9 +87,9 @@ hub_ap5::indirected_pwm_output::indirected_pwm_output(const socket& sock, hub_ap
 
 }
 
-void hub_ap5::indirected_pwm_output::set(socket_pin_number pin_number, double duty_cycle, double frequency)
+void hub_ap5::indirected_pwm_output::set(pwm_channel channel, double duty_cycle, double frequency)
 {
-	this->hub.set_pwm(this->sock.pins[pin_number], duty_cycle, frequency);
+	this->hub.set_pwm(channel, duty_cycle, frequency);
 }
 
 hub_ap5::hub_ap5(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::I)), io60_chip(this->sock), analog_chip(socket_number), socket_start(socket_number * 10 + 10), socket_1(this->socket_start + 1), socket_2(this->socket_start + 2), socket_3(this->socket_start + 3), socket_4(this->socket_start + 4), socket_5(this->socket_start + 5), socket_6(this->socket_start + 6), socket_7(this->socket_start + 7), socket_8(this->socket_start + 8)

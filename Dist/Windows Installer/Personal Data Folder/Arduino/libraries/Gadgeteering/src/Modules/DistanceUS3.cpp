@@ -35,7 +35,7 @@ int distance_us3::get_distance_in_centimeters(unsigned int samples)
 	{
 		measured_value = this->get_distance_helper();
 
-		if (measured_value != distance_us3::MAX_FLAG || measured_value != distance_us3::MIN_FLAG)
+		if (measured_value != distance_us3::MAX_FLAG && measured_value != distance_us3::MIN_FLAG)
 		{
 			measured_average += measured_value;
 		}

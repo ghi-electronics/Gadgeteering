@@ -24,7 +24,7 @@ const double radio_fm1::MAX_CHANNEL = 107.5;
 const double radio_fm1::MIN_CHANNEL = 87.5;
 const double radio_fm1::INVALID_CHANNEL = -1.0;
 
-radio_fm1::radio_fm1(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::Y)), i2c(this->sock.i2c, radio_fm1::I2C_ADDRESS), reset_pin(this->sock, 5), sen_pin(this->sock, 4, true)
+radio_fm1::radio_fm1(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::Y)), i2c(this->sock, radio_fm1::I2C_ADDRESS, false), reset_pin(this->sock, 5), sen_pin(this->sock, 4, true)
 {
 	this->reset_pin.write(true);
 

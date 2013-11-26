@@ -14,34 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "Current.h"
+#pragma once
 
-using namespace gadgeteering;
-using namespace gadgeteering::modules;
-using namespace gadgeteering::interfaces;
+#include "../Gadgeteering.h"
 
-current::current(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::A)), ain(this->sock, 4)
+#include "FEZMedusaS12.h"
+
+namespace gadgeteering
 {
-
-}
-
-double current::get_current_reading()
-{
-	return this->ain.read() * 30.0;
-}
-
-double current::get_current_peak()
-{
-	double max = 0;
-	double current = 0;
-
-	for (unsigned int i = 0; i < current::SAMPLE_COUNT; i++)
+	namespace mainboards
 	{
-		current = this->ain.read();
+		class fez_medusa_shield : public fez_medusa_s12
+		{
+			public:
+				struct pins : public fez_medusa_s12::pins
+				{
 
-		if (max < current)
-			max = current;
+				};
+
+				fez_medusa_shield();
+				virtual ~fez_medusa_shield();
+		};
 	}
-
-	return max * 30;
 }

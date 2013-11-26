@@ -32,7 +32,7 @@ namespace gadgeteering
 			public:
 				unsigned char address;
 
-				i2c(const socket& sock, unsigned char address);
+				i2c(const socket& sock, unsigned char address, bool uses_hardware_i2c = true);
 				i2c(i2c_channel channel, unsigned char address);
 				i2c(cpu_pin sda, cpu_pin scl, unsigned char address, bool use_resistors = true);
 				~i2c();

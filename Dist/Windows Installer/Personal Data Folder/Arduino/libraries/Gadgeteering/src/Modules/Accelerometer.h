@@ -26,6 +26,7 @@ namespace gadgeteering
 		{
 			const socket& sock;
 			devices::i2c i2c;
+			interfaces::digital_input int1;
 
 			struct calibration_offsets
 			{
@@ -119,6 +120,7 @@ namespace gadgeteering
 				void reset_threshold_detection();
 				void calibrate(acceleration reference_acceleration);
 				void calibrate();
+				bool is_interrupted();
 		};
 	}
 }

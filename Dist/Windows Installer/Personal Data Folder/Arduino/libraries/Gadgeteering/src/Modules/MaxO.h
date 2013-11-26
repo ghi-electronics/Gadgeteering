@@ -25,8 +25,8 @@ namespace gadgeteering
 		class max_o
 		{
 			const socket& sock;
-			interfaces::digital_output clr;
 			interfaces::digital_output enable;
+			interfaces::digital_output clr;
 			devices::spi spi;
 
 			unsigned char* data;

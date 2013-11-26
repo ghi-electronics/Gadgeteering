@@ -18,20 +18,27 @@ limitations under the License.
 
 #include "Types.h"
 
-namespace gadgeteering 
+namespace gadgeteering
 {
-	class software_i2c 
+    /// @brief Provides software driven I2C communications
+    /// Software I2C is slower than hardware driven I2C.
+    /// This class is useful when you use a module that uses GPIO
+    /// pins to process communications and on platforms that do not
+    /// offer a hardware I2C solution.
+	class software_i2c
     {
 		cpu_pin sda;
 		cpu_pin scl;
-		
+
 		bool start;
 		bool use_resistors;
 
 		void clear_scl();
 		bool read_scl();
+		void release_scl();
 		void clear_sda();
 		bool read_sda();
+		void release_sda();
 
 		void wait_scl();
 		void delay();
@@ -40,15 +47,31 @@ namespace gadgeteering
 		bool read_bit();
 
 		bool send_start_condition();
-		bool send_stop_condition();                       
+		bool send_stop_condition();
 
 		bool transmit(bool send_start, bool send_stop, unsigned char data);
 		unsigned char receive(bool send_ack, bool send_stop_condition);
 
 		public:
+            /// @brief The software_i2c class constructor
+            /// @param sda The CPU pin of the I2C serial data pin (SDA)
+            /// @param scl The CPU pin of the I2C serial clock pin (SCL)
 			software_i2c(cpu_pin sda, cpu_pin scl, bool use_resistors = true);
-                                                        
+
+            /// @brief Method to transmit data to a specified address
+            /// @param address The address of the I2C slave device
+            /// @param buffer The data to be sent to the I2C slave
+            /// @param length The length of the transmission
+            /// @param send_start Should an I2C start condition be sent?
+            /// @param send_stop Should an I2C stop condition be sent?
 			bool write(unsigned char address, const unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);
+
+            /// @brief Method to receive data from a specified address
+            /// @param address The address of the I2C slave device
+            /// @param buffer The initialized buffer to place the received data from the I2C slave
+            /// @param length The length of the transmission
+            /// @param send_start Should an I2C start condition be sent?
+            /// @param send_stop Should an I2C stop condition be sent?
 			bool read(unsigned char address, unsigned char* buffer, unsigned int length, bool send_start, bool send_stop);
     };
 }

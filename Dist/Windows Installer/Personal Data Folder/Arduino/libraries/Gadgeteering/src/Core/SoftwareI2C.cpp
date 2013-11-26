@@ -41,6 +41,11 @@ bool software_i2c::read_scl()
 	return mainboard->read_digital(this->scl);
 }
 
+void software_i2c::release_scl()
+{
+	mainboard->set_io_mode(this->scl, io_modes::DIGITAL_INPUT, this->use_resistors ? resistor_modes::PULL_UP : resistor_modes::FLOATING);
+}
+
 void software_i2c::clear_sda()
 {
 	mainboard->set_io_mode(this->sda, io_modes::DIGITAL_OUTPUT, resistor_modes::NONE);
@@ -51,6 +56,11 @@ bool software_i2c::read_sda()
 {
 	mainboard->set_io_mode(this->sda, io_modes::DIGITAL_INPUT, this->use_resistors ? resistor_modes::PULL_UP : resistor_modes::FLOATING);
 	return mainboard->read_digital(this->sda);
+}
+
+void software_i2c::release_sda()
+{
+	mainboard->set_io_mode(this->sda, io_modes::DIGITAL_INPUT, this->use_resistors ? resistor_modes::PULL_UP : resistor_modes::FLOATING);
 }
 
 void software_i2c::wait_scl()
@@ -68,7 +78,7 @@ void software_i2c::delay()
 bool software_i2c::write_bit(bool bit)
 {
 	if (bit)
-		this->read_sda();
+		this->release_sda();
 	else
 		this->clear_sda();
 
@@ -88,7 +98,7 @@ bool software_i2c::write_bit(bool bit)
 
 bool software_i2c::read_bit()
 {
-	this->read_sda();
+	this->release_sda();
 
 	this->delay();
 	
@@ -107,7 +117,7 @@ bool software_i2c::send_start_condition()
 {
 	if (this->start)
 	{
-		this->read_sda();
+		this->release_sda();
 
 		this->delay();
 		

@@ -80,7 +80,7 @@ namespace gadgeteering
 				public:
 					indirected_analog_input(const socket& sock, hub_ap5& hub);
 
-					virtual double read(socket_pin_number pin_number);
+					virtual double read(analog_channel channel);
 			};
 
 			class indirected_pwm_output : public indirectors::pwm_output
@@ -91,7 +91,7 @@ namespace gadgeteering
 				public:
 					indirected_pwm_output(const socket& sock, hub_ap5& hub);
 
-					virtual void set(socket_pin_number pin_number, double duty_cycle, double frequency);
+					virtual void set(pwm_channel channel, double duty_cycle, double frequency);
 			};
 
 			public:

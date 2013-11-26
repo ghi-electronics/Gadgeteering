@@ -23,7 +23,7 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-max_o::max_o(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::S)), enable(this->sock, 3, false), clr(this->sock, 4, true), spi(this->sock.spi, spi_configuration(false, 0, 0, false, true, 1000))
+max_o::max_o(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::S)), enable(this->sock, 3, false), clr(this->sock, 4, true), spi(this->sock.spi, spi_configuration(false, 0, 0, false, true, 1000), this->sock, 5)
 {
 	this->resized = false;
 	this->num_boards = 0;

@@ -38,9 +38,10 @@ namespace gadgeteering
 			public:
 				thermocouple(unsigned char socket_number);
 
-				short get_external_temp_celsius();
-				short get_external_temp_fahrenheit();
-				unsigned char get_internal_temp_celsius();
+				int get_external_temp_celsius();
+				int get_external_temp_fahrenheit();
+				int get_internal_temp_celsius();
+				int get_internal_temp_fahrenheit();
 		};
 	}
 }
