@@ -23,6 +23,7 @@ namespace gadgeteering
 {
 	namespace interfaces
 	{
+
 		class digital_output
 		{
 			const socket& sock;
@@ -92,7 +93,7 @@ namespace gadgeteering
 			socket_pin_number sock_pin;
 			cpu_pin pin;
 			analog_out_channel channel;
-			
+
 			public:
 				analog_output(const socket& sock, socket_pin_number pin_number);
 
