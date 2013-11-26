@@ -35,9 +35,10 @@ double current::get_current_peak()
 	double max = 0;
 	double current = 0;
 
-	for (unsigned int i = 0; i < 200; i++)
+	for (unsigned int i = 0; i < current::SAMPLE_COUNT; i++)
 	{
 		current = this->ain.read();
+
 		if (max < current)
 			max = current;
 	}

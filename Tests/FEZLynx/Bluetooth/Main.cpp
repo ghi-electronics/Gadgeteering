@@ -13,7 +13,7 @@ using namespace gadgeteering::modules;
 int main(int argc, char** argv)
 {
 	fez_lynx_s4 board;
-	bluetooth  bt(3);
+	bluetooth bt(3);
 
 	return 0;
 }

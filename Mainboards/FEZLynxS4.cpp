@@ -268,8 +268,8 @@ bool fez_lynx_s4::i2c_read(i2c_channel channel, unsigned char address, unsigned 
 	address |= 1;
 
 	if (this->channels[1].i2c_write(&address, 1, send_start, length == 0))
-	if (this->channels[1].i2c_read(buffer, length, false, send_stop))
-		return true;
+		if (this->channels[1].i2c_read(buffer, length, false, send_stop))
+			return true;
 
 	return false;
 }
@@ -432,22 +432,14 @@ bool fez_lynx_s4::ftdi_channel::set_mode(mode mode)
 
 	status |= FT_ResetDevice(this->handle);
 
-	if(mode == modes::MPSSE)
+    do
     {
-        do
-        {
-            status |= FT_GetQueueStatus(this->handle, &to_read);
-            if (status == FT_OK && to_read > 0)
-                status |= FT_Read(this->handle, this->buffer, to_read, &read);
-        } while (to_read != 0);
-    }
-	else
-	{
-        status |= FT_Purge(this->handle, FT_PURGE_RX);
-	}
+        status |= FT_GetQueueStatus(this->handle, &to_read);
+        if (status == FT_OK && to_read > 0)
+            status |= FT_Read(this->handle, this->buffer, to_read, &read);
+    } while (to_read != 0);
 
     status |= FT_SetLatencyTimer(this->handle, 2);
-    status |= FT_SetTimeouts(this->handle, 2000, 2000);
     status |= FT_SetBitMode(this->handle, 0x00, 0x00);
 
 	if (mode == modes::MPSSE)
@@ -597,7 +589,7 @@ void fez_lynx_s4::ftdi_channel::spi_read_write(const unsigned char* write_buffer
 
 	this->set_mode(fez_lynx_s4::ftdi_channel::modes::MPSSE);
 
-	ULONG divisor = 30000000 / config.clock_rate + 1;
+	ULONG divisor = 60000 / config.clock_rate + 1;
 
 	this->buffer[0] = fez_lynx_s4::ftdi_channel::MPSSE_DISABLE_THREE_PHASE_CLOCK;
 	this->buffer[1] = fez_lynx_s4::ftdi_channel::MPSSE_SET_DIVISOR; this->buffer[2] = divisor & 0xFF; this->buffer[3] = (divisor >> 8) & 0xFF;
@@ -617,10 +609,13 @@ void fez_lynx_s4::ftdi_channel::spi_read_write(const unsigned char* write_buffer
 	this->buffer[1] = (count - 1) & 0xFF;
 	this->buffer[2] = ((count - 1) >> 8) & 0xFF;
 
-	mainboard->set_io_mode(config.chip_select, io_modes::DIGITAL_OUTPUT, resistor_modes::NONE);
-	mainboard->write_digital(config.chip_select, config.cs_active_state);
-	if (config.uses_chip_select && config.cs_setup_time != 0)
-		system::sleep(config.cs_setup_time);
+	if (config.uses_chip_select)
+	{
+		mainboard->set_io_mode(config.chip_select, io_modes::DIGITAL_OUTPUT, resistor_modes::NONE);
+		mainboard->write_digital(config.chip_select, config.cs_active_state);
+		if (config.cs_setup_time != 0)
+			system::sleep(config.cs_setup_time);
+	}
 
 	status |= FT_Write(handle, this->buffer, count + 3, &sent);
 	sent -= 3;
@@ -785,20 +780,54 @@ BYTE fez_lynx_s4::ftdi_channel::i2c_read_byte()
 	return read_in;
 }
 
-DWORD fez_lynx_s4::ftdi_channel::serial_write(const unsigned char* buffer, DWORD count, serial_configuration& config)
+void fez_lynx_s4::ftdi_channel::serial_configure(serial_configuration& config)
 {
 	this->set_mode(fez_lynx_s4::ftdi_channel::modes::SERIAL);
 
-	DWORD sent;
 	FT_STATUS status = FT_OK;
+	bool fail = false;
 
 	status |= FT_SetBaudRate(this->handle, config.baud_rate);
-	status |= FT_SetDataCharacteristics(this->handle, config.data_bits, config.stop_bits, config.data_parity);
+
+	UCHAR parity, stop, data;
+
+	switch (config.data_parity)
+	{
+		case serial_configuration::parities::EVEN: parity = FT_PARITY_EVEN; break;
+		case serial_configuration::parities::ODD: parity = FT_PARITY_ODD; break;
+		case serial_configuration::parities::MARK: parity = FT_PARITY_MARK; break;
+		case serial_configuration::parities::SPACE: parity = FT_PARITY_SPACE; break;
+		case serial_configuration::parities::NONE: parity = FT_PARITY_NONE; break;
+		default: panic(errors::MAINBOARD_ERROR);
+	}
+
+	switch (config.data_bits)
+	{
+		case 7: data = FT_BITS_7; break;
+		case 8: data = FT_BITS_8; break;
+		default: panic(errors::MAINBOARD_ERROR);
+	}
+
+	switch (config.stop_bits)
+	{
+		case serial_configuration::stop_bits::ONE: stop = FT_STOP_BITS_1; break;
+		case serial_configuration::stop_bits::TWO: stop = FT_STOP_BITS_2; break;
+		default: panic(errors::MAINBOARD_ERROR);
+	}
+
+	status |= FT_SetDataCharacteristics(this->handle, data, stop, parity);
 	status |= FT_SetFlowControl(this->handle, FT_FLOW_NONE, 0x00, 0x00);
 
-	status |= FT_Write(this->handle, const_cast<unsigned char*>(buffer), count, &sent);
-
 	if (status != FT_OK)
+		panic(errors::MAINBOARD_ERROR);
+}
+
+DWORD fez_lynx_s4::ftdi_channel::serial_write(const unsigned char* buffer, DWORD count, serial_configuration& config)
+{
+	this->serial_configure(config);
+
+	DWORD sent;
+	if (FT_Write(this->handle, const_cast<unsigned char*>(buffer), count, &sent) != FT_OK)
 		panic(errors::MAINBOARD_ERROR);
 
 	return sent;
@@ -806,14 +835,10 @@ DWORD fez_lynx_s4::ftdi_channel::serial_write(const unsigned char* buffer, DWORD
 
 DWORD fez_lynx_s4::ftdi_channel::serial_read(unsigned char* buffer, DWORD count, serial_configuration& config)
 {
-	this->set_mode(fez_lynx_s4::ftdi_channel::modes::SERIAL);
+	this->serial_configure(config);
 
 	DWORD read = 0, available = 0;
 	FT_STATUS status = FT_OK;
-
-	status |= FT_SetBaudRate(this->handle, config.baud_rate);
-	status |= FT_SetDataCharacteristics(this->handle, config.data_bits, config.stop_bits, config.data_parity);
-	status |= FT_SetFlowControl(this->handle, FT_FLOW_NONE, 0x00, 0x00);
 
 	status |= FT_GetQueueStatus(this->handle, &available);
 	status |= FT_Read(this->handle, buffer, available > count ? count : available, &read);

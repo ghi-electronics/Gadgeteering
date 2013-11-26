@@ -17,7 +17,7 @@ int main()
 
 	while(true)
 	{
-		cout << therm.get_external_temp_celsius() << " " << therm.get_internal_temp_celsius() << endl;
+		cout << therm.get_external_temp_celsius() << " " << therm.get_external_temp_fahrenheit() << " " << therm.get_internal_temp_celsius() << " " << therm.get_internal_temp_fahrenheit() << endl;
 
 		system::sleep(100);
 	}

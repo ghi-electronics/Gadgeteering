@@ -15,22 +15,23 @@ int main(int argc, char** argv)
 	fez_lynx_s4 board;
 	serial_usb serial_module(3);
 
-	serial_module.serial.write("This is a test", 14);
+	serial_module.configure(serial_configuration(9600, serial_configuration::parities::NONE, serial_configuration::stop_bits::ONE, 8));
 
-	int read = 0;
-	int to_read = 14;
-	int available = 0;
+	serial_module.serial.write("Hello, World!", 13);
 
-	unsigned char buffer[14];
-
-	while(read < to_read)
+	unsigned int available, read;
+	unsigned char buffer[10];
+	while (true)
 	{
-		if(((available = serial_module.serial.available()) > 0) && (available > 14))
-			read += serial_module.serial.read(buffer, 14);
-		else if(available > 0)
-			read += serial_module.serial.read(buffer, available);
+		available = serial_module.serial.available();
+		if (available == 0)
+			continue;
 
-		system::sleep(100);
+		read = serial_module.serial.read(buffer, available > 10 ? 10 : available);
+
+		serial_module.serial.write(buffer, read);
+
+		system::sleep(25);
 	}
 
 	return 0;

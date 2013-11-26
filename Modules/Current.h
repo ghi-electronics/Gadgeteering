@@ -24,16 +24,16 @@ namespace gadgeteering
 	{
 		class current
 		{
-			static const unsigned int AC_SAMPLE_COUNT = 400;
+			static const unsigned int SAMPLE_COUNT = 10;
 
 			const socket& sock;
 			interfaces::analog_input ain;
 
-		public:
-			current(unsigned char socket_number);
+			public:
+				current(unsigned char socket_number);
 
-			double get_current_reading();
-			double get_current_peak();
+				double get_current_reading();
+				double get_current_peak();
 		};
 	}
 }

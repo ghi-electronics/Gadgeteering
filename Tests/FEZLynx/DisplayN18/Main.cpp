@@ -15,15 +15,15 @@ int main(int argc, char** argv)
 	fez_lynx_s4 board;
 	display_n18 disp(4);
 
-	disp.clear();
-	disp.draw_circle(10, 10, 10, 0xFAFF);
-	disp.draw_rect(0, 0, 10, 10, 0xFF0F);
-	disp.draw_line(20,20, 10, 10, 0xFFFF);
-	disp.draw_character(30, 30, 'G', 0x0000, 0xFFFF);
+	disp.draw_circle(10, 10, 10, 0x07E0);
+	disp.draw_rect(25, 25, 50, 50, 0x001F);
+	disp.draw_line(50, 50, 75, 75, 0xF800);
+	
+	disp.fill_circle(50, 10, 10, 0x07E0);
+	disp.fill_rect(50, 25, 10, 10, 0x001F);
 
-	disp.fill_circle(0, 0, 40, 0x0FFF);
-	system::sleep(2000);
-	disp.fill_rect(0, 0, 128, 162, 0x0000);
+	disp.draw_string(5, 80, "Hello", 0x001F, 0x07E0, 2);
+	disp.draw_string(5, 96, "World", 0x001F, 0x07E0, 2);
 
 	return 0;
 }

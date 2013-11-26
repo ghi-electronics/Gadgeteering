@@ -50,18 +50,24 @@ unsigned long thermocouple::read_data()
 	return data;
 }
 
-short thermocouple::get_external_temp_celsius()
+int thermocouple::get_external_temp_celsius()
 {
-	return (read_data() >> 20) & 0xFFF;
+	unsigned long raw_data= this->read_data();
+	int value = ((raw_data >> 16) & 0xFF) | (((raw_data >> 24) & 0xFF) << 8);
+	return value >> 4;
 }
 
-short thermocouple::get_external_temp_fahrenheit()
+int thermocouple::get_external_temp_fahrenheit()
 {
-	return static_cast<short>((get_external_temp_celsius() * 1.8) + 32);
+	return static_cast<short>(this->get_external_temp_celsius() * 1.8 + 32);
 }
 
-unsigned char thermocouple::get_internal_temp_celsius()
+int thermocouple::get_internal_temp_celsius()
 {
-	unsigned long value = this->read_data();
-	return static_cast<unsigned char>((value >> 8) & 0xFF); // get byte 2
+	return (this->read_data() >> 8) & 0xFF;
+}
+
+int thermocouple::get_internal_temp_fahrenheit()
+{
+	return static_cast<short>(this->get_internal_temp_celsius() * 1.8 + 32);
 }

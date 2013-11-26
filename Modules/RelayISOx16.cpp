@@ -20,11 +20,17 @@ using namespace gadgeteering;
 using namespace gadgeteering::interfaces;
 using namespace gadgeteering::modules;
 
-relay_iso_x16::relay_iso_x16(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::Y)), enable(this->sock, 3, true), clear(this->sock, 4, true), latch(this->sock, 5), data(this->sock, 7, true), clock(this->sock, 9)
+relay_iso_x16::relay_iso_x16(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::Y)), data(this->sock, 7, false), clock(this->sock, 9, false), enable(this->sock, 3, true), latch(this->sock, 5, false), clear(this->sock, 4, true)
 {
+	system::sleep(100);
+
 	this->disable_all_relays();
 
+	system::sleep(100);
+
 	this->enable_output();
+
+	system::sleep(100);
 }
 
 void relay_iso_x16::disable_all_relays()
@@ -71,17 +77,18 @@ void relay_iso_x16::write_data()
 
 	for (int i = 0; i < 16; i++)
 	{
-		this->data.write((reg & 0x1) == 1);
-		this->data.write(true);
+		this->data.write((reg & 0x1) != 1);
+		system::sleep_micro(100);
 
 		this->clock.write(true);
-		system::sleep_micro(3);
+		system::sleep_micro(100);
 		this->clock.write(false);
 
 		reg >>= 1;
-		system::sleep_micro(57);
+		system::sleep_micro(100);
 	}
 
 	this->latch.write(true);
+	system::sleep_micro(100);
 	this->latch.write(false);
 }

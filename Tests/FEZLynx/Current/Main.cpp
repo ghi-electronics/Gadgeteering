@@ -5,8 +5,7 @@
 #include <Mainboards/FEZLynxS4.h>
 #include <Modules/Current.h>
 
-#include <iostream>
-
+using namespace std;
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
 using namespace gadgeteering::modules;
@@ -18,8 +17,7 @@ int main(int argc, char** argv)
 
 	while(true)
 	{
-		std::cout << "Peak Current: " << sensor.get_current_peak() << std::endl;
-		std::cout << "Current consumption: " << sensor.get_current_reading() << std::endl;
+		cout << sensor.get_current_reading() << endl;
 
 		system::sleep(100);
 	}

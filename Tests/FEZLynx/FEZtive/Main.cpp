@@ -13,7 +13,7 @@ using namespace gadgeteering::modules;
 int main(int argc, char** argv)
 {
 	fez_lynx_s4 board;
-	feztive fez(1);
+	feztive fez(4);
 
 	fez.initialize();
 	fez.set_led(color::RED, 1);
