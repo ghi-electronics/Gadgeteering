@@ -130,7 +130,7 @@ void fez_medusa_mini::create_sockets()
 unsigned char fez_medusa_mini::get_serial_config(serial_configuration& config)
 {
 #ifdef SERIAL_5E1 //The Due does not yet define these.
-	if (config.parity == serial_configuration::parities::EVEN)
+	if (config.data_parity == serial_configuration::parities::EVEN)
 	{
 		if (config.stop_bits == serial_configuration::stop_bits::ONE)
 		{
@@ -153,7 +153,7 @@ unsigned char fez_medusa_mini::get_serial_config(serial_configuration& config)
 			}
 		}
 	}
-	else if (config.parity == serial_configuration::parities::ODD)
+	else if (config.data_parity == serial_configuration::parities::ODD)
 	{
 		if (config.stop_bits == serial_configuration::stop_bits::ONE)
 		{
@@ -176,7 +176,7 @@ unsigned char fez_medusa_mini::get_serial_config(serial_configuration& config)
 			}
 		}
 	}
-	else if (config.parity == serial_configuration::parities::NONE)
+	else if (config.data_parity == serial_configuration::parities::NONE)
 	{
 		if (config.stop_bits == serial_configuration::stop_bits::ONE)
 		{

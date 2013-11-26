@@ -172,6 +172,8 @@ namespace gadgeteering
 					static const cpu_pin DD7 = 16 * 3 + 7;
 				};
 
+				static const unsigned char ext_hub_socket = 0;
+
 				fez_lynx_s4();
 				virtual ~fez_lynx_s4();
 
