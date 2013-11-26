@@ -57,7 +57,7 @@ namespace gadgeteering
 				~io60p16();
 
 				void set_io_mode(unsigned char port, unsigned char pin, io_mode new_io_mode, resistor_mode new_resistor_mode);
-				void set_pwm(unsigned char port, unsigned char pin, double duty_cycle, double frequency);
+				void set_pwm(unsigned char port, unsigned char pin, double frequency, double duty_cycle);
 				bool read_digital(unsigned char port, unsigned char pin);
 				void write_digital(unsigned char port, unsigned char pin, bool value);
 		};

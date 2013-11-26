@@ -29,7 +29,6 @@ namespace gadgeteering
 		class fez_medusa_shield_3d : public fez_medusa_mini
 		{
 			void create_sockets();
-			HardwareSerial* get_serial_instance(serial_channel channel);
 
 			public:
 				struct pins
@@ -108,9 +107,11 @@ namespace gadgeteering
 				fez_medusa_shield_3d(double max_analog_voltage = 5.0);
 				virtual ~fez_medusa_shield_3d();
 
+				virtual void set_debug_led(bool state);
+
 				virtual void write_analog(analog_channel channel, double voltage);
 				virtual double read_analog(analog_channel channel);
-				virtual void set_pwm(pwm_channel channel, double duty_cycle, double frequency);
+				virtual void set_pwm(pwm_channel channel, double frequency, double duty_cycle);
 				
 				virtual void i2c_begin(i2c_channel channel);
 				virtual void i2c_end(i2c_channel channel);

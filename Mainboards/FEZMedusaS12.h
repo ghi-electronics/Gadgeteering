@@ -30,7 +30,7 @@ namespace gadgeteering
 		{
 			void create_sockets();
 
-			modules::io60p16* extender;
+			modules::io60p16 extender;
 
 			public:
 				struct pins : public fez_medusa_mini::pins
@@ -114,7 +114,7 @@ namespace gadgeteering
 				virtual void set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_resistor_mode);
 				virtual void write_digital(cpu_pin pin, bool value);
 				virtual bool read_digital(cpu_pin pin);
-				virtual void set_pwm(pwm_channel channel, double duty_cycle, double frequency);
+				virtual void set_pwm(pwm_channel channel, double frequency, double duty_cycle);
 		};
 	}
 }

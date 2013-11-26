@@ -47,7 +47,7 @@ interfaces::analog_input bread_board_x1::setup_analog_input(unsigned char pin_nu
 
 interfaces::analog_output bread_board_x1::setup_analog_output(unsigned char pin_number)
 {
-	return interfaces::analog_output(this->sock, pin_number);
+	return interfaces::analog_output(this->sock);
 }
 
 interfaces::pwm_output bread_board_x1::setup_pwm_output(unsigned char pin_number)

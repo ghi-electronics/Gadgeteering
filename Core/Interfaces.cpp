@@ -35,7 +35,24 @@ digital_output::digital_output(const socket& sock, socket_pin_number pin_number,
 	{
 		this->sock.digital_output_indirector->set_output(this->sock_pin);
 	}
-	
+
+	this->write(initial_state);
+}
+
+digital_output::digital_output(unsigned char socket_number, socket_pin_number pin_number, bool initial_state) : sock(mainboard->get_socket(socket_number)), sock_pin(pin_number), pin(sock.pins[pin_number])
+{
+	if (sock.pins[pin_number] == UNCONNECTED_PIN)
+		panic(errors::SOCKET_PIN_NOT_CONNECTED);
+
+	if (!this->sock.digital_output_indirector)
+	{
+		mainboard->set_io_mode(this->pin, io_modes::DIGITAL_OUTPUT, resistor_modes::FLOATING);
+	}
+	else
+	{
+		this->sock.digital_output_indirector->set_output(this->sock_pin);
+	}
+
 	this->write(initial_state);
 }
 
@@ -64,7 +81,24 @@ digital_input::digital_input(const socket& sock, socket_pin_number pin_number, r
 	{
 		this->sock.digital_input_indirector->set_input(this->sock_pin, new_resistor_mode);
 	}
-	
+
+	this->set_resistor_mode(new_resistor_mode);
+}
+
+digital_input::digital_input(unsigned char socket_number, socket_pin_number pin_number, resistor_mode new_resistor_mode) : sock(mainboard->get_socket(socket_number)), sock_pin(pin_number), pin(sock.pins[pin_number])
+{
+	if (sock.pins[pin_number] == UNCONNECTED_PIN)
+		panic(errors::SOCKET_PIN_NOT_CONNECTED);
+
+	if (!this->sock.digital_input_indirector)
+	{
+		mainboard->set_io_mode(this->pin, io_modes::DIGITAL_OUTPUT, resistor_modes::FLOATING);
+	}
+	else
+	{
+		this->sock.digital_input_indirector->set_input(this->sock_pin, new_resistor_mode);
+	}
+
 	this->set_resistor_mode(new_resistor_mode);
 }
 
@@ -100,6 +134,15 @@ resistor_mode digital_input::get_resistor_mode()
 }
 
 digital_io::digital_io(const socket& sock, socket_pin_number pin_number) : sock(sock), sock_pin(pin_number), pin(sock.pins[pin_number])
+{
+	if (sock.pins[pin_number] == UNCONNECTED_PIN)
+		panic(errors::SOCKET_PIN_NOT_CONNECTED);
+
+	this->current_resistor_mode = resistor_modes::NONE;
+	this->current_io_state = io_modes::NONE;
+}
+
+digital_io::digital_io(unsigned char socket_number, socket_pin_number pin_number) : sock(mainboard->get_socket(socket_number)), sock_pin(pin_number), pin(sock.pins[pin_number])
 {
 	if (sock.pins[pin_number] == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
@@ -193,6 +236,20 @@ analog_input::analog_input(const socket& sock, socket_pin_number pin_number) : s
 		panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
 }
 
+analog_input::analog_input(unsigned char socket_number, socket_pin_number pin_number) : sock(mainboard->get_socket(socket_number)), sock_pin(pin_number), pin(sock.pins[pin_number])
+{
+	switch (pin_number)
+	{
+		case 3: this->channel = sock.analog3; break;
+		case 4: this->channel = sock.analog4; break;
+		case 5: this->channel = sock.analog5; break;
+		default: this->channel = analog_channels::NONE; break;
+	}
+
+	if (this->channel == analog_channels::NONE)
+		panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
+}
+
 double analog_input::read()
 {
 	return this->read_proportion() * mainboard->max_analog_voltage;
@@ -210,9 +267,17 @@ double analog_input::read_proportion()
 	}
 }
 
-analog_output::analog_output(const socket& sock, socket_pin_number pin_number) : sock(sock), sock_pin(pin_number), pin(sock.pins[pin_number])
+analog_output::analog_output(const socket& sock) : sock(sock), sock_pin(5), pin(sock.pins[5])
 {
-	if (pin_number != 5 || sock.analog_out == analog_out_channels::NONE)
+	if (sock.analog_out == analog_out_channels::NONE)
+		panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
+
+	this->channel = sock.analog_out;
+}
+
+analog_output::analog_output(unsigned char socket_number) : sock(mainboard->get_socket(socket_number)), sock_pin(5), pin(sock.pins[5])
+{
+	if (sock.analog_out == analog_out_channels::NONE)
 		panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
 
 	this->channel = sock.analog_out;
@@ -242,6 +307,22 @@ pwm_output::pwm_output(const socket& sock, socket_pin_number pin_number) : sock(
 		case 7: this->channel = sock.pwm7; break;
 		case 8: this->channel = sock.pwm8; break;
 		case 9: this->channel = sock.pwm9; break;
+	}
+
+	if (this->channel == pwm_channels::NONE)
+		panic(errors::PIN_DOES_NOT_SUPPORT_THIS_TYPE);
+
+	this->set(0, 0);
+}
+
+pwm_output::pwm_output(unsigned char socket_number, socket_pin_number pin_number) : sock(mainboard->get_socket(socket_number)), sock_pin(pin_number), pin(sock.pins[pin_number])
+{
+	switch (pin_number)
+	{
+		case 7: this->channel = sock.pwm7; break;
+		case 8: this->channel = sock.pwm8; break;
+		case 9: this->channel = sock.pwm9; break;
+		default: this->channel = pwm_channels::NONE; break;
 	}
 
 	if (this->channel == pwm_channels::NONE)

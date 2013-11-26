@@ -66,7 +66,7 @@ fez_lynx_s4::~fez_lynx_s4()
 
 void fez_lynx_s4::create_sockets()
 {
-	socket s1(1, socket::types::Y | socket::types::A | socket::types::X);
+	socket s1(1, socket::types::A | socket::types::Y);
 	s1.pins[3] = fez_lynx_s4::pins::DD4;
 	s1.pins[4] = fez_lynx_s4::pins::DD5;
 	s1.pins[5] = fez_lynx_s4::pins::AD4;
@@ -86,7 +86,7 @@ void fez_lynx_s4::create_sockets()
 	this->sockets[1] = s1;
 
 
-	socket s2(2, socket::types::I | socket::types::A);
+	socket s2(2, socket::types::A | socket::types::I);
 	s2.pins[3] = fez_lynx_s4::pins::DD1;
 	s2.pins[4] = fez_lynx_s4::pins::DD2;
 	s2.pins[5] = 0xFF; //fez_lynx_s4::pins::VIN2;
@@ -107,7 +107,7 @@ void fez_lynx_s4::create_sockets()
 	this->sockets[2] = s2;
 
 
-	socket s3(3, socket::types::K | socket::types::I | socket::types::X | socket::types::U);
+	socket s3(3, socket::types::I | socket::types::K | socket::types::U | socket::types::X);
 	s3.pins[3] = fez_lynx_s4::pins::DD0;
 	s3.pins[4] = fez_lynx_s4::pins::CD0;
 	s3.pins[5] = fez_lynx_s4::pins::CD1;
@@ -122,7 +122,7 @@ void fez_lynx_s4::create_sockets()
 	this->sockets[3] = s3;
 
 
-	socket s4(4, socket::types::S | socket::types::X | socket::types::Y);
+	socket s4(4, socket::types::S | socket::types::X);
 	s4.pins[3] = fez_lynx_s4::pins::BD4;
 	s4.pins[4] = fez_lynx_s4::pins::BD5;
 	s4.pins[5] = fez_lynx_s4::pins::BD6;
@@ -208,7 +208,7 @@ double fez_lynx_s4::read_analog(analog_channel channel)
 	return this->analog_converter->get_reading(mapping.second);
 }
 
-void fez_lynx_s4::set_pwm(pwm_channel channel, double duty_cycle, double frequency)
+void fez_lynx_s4::set_pwm(pwm_channel channel, double frequency, double duty_cycle)
 {
 	panic(errors::PWM_NOT_SUPPORTED);
 }

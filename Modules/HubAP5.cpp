@@ -87,9 +87,9 @@ hub_ap5::indirected_pwm_output::indirected_pwm_output(const socket& sock, hub_ap
 
 }
 
-void hub_ap5::indirected_pwm_output::set(pwm_channel channel, double duty_cycle, double frequency)
+void hub_ap5::indirected_pwm_output::set(pwm_channel channel, double frequency, double duty_cycle)
 {
-	this->hub.set_pwm(channel, duty_cycle, frequency);
+	this->hub.set_pwm(channel, frequency, duty_cycle);
 }
 
 hub_ap5::hub_ap5(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::I)), io60_chip(this->sock), analog_chip(socket_number), socket_start(socket_number * 10 + 10), socket_1(this->socket_start + 1), socket_2(this->socket_start + 2), socket_3(this->socket_start + 3), socket_4(this->socket_start + 4), socket_5(this->socket_start + 5), socket_6(this->socket_start + 6), socket_7(this->socket_start + 7), socket_8(this->socket_start + 8)
@@ -99,7 +99,7 @@ hub_ap5::hub_ap5(unsigned char socket_number) : sock(mainboard->get_socket(socke
 
 void hub_ap5::create_sockets()
 {
-	socket s1(this->socket_start + 1, socket::types::Y | socket::types::X | socket::types::A);
+	socket s1(this->socket_start + 1, socket::types::Y | socket::types::A);
 	s1.pins[3] = hub_ap5::pins::P5_0;
 	s1.pins[4] = hub_ap5::pins::P5_1;
 	s1.pins[5] = hub_ap5::pins::P5_2;
@@ -119,7 +119,7 @@ void hub_ap5::create_sockets()
 	ns1.digital_io_indirector = new indirected_digital_io(ns1, *this);
 
 
-	socket s2(this->socket_start + 2, socket::types::Y | socket::types::X | socket::types::A);
+	socket s2(this->socket_start + 2, socket::types::Y | socket::types::A);
 	s2.pins[3] = hub_ap5::pins::P4_0;
 	s2.pins[4] = hub_ap5::pins::P4_1;
 	s2.pins[5] = hub_ap5::pins::P4_2;
@@ -139,7 +139,7 @@ void hub_ap5::create_sockets()
 	ns2.digital_io_indirector = new indirected_digital_io(ns2, *this);
 
 
-	socket s3(this->socket_start + 3, socket::types::Y | socket::types::X);
+	socket s3(this->socket_start + 3, socket::types::Y);
 	s3.pins[3] = hub_ap5::pins::P3_0;
 	s3.pins[4] = hub_ap5::pins::P3_1;
 	s3.pins[5] = hub_ap5::pins::P3_2;
@@ -155,7 +155,7 @@ void hub_ap5::create_sockets()
 	ns3.digital_io_indirector = new indirected_digital_io(ns3, *this);
 
 
-	socket s4(this->socket_start + 4, socket::types::Y | socket::types::P | socket::types::X);
+	socket s4(this->socket_start + 4, socket::types::Y | socket::types::P);
 	s4.pins[3] = hub_ap5::pins::P2_0;
 	s4.pins[4] = hub_ap5::pins::P2_1;
 	s4.pins[5] = hub_ap5::pins::P2_2;
@@ -176,7 +176,7 @@ void hub_ap5::create_sockets()
 	ns4.pwm_output_indirector = new indirected_pwm_output(ns4, *this);
 
 
-	socket s5(this->socket_start + 5, socket::types::Y | socket::types::P | socket::types::X);
+	socket s5(this->socket_start + 5, socket::types::Y | socket::types::P);
 	s5.pins[3] = hub_ap5::pins::P1_4;
 	s5.pins[4] = hub_ap5::pins::P1_5;
 	s5.pins[5] = hub_ap5::pins::P1_6;
@@ -197,7 +197,7 @@ void hub_ap5::create_sockets()
 	ns5.pwm_output_indirector = new indirected_pwm_output(ns5, *this);
 
 
-	socket s6(this->socket_start + 6, socket::types::Y | socket::types::P | socket::types::X);
+	socket s6(this->socket_start + 6, socket::types::Y | socket::types::P);
 	s6.pins[3] = hub_ap5::pins::P1_0;
 	s6.pins[4] = hub_ap5::pins::P1_1;
 	s6.pins[5] = hub_ap5::pins::P1_2;
@@ -218,7 +218,7 @@ void hub_ap5::create_sockets()
 	ns6.pwm_output_indirector = new indirected_pwm_output(ns6, *this);
 
 
-	socket s7(this->socket_start + 7, socket::types::Y | socket::types::P | socket::types::X);
+	socket s7(this->socket_start + 7, socket::types::Y | socket::types::P);
 	s6.pins[3] = hub_ap5::pins::P0_4;
 	s6.pins[4] = hub_ap5::pins::P0_5;
 	s6.pins[5] = hub_ap5::pins::P0_6;
@@ -239,7 +239,7 @@ void hub_ap5::create_sockets()
 	ns7.pwm_output_indirector = new indirected_pwm_output(ns7, *this);
 
 
-	socket s8(this->socket_start + 8, socket::types::Y | socket::types::P | socket::types::X);
+	socket s8(this->socket_start + 8, socket::types::Y | socket::types::P);
 	s8.pins[3] = hub_ap5::pins::P0_0;
 	s8.pins[4] = hub_ap5::pins::P0_1;
 	s8.pins[5] = hub_ap5::pins::P0_2;
@@ -265,7 +265,7 @@ void hub_ap5::set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_re
 	this->io60_chip.set_io_mode(GET_PORT(pin), GET_PIN(pin), new_io_mode, new_resistor_mode);
 }
 
-void hub_ap5::set_pwm(pwm_channel channel, double duty_cycle, double frequency)
+void hub_ap5::set_pwm(pwm_channel channel, double frequency, double duty_cycle)
 {
 	if (channel == pwm_channels::NONE || channel > pwm_channels::PWM_14)
 		panic(errors::INVALID_CHANNEL);

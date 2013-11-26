@@ -25,12 +25,8 @@ namespace gadgeteering
 		class display_n18
 		{
 #ifdef Arduino_h
-			static const unsigned char STEP_X = 4;
-			static const unsigned char STEP_Y = 5;
 			static const unsigned char STEP = 1;
 #else
-			static const unsigned char STEP_X = 4;
-			static const unsigned char STEP_Y = 5;
 			static const unsigned char STEP = 12;
 #endif
 

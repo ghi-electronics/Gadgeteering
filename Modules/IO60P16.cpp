@@ -118,7 +118,7 @@ void io60p16::set_io_mode(unsigned char port, unsigned char pin, io_mode new_io_
 	this->change_resistor(port, mask, resistor_register);
 }
 
-void io60p16::set_pwm(unsigned char port, unsigned char pin, double duty_cycle, double frequency)
+void io60p16::set_pwm(unsigned char port, unsigned char pin, double frequency, double duty_cycle)
 {
 	unsigned char mask = 1 << pin;
 	unsigned char pwm = static_cast<unsigned char>((pin % 8) + (port - 6) * 8);
