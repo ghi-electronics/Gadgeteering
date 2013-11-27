@@ -291,7 +291,7 @@ void hub_ap5::set_pwm(pwm_channel channel, double frequency, double duty_cycle)
 		case pwm_channels::PWM_14: pin = hub_ap5::pins::P7_6; break;
 	}
 
-	this->io60_chip.set_pwm(GET_PORT(pin), GET_PIN(pin), duty_cycle, frequency);
+	this->io60_chip.set_pwm(GET_PORT(pin), GET_PIN(pin), frequency, duty_cycle);
 }
 
 bool hub_ap5::read_digital(cpu_pin pin)

@@ -19,7 +19,7 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
+	fez_medusa_s12
 	multicolor_led led1(1);
 	multicolor_led led2(1);
 

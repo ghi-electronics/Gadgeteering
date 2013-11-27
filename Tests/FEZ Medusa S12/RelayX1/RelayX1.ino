@@ -19,7 +19,7 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
+	fez_medusa_s12
 	relay_x1 relay(1);
 
 	while(true)

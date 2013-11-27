@@ -20,49 +20,40 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-button::button(unsigned char socket_number)
+button::button(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::X)), input(this->sock, 3, resistor_modes::PULL_UP), led(this->sock, 4)
 {
 	const socket& sock = mainboard->get_socket(socket_number, socket::types::X);
-
-	this->input = new digital_input(sock, 3, resistor_modes::PULL_UP);
-	this->led = new digital_output(sock, 4, false);
 
 	this->led_state = false;
 }
 
-button::~button()
-{
-	delete this->input;
-	delete this->led;
-}
-
 bool button::is_pressed()
 {
-	return !this->input->read();
+	return !this->input.read();
 }
 
 void button::turn_led_on()
 {
-	this->led->write(true);
+	this->led.write(true);
 	this->led_state = true;
 }
 
 void button::turn_led_off()
 {
-	this->led->write(false);
+	this->led.write(false);
 	this->led_state = false;
 }
 
 void button::set_led(bool state)
 {
 	this->led_state = state;
-	this->led->write(this->led_state);
+	this->led.write(this->led_state);
 }
 
 void button::toggle_led()
 {
 	this->led_state = !this->led_state;
-	this->led->write(this->led_state);
+	this->led.write(this->led_state);
 }
 
 bool button::is_led_on()

@@ -25,10 +25,11 @@ namespace gadgeteering
 		class amp_m35
 		{
 			const socket& sock;
-			interfaces::analog_output out;
 
 			public:
 				amp_m35(unsigned char socket_number);
+				
+				interfaces::analog_output out;
 		};
 	}
 }

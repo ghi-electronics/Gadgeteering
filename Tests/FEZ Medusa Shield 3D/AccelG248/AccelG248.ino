@@ -20,7 +20,7 @@ void setup()
 	Serial.begin(9600);
 
 	fez_medusa_shield_3d board;
-	accel_g248 accel(2);
+	accel_g248 accel(4);
 	int x, y, z;
 	
 	while (true)

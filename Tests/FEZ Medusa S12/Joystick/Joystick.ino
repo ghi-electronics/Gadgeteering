@@ -19,12 +19,12 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
+	fez_medusa_s12
 	joystick joy(1);
 
 	while(true)
 	{
-		Serial.print("X: "); Serial.print(joy.get_x()); Serial.print(" Y: "); Serial.print(joy.get_y();
+		Serial.print("X: "); Serial.print(joy.get_x()); Serial.print(" Y: "); Serial.print(joy.get_y());
 
 		double x = 0, y = 0;
 		joy.get_xy(x,y);

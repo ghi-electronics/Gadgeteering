@@ -2,8 +2,8 @@ GHI Electronics, LLC
 GHI Gadgeteering SDK
 
 ----------------------------------------
-SDK Version 2013 R1 Beta (v0.9.0)
-November 27th, 2013
+SDK Version 2013 R1 Beta (v0.4.0)
+November, 29th 2013
 ----------------------------------------
 
 Release Info
@@ -12,4 +12,5 @@ Release Info
 Known Issues
 -The executing program that controls the Lynx might sometimes deadlock inside the FTDI driver. The only way to close the program is to restart the computer. Serial communications are particularly prone to this deadlock.
 -Sockets 10 and 11 and the FEZ Medusa Shield 3D are only O type sockets and socket 8 is only a C type socket when running on an Arduino Due.
--Only the serial baud rate is configurable on the FEZ Medusa Shield when running the Ardunio Mega or the Arduino Due. 
+-Only the serial baud rate is configurable on the FEZ Medusa Shield when running the Ardunio Mega or the Arduino Due.
+-Many modules are not yet functional.

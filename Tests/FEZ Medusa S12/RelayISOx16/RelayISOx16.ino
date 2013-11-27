@@ -19,7 +19,7 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
+	fez_medusa_s12
 	relay_iso_x16 relays(1);
 
 	unsigned int index = 0;
@@ -32,9 +32,9 @@ void setup()
 
 	while (true)
 	{
-		relays.enable_relays((1); Serial.print(index));
+		relays.enable_relays((1 << index));
 		system::sleep(100);
-		relays.disable_relays((1); Serial.print(index));
+		relays.disable_relays((1 << index));
 
 		if (++index >= 16)
 			index = 0;

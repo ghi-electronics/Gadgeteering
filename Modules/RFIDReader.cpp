@@ -50,13 +50,16 @@ unsigned char rfid_reader::ascii_to_num(char upper, char lower)
 bool rfid_reader::check_id(unsigned char buffer[10])
 {
 	int bytes_to_read = this->serial.available();
-
+	int needed = rfid_reader::ID_LENGTH - this->found;
+	
 	if (bytes_to_read > 0)
 	{
-		this->found += this->serial.read(this->read_buffer + this->found, rfid_reader::ID_LENGTH - this->found);
+		this->found += this->serial.read(this->read_buffer + this->found, needed > bytes_to_read ? bytes_to_read : needed);
 
 		if (this->found == rfid_reader::ID_LENGTH)
 		{
+			this->found = 0;
+
 			if (this->read_buffer[0] != 2)
 				return false;
 

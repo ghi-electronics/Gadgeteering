@@ -33,12 +33,14 @@ namespace gadgeteering
 			static const unsigned char WHEELS = 8;
 
 			const socket& sock;
+			interfaces::digital_input int_port;
 			interfaces::digital_output reset_port;
 			devices::i2c device;
 
+			void clear_interrupt();
 			void reset();
 			void configure_spm();
-			void write_spm(unsigned char address, const unsigned char data[9]);
+			void write_spm(unsigned char address, const unsigned char data[8]);
 
 			public:
 				typedef unsigned char button;

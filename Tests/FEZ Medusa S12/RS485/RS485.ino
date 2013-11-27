@@ -19,8 +19,8 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
-	rs_485 serial_module(3);
+	fez_medusa_s12
+	rs_485 serial_module(5);
 
 	serial_module.serial.write("This is a test", 14);
 

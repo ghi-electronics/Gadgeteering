@@ -443,12 +443,12 @@ bool fez_medusa_mini::i2c_write(i2c_channel channel, unsigned char address, cons
 {
 	if (channel == i2c_channels::I2C_0)
 	{
-		Wire.beginTransmission(address);
+		if (send_start)
+			Wire.beginTransmission(address);
 
 		bool successful = Wire.write(buffer, length) == length;
 
-		if (send_stop)
-			Wire.endTransmission();
+		Wire.endTransmission(send_stop);
 
 		return successful;
 	}
@@ -465,7 +465,8 @@ bool fez_medusa_mini::i2c_read(i2c_channel channel, unsigned char address, unsig
 {
 	if (channel == i2c_channels::I2C_0)
 	{
-		Wire.requestFrom(static_cast<int>(address), static_cast<int>(length), static_cast<int>(send_stop));
+		if (send_start)
+			Wire.requestFrom(static_cast<int>(address), static_cast<int>(length), static_cast<int>(send_stop));
 
 		for (unsigned int i = 0; i < length; i++)
 		{

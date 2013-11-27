@@ -19,14 +19,14 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
+	fez_medusa_s12
 	light_sense sensor(1);
 
 	while(true)
 	{
 		Serial.print("Light reading: "); Serial.print(sensor.get_illuminance()); Serial.println("");
 		Serial.print("Light sensor percent: "); Serial.print(sensor.read_percentage()); Serial.println("");
-		Serial.print("Light sensor voltage input: "); Serial.print(sensor.read_voltage()); Serial.println("");); Serial.println("");
+		Serial.print("Light sensor voltage input: "); Serial.print(sensor.read_voltage()); Serial.println(""); Serial.println("");
 
 		system::sleep(500);
 	}

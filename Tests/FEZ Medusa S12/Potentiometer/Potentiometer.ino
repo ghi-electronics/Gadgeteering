@@ -19,14 +19,15 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
+	fez_medusa_s12
 	potentiometer pot(1);
 
 	while(true)
 	{
-		Serial.print(pot.read_percentage()); Serial.println("");
+		Serial.println(pot.read_percentage());
 
 		system::sleep(100);
 	}
+
 	return;
 }

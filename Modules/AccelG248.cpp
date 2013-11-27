@@ -20,7 +20,7 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-accel_g248::accel_g248(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::A)), i2c(this->sock.i2c, 0x1C, false)
+accel_g248::accel_g248(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::I)), i2c(this->sock.i2c, 0x1C, false)
 {
 	this->i2c.write_register(0x2A, 1);
 }

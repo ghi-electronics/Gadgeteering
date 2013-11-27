@@ -20,10 +20,11 @@ void setup()
 	Serial.begin(9600);
 
 	fez_medusa_shield_3d board;
-	radio_fm1 radio(1);
+	radio_fm1 radio(2);
 
 	radio.set_channel(98.7);
-	radio.set_volume(9);
+	radio.set_volume(15);
+	return;
 
 	while(true)
 	{

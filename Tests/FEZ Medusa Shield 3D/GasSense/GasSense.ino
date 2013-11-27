@@ -24,8 +24,9 @@ void setup()
 
 	sensor.set_heating_element(true);
 
-	while(true)
+	while(true) {
 		Serial.print(sensor.read_voltage()); Serial.println("");
+        }
 
 	sensor.set_heating_element(false);
 

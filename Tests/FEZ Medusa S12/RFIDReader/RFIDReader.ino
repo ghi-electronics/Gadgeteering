@@ -19,18 +19,19 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
-	rfid_reader rfid(3);
+	fez_medusa_s12
+	rfid_reader rfid(5);
 	
 	unsigned char buffer[11];
 	buffer[10] = '\0';
 
 	while (true)
 	{
-		if (rfid.check_id(buffer))
+		if (rfid.check_id(buffer)) {
 			Serial.print(reinterpret_cast<char*>(buffer)); Serial.println("");
-
-		system::sleep(250);
+                }
+                
+		system::sleep(1000);
 	}
 
 	return;

@@ -19,7 +19,7 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
+	fez_medusa_s12
 	pulse_in_out pulse(1);
 
 	pulse.set_pulse(1, 50, 20);

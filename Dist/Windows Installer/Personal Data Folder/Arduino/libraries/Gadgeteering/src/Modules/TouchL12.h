@@ -30,15 +30,16 @@ namespace gadgeteering
 			static const unsigned char CAP_STAT_LSB = 0x2;
 			static const unsigned char WHL_POS_MSB = 0x3;
 			static const unsigned char WHL_POS_LSB = 0x4;
-			static const unsigned char WHEELS = 12;
 
 			const socket& sock;
+			interfaces::digital_input int_port;
 			interfaces::digital_output reset_port;
 			devices::i2c device;
 
+			void clear_interrupt();
 			void reset();
 			void configure_spm();
-			void write_spm(unsigned char address, const unsigned char data[9]);
+			void write_spm(unsigned char address, const unsigned char data[8]);
 
 			public:
 				typedef unsigned char direction;

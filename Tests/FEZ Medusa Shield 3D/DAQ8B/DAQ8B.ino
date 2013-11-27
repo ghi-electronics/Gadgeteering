@@ -20,7 +20,7 @@ void setup()
 	Serial.begin(9600);
 
 	fez_medusa_shield_3d board;
-	daq_8b daq(4);
+	daq_8b daq(8);
 
 	while (true)
 	{

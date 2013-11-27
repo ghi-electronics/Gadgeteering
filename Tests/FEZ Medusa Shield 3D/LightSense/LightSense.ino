@@ -26,7 +26,7 @@ void setup()
 	{
 		Serial.print("Light reading: "); Serial.print(sensor.get_illuminance()); Serial.println("");
 		Serial.print("Light sensor percent: "); Serial.print(sensor.read_percentage()); Serial.println("");
-		Serial.print("Light sensor voltage input: "); Serial.print(sensor.read_voltage()); Serial.println("");); Serial.println("");
+		Serial.print("Light sensor voltage input: "); Serial.print(sensor.read_voltage()); Serial.println(""); Serial.println("");
 
 		system::sleep(500);
 	}

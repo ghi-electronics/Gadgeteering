@@ -19,7 +19,7 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
+	fez_medusa_s12
 	breakout_tb10 exposed_socket(1);
 
 	return;

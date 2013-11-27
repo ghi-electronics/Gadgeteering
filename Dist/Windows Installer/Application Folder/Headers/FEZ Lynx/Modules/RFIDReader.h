@@ -24,7 +24,7 @@ namespace gadgeteering
 	{
 		class rfid_reader
 		{
-			static const int ID_LENGTH = 12;
+			static const int ID_LENGTH = 13;
 
 			const socket& sock;
 			devices::serial serial;

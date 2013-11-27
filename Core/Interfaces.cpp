@@ -333,8 +333,8 @@ pwm_output::pwm_output(unsigned char socket_number, socket_pin_number pin_number
 
 void pwm_output::set(double frequency, double duty_cycle)
 {
-	this->duty_cycle = duty_cycle;
 	this->frequency = frequency;
+	this->duty_cycle = duty_cycle;
 
 	if (!this->sock.pwm_output_indirector)
 	{
@@ -342,7 +342,7 @@ void pwm_output::set(double frequency, double duty_cycle)
 	}
 	else
 	{
-		this->sock.pwm_output_indirector->set(this->channel, this->duty_cycle, this->frequency);
+		this->sock.pwm_output_indirector->set(this->channel, this->frequency, this->duty_cycle);
 	}
 }
 

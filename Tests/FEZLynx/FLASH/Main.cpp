@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 
 	flash_chip.erase_sector(0x00, 1);
 
-	const char* str = "This is a test";
+	const char* str = "This is a tast";
 	flash_chip.write_data(0x00, reinterpret_cast<const unsigned char*>(str), 15);
 
 	while(flash_chip.write_in_progress())

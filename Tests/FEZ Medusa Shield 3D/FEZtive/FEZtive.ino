@@ -20,10 +20,11 @@ void setup()
 	Serial.begin(9600);
 
 	fez_medusa_shield_3d board;
-	feztive fez(4);
+	feztive fez(8);
 
 	fez.initialize();
-	fez.set_led(color::RED, 1);
+	fez.set_led(color::RED, 2);
+	fez.set_led(color::GREEN, 1);
 
 	return;
 }

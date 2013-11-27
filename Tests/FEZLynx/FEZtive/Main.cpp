@@ -17,6 +17,7 @@ int main(int argc, char** argv)
 
 	fez.initialize();
 	fez.set_led(color::RED, 1);
+	fez.set_led(color::BLUE, 2);
 
 	return 0;
 }

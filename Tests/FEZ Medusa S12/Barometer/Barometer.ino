@@ -19,8 +19,8 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
-	barometer bar(2);
+	fez_medusa_s12
+	barometer bar(4);
 
 	while(true)
 	{

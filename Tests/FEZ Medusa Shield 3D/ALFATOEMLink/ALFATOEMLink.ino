@@ -20,7 +20,7 @@ void setup()
 	Serial.begin(9600);
 
 	fez_medusa_shield_3d board;
-	alfat_oem_link alfat(4);
+	alfat_oem_link alfat(8);
 
 	unsigned char major, minor, rev;
 	alfat.get_version(major, minor, rev);

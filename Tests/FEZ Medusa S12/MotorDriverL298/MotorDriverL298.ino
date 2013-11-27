@@ -20,8 +20,8 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
-	hub_ap5 hub(0);
+	fez_medusa_s12
+	hub_ap5 hub(4);
 	motor_driver_l298 driver(hub.socket_4);
 
 	driver.move_motor(motor_driver_l298::motors::MOTOR_1, 25);

@@ -1233,6 +1233,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C76329206E1F46E8898949E9B1CF4683"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C849E286BA87438089BCCF434DB2BF5B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -5768,6 +5774,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C76329206E1F46E8898949E9B1CF4683"
+            {
+            "SourcePath" = "8:Application Folder\\Examples.zip"
+            "TargetName" = "8:Examples.zip"
+            "Tag" = "8:"
+            "Folder" = "8:_633A32A4D44E4083B2EB24A542F0640E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C849E286BA87438089BCCF434DB2BF5B"
             {
             "SourcePath" = "8:Personal Data Folder\\Arduino\\libraries\\Gadgeteering\\src\\Modules\\LEDMatrix.h"
@@ -7084,17 +7110,6 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_115BAFFE02AB4DA098192896AA086747"
-                    {
-                    "Name" = "8:Examples"
-                    "AlwaysCreate" = "11:FALSE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_E741884F36654779B20E6C613AA234CD"
-                        "Folders"
-                        {
-                        }
-                    }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_585D6108829D45088F79983842C381F6"
                     {
                     "Name" = "8:Installation"
@@ -7575,15 +7590,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:GHI Gadgeteering SDK"
-        "ProductCode" = "8:{94367716-579B-43F8-988C-6BF2BA0C8AA6}"
-        "PackageCode" = "8:{FFA928B4-07D3-494D-A70A-F6CA90A958C6}"
+        "ProductCode" = "8:{4F00C9BA-BDD1-4DE4-B0B4-49601D5906C9}"
+        "PackageCode" = "8:{FC2EA84E-ACA6-41D0-90FD-90273BAB181B}"
         "UpgradeCode" = "8:{A2A40B09-4504-4CCE-BFAC-E873E8EE65E1}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:0.0.3"
+        "ProductVersion" = "8:0.0.4"
         "Manufacturer" = "8:GHI Electronics"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.ghielectronics.com/support"

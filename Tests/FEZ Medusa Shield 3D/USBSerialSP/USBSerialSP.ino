@@ -20,7 +20,7 @@ void setup()
 	Serial.begin(9600);
 
 	fez_medusa_shield_3d board;
-	usb_serial_sp serial_module(3);
+	usb_serial_sp serial_module(5);
 
 	serial_module.configure(serial_configuration(9600, serial_configuration::parities::NONE, serial_configuration::stop_bits::ONE, 8));
 

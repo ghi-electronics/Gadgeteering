@@ -20,7 +20,7 @@ void setup()
 	Serial.begin(9600);
 
 	fez_medusa_shield_3d board;
-	rs_485 serial_module(3);
+	rs_485 serial_module(5);
 
 	serial_module.serial.write("This is a test", 14);
 

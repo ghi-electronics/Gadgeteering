@@ -27,6 +27,7 @@ void setup()
 	while (true)
 	{
 		led.draw_bitmap(buffer1);
+		system::sleep(250);
 		led.draw_bitmap(buffer2);
 		system::sleep(250);
 	}

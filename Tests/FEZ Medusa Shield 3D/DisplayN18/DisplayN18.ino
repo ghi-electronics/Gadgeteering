@@ -20,7 +20,7 @@ void setup()
 	Serial.begin(9600);
 
 	fez_medusa_shield_3d board;
-	display_n18 disp(4);
+	display_n18 disp(8);
 
 	disp.draw_circle(10, 10, 10, 0x07E0);
 	disp.draw_rect(25, 25, 50, 50, 0x001F);

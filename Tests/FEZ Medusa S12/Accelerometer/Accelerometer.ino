@@ -19,8 +19,8 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
-	accelerometer accel(2);
+	fez_medusa_s12
+	accelerometer accel(4);
 
 	while (true)
 	{

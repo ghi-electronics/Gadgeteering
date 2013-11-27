@@ -18,9 +18,9 @@ void loop()
 void setup()
 {
 	Serial.begin(9600);
-
-	fez_medusa_s12 board;
-	io60p16 io(1);
+       
+	fez_medusa_s12
+	io60p16 io(5);
 
 	io.set_io_mode(2, 2, io_modes::DIGITAL_OUTPUT, resistor_modes::NONE);
 

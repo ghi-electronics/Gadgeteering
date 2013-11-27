@@ -19,8 +19,8 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
-	display_n18 disp(4);
+	fez_medusa_s12
+	display_n18 disp(8);
 
 	disp.draw_circle(10, 10, 10, 0x07E0);
 	disp.draw_rect(25, 25, 50, 50, 0x001F);

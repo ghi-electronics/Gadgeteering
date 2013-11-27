@@ -19,7 +19,7 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
+	fez_medusa_s12
 	temp_humidity sensor(1);
 
 	double temp = 0.0, humid = 0.0;

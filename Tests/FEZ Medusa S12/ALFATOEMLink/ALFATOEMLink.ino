@@ -19,8 +19,8 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
-	alfat_oem_link alfat(4);
+	fez_medusa_s12
+	alfat_oem_link alfat(8);
 
 	unsigned char major, minor, rev;
 	alfat.get_version(major, minor, rev);

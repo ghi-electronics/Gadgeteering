@@ -24,7 +24,7 @@ void setup()
 
 	while(true)
 	{
-		std::Serial.print("Moisture level: "); Serial.print(sensor.get_moisture_reading(2)); Serial.print(std::endl;
+		Serial.print("Moisture level: "); Serial.print(sensor.get_moisture_reading(2)); Serial.println("");
 		system::sleep(100);
 	}
 

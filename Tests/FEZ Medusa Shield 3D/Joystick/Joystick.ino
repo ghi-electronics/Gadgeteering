@@ -24,7 +24,7 @@ void setup()
 
 	while(true)
 	{
-		Serial.print("X: "); Serial.print(joy.get_x()); Serial.print(" Y: "); Serial.print(joy.get_y();
+		Serial.print("X: "); Serial.print(joy.get_x()); Serial.print(" Y: "); Serial.print(joy.get_y());
 
 		double x = 0, y = 0;
 		joy.get_xy(x,y);

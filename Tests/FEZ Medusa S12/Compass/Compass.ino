@@ -19,8 +19,8 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
-	compass comp(3);
+	fez_medusa_s12
+	compass comp(4);
 
 	while(true)
 	{

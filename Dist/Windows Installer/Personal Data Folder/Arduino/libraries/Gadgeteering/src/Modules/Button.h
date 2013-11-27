@@ -24,13 +24,13 @@ namespace gadgeteering
 	{
 		class button
 		{
-			interfaces::digital_input* input;
-			interfaces::digital_output* led;
+			const socket& sock;
+			interfaces::digital_input input;
+			interfaces::digital_output led;
 			bool led_state;
 
 			public:
 				button(unsigned char socket_number);
-				~button();
 
 				bool is_pressed();
 				void turn_led_on();

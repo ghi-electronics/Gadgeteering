@@ -20,7 +20,7 @@ void setup()
 	Serial.begin(9600);
 
 	fez_medusa_shield_3d board;
-	accelerometer accel(2);
+	accelerometer accel(4);
 
 	while (true)
 	{

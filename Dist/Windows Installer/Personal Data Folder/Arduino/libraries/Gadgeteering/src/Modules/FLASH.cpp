@@ -29,7 +29,7 @@ flash::flash(unsigned char socket_number) : sock(mainboard->get_socket(socket_nu
 
 bool flash::write_enable()
 {
-	unsigned char data = CMD_WRITE_ENABLE;
+	unsigned char data = flash::CMD_WRITE_ENABLE;
 	unsigned char result = 0;
 
 	this->status_led.write(true);
@@ -38,8 +38,7 @@ bool flash::write_enable()
 
 	data = flash::CMD_READ_STATUS;
 
-	this->spi.write(&data, 1);
-	this->spi.read(&result, 1, true);
+	this->spi.write_then_read(&data, &result, 1, 1);
 
 	this->status_led.write(false);
 
@@ -52,7 +51,7 @@ void flash::get_indentification(unsigned char received[4])
 
 	this->status_led.write(true);
 
-	this->spi.write_then_read(&command, received, 1, 4, true);
+	this->spi.write_then_read(&command, received, 1, 4);
 
 	if ((received[1] == 0xFF && received[2] == 0xFF && received[3] == 0xFF) || (received[1] == 0 && received[2] == 0 && received[3] == 0))
 		panic_specific(errors::MODULE_ERROR, 1);
@@ -67,8 +66,7 @@ bool flash::write_in_progress()
 	unsigned char read_data = 0xFF;
 	unsigned char write_data = flash::CMD_READ_STATUS;
 
-	this->spi.write(&write_data, 1, false);
-	this->spi.read(&read_data, 1, true);
+	this->spi.write_then_read(&write_data, &read_data, 1, 1);
 
 	this->status_led.write(false);
 
@@ -83,7 +81,7 @@ void flash::erase_chip()
 		system::sleep(0);
 
 	unsigned char to_write = flash::CMD_ERASE_CHIP;
-	this->spi.write(&to_write, 1, true);
+	this->spi.write(&to_write, 1);
 
 	while (this->write_in_progress() == true)
 		system::sleep(0);
@@ -112,7 +110,7 @@ bool flash::erase_block(unsigned int block, unsigned int number)
 		write_data[2] = static_cast<unsigned char>(address >> 8);
 		write_data[3] = static_cast<unsigned char>(address >> 0);
 
-		this->spi.write(write_data, 4, true);
+		this->spi.write(write_data, 4);
 
 		address += flash::BLOCK_SIZE;
 
@@ -146,7 +144,7 @@ bool flash::erase_sector(unsigned int sector, unsigned int number)
 		write_data[2] = static_cast<unsigned char>(address >> 8);
 		write_data[3] = static_cast<unsigned char>(address >> 0);
 
-		this->spi.write(write_data, 4, true);
+		this->spi.write(write_data, 4);
 
 		address += flash::SECTOR_SIZE;
 
@@ -185,7 +183,7 @@ bool flash::write_data(unsigned long address, const unsigned char* data, unsigne
 
 			memcpy(write_data + 4, data + i * flash::PAGE_SIZE, flash::PAGE_SIZE);
 
-			this->spi.write_read(write_data, NULL, flash::PAGE_SIZE + 4, true);
+			this->spi.write(write_data, flash::PAGE_SIZE + 4);
 
 			while (this->write_in_progress() == true)
 				system::sleep(0);
@@ -209,7 +207,7 @@ bool flash::write_data(unsigned long address, const unsigned char* data, unsigne
 
 		memcpy(write_data + 4, data + i * flash::PAGE_SIZE, length);
 
-		this->spi.write_read(write_data, NULL, length + 4, true);
+		this->spi.write(write_data, length + 4);
 
 		while (this->write_in_progress() == true)
 			system::sleep(0);
@@ -242,7 +240,7 @@ bool flash::read_data(unsigned long address, unsigned char* data, unsigned int l
 	write_data[2] = static_cast<unsigned char>(address >> 8);
 	write_data[3] = static_cast<unsigned char>(address >> 0);
 
-	this->spi.write_then_read(write_data, data, 4, length, true);
+	this->spi.write_then_read(write_data, data, 4, length);
 
 	this->status_led.write(false);
 
@@ -267,7 +265,7 @@ bool flash::read_data_fast(unsigned long address, unsigned char* data, unsigned 
 	write_data[3] = static_cast<unsigned char>(address >> 0);
 	write_data[4] = 0x00;
 
-	this->spi.write_then_read(write_data, data, 4, length, true);
+	this->spi.write_then_read(write_data, data, 4, length);
 
 	this->status_led.write(false);
 

@@ -1,10 +1,11 @@
+#include <iostream>
+
 #include <Gadgeteering.h>
 
 #include <Mainboards/FEZLynxS4.h>
 #include <Modules/Moisture.h>
 
-#include <iostream>
-
+using namespace std;
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
 using namespace gadgeteering::modules;
@@ -16,7 +17,7 @@ int main(int argc, char** argv)
 
 	while(true)
 	{
-		std::cout << "Moisture level: " << sensor.get_moisture_reading(2) << std::endl;
+		cout << "Moisture level: " << sensor.get_moisture_reading(2) << endl;
 		system::sleep(100);
 	}
 

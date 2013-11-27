@@ -4,30 +4,22 @@
 #include <Gadgeteering.h>
 
 #include <Mainboards/FEZMedusaShield3D.h>
-#include <Modules/Potentiometer.h>
+#include <Modules/Button.h>
 
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
 using namespace gadgeteering::modules;
 
-void loop()
-{
-
-}
+fez_medusa_shield_3d board;
+button b(1);
 
 void setup()
 {
-	Serial.begin(9600);
+  
+}
 
-	fez_medusa_shield_3d board;
-	potentiometer pot(1);
-
-	while(true)
-	{
-		Serial.println(pot.read_percentage());
-
-		system::sleep(100);
-	}
-
-	return;
+void loop()
+{
+  b.set_led(b.is_pressed());
+  system::sleep(50);
 }

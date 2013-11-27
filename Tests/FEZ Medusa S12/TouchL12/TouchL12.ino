@@ -19,8 +19,8 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
-	touch_l12 touch(3);
+	fez_medusa_s12
+	touch_l12 touch(5);
 
 	while (true)
 	{

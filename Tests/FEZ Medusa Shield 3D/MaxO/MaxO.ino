@@ -20,7 +20,7 @@ void setup()
 	Serial.begin(9600);
 
 	fez_medusa_shield_3d board;
-	max_o maxo(4);
+	max_o maxo(8);
 
 	maxo.set_number_of_boards(1);
 
@@ -30,8 +30,12 @@ void setup()
 	for(int i = 0; i < 32; i++)
 		maxo.write_pin(1, i, true);
 	
+        system::sleep(5000);
+
 	for(int i = 0; i < 32; i++)
 		maxo.write_pin(1, i, false);
+	
+        system::sleep(5000);
 
 	maxo.disable_outputs();
 

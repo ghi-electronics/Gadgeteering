@@ -19,11 +19,13 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
+	fez_medusa_s12
 	current_acs712 sensor(1);
 
 	while(true)
+        {
 		Serial.print(sensor.read_ac_current()); Serial.print(" "); Serial.print(sensor.read_dc_current()); Serial.println("");
+        }
 
 	return;
 }

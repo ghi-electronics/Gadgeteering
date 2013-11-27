@@ -110,7 +110,7 @@ namespace gadgeteering
 				/// @param pin_number The target pin
 				/// @param duty_cycle The desired duty cycle
 				/// @param frequency The desired frequency
-				virtual void set(socket_pin_number pin_number, double duty_cycle, double frequency) = 0;
+				virtual void set(socket_pin_number pin_number, double frequency, double duty_cycle) = 0;
 		};
 	}
 

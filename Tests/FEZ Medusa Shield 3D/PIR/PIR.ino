@@ -25,7 +25,7 @@ void setup()
 	while(true)
 	{
 		if(motion_sensor.is_motion_detected())
-			Serial.print("Movement detected"); Serial.println("");
+			Serial.println("Movement detected");
 
 		system::sleep(10);
 	}

@@ -19,7 +19,7 @@ limitations under the License.
 using namespace gadgeteering;
 using namespace gadgeteering::modules;
 
-feztive::feztive(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::S)), spi(this->sock.spi, spi_configuration(true, 0, 0, false, true, 1000, false))
+feztive::feztive(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::S)), spi(this->sock.spi, spi_configuration(true, 0, 0, false, true, 1000), this->sock, 6)
 {
 	this->leds = NULL;
 	this->zeros = NULL;
@@ -49,9 +49,7 @@ void feztive::initialize(int num_leds, unsigned int spi_clock)
 	this->zeros = new unsigned char[this->zero_len];
 
 	for (unsigned int i = 0; i < this->zero_len; i++)
-	{
 		this->zeros[i] = 0x00;
-	}
 }
 
 void feztive::set_all(color c)
@@ -76,7 +74,7 @@ void feztive::set_all(color c)
 		this->spi.write(colorarr, 3);
 	}
 
-	this->spi.write(this->zeros, 1, true);
+	this->spi.write(this->zeros, 1);
 }
 
 void feztive::set_all(color *arr)
@@ -96,7 +94,7 @@ void feztive::set_all(color *arr)
 		this->spi.write(c, 1);
 	}
 
-	this->spi.write(this->zeros, 1, true);
+	this->spi.write(this->zeros, 1);
 }
 
 void feztive::set_led(color c, int num_led, bool redraw)
@@ -131,7 +129,7 @@ void feztive::redraw()
 		this->spi.write(c, 3);
 	}
 
-	this->spi.write(this->zeros, 1, true);
+	this->spi.write(this->zeros, 1);
 }
 
 void feztive::get_color_for_render(color c, unsigned char& g, unsigned char& r, unsigned char& b)

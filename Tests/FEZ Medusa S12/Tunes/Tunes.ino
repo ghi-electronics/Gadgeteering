@@ -20,11 +20,13 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
-	hub_ap5 hub(0);
-	tunes piezo(hub.socket_4);
+	fez_medusa_s12
+	hub_ap5 hub(5);
+	tunes piezo(hub.socket_8);
 	
-	piezo.set(500, 0.5);
+	piezo.set(1000, 0.25);
+
+        system::sleep(100000);
 	
 	return;
 }

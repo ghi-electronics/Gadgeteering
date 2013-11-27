@@ -45,7 +45,7 @@ int distance_us3::get_distance_in_centimeters(unsigned int samples)
 			i--;
 
 			if (error_count > ACCEPTABLE_ERROR_RATE)
-				panic(errors::MODULE_ERROR);
+				return 0;
 		}
 
 	}

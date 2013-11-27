@@ -19,8 +19,8 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
-	daq_8b daq(4);
+	fez_medusa_s12
+	daq_8b daq(8);
 
 	while (true)
 	{

@@ -32,9 +32,9 @@ void setup()
 
 	while (true)
 	{
-		relays.enable_relays((1); Serial.print(index));
+		relays.enable_relays((1 << index));
 		system::sleep(100);
-		relays.disable_relays((1); Serial.print(index));
+		relays.disable_relays((1 << index));
 
 		if (++index >= 16)
 			index = 0;

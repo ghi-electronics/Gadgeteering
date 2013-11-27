@@ -20,7 +20,7 @@ void setup()
 	Serial.begin(9600);
 
 	fez_medusa_shield_3d board;
-	touch_l12 touch(3);
+	touch_l12 touch(5);
 
 	while (true)
 	{

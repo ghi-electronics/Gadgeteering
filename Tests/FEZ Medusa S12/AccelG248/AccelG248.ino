@@ -19,8 +19,8 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
-	accel_g248 accel(2);
+	fez_medusa_s12
+	accel_g248 accel(4);
 	int x, y, z;
 	
 	while (true)

@@ -19,13 +19,14 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
+	fez_medusa_s12
 	gas_sense sensor(1);
 
 	sensor.set_heating_element(true);
 
-	while(true)
+	while(true) {
 		Serial.print(sensor.read_voltage()); Serial.println("");
+        }
 
 	sensor.set_heating_element(false);
 

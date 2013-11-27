@@ -20,7 +20,7 @@ void setup()
 	Serial.begin(9600);
 
 	fez_medusa_shield_3d board;
-	barometer bar(2);
+	barometer bar(4);
 
 	while(true)
 	{

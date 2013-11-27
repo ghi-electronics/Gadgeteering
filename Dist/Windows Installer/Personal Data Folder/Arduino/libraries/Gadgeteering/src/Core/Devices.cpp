@@ -41,13 +41,13 @@ i2c::i2c(const socket& sock, unsigned char address, bool uses_hardware_i2c)
 	if (sock.i2c == i2c_channels::NONE && uses_hardware_i2c)
 		panic(errors::SOCKET_DOES_NOT_SUPPORT_THIS_CHANNEL);
 
-	this->channel = sock.i2c;
 	this->address = address;
 
 	if (uses_hardware_i2c)
 	{
-		mainboard->i2c_begin(this->channel);
+		this->channel = sock.i2c;
 		this->soft_i2c = NULL;
+		mainboard->i2c_begin(this->channel);
 	}
 	else
 	{
@@ -95,14 +95,7 @@ bool i2c::read(unsigned char* buffer, unsigned int length, bool send_start, bool
 
 bool i2c::write_read(const unsigned char* write_buffer, unsigned int write_length, unsigned char* read_buffer, unsigned int read_length)
 {
-	bool w = true, r = true;
-
-	w = this->write(write_buffer, write_length, true, read_length == 0);
-
-	if (read_length != 0)
-		r = this->read(read_buffer, read_length, true, true);
-	
-	return w && r;
+	return this->write(write_buffer, write_length, true, false) && this->read(read_buffer, read_length, true, true);
 }
 
 bool i2c::write_register(unsigned char address, unsigned char value)

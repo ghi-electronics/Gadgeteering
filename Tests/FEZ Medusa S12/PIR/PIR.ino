@@ -19,13 +19,13 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
+	fez_medusa_s12
 	pir motion_sensor(1);
 
 	while(true)
 	{
 		if(motion_sensor.is_motion_detected())
-			Serial.print("Movement detected"); Serial.println("");
+			Serial.println("Movement detected");
 
 		system::sleep(10);
 	}

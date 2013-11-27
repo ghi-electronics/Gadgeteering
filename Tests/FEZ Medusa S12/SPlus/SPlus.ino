@@ -4,7 +4,7 @@
 #include <Gadgeteering.h>
 
 #include <Mainboards/FEZMedusaS12.h>
-#include <Modules/FLASH.h>
+#include <Modules/DisplayN18.h>
 #include <Modules/SPlus.h>
 
 using namespace gadgeteering;
@@ -20,39 +20,33 @@ void setup()
 {
 	Serial.begin(9600);
 
-	fez_medusa_s12 board;
-	s_plus s(4, 1);
-	flash f1(s.socket_1);
-	flash f2(s.socket_2);
+	fez_medusa_s12
+	s_plus s(8, 1);
+	display_n18 f1(s.socket_1);
+	display_n18 f2(s.socket_2);
 
-	unsigned char id[4];
-	const char* str = "Hello, World!";
-	unsigned char buffer[14];
+	f1.draw_circle(10, 10, 10, 0x07E0);
+	f1.draw_rect(25, 25, 50, 50, 0x001F);
+	f1.draw_line(50, 50, 75, 75, 0xF800);
+	
+	f1.fill_circle(50, 10, 10, 0x07E0);
+	f1.fill_rect(50, 25, 10, 10, 0x001F);
 
-	f1.get_indentification(id);
-	Serial.print(static_cast<int>(id[0])); Serial.print(" "); Serial.print(static_cast<int>(id[1])); Serial.print(" "); Serial.print(static_cast<int>(id[2])); Serial.print(" "); Serial.print(static_cast<int>(id[3])); Serial.println("");
-
-	f1.erase_sector(0x00, 1);
-	f1.write_data(0x00, reinterpret_cast<const unsigned char*>(str), 14);
-
-	while (f1.write_in_progress())
-		system::sleep(10);
-
-	f1.read_data(0x00, buffer, 14);
-	Serial.print(buffer); Serial.println("");
+	f1.draw_string(5, 80, "Hello", 0x001F, 0x07E0, 2);
+	f1.draw_string(5, 96, "World", 0x001F, 0x07E0, 2);
 
 
-	f2.get_indentification(id);
-	Serial.print(static_cast<int>(id[0])); Serial.print(" "); Serial.print(static_cast<int>(id[1])); Serial.print(" "); Serial.print(static_cast<int>(id[2])); Serial.print(" "); Serial.print(static_cast<int>(id[3])); Serial.println("");
 
-	f2.erase_sector(0x00, 1);
-	f2.write_data(0x00, reinterpret_cast<const unsigned char*>(str), 14);
+	f2.draw_circle(10, 10, 10, 0x07E0);
+	f2.draw_rect(25, 25, 50, 50, 0x001F);
+	f2.draw_line(50, 50, 75, 75, 0xF800);
+	
+	f2.fill_circle(50, 10, 10, 0x07E0);
+	f2.fill_rect(50, 25, 10, 10, 0x001F);
 
-	while (f2.write_in_progress())
-		system::sleep(10);
+	f2.draw_string(5, 80, "Hello", 0x001F, 0x07E0, 2);
+	f2.draw_string(5, 96, "World", 0x001F, 0x07E0, 2);
 
-	f2.read_data(0x00, buffer, 14);
-	Serial.print(buffer); Serial.println("");
 
 
 	system::sleep(5000);
