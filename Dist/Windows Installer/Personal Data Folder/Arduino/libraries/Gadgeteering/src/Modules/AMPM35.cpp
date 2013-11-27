@@ -20,7 +20,7 @@ using namespace gadgeteering;
 using namespace gadgeteering::modules;
 using namespace gadgeteering::interfaces;
 
-amp_m35::amp_m35(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::O)), out(this->sock, 5)
+amp_m35::amp_m35(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::O)), out(this->sock)
 {
 
 }

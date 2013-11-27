@@ -2,15 +2,15 @@
 
 #include <Gadgeteering.h>
 
-#include <Mainboards\FEZLynxS4.h>
-#include <Modules\Thermocouple.h>
+#include <Mainboards/FEZLynxS4.h>
+#include <Modules/Thermocouple.h>
 
 using namespace std;
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
 using namespace gadgeteering::modules;
 
-int main()
+int main(int argc, char** argv)
 {
 	fez_lynx_s4 board;
 	thermocouple therm(1);

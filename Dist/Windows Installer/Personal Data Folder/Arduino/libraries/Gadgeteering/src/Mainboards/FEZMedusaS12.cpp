@@ -23,18 +23,16 @@ using namespace gadgeteering::mainboards;
 #define EXTENDER_PORT(cpu_pin_number) ((cpu_pin_number & 0x70) >> 4)
 #define EXTENDER_PIN(cpu_pin_number) (cpu_pin_number & 0x0F)
 
-fez_medusa_s12::fez_medusa_s12() : fez_medusa_mini()
+fez_medusa_s12::fez_medusa_s12() : fez_medusa_mini(), extender(this->get_socket(3))
 {
 	mainboard = this;
 
 	this->create_sockets();
-
-	this->extender = new modules::io60p16(this->get_socket(3));
 }
 
 fez_medusa_s12::~fez_medusa_s12()
 {
-	delete this->extender;
+
 }
 
 void fez_medusa_s12::create_sockets()
@@ -154,10 +152,10 @@ void fez_medusa_s12::create_sockets()
 
 void fez_medusa_s12::set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_resistor_mode)
 {
-	!IS_EXTENDER_PIN(pin) ? fez_medusa_mini::set_io_mode(pin, new_io_mode, new_resistor_mode) : this->extender->set_io_mode(EXTENDER_PORT(pin), EXTENDER_PIN(pin), new_io_mode, new_resistor_mode);
+	!IS_EXTENDER_PIN(pin) ? fez_medusa_mini::set_io_mode(pin, new_io_mode, new_resistor_mode) : this->extender.set_io_mode(EXTENDER_PORT(pin), EXTENDER_PIN(pin), new_io_mode, new_resistor_mode);
 }
 
-void fez_medusa_s12::set_pwm(pwm_channel channel, double duty_cycle, double frequency)
+void fez_medusa_s12::set_pwm(pwm_channel channel, double frequency, double duty_cycle)
 {
 	cpu_pin pin;
 
@@ -184,17 +182,18 @@ void fez_medusa_s12::set_pwm(pwm_channel channel, double duty_cycle, double freq
 		case pwm_channels::PWM_15: pin = fez_medusa_s12::pins::P7_4; break;
 		case pwm_channels::PWM_16: pin = fez_medusa_s12::pins::P7_5; break;
 		case pwm_channels::PWM_17: pin = fez_medusa_s12::pins::P7_6; break;
+		default: panic(errors::PWM_NOT_SUPPORTED);
 	}
 
-	this->extender->set_pwm(EXTENDER_PORT(pin), EXTENDER_PIN(pin), duty_cycle, frequency);
+	this->extender.set_pwm(EXTENDER_PORT(pin), EXTENDER_PIN(pin), duty_cycle, frequency);
 }
 
 bool fez_medusa_s12::read_digital(cpu_pin pin)
 {
-	return !IS_EXTENDER_PIN(pin) ? fez_medusa_mini::read_digital(pin) : this->extender->read_digital(EXTENDER_PORT(pin), EXTENDER_PIN(pin));
+	return !IS_EXTENDER_PIN(pin) ? fez_medusa_mini::read_digital(pin) : this->extender.read_digital(EXTENDER_PORT(pin), EXTENDER_PIN(pin));
 }
 
 void fez_medusa_s12::write_digital(cpu_pin pin, bool value)
 {
-	!IS_EXTENDER_PIN(pin) ? fez_medusa_mini::write_digital(pin, value) : this->extender->write_digital(EXTENDER_PORT(pin), EXTENDER_PIN(pin), value);
+	!IS_EXTENDER_PIN(pin) ? fez_medusa_mini::write_digital(pin, value) : this->extender.write_digital(EXTENDER_PORT(pin), EXTENDER_PIN(pin), value);
 }

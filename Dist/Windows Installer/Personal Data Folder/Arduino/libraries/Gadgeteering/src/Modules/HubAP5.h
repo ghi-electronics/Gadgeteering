@@ -91,7 +91,7 @@ namespace gadgeteering
 				public:
 					indirected_pwm_output(const socket& sock, hub_ap5& hub);
 
-					virtual void set(pwm_channel channel, double duty_cycle, double frequency);
+					virtual void set(pwm_channel channel, double frequency, double duty_cycle);
 			};
 
 			public:
@@ -182,7 +182,7 @@ namespace gadgeteering
 				const unsigned char socket_8;
 
 				void set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_resistor_mode);
-				void set_pwm(pwm_channel channel, double duty_cycle, double frequency);
+				void set_pwm(pwm_channel channel, double frequency, double duty_cycle);
 				bool read_digital(cpu_pin pin);
 				void write_digital(cpu_pin pin, bool value);
 				double read_analog(analog_channel channel);

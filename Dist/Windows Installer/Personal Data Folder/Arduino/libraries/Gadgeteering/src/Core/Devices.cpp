@@ -153,6 +153,7 @@ spi::spi(spi_channel channel, spi_configuration configuration, const socket& cs_
 
 	this->config = configuration;
 	this->channel = channel;
+	this->config.uses_chip_select = true;
 	this->config.chip_select = cs_socket.pins[cs_pin_number];
 	
 	mainboard->spi_begin(this->channel, config);
@@ -176,6 +177,7 @@ spi::spi(const socket& spi_socket, spi_configuration configuration, const socket
 
 	this->config = configuration;
 	this->channel = spi_socket.spi;
+	this->config.uses_chip_select = true;
 	this->config.chip_select = cs_socket.pins[cs_pin_number];
 
 	mainboard->spi_begin(this->channel, config);

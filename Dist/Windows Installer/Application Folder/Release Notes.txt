@@ -11,4 +11,5 @@ Release Info
 
 Known Issues
 -The executing program that controls the Lynx might sometimes deadlock inside the FTDI driver. The only way to close the program is to restart the computer. Serial communications are particularly prone to this deadlock.
--Hardware I2C does not work on the Medusa platform. It currently uses software I2C only.
+-Sockets 10 and 11 and the FEZ Medusa Shield 3D are only O type sockets and socket 8 is only a C type socket when running on an Arduino Due.
+-Only the serial baud rate is configurable on the FEZ Medusa Shield when running the Ardunio Mega or the Arduino Due. 

@@ -33,6 +33,7 @@ namespace gadgeteering
 
 				fez_medusa_mini(double max_analog_voltage, bool create_soft_i2c);
 
+				void clear_sockets();
 				void create_sockets();
 				unsigned char get_serial_config(serial_configuration& config);
 
@@ -77,7 +78,7 @@ namespace gadgeteering
 				virtual bool read_digital(cpu_pin pin);
 				virtual void write_analog(analog_channel channel, double voltage_proportion);
 				virtual double read_analog(analog_channel channel);
-				virtual void set_pwm(pwm_channel channel, double duty_cycle, double frequency);
+				virtual void set_pwm(pwm_channel channel, double frequency, double duty_cycle);
 
 				void set_pwm(cpu_pin pin, double duty_cycle, double frequency, double duration); //socket 2 only
 

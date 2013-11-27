@@ -60,11 +60,16 @@ fez_medusa_mini::fez_medusa_mini(double max_analog_voltage) : base_mainboard(max
 fez_medusa_mini::~fez_medusa_mini() 
 {
 	if (this->i2c1)
-	{
 		delete this->i2c1;
-		delete this->i2c2;
-	}
 
+	if (this->i2c2)
+		delete this->i2c2;
+
+	this->clear_sockets();
+}
+
+void fez_medusa_mini::clear_sockets()
+{
 	socket_list_node* current = this->sockets;
 	socket_list_node* next = NULL;
 
@@ -74,11 +79,13 @@ fez_medusa_mini::~fez_medusa_mini()
 		delete current;
 		current = next;
 	}
+
+	this->sockets = NULL;
 }
 
 void fez_medusa_mini::create_sockets()
 {
-	socket s1(1, socket::types::I | socket::types::S | socket::types::Y | socket::types::X);
+	socket s1(1, socket::types::I | socket::types::S | socket::types::Y);
 	s1.pins[3] = fez_medusa_mini::pins::IO7;
 	s1.pins[4] = fez_medusa_mini::pins::IO8;
 	s1.pins[5] = fez_medusa_mini::pins::IO9;
@@ -92,7 +99,7 @@ void fez_medusa_mini::create_sockets()
 
 	this->register_socket(s1);
 
-	socket s2(2, socket::types::I | socket::types::P | socket::types::U | socket::types::Y | socket::types::X);
+	socket s2(2, socket::types::I | socket::types::P | socket::types::U | socket::types::Y);
 	s2.pins[3] = fez_medusa_mini::pins::IO2;
 	s2.pins[4] = fez_medusa_mini::pins::IO1;
 	s2.pins[5] = fez_medusa_mini::pins::IO0;
@@ -242,7 +249,7 @@ socket& fez_medusa_mini::register_socket(socket s)
 	current->next = NULL;
 	current->data = s;
 
-	return current->next->data;
+	return current->data;
 }
 
 void fez_medusa_mini::set_debug_led(bool state)
@@ -289,7 +296,7 @@ double fez_medusa_mini::read_analog(analog_channel channel)
 	}
 }
 
-void fez_medusa_mini::set_pwm(pwm_channel channel, double duty_cycle, double frequency)
+void fez_medusa_mini::set_pwm(pwm_channel channel, double frequency, double duty_cycle)
 {
 	cpu_pin pin = UNCONNECTED_PIN;
 
@@ -379,6 +386,7 @@ void fez_medusa_mini::spi_read_write(spi_channel channel, const unsigned char* w
 
 	if (config.uses_chip_select)
 	{
+		mainboard->set_io_mode(config.chip_select, io_modes::DIGITAL_OUTPUT, resistor_modes::NONE);
 		mainboard->write_digital(config.chip_select, config.cs_active_state);
 		if (config.cs_setup_time != 0)
 			system::sleep(config.cs_setup_time);
@@ -424,7 +432,7 @@ void fez_medusa_mini::i2c_end(i2c_channel channel)
 {
 	switch (channel)
 	{
-		case i2c_channels::I2C_0:  break;
+		case i2c_channels::I2C_0: break;
 		case i2c_channels::I2C_1: break;
 		case i2c_channels::I2C_2: break;
 		default: panic(errors::INVALID_CHANNEL);

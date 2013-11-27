@@ -41,7 +41,7 @@ namespace gadgeteering
 			virtual bool read_digital(cpu_pin pin) = 0;
 			virtual void write_analog(analog_out_channel channel, double voltage_proportion) = 0;
 			virtual double read_analog(analog_channel channel) = 0;
-			virtual void set_pwm(pwm_channel channel, double duty_cycle, double frequency) = 0;
+			virtual void set_pwm(pwm_channel channel, double frequency, double duty_cycle) = 0;
 
 			virtual void spi_begin(spi_channel channel, spi_configuration& config) = 0;
 			virtual void spi_end(spi_channel channel, spi_configuration& config) = 0;

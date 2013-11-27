@@ -23,6 +23,7 @@ namespace gadgeteering
 {
 	namespace interfaces
 	{
+
 		class digital_output
 		{
 			const socket& sock;
@@ -31,6 +32,7 @@ namespace gadgeteering
 
 			public:
 				digital_output(const socket& sock, socket_pin_number pin_number, bool initial_state = false);
+				digital_output(unsigned char socket_number, socket_pin_number pin_number, bool initial_state = false);
 
 				void write(bool value);
 		};
@@ -44,6 +46,7 @@ namespace gadgeteering
 
 			public:
 				digital_input(const socket& sock, socket_pin_number pin_number, resistor_mode initial_resistor_mode = resistor_modes::FLOATING);
+				digital_input(unsigned char socket_number, socket_pin_number pin_number, resistor_mode initial_resistor_mode = resistor_modes::FLOATING);
 
 				bool read();
 
@@ -61,6 +64,7 @@ namespace gadgeteering
 
 			public:
 				digital_io(const socket& sock, socket_pin_number pin_number);
+				digital_io(unsigned char socket_number, socket_pin_number pin_number);
 
 				void write(bool value);
 				bool read();
@@ -81,6 +85,7 @@ namespace gadgeteering
 
 			public:
 				analog_input(const socket& sock, socket_pin_number pin_number);
+				analog_input(unsigned char socket_number, socket_pin_number pin_number);
 
 				double read();
 				double read_proportion();
@@ -92,9 +97,10 @@ namespace gadgeteering
 			socket_pin_number sock_pin;
 			cpu_pin pin;
 			analog_out_channel channel;
-			
+
 			public:
-				analog_output(const socket& sock, socket_pin_number pin_number);
+				analog_output(const socket& sock);
+				analog_output(unsigned char socket_number);
 
 				void write(double value);
 				void write_proportion(double value);
@@ -112,6 +118,7 @@ namespace gadgeteering
 
 			public:
 				pwm_output(const socket& sock, socket_pin_number pin_number);
+				pwm_output(unsigned char socket_number, socket_pin_number pin_number);
 
 				void set(double frequency, double duty_cycle);
 				void set_frequency(double frequency);
