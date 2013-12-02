@@ -27,5 +27,5 @@ usb_serial_sp::usb_serial_sp(unsigned char socket_number) : sock(mainboard->get_
 
 void usb_serial_sp::configure(serial_configuration config)
 {
-	this->serial.config = config;
+	this->serial.change_config(config);;
 }

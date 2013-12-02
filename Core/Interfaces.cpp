@@ -27,13 +27,15 @@ digital_output::digital_output(const socket& sock, socket_pin_number pin_number,
 	if (sock.pins[pin_number] == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
-	if (!this->sock.digital_output_indirector)
-	{
-		mainboard->set_io_mode(this->pin, io_modes::DIGITAL_OUTPUT, resistor_modes::FLOATING);
-	}
-	else
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
+	if (this->sock.digital_output_indirector)
 	{
 		this->sock.digital_output_indirector->set_output(this->sock_pin);
+	}
+	else
+#endif
+	{
+		mainboard->set_io_mode(this->pin, io_modes::DIGITAL_OUTPUT, resistor_modes::FLOATING);
 	}
 
 	this->write(initial_state);
@@ -44,13 +46,15 @@ digital_output::digital_output(unsigned char socket_number, socket_pin_number pi
 	if (sock.pins[pin_number] == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
-	if (!this->sock.digital_output_indirector)
-	{
-		mainboard->set_io_mode(this->pin, io_modes::DIGITAL_OUTPUT, resistor_modes::FLOATING);
-	}
-	else
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
+	if (this->sock.digital_output_indirector)
 	{
 		this->sock.digital_output_indirector->set_output(this->sock_pin);
+	}
+	else
+#endif
+	{
+		mainboard->set_io_mode(this->pin, io_modes::DIGITAL_OUTPUT, resistor_modes::FLOATING);
 	}
 
 	this->write(initial_state);
@@ -58,13 +62,15 @@ digital_output::digital_output(unsigned char socket_number, socket_pin_number pi
 
 void digital_output::write(bool value)
 {
-	if (!this->sock.digital_output_indirector)
-	{
-		mainboard->write_digital(this->pin, value);
-	}
-	else
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
+	if (this->sock.digital_output_indirector)
 	{
 		this->sock.digital_output_indirector->write(this->sock_pin, value);
+	}
+	else
+#endif
+	{
+		mainboard->write_digital(this->pin, value);
 	}
 }
 
@@ -73,13 +79,15 @@ digital_input::digital_input(const socket& sock, socket_pin_number pin_number, r
 	if (sock.pins[pin_number] == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
-	if (!this->sock.digital_input_indirector)
-	{
-		mainboard->set_io_mode(this->pin, io_modes::DIGITAL_OUTPUT, resistor_modes::FLOATING);
-	}
-	else
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
+	if (this->sock.digital_input_indirector)
 	{
 		this->sock.digital_input_indirector->set_input(this->sock_pin, new_resistor_mode);
+	}
+	else
+#endif
+	{
+		mainboard->set_io_mode(this->pin, io_modes::DIGITAL_OUTPUT, resistor_modes::FLOATING);
 	}
 
 	this->set_resistor_mode(new_resistor_mode);
@@ -90,13 +98,15 @@ digital_input::digital_input(unsigned char socket_number, socket_pin_number pin_
 	if (sock.pins[pin_number] == UNCONNECTED_PIN)
 		panic(errors::SOCKET_PIN_NOT_CONNECTED);
 
-	if (!this->sock.digital_input_indirector)
-	{
-		mainboard->set_io_mode(this->pin, io_modes::DIGITAL_OUTPUT, resistor_modes::FLOATING);
-	}
-	else
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
+	if (this->sock.digital_input_indirector)
 	{
 		this->sock.digital_input_indirector->set_input(this->sock_pin, new_resistor_mode);
+	}
+	else
+#endif
+	{
+		mainboard->set_io_mode(this->pin, io_modes::DIGITAL_OUTPUT, resistor_modes::FLOATING);
 	}
 
 	this->set_resistor_mode(new_resistor_mode);
@@ -104,13 +114,15 @@ digital_input::digital_input(unsigned char socket_number, socket_pin_number pin_
 
 bool digital_input::read()
 {
-	if (!this->sock.digital_input_indirector)
-	{
-		return mainboard->read_digital(this->pin);
-	}
-	else
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
+	if (this->sock.digital_input_indirector)
 	{
 		return this->sock.digital_input_indirector->read(this->sock_pin);
+	}
+	else
+#endif
+	{
+		return mainboard->read_digital(this->pin);
 	}
 }
 
@@ -118,13 +130,15 @@ void digital_input::set_resistor_mode(resistor_mode new_resistor_mode)
 {
 	this->current_resistor_mode = new_resistor_mode;
 
-	if (!this->sock.digital_input_indirector)
-	{
-		mainboard->set_io_mode(this->pin, io_modes::DIGITAL_INPUT, new_resistor_mode);
-	}
-	else
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
+	if (this->sock.digital_input_indirector)
 	{
 		this->sock.digital_input_indirector->set_input(this->sock_pin, new_resistor_mode);
+	}
+	else
+#endif
+	{
+		mainboard->set_io_mode(this->pin, io_modes::DIGITAL_INPUT, new_resistor_mode);
 	}
 }
 
@@ -155,13 +169,15 @@ void digital_io::write(bool value)
 {
 	this->set_io_mode(io_modes::DIGITAL_OUTPUT);
 
-	if (!this->sock.digital_io_indirector)
-	{
-		mainboard->write_digital(this->pin, value);
-	}
-	else
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
+	if (this->sock.digital_io_indirector)
 	{
 		this->sock.digital_io_indirector->write(this->sock_pin, value);
+	}
+	else
+#endif
+	{
+		mainboard->write_digital(this->pin, value);
 	}
 }
 
@@ -169,13 +185,15 @@ bool digital_io::read()
 {
 	this->set_io_mode(io_modes::DIGITAL_INPUT);
 
-	if (!this->sock.digital_io_indirector)
-	{
-		return mainboard->read_digital(this->pin);
-	}
-	else
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
+	if (this->sock.digital_io_indirector)
 	{
 		return this->sock.digital_io_indirector->read(this->sock_pin);
+	}
+	else
+#endif
+	{
+		return mainboard->read_digital(this->pin);
 	}
 }
 
@@ -186,13 +204,15 @@ void digital_io::set_io_mode(io_mode new_io_mode)
 
 	this->current_io_state = new_io_mode;
 
-	if (!this->sock.digital_io_indirector)
-	{
-		mainboard->set_io_mode(this->pin, this->current_io_state, this->current_resistor_mode);
-	}
-	else
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
+	if (this->sock.digital_io_indirector)
 	{
 		this->sock.digital_io_indirector->set_io_mode(this->sock_pin, this->current_io_state, this->current_resistor_mode);
+	}
+	else
+#endif
+	{
+		mainboard->set_io_mode(this->pin, this->current_io_state, this->current_resistor_mode);
 	}
 }
 
@@ -203,13 +223,15 @@ void digital_io::set_resistor_mode(resistor_mode new_resistor_mode)
 
 	this->current_resistor_mode = new_resistor_mode;
 
-	if (!this->sock.digital_io_indirector)
-	{
-		mainboard->set_io_mode(this->pin, this->current_io_state, this->current_resistor_mode);
-	}
-	else
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
+	if (this->sock.digital_io_indirector)
 	{
 		this->sock.digital_io_indirector->set_io_mode(this->sock_pin, this->current_io_state, this->current_resistor_mode);
+	}
+	else
+#endif
+	{
+		mainboard->set_io_mode(this->pin, this->current_io_state, this->current_resistor_mode);
 	}
 }
 
@@ -257,13 +279,15 @@ double analog_input::read()
 
 double analog_input::read_proportion()
 {
-	if (!this->sock.analog_input_indirector)
-	{
-		return mainboard->read_analog(this->channel);
-	}
-	else
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
+	if (this->sock.analog_input_indirector)
 	{
 		return this->sock.analog_input_indirector->read(this->sock_pin);
+	}
+	else
+#endif
+	{
+		return mainboard->read_analog(this->channel);
 	}
 }
 
@@ -290,13 +314,15 @@ void analog_output::write(double value)
 
 void analog_output::write_proportion(double value)
 {
-	if (!this->sock.analog_output_indirector)
-	{
-		mainboard->write_analog(this->channel, value);
-	}
-	else
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
+	if (this->sock.analog_output_indirector)
 	{
 		this->sock.analog_output_indirector->write(this->channel, value);
+	}
+	else
+#endif
+	{
+		mainboard->write_analog(this->channel, value);
 	}
 }
 
@@ -336,13 +362,15 @@ void pwm_output::set(double frequency, double duty_cycle)
 	this->frequency = frequency;
 	this->duty_cycle = duty_cycle;
 
-	if (!this->sock.pwm_output_indirector)
-	{
-		mainboard->set_pwm(this->channel, this->frequency, this->duty_cycle);
-	}
-	else
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
+	if (this->sock.pwm_output_indirector)
 	{
 		this->sock.pwm_output_indirector->set(this->channel, this->frequency, this->duty_cycle);
+	}
+	else
+#endif
+	{
+		mainboard->set_pwm(this->channel, this->frequency, this->duty_cycle);
 	}
 }
 

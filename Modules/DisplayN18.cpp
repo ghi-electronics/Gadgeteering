@@ -195,7 +195,9 @@ unsigned short display_n18::rgb_to_short(unsigned char r, unsigned char g, unsig
 
 void display_n18::clear(unsigned short back_color)
 {
-	this->fill_rect(0, 0, display_n18::WIDTH, display_n18::HEIGHT, back_color);
+	for (unsigned int i = 0; i < display_n18::WIDTH; i += 10)
+		for (unsigned int j = 0; j < display_n18::HEIGHT; j += 8)
+			this->fill_rect(i, j, 10, 8, back_color);
 }
 
 void display_n18::draw(const unsigned short* data, int x, int y, int width, int height)
@@ -239,7 +241,7 @@ void display_n18::fill_rect(int x, int y, int width, int height, unsigned short 
 
 	this->rs_pin.write(true);
 
-	int i;
+	int i = 0;
 	for (i = 0; i < height; i += display_n18::STEP)
 		this->write_data(reinterpret_cast<unsigned char*>(buffer), width * display_n18::STEP * 2);
 

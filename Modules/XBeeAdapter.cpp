@@ -27,5 +27,5 @@ xbee_adapater::xbee_adapater(unsigned char socket_number) : sock(mainboard->get_
 
 void xbee_adapater::configure(serial_configuration config)
 {
-	this->serial.config = config;
+	this->serial.change_config(config);;
 }

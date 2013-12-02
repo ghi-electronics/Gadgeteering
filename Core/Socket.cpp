@@ -22,12 +22,14 @@ using namespace gadgeteering;
 
 socket::socket()
 {
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
 	this->digital_input_indirector = NULL;
 	this->digital_output_indirector = NULL;
 	this->digital_io_indirector = NULL;
 	this->analog_input_indirector = NULL;
 	this->analog_output_indirector = NULL;
 	this->pwm_output_indirector = NULL;
+#endif
 }
 
 socket::socket(unsigned char number, type type) 
@@ -49,12 +51,14 @@ socket::socket(unsigned char number, type type)
 	this->i2c = i2c_channels::NONE;
 	this->serial = serial_channels::NONE;
 
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
 	this->digital_input_indirector = NULL;
 	this->digital_output_indirector = NULL;
 	this->digital_io_indirector = NULL;
 	this->analog_input_indirector = NULL;
 	this->analog_output_indirector = NULL;
 	this->pwm_output_indirector = NULL;
+#endif
 
 	for (unsigned char i = 1; i <= 10; i++)
 		this->pins[i] = UNCONNECTED_PIN;
@@ -62,6 +66,7 @@ socket::socket(unsigned char number, type type)
 
 socket::~socket()
 {
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
 	if (this->digital_input_indirector)
 		delete this->digital_input_indirector;
 
@@ -79,6 +84,7 @@ socket::~socket()
 
 	if (this->pwm_output_indirector)
 		delete this->pwm_output_indirector;
+#endif
 }
 
 void socket::ensure_type(type t) const

@@ -27,5 +27,5 @@ rs_485::rs_485(unsigned char socket_number) : sock(mainboard->get_socket(socket_
 
 void rs_485::configure(serial_configuration config)
 {
-	this->serial.config = config;
+	this->serial.change_config(config);;
 }

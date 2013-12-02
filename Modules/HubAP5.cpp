@@ -22,6 +22,7 @@ using namespace gadgeteering::modules;
 #define GET_PORT(cpu_pin_number) ((cpu_pin_number & 0x70) >> 4)
 #define GET_PIN(cpu_pin_number) (cpu_pin_number & 0x0F)
 
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
 hub_ap5::indirected_digital_input::indirected_digital_input(const socket& sock, hub_ap5& hub) : sock(sock), hub(hub)
 {
 
@@ -91,6 +92,7 @@ void hub_ap5::indirected_pwm_output::set(pwm_channel channel, double frequency, 
 {
 	this->hub.set_pwm(channel, frequency, duty_cycle);
 }
+#endif
 
 hub_ap5::hub_ap5(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::I)), io60_chip(this->sock), analog_chip(socket_number), socket_start(socket_number * 10 + 10), socket_1(this->socket_start + 1), socket_2(this->socket_start + 2), socket_3(this->socket_start + 3), socket_4(this->socket_start + 4), socket_5(this->socket_start + 5), socket_6(this->socket_start + 6), socket_7(this->socket_start + 7), socket_8(this->socket_start + 8)
 {
@@ -113,10 +115,12 @@ void hub_ap5::create_sockets()
 	s1.analog5 = analog_channels::ANALOG_2;
 
 	socket& ns1 = mainboard->register_socket(s1);
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
 	ns1.analog_input_indirector = new indirected_analog_input(ns1, *this);
 	ns1.digital_input_indirector = new indirected_digital_input(ns1, *this);
 	ns1.digital_output_indirector = new indirected_digital_output(ns1, *this);
 	ns1.digital_io_indirector = new indirected_digital_io(ns1, *this);
+#endif
 
 
 	socket s2(this->socket_start + 2, socket::types::Y | socket::types::A);
@@ -133,10 +137,12 @@ void hub_ap5::create_sockets()
 	s2.analog5 = analog_channels::ANALOG_5;
 
 	socket& ns2 = mainboard->register_socket(s2);
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
 	ns2.analog_input_indirector = new indirected_analog_input(ns2, *this);
 	ns2.digital_input_indirector = new indirected_digital_input(ns2, *this);
 	ns2.digital_output_indirector = new indirected_digital_output(ns2, *this);
 	ns2.digital_io_indirector = new indirected_digital_io(ns2, *this);
+#endif
 
 
 	socket s3(this->socket_start + 3, socket::types::Y);
@@ -149,10 +155,12 @@ void hub_ap5::create_sockets()
 	s3.pins[9] = hub_ap5::pins::P3_6;
 
 	socket& ns3 = mainboard->register_socket(s3);
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
 	ns3.analog_input_indirector = new indirected_analog_input(ns3, *this);
 	ns3.digital_input_indirector = new indirected_digital_input(ns3, *this);
 	ns3.digital_output_indirector = new indirected_digital_output(ns3, *this);
 	ns3.digital_io_indirector = new indirected_digital_io(ns3, *this);
+#endif
 
 
 	socket s4(this->socket_start + 4, socket::types::Y | socket::types::P);
@@ -169,11 +177,13 @@ void hub_ap5::create_sockets()
 	s4.pwm9 = pwm_channels::PWM_14;
 
 	socket& ns4 = mainboard->register_socket(s4);
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
 	ns4.analog_input_indirector = new indirected_analog_input(ns4, *this);
 	ns4.digital_input_indirector = new indirected_digital_input(ns4, *this);
 	ns4.digital_output_indirector = new indirected_digital_output(ns4, *this);
 	ns4.digital_io_indirector = new indirected_digital_io(ns4, *this);
 	ns4.pwm_output_indirector = new indirected_pwm_output(ns4, *this);
+#endif
 
 
 	socket s5(this->socket_start + 5, socket::types::Y | socket::types::P);
@@ -190,11 +200,13 @@ void hub_ap5::create_sockets()
 	s5.pwm9 = pwm_channels::PWM_11;
 
 	socket& ns5 = mainboard->register_socket(s5);
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
 	ns5.analog_input_indirector = new indirected_analog_input(ns5, *this);
 	ns5.digital_input_indirector = new indirected_digital_input(ns5, *this);
 	ns5.digital_output_indirector = new indirected_digital_output(ns5, *this);
 	ns5.digital_io_indirector = new indirected_digital_io(ns5, *this);
 	ns5.pwm_output_indirector = new indirected_pwm_output(ns5, *this);
+#endif
 
 
 	socket s6(this->socket_start + 6, socket::types::Y | socket::types::P);
@@ -211,11 +223,13 @@ void hub_ap5::create_sockets()
 	s6.pwm9 = pwm_channels::PWM_8;
 
 	socket& ns6 = mainboard->register_socket(s6);
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
 	ns6.analog_input_indirector = new indirected_analog_input(ns6, *this);
 	ns6.digital_input_indirector = new indirected_digital_input(ns6, *this);
 	ns6.digital_output_indirector = new indirected_digital_output(ns6, *this);
 	ns6.digital_io_indirector = new indirected_digital_io(ns6, *this);
 	ns6.pwm_output_indirector = new indirected_pwm_output(ns6, *this);
+#endif
 
 
 	socket s7(this->socket_start + 7, socket::types::Y | socket::types::P);
@@ -232,11 +246,13 @@ void hub_ap5::create_sockets()
 	s7.pwm9 = pwm_channels::PWM_5;
 
 	socket& ns7 = mainboard->register_socket(s7);
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
 	ns7.analog_input_indirector = new indirected_analog_input(ns7, *this);
 	ns7.digital_input_indirector = new indirected_digital_input(ns7, *this);
 	ns7.digital_output_indirector = new indirected_digital_output(ns7, *this);
 	ns7.digital_io_indirector = new indirected_digital_io(ns7, *this);
 	ns7.pwm_output_indirector = new indirected_pwm_output(ns7, *this);
+#endif
 
 
 	socket s8(this->socket_start + 8, socket::types::Y | socket::types::P);
@@ -253,11 +269,13 @@ void hub_ap5::create_sockets()
 	s8.pwm9 = pwm_channels::PWM_2;
 
 	socket& ns8 = mainboard->register_socket(s8);
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
 	ns8.analog_input_indirector = new indirected_analog_input(ns8, *this);
 	ns8.digital_input_indirector = new indirected_digital_input(ns8, *this);
 	ns8.digital_output_indirector = new indirected_digital_output(ns8, *this);
 	ns8.digital_io_indirector = new indirected_digital_io(ns8, *this);
 	ns8.pwm_output_indirector = new indirected_pwm_output(ns8, *this);
+#endif
 }
 
 void hub_ap5::set_io_mode(cpu_pin pin, io_mode new_io_mode, resistor_mode new_resistor_mode)

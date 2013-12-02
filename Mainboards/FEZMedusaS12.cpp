@@ -37,7 +37,7 @@ fez_medusa_s12::~fez_medusa_s12()
 
 void fez_medusa_s12::create_sockets()
 {
-	socket s5(5, socket::types::Y | socket::types::P | socket::types::X);
+	socket s5(5, socket::types::Y | socket::types::P);
 	s5.pins[3] = fez_medusa_s12::pins::P0_0;
 	s5.pins[4] = fez_medusa_s12::pins::P0_1;
 	s5.pins[5] = fez_medusa_s12::pins::P0_2;
@@ -53,7 +53,7 @@ void fez_medusa_s12::create_sockets()
 	this->register_socket(s5);
 
 
-	socket s6(6, socket::types::Y | socket::types::P | socket::types::X);
+	socket s6(6, socket::types::Y | socket::types::P);
 	s6.pins[3] = fez_medusa_s12::pins::P0_3;
 	s6.pins[4] = fez_medusa_s12::pins::P0_4;
 	s6.pins[5] = fez_medusa_s12::pins::P0_5;
@@ -69,7 +69,7 @@ void fez_medusa_s12::create_sockets()
 	this->register_socket(s6);
 
 
-	socket s7(7, socket::types::Y | socket::types::P | socket::types::X);
+	socket s7(7, socket::types::Y | socket::types::P);
 	s7.pins[3] = fez_medusa_s12::pins::P1_0;
 	s7.pins[4] = fez_medusa_s12::pins::P1_1;
 	s7.pins[5] = fez_medusa_s12::pins::P1_2;
@@ -85,7 +85,7 @@ void fez_medusa_s12::create_sockets()
 	this->register_socket(s7);
 
 
-	socket s8(8, socket::types::Y | socket::types::P | socket::types::X);
+	socket s8(8, socket::types::Y | socket::types::P);
 	s8.pins[3] = fez_medusa_s12::pins::P1_4;
 	s8.pins[4] = fez_medusa_s12::pins::P1_5;
 	s8.pins[5] = fez_medusa_s12::pins::P1_6;
@@ -101,7 +101,7 @@ void fez_medusa_s12::create_sockets()
 	this->register_socket(s8);
 
 
-	socket s9(9, socket::types::Y | socket::types::P | socket::types::X);
+	socket s9(9, socket::types::Y | socket::types::P);
 	s9.pins[3] = fez_medusa_s12::pins::P2_0;
 	s9.pins[4] = fez_medusa_s12::pins::P2_1;
 	s9.pins[5] = fez_medusa_s12::pins::P2_2;
@@ -117,7 +117,7 @@ void fez_medusa_s12::create_sockets()
 	this->register_socket(s9);
 
 
-	socket s10(10, socket::types::Y | socket::types::X);
+	socket s10(10, socket::types::Y);
 	s10.pins[3] = fez_medusa_s12::pins::P3_0;
 	s10.pins[4] = fez_medusa_s12::pins::P3_1;
 	s10.pins[5] = fez_medusa_s12::pins::P3_2;
@@ -128,7 +128,7 @@ void fez_medusa_s12::create_sockets()
 	this->register_socket(s10);
 
 
-	socket s11(11, socket::types::Y | socket::types::X);
+	socket s11(11, socket::types::Y);
 	s11.pins[3] = fez_medusa_s12::pins::P4_0;
 	s11.pins[4] = fez_medusa_s12::pins::P4_1;
 	s11.pins[5] = fez_medusa_s12::pins::P4_2;
@@ -139,7 +139,7 @@ void fez_medusa_s12::create_sockets()
 	this->register_socket(s11);
 
 
-	socket s12(12, socket::types::Y | socket::types::X);
+	socket s12(12, socket::types::Y);
 	s12.pins[3] = fez_medusa_s12::pins::P5_0;
 	s12.pins[4] = fez_medusa_s12::pins::P5_1;
 	s12.pins[5] = fez_medusa_s12::pins::P5_2;

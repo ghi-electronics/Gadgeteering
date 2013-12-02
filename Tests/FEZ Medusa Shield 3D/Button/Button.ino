@@ -25,22 +25,22 @@ void setup()
 	b.turn_led_on();
 	system::sleep(500);
 	if (b.is_led_on() == false)
-		Serial.print("FAIL"); Serial.println("");
+		Serial.println("FAIL");
 
 	b.turn_led_off();
 	system::sleep(500);
 	if (b.is_led_on() == true)
-		Serial.print("FAIL"); Serial.println("");
+		Serial.println("FAIL");
 
 	b.toggle_led();
 	system::sleep(500);
 	if (b.is_led_on() == false)
-		Serial.print("FAIL"); Serial.println("");
+		Serial.println("FAIL");
 
 	b.toggle_led();
 	system::sleep(500);
 	if (b.is_led_on() == true)
-		Serial.print("FAIL"); Serial.println("");
+		Serial.println("FAIL");
 
 	while (true)
 	{

@@ -35,6 +35,7 @@ namespace gadgeteering
 
 			void create_sockets();
 
+#if (!(defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA) || defined SOCKET_INDIRECT_ENABLED)
 			class indirected_digital_input : public indirectors::digital_input
 			{
 				const socket& sock;
@@ -93,6 +94,7 @@ namespace gadgeteering
 
 					virtual void set(pwm_channel channel, double frequency, double duty_cycle);
 			};
+#endif
 
 			public:
 				struct pins
