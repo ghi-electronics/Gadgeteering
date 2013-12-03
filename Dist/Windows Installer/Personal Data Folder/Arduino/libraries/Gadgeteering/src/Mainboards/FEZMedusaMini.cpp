@@ -285,6 +285,7 @@ void fez_medusa_mini::write_analog(analog_channel channel, double voltage_propor
 {
 	panic(errors::NOT_SUPPORTED);
 }
+
 double fez_medusa_mini::read_analog(analog_channel channel)
 {
 	switch (channel)

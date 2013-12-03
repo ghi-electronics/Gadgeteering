@@ -42,28 +42,28 @@ color_sense::color_data color_sense::read_color_channels()
 	result.green = read;
 	command = 0x91;
 	this->i2c.write_read(&command, 1, &read, 1);
-	result.green |= (unsigned int)(read) << 8;
+	result.green |= static_cast<unsigned int>(read) << 8;
 
 	command = 0x92;
 	this->i2c.write_read(&command, 1, &read, 1);
 	result.red = read;
 	command = 0x93;
 	this->i2c.write_read(&command, 1, &read, 1);
-	result.red |= (unsigned int)(read) << 8;
+	result.red |= static_cast<unsigned int>(read) << 8;
 
 	command = 0x94;
 	this->i2c.write_read(&command, 1, &read, 1);
 	result.blue = read;
 	command = 0x95;
 	this->i2c.write_read(&command, 1, &read, 1);
-	result.blue |= (unsigned int)(read) << 8;
+	result.blue |= static_cast<unsigned int>(read) << 8;
 
 	command = 0x96;
 	this->i2c.write_read(&command, 1, &read, 1);
 	result.clear = read;
 	command = 0x97;
 	this->i2c.write_read(&command, 1, &read, 1);
-	result.clear |= (unsigned int)(read) << 8;
+	result.clear |= static_cast<unsigned int>(read) << 8;
 
 	return result;
 }

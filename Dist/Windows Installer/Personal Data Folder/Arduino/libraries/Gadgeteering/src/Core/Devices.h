@@ -88,6 +88,8 @@ namespace gadgeteering
 				serial(serial_channel channel, serial_configuration configuration);
 				~serial();
 
+				void change_config(serial_configuration configuration);
+
 				void write(const unsigned char* buffer, unsigned int length);
 				void write(const char* buffer, unsigned int length = 0);
 				unsigned int read(unsigned char* buffer, unsigned int length);

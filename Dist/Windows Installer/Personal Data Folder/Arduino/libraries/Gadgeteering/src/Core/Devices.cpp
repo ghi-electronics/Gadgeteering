@@ -95,7 +95,9 @@ bool i2c::read(unsigned char* buffer, unsigned int length, bool send_start, bool
 
 bool i2c::write_read(const unsigned char* write_buffer, unsigned int write_length, unsigned char* read_buffer, unsigned int read_length)
 {
-	return this->write(write_buffer, write_length, true, false) && this->read(read_buffer, read_length, true, true);
+	bool w = this->write(write_buffer, write_length, true, false);
+	bool r = this->read(read_buffer, read_length, true, true);
+	return w && r;
 }
 
 bool i2c::write_register(unsigned char address, unsigned char value)
@@ -135,7 +137,7 @@ spi::spi(spi_channel channel, spi_configuration configuration)
 
 	this->config = configuration;
 	this->channel = channel;
-
+	
 	mainboard->spi_begin(this->channel, config);
 }
 
@@ -148,7 +150,7 @@ spi::spi(spi_channel channel, spi_configuration configuration, const socket& cs_
 	this->channel = channel;
 	this->config.uses_chip_select = true;
 	this->config.chip_select = cs_socket.pins[cs_pin_number];
-	
+
 	mainboard->spi_begin(this->channel, config);
 }
 
@@ -226,12 +228,19 @@ serial::serial(const socket& sock, serial_configuration configuration)
 
 	this->config = configuration;
 	this->channel = sock.serial;
-	mainboard->serial_begin(this->channel, config);
+	mainboard->serial_begin(this->channel, this->config);
 }
 
 serial::~serial()
 {
-	mainboard->serial_end(this->channel, config);
+	mainboard->serial_end(this->channel, this->config);
+}
+
+void serial::change_config(serial_configuration configuration)
+{
+	mainboard->serial_end(this->channel, this->config);
+	this->config = configuration;
+	mainboard->serial_begin(this->channel, this->config);
 }
 
 void serial::write(const unsigned char* buffer, unsigned int length) 

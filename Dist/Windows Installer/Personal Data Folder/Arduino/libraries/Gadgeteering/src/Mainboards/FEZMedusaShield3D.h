@@ -20,8 +20,6 @@ limitations under the License.
 
 #include "FEZMedusaMini.h"
 
-#include <Arduino.h>
-
 namespace gadgeteering
 {
 	namespace mainboards

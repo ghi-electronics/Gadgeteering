@@ -16,8 +16,13 @@ limitations under the License.
 
 #pragma once
 
+#if !defined NO_DEBUG
 #define panic(code) gadgeteering::system::throw_error(code, __FILE__, __LINE__)
 #define panic_specific(code, specific) gadgeteering::system::throw_error(code, __FILE__, __LINE__, specific)
+#else
+#define panic(code) gadgeteering::system::throw_error(code)
+#define panic_specific(code, specific) gadgeteering::system::throw_error(code, specific)
+#endif
 
 namespace gadgeteering
 {

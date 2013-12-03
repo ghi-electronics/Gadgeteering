@@ -21,6 +21,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_011BCB279A1D4BA88A6A578AB7E42284"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_020A3C200FED47909E28FA456644993E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -153,12 +159,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_0FF39ACC1426435CB5EFACDAB4A55CD2"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_1020A5E76C0E4A7B8596836695A56891"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -166,6 +166,12 @@
         "Entry"
         {
         "MsmKey" = "8:_122FD6F3257145009C42683E5A4CB483"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_12FFB555851A40649E70361A3B7C8EFC"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -261,6 +267,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_2516B9BF772640779F5F1830DAB10C7E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_270CA3983E324263BF85B32BEA1A2B5E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -315,6 +327,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_31C9A89DF01B48239B26C4CFB1E261BD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_3226AA46495D46CCBC15628DB33F8CDB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -358,6 +376,12 @@
         "Entry"
         {
         "MsmKey" = "8:_39BCDC8AE8864B4492E9EEFC7CB51AE6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3BB682CACB354EEEA069BD89919F8EC3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -573,12 +597,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_59C0EB39E5E94E8EA22815489CF92D76"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_5B34DBCAB4BE4A8EAA201414DD5DD878"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -598,6 +616,12 @@
         "Entry"
         {
         "MsmKey" = "8:_5C9A83EABF5841D7A3B0BBD89D4DC2DC"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5CE12EB5A72E416EBBB4982DAC81D57E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -639,7 +663,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_64A691DC30E34564BBD73D6CEE566AE8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_652B081B1F76472AB7142C085CA23BAE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_65D08681DA40474D854D7E912296901E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -742,12 +778,6 @@
         "Entry"
         {
         "MsmKey" = "8:_704DBE33853D48D28C665E79149536DE"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_72FBC7407AD7421E8D81918BB3999A9D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -933,6 +963,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_92ACED3BE43243DA94F1113973C9DFF6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_92EBEE6EE9D24546B7E1F9D4F4654F23"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -981,6 +1017,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_9852DE822A664471AEAC34FEA02B65E2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_99D2FF28ECEB4750B32C8DBF7E30049B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1000,6 +1042,12 @@
         "Entry"
         {
         "MsmKey" = "8:_9BE19CE7B8B4409391C02912A8FB9444"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9D0C4E5270B64F59B2C865B7C31A233A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1036,18 +1084,6 @@
         "Entry"
         {
         "MsmKey" = "8:_A5A620F6239A48D293F88C6CA5A0C943"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A66A03804BF04C62B4865E146D87B02A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A7E365CFF0CB4FA8921C0DF84C7F0352"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1179,6 +1215,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_BC9F7C63018B4DF3AB9F48EE1C839C59"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_BE2FB772565A426093208950211E8E0A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1233,12 +1275,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_C76329206E1F46E8898949E9B1CF4683"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_C849E286BA87438089BCCF434DB2BF5B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1270,6 +1306,12 @@
         "Entry"
         {
         "MsmKey" = "8:_CD78FD74C5E64D9CA39073BAAF5D0B46"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CED9909677644F7FBAB1FC09274E1E66"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1734,6 +1776,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_011BCB279A1D4BA88A6A578AB7E42284"
+            {
+            "SourcePath" = "8:Application Folder\\FEZ Lynx Examples.zip"
+            "TargetName" = "8:FEZ Lynx Examples.zip"
+            "Tag" = "8:"
+            "Folder" = "8:_633A32A4D44E4083B2EB24A542F0640E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_020A3C200FED47909E28FA456644993E"
             {
             "SourcePath" = "8:Application Folder\\Headers\\FEZ Lynx\\Modules\\Gyro.h"
@@ -2174,26 +2236,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0FF39ACC1426435CB5EFACDAB4A55CD2"
-            {
-            "SourcePath" = "8:Personal Data Folder\\Arduino\\hardware\\GHI\\avr\\libraries\\Wire\\Wire.cpp"
-            "TargetName" = "8:Wire.cpp"
-            "Tag" = "8:"
-            "Folder" = "8:_36A954AEE51949BEB5A8841F98B62766"
-            "Condition" = "8:CHECKBOXMEDUSA=1"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1020A5E76C0E4A7B8596836695A56891"
             {
             "SourcePath" = "8:Application Folder\\Headers\\FEZ Lynx\\Modules\\CharacterDisplay.h"
@@ -2221,6 +2263,26 @@
             "Tag" = "8:"
             "Folder" = "8:_86D2DA04799F45F782F43DF62F17DA85"
             "Condition" = "8:CHECKBOXLYNX=1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_12FFB555851A40649E70361A3B7C8EFC"
+            {
+            "SourcePath" = "8:Personal Data Folder\\Arduino\\libraries\\Gadgeteering\\examples\\ButtonLED\\ButtonLED.ino"
+            "TargetName" = "8:ButtonLED.ino"
+            "Tag" = "8:"
+            "Folder" = "8:_F37FCFAF3D00407C814A10067836A883"
+            "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -2534,6 +2596,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2516B9BF772640779F5F1830DAB10C7E"
+            {
+            "SourcePath" = "8:Personal Data Folder\\GHI Electronics\\Gadgeteering\\Examples\\FEZ Lynx\\Blink LED\\Main.cpp"
+            "TargetName" = "8:Main.cpp"
+            "Tag" = "8:"
+            "Folder" = "8:_2AC05A6C0D0E461F82F6632E6D113761"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_270CA3983E324263BF85B32BEA1A2B5E"
             {
             "SourcePath" = "8:Application Folder\\Headers\\FEZ Lynx\\Modules\\Extender.h"
@@ -2714,6 +2796,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_31C9A89DF01B48239B26C4CFB1E261BD"
+            {
+            "SourcePath" = "8:Personal Data Folder\\Arduino\\libraries\\Gadgeteering\\examples\\BaseProject\\BaseProject.ino"
+            "TargetName" = "8:BaseProject.ino"
+            "Tag" = "8:"
+            "Folder" = "8:_6069D612F5214CB1806AE72AAF10C0E0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3226AA46495D46CCBC15628DB33F8CDB"
             {
             "SourcePath" = "8:Application Folder\\Headers\\FEZ Lynx\\Modules\\FEZtive.h"
@@ -2861,6 +2963,26 @@
             "Tag" = "8:"
             "Folder" = "8:_FB31CFF014E244598FA12C69CA4F9DFF"
             "Condition" = "8:CHECKBOXMEDUSA=1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3BB682CACB354EEEA069BD89919F8EC3"
+            {
+            "SourcePath" = "8:Personal Data Folder\\GHI Electronics\\Gadgeteering\\Examples\\FEZ Lynx\\Blink LED\\Blink LED.sln"
+            "TargetName" = "8:Blink LED.sln"
+            "Tag" = "8:"
+            "Folder" = "8:_2AC05A6C0D0E461F82F6632E6D113761"
+            "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -3574,26 +3696,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_59C0EB39E5E94E8EA22815489CF92D76"
-            {
-            "SourcePath" = "8:Personal Data Folder\\Arduino\\hardware\\GHI\\avr\\libraries\\Wire\\keywords.txt"
-            "TargetName" = "8:keywords.txt"
-            "Tag" = "8:"
-            "Folder" = "8:_36A954AEE51949BEB5A8841F98B62766"
-            "Condition" = "8:CHECKBOXMEDUSA=1"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5B34DBCAB4BE4A8EAA201414DD5DD878"
             {
             "SourcePath" = "8:Personal Data Folder\\Arduino\\libraries\\Gadgeteering\\src\\Modules\\XBeeAdapter.cpp"
@@ -3661,6 +3763,26 @@
             "Tag" = "8:"
             "Folder" = "8:_FB31CFF014E244598FA12C69CA4F9DFF"
             "Condition" = "8:CHECKBOXMEDUSA=1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5CE12EB5A72E416EBBB4982DAC81D57E"
+            {
+            "SourcePath" = "8:Personal Data Folder\\GHI Electronics\\Gadgeteering\\Examples\\FEZ Lynx\\Button LED\\Main.cpp"
+            "TargetName" = "8:Main.cpp"
+            "Tag" = "8:"
+            "Folder" = "8:_2A70990FD3CD4128B0F56239AE07FF12"
+            "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -3794,6 +3916,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_64A691DC30E34564BBD73D6CEE566AE8"
+            {
+            "SourcePath" = "8:Personal Data Folder\\GHI Electronics\\Gadgeteering\\Examples\\FEZ Lynx\\Base VS Project\\Base VS Project.sln"
+            "TargetName" = "8:Base VS Project.sln"
+            "Tag" = "8:"
+            "Folder" = "8:_25A0533EC1C24E9D8982AF3210FFAC07"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_652B081B1F76472AB7142C085CA23BAE"
             {
             "SourcePath" = "8:Application Folder\\Headers\\FEZ Lynx\\Modules\\HD44780.h"
@@ -3801,6 +3943,26 @@
             "Tag" = "8:"
             "Folder" = "8:_86D2DA04799F45F782F43DF62F17DA85"
             "Condition" = "8:CHECKBOXLYNX=1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_65D08681DA40474D854D7E912296901E"
+            {
+            "SourcePath" = "8:Application Folder\\Tests.zip"
+            "TargetName" = "8:Tests.zip"
+            "Tag" = "8:"
+            "Folder" = "8:_633A32A4D44E4083B2EB24A542F0640E"
+            "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -4141,26 +4303,6 @@
             "Tag" = "8:"
             "Folder" = "8:_86D2DA04799F45F782F43DF62F17DA85"
             "Condition" = "8:CHECKBOXLYNX=1"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_72FBC7407AD7421E8D81918BB3999A9D"
-            {
-            "SourcePath" = "8:Personal Data Folder\\Arduino\\hardware\\GHI\\avr\\libraries\\Wire\\utility\\twi.c"
-            "TargetName" = "8:twi.c"
-            "Tag" = "8:"
-            "Folder" = "8:_369AC86D1CA54641ABB03DF29CD4C87C"
-            "Condition" = "8:CHECKBOXMEDUSA=1"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -4774,6 +4916,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_92ACED3BE43243DA94F1113973C9DFF6"
+            {
+            "SourcePath" = "8:Personal Data Folder\\GHI Electronics\\Gadgeteering\\Examples\\FEZ Lynx\\Base VS Project\\Main.cpp"
+            "TargetName" = "8:Main.cpp"
+            "Tag" = "8:"
+            "Folder" = "8:_25A0533EC1C24E9D8982AF3210FFAC07"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_92EBEE6EE9D24546B7E1F9D4F4654F23"
             {
             "SourcePath" = "8:Personal Data Folder\\Arduino\\libraries\\Gadgeteering\\src\\Modules\\Potentiometer.cpp"
@@ -4934,6 +5096,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9852DE822A664471AEAC34FEA02B65E2"
+            {
+            "SourcePath" = "8:Personal Data Folder\\GHI Electronics\\Gadgeteering\\Examples\\FEZ Lynx\\Button LED\\Button LED.sln"
+            "TargetName" = "8:Button LED.sln"
+            "Tag" = "8:"
+            "Folder" = "8:_2A70990FD3CD4128B0F56239AE07FF12"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_99D2FF28ECEB4750B32C8DBF7E30049B"
             {
             "SourcePath" = "8:Personal Data Folder\\Arduino\\libraries\\Gadgeteering\\src\\Modules\\Moisture.cpp"
@@ -5001,6 +5183,26 @@
             "Tag" = "8:"
             "Folder" = "8:_86D2DA04799F45F782F43DF62F17DA85"
             "Condition" = "8:CHECKBOXLYNX=1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9D0C4E5270B64F59B2C865B7C31A233A"
+            {
+            "SourcePath" = "8:Personal Data Folder\\GHI Electronics\\Gadgeteering\\Examples\\FEZ Lynx\\Blink LED\\Blink LED.vcxproj"
+            "TargetName" = "8:Blink LED.vcxproj"
+            "Tag" = "8:"
+            "Folder" = "8:_2AC05A6C0D0E461F82F6632E6D113761"
+            "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -5120,46 +5322,6 @@
             "TargetName" = "8:Bluetooth.cpp"
             "Tag" = "8:"
             "Folder" = "8:_FB31CFF014E244598FA12C69CA4F9DFF"
-            "Condition" = "8:CHECKBOXMEDUSA=1"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A66A03804BF04C62B4865E146D87B02A"
-            {
-            "SourcePath" = "8:Personal Data Folder\\Arduino\\hardware\\GHI\\avr\\libraries\\Wire\\Wire.h"
-            "TargetName" = "8:Wire.h"
-            "Tag" = "8:"
-            "Folder" = "8:_36A954AEE51949BEB5A8841F98B62766"
-            "Condition" = "8:CHECKBOXMEDUSA=1"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A7E365CFF0CB4FA8921C0DF84C7F0352"
-            {
-            "SourcePath" = "8:Personal Data Folder\\Arduino\\hardware\\GHI\\avr\\libraries\\Wire\\utility\\twi.h"
-            "TargetName" = "8:twi.h"
-            "Tag" = "8:"
-            "Folder" = "8:_369AC86D1CA54641ABB03DF29CD4C87C"
             "Condition" = "8:CHECKBOXMEDUSA=1"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5594,6 +5756,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BC9F7C63018B4DF3AB9F48EE1C839C59"
+            {
+            "SourcePath" = "8:Personal Data Folder\\GHI Electronics\\Gadgeteering\\Examples\\FEZ Lynx\\Button LED\\Button LED.vcxproj"
+            "TargetName" = "8:Button LED.vcxproj"
+            "Tag" = "8:"
+            "Folder" = "8:_2A70990FD3CD4128B0F56239AE07FF12"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BE2FB772565A426093208950211E8E0A"
             {
             "SourcePath" = "8:Personal Data Folder\\Arduino\\libraries\\Gadgeteering\\src\\Modules\\Load.cpp"
@@ -5774,26 +5956,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C76329206E1F46E8898949E9B1CF4683"
-            {
-            "SourcePath" = "8:Application Folder\\Examples.zip"
-            "TargetName" = "8:Examples.zip"
-            "Tag" = "8:"
-            "Folder" = "8:_633A32A4D44E4083B2EB24A542F0640E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C849E286BA87438089BCCF434DB2BF5B"
             {
             "SourcePath" = "8:Personal Data Folder\\Arduino\\libraries\\Gadgeteering\\src\\Modules\\LEDMatrix.h"
@@ -5901,6 +6063,26 @@
             "Tag" = "8:"
             "Folder" = "8:_FB31CFF014E244598FA12C69CA4F9DFF"
             "Condition" = "8:CHECKBOXMEDUSA=1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CED9909677644F7FBAB1FC09274E1E66"
+            {
+            "SourcePath" = "8:Personal Data Folder\\GHI Electronics\\Gadgeteering\\Examples\\FEZ Lynx\\Base VS Project\\Base VS Project.vcxproj"
+            "TargetName" = "8:Base VS Project.vcxproj"
+            "Tag" = "8:"
+            "Folder" = "8:_25A0533EC1C24E9D8982AF3210FFAC07"
+            "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -6056,7 +6238,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D567E551DC494C2ABDB46136F1D8B410"
             {
-            "SourcePath" = "8:Personal Data Folder\\Arduino\\hardware\\GHI\\avr\\bootloaders\\optiboot\\optiboot_medusa.hex"
+            "SourcePath" = "8:Personal Data Folder\\Arduino\\hardware\\GHI Electronics\\avr\\bootloaders\\optiboot\\optiboot_medusa.hex"
             "TargetName" = "8:optiboot_medusa.hex"
             "Tag" = "8:"
             "Folder" = "8:_470ABFC617384B8EA6723761AB37B199"
@@ -6176,7 +6358,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DA926B9D8BB941ED9AB44FE3E482BBFE"
             {
-            "SourcePath" = "8:Personal Data Folder\\Arduino\\hardware\\GHI\\avr\\boards.txt"
+            "SourcePath" = "8:Personal Data Folder\\Arduino\\hardware\\GHI Electronics\\avr\\boards.txt"
             "TargetName" = "8:boards.txt"
             "Tag" = "8:"
             "Folder" = "8:_2DC64B36158B4A58A7EA48A824A1CD26"
@@ -6416,7 +6598,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E27B1C327E0543288746B4A34BF0F7B3"
             {
-            "SourcePath" = "8:Personal Data Folder\\Arduino\\hardware\\GHI\\avr\\bootloaders\\optiboot\\optiboot_medusa.lst"
+            "SourcePath" = "8:Personal Data Folder\\Arduino\\hardware\\GHI Electronics\\avr\\bootloaders\\optiboot\\optiboot_medusa.lst"
             "TargetName" = "8:optiboot_medusa.lst"
             "Tag" = "8:"
             "Folder" = "8:_470ABFC617384B8EA6723761AB37B199"
@@ -7363,6 +7545,83 @@
                             }
                         }
                     }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_250DD0F9888E4D75BA200348B1B667BF"
+                    {
+                    "Name" = "8:GHI Electronics"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_25E2E40D094B46D29516C1E427D0EE8E"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_20DBE8A50D1246BE937644A9F94C4E77"
+                            {
+                            "Name" = "8:Gadgeteering"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_2D5F4DC77D40493CA18C219CA3726BAA"
+                                "Folders"
+                                {
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_48CEF3C10D174C449946668FCA6DEC57"
+                                    {
+                                    "Name" = "8:Examples"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_7F25B8DE950E4A33ABB931F47AA95120"
+                                        "Folders"
+                                        {
+                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_2663DF669795412282AE1345C0EB5D30"
+                                            {
+                                            "Name" = "8:FEZ Lynx"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "Property" = "8:_4EA05CA2627B4B32B42730365B4312B7"
+                                                "Folders"
+                                                {
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_25A0533EC1C24E9D8982AF3210FFAC07"
+                                                    {
+                                                    "Name" = "8:Base VS Project"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_31B7D7ECC1F64821BC2EF563B7934219"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_2A70990FD3CD4128B0F56239AE07FF12"
+                                                    {
+                                                    "Name" = "8:Button LED"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_9921BBAA2C9E4C34A929F2DB59015C43"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_2AC05A6C0D0E461F82F6632E6D113761"
+                                                    {
+                                                    "Name" = "8:Blink LED"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_C70E8AF5A16B48B6BFDDF29441074A84"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_7E679665D995415DA4A8B5B9332C2A09"
                     {
                     "Name" = "8:Visual Studio 2013"
@@ -7434,6 +7693,39 @@
                                     "Property" = "8:_2A3EDC23C12D41FB85A7ED03444CC8BB"
                                         "Folders"
                                         {
+                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_082C71738DCE480D8C392C030135B9A7"
+                                            {
+                                            "Name" = "8:examples"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "Property" = "8:_D9C3B882F8DB4C75B48E3DB0D0AC2EC9"
+                                                "Folders"
+                                                {
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_6069D612F5214CB1806AE72AAF10C0E0"
+                                                    {
+                                                    "Name" = "8:BaseProject"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_90CDE2FAD2174363B73EB8748190F2FD"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_F37FCFAF3D00407C814A10067836A883"
+                                                    {
+                                                    "Name" = "8:ButtonLED"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_A2C736F2A8DF45FBA92AA468348EAA37"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                }
+                                            }
                                             "{9EF0B969-E518-4E46-987F-47570745A589}:_28B664D15F8C47D5BA63B63E0B8D29DE"
                                             {
                                             "Name" = "8:src"
@@ -7493,7 +7785,7 @@
                                 {
                                     "{9EF0B969-E518-4E46-987F-47570745A589}:_6929E183BA9445B899379A934B1C3189"
                                     {
-                                    "Name" = "8:GHI"
+                                    "Name" = "8:GHI Electronics"
                                     "AlwaysCreate" = "11:FALSE"
                                     "Condition" = "8:"
                                     "Transitive" = "11:FALSE"
@@ -7509,39 +7801,6 @@
                                             "Property" = "8:_A5B80BC9C9DB43548151235A452D6F1C"
                                                 "Folders"
                                                 {
-                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_31AE362B362C4560B91D81C0ACA208B7"
-                                                    {
-                                                    "Name" = "8:libraries"
-                                                    "AlwaysCreate" = "11:FALSE"
-                                                    "Condition" = "8:"
-                                                    "Transitive" = "11:FALSE"
-                                                    "Property" = "8:_A355F15D47BB4D75B2E2039B99B9EAEF"
-                                                        "Folders"
-                                                        {
-                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_36A954AEE51949BEB5A8841F98B62766"
-                                                            {
-                                                            "Name" = "8:Wire"
-                                                            "AlwaysCreate" = "11:FALSE"
-                                                            "Condition" = "8:"
-                                                            "Transitive" = "11:FALSE"
-                                                            "Property" = "8:_76A95144D69045B0A9D416D714B96403"
-                                                                "Folders"
-                                                                {
-                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_369AC86D1CA54641ABB03DF29CD4C87C"
-                                                                    {
-                                                                    "Name" = "8:utility"
-                                                                    "AlwaysCreate" = "11:FALSE"
-                                                                    "Condition" = "8:"
-                                                                    "Transitive" = "11:FALSE"
-                                                                    "Property" = "8:_394A88B68C334D37861CBBBC98B230BF"
-                                                                        "Folders"
-                                                                        {
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
                                                     "{9EF0B969-E518-4E46-987F-47570745A589}:_E6017D3B3022498DBF1989EBDB35ABB2"
                                                     {
                                                     "Name" = "8:bootloaders"
@@ -7590,15 +7849,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:GHI Gadgeteering SDK"
-        "ProductCode" = "8:{4F00C9BA-BDD1-4DE4-B0B4-49601D5906C9}"
-        "PackageCode" = "8:{FC2EA84E-ACA6-41D0-90FD-90273BAB181B}"
+        "ProductCode" = "8:{85B14F2F-70D8-4BA3-932D-2763F67B0F2E}"
+        "PackageCode" = "8:{E124E392-BB99-4065-9FBC-254024A23E67}"
         "UpgradeCode" = "8:{A2A40B09-4504-4CCE-BFAC-E873E8EE65E1}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:0.0.4"
+        "ProductVersion" = "8:0.0.5"
         "Manufacturer" = "8:GHI Electronics"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.ghielectronics.com/support"

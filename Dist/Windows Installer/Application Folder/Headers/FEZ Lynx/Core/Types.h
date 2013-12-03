@@ -298,10 +298,10 @@ namespace gadgeteering
 
         /// @brief The serial_configuration constructor
         /// @param baud_rate The speed at which data will be sent (in bits-per-second)
-        /// @param parity The parity that will be used to detect erroneous communications (Default: Even)
+        /// @param parity The parity that will be used to detect erroneous communications (Default: none)
         /// @param stop_bits The number of bits that will be used to detect and signify the end of a character
         /// @param data_bits The number of data bits in each character
-		serial_configuration(unsigned int baud_rate = 9600, parity parity = parities::EVEN, stop_bit stop_bits = stop_bits::ONE, unsigned char data_bits = 8);
+		serial_configuration(unsigned int baud_rate = 9600, parity parity = parities::NONE, stop_bit stop_bits = stop_bits::ONE, unsigned char data_bits = 8);
 	};
 
     /// @brief Contains default error codes
