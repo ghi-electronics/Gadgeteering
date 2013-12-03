@@ -7,11 +7,12 @@ November, 29th 2013
 ----------------------------------------
 
 Release Info
--Initial Beta Release
+-Initial Beta Release.
 
 Known Issues
 -The executing program that controls the Lynx might sometimes deadlock inside the FTDI driver. The only way to close the program is to restart the computer. Serial communications are particularly prone to this deadlock.
 -Sockets 10 and 11 and the FEZ Medusa Shield 3D are only O type sockets and socket 8 is only a C type socket when running on an Arduino Due.
 -Only the serial baud rate is configurable on the FEZ Medusa Shield 3D when running the Ardunio Mega or the Arduino Due.
--Many modules are not yet functional.
+-Some of the modules are not yet functional. See [URL] for a list of tested modules.
 -The Gadgeteering framework uses a lot of memory on the FEZ Medusa Mini, S12, and Shield. It is particularly high for the S12 and Shield. As a result, programs that use a lot of memory may observe random behavior.
+-The RadioFM1 may cause the FEZ Medusa Shield 3D to lose power and not show up in the Arduino IDE.
