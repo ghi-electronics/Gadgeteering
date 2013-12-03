@@ -3,7 +3,7 @@ GHI Gadgeteering SDK
 
 ----------------------------------------
 SDK Version 2013 R1 Beta (v0.5.0)
-December 3rd, 2013
+December 4th, 2013
 ----------------------------------------
 
 Release Info

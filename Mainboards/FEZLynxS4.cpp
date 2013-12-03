@@ -407,16 +407,12 @@ void fez_lynx_s4::ftdi_channel::open(const char* serial_number)
 {
 	if (FT_OpenEx(const_cast<char*>(serial_number), FT_OPEN_BY_SERIAL_NUMBER, &this->handle) != FT_OK)
 		panic_specific(errors::MAINBOARD_ERROR, 1);
-
-	FT_ResetDevice(this->handle);
 }
 
 void fez_lynx_s4::ftdi_channel::open_by_index(unsigned int index)
 {
 	if (FT_Open(index, &this->handle) != FT_OK)
 		panic_specific(errors::MAINBOARD_ERROR, 1);
-
-	FT_ResetDevice(this->handle);
 }
 
 bool fez_lynx_s4::ftdi_channel::set_mode(mode mode)
@@ -467,6 +463,8 @@ bool fez_lynx_s4::ftdi_channel::set_mode(mode mode)
 	else if (mode == modes::SERIAL)
 	{
 		status |= FT_SetChars(this->handle, false, 0, false, 0);
+
+		status |= FT_Purge(this->handle, FT_PURGE_RX);
 
         system::sleep(20);
 	}
