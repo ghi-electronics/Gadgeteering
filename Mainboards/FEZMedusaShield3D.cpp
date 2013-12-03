@@ -16,6 +16,8 @@ limitations under the License.
 
 #include "FEZMedusaShield3D.h"
 
+#include <Arduino.h>
+
 using namespace gadgeteering;
 using namespace gadgeteering::mainboards;
 
