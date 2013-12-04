@@ -1,0 +1,22 @@
+Full directory structure, things that may be added infuture are set-off with []
+Linux build directory names usually lower case.
+
+    bin
+    build -objects go here
+    doc - ?? now or nextrelease doxygen APIs, pointers to website docs
+    include
+    src
+    lib -preinstalled libraries like FTDI and built libs (.a, .so)
+    <Makefile>
+    <README.txt>
+    [tools] scripts and source to tools/utilities
+    test - test programs
+    examples
+    [data] - binary, ascii tables, etc.
+
+Future Install options
+- if both lynx and medusa offer linked versions (hard link files)
+- lynx: server/system-wide build install target for lynx root permissions
+- lynx: shared library build and install (root), target apps for shared build
+
+
