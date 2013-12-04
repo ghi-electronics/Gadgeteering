@@ -56,7 +56,7 @@ fez_lynx_s4::fez_lynx_s4() : base_mainboard(3.3)
 
 	const socket& sock = mainboard->get_socket(0);
 
-	this->analog_converter = new ads_7830(sock, 0x48);
+	this->analog_converter = new ads_7830(sock, 0x49);
 }
 
 fez_lynx_s4::~fez_lynx_s4()

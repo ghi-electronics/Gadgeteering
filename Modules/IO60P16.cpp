@@ -152,7 +152,7 @@ bool io60p16::read_digital(unsigned char port, unsigned char pin)
 {
 	unsigned char b = this->chip->read_register(io60p16::INPUT_PORT_0_REGISTER + port);
 
-	return (b & pin) != 0;
+	return (b & (1 << pin)) != 0;
 }
 
 void io60p16::write_digital(unsigned char port, unsigned char pin, bool value)
