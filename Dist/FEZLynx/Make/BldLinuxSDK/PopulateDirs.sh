@@ -28,7 +28,8 @@ jdo Modules Modules
 #special case, because this file is generated base on ../Core/*.h, but is kept one directory above
 # Core, Modules, and Mainboards
 cp $REPODIR/Gadgeteering.h base/include/
-# another special case. We keep FTDI distributions in it's own directory so it doesn't take a lot of work
+# more special cases. We keep FTDI distributions in it's own directory so it doesn't take a lot of work
 # to clean it out of your other trees and so new releases are easy to install, we need a couple of include
-# files from the root of the FTDI release:
+# files from the root of the FTDI release and the library(s) themself:
 cp $REPODIR/libftd2xx1.1.12/release/*.h  base/include/
+cp $REPODIR/libftd2xx1.1.12/release/build/i386/*.a  base/lib/
