@@ -435,8 +435,10 @@ bool fez_lynx_s4::ftdi_channel::set_mode(mode mode)
             status |= FT_Read(this->handle, this->buffer, to_read, &read);
     } while (to_read != 0);
 
-    status |= FT_SetLatencyTimer(this->handle, 2);
-    status |= FT_SetBitMode(this->handle, 0x00, 0x00);
+#ifdef _WIN32
+    status |= FT_SetLatencyTimer(this->handle, 2); //Calling this function on Linux causes FT_GetQueueStatus to return 0 bytes available.
+#endif
+	status |= FT_SetBitMode(this->handle, 0x00, 0x00);
 
 	if (mode == modes::MPSSE)
 	{
