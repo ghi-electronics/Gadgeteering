@@ -1,22 +1,32 @@
-Full directory structure, things that may be added infuture are set-off with []
-Linux build directory names usually lower case.
+=============================================
+Contents of scripts and files and their function:
 
-    bin
-    build -objects go here
-    doc - ?? now or nextrelease doxygen APIs, pointers to website docs
-    include
-    src
-    lib -preinstalled libraries like FTDI and built libs (.a, .so)
+-- InstallationAndSetup.txt - this file, notes and instructions for creating a distribution tree that can then be zipped to create the distributable SDK
+To be run, in order, on a target system:
+1) MakeDirStruct.sh - creates the directory structure of the tree as it would exist on end-users development machine after unzipping the SDK
+2) PopulateDirs.sh - after the directory structure is created, the git repository is used as a source to copy files to the directory structure created in step 1
+3) Makelibs.sh - this step uses the populated distribution to create and deposit the object libraries (dynamic and static) in the tree
+--  Button_LED - currently copied by hand into the directory tree's example sub-directory. NOTE THIS SHOULD AUTOMATED AS PART OF STEP 2
+
+======================================================
+
+Full directory structure of tree as it as it would exist on the development platorm during active development. Note: some of these directories are not part of the zipped SDK; rather, they are created by the Makefiles when creating applications.  Bracketed directories are for future consideration/use.  Note: Linux build directory names are usually lower case.
+
+    bin - compiled & linked executables go here
+    build -object files go here
+    doc - now (?) or next release: doxygen APIs, pointers to website docs
+    include - the header files
+    src - the source tree separated into the system dependent mainboards, the base/core libraries of the system (the system indepent layer that connects the mainboards to the framework); and, finally, the drivers for each of the modules.
+    lib -preinstalled libraries like FTDI and built libs (.a, .so). Built libraries of the end-user should also go here.
     <Makefile>
     <README.txt>
     [tools] scripts and source to tools/utilities
     test - test programs
-    examples
+    examples 
     [data] - binary, ascii tables, etc.
 
 Future Install options
-- if both lynx and medusa offer linked versions (hard link files)
-- lynx: server/system-wide build install target for lynx root permissions
-- lynx: shared library build and install (root), target apps for shared build
+- if installing both lynx and medusa from the SDK offer end user options to link the common files between the two development platforms. Only source files will be linked and only by hard links.
+- lynx: server/system-wide build install target for lynx, needs root permissions. For shared libraries build and install into system librariy directories (/usr/lib and/or ???) for access by all users
 
 
