@@ -22,15 +22,15 @@ using namespace gadgeteering::interfaces;
 
 motor_driver_l298::motor_driver_l298(unsigned char socket_number) : sock(mainboard->get_socket(socket_number, socket::types::P)), pwm1(this->sock, 7), pwm2(this->sock, 8), direction1(this->sock, 9), direction2(this->sock, 6)
 {
-	this->freq = 25000;
+	this->frequency = 25000;
 	this->last_speed_1 = 0;
 	this->last_speed_2 = 0;
 
 	this->direction1.write(false);
 	this->direction2.write(false);
 
-	this->pwm1.set(freq, 0);
-	this->pwm2.set(freq, 0);
+	this->pwm1.set(this->frequency, 0);
+	this->pwm2.set(this->frequency, 0);
 }
 
 void motor_driver_l298::move_motor(motor motor_side, int new_speed)
@@ -49,7 +49,7 @@ void motor_driver_l298::move_motor(motor motor_side, int new_speed)
 		{
 			//if (last_speed_1 == 0)
 			this->direction1.write(false);
-			this->pwm1.set(freq, 0.01);
+			this->pwm1.set(this->frequency, 0.01);
 		}
 		else if (new_speed < 0)
 		{
@@ -66,7 +66,7 @@ void motor_driver_l298::move_motor(motor motor_side, int new_speed)
 				fix = 0.01;
 			/////////////////////////////////////////////////////////////////////////////
 
-			this->pwm1.set(freq, fix);
+			this->pwm1.set(this->frequency, fix);
 		}
 		else
 		{
@@ -82,7 +82,7 @@ void motor_driver_l298::move_motor(motor motor_side, int new_speed)
 				fix = 0.01;
 			/////////////////////////////////////////////////////////////////////////////
 
-			this->pwm1.set(freq, fix);
+			this->pwm1.set(this->frequency, fix);
 		}
 
 		// Save our speed
@@ -98,7 +98,7 @@ void motor_driver_l298::move_motor(motor motor_side, int new_speed)
 		{
 			//if( last_speed_2 == 0)
 			this->direction2.write(false);
-			this->pwm2.set(freq, 0.01);
+			this->pwm2.set(this->frequency, 0.01);
 		}
 		else if (new_speed < 0)
 		{
@@ -115,7 +115,7 @@ void motor_driver_l298::move_motor(motor motor_side, int new_speed)
 				fix = 0.01;
 			/////////////////////////////////////////////////////////////////////////////
 
-			this->pwm2.set(freq, fix);
+			this->pwm2.set(this->frequency, fix);
 		}
 		else
 		{
@@ -131,7 +131,7 @@ void motor_driver_l298::move_motor(motor motor_side, int new_speed)
 				fix = 0.01;
 			/////////////////////////////////////////////////////////////////////////////
 
-			this->pwm2.set(freq, fix);
+			this->pwm2.set(this->frequency, fix);
 		}
 
 		// Save our speed

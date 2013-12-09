@@ -35,9 +35,10 @@ namespace gadgeteering
 			int last_speed_1;
 			int last_speed_2;
 
-			int freq;
 
 			public:
+				unsigned int frequency;
+
 				typedef unsigned char motor;
 				struct motors
 				{
