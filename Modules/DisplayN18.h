@@ -24,7 +24,7 @@ namespace gadgeteering
 	{
 		class display_n18
 		{
-#ifdef Arduino_h
+#if (defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA)
 			static const unsigned char STEP = 1;
 #else
 			static const unsigned char STEP = 12;

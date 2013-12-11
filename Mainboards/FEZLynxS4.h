@@ -33,6 +33,9 @@ limitations under the License.
 	#include <errno.h>
 #endif
 
+#define FEZ_LYNX
+#define FEZ_LYNX_S4
+
 namespace gadgeteering
 {
     namespace mainboards

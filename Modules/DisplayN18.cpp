@@ -436,7 +436,7 @@ void display_n18::draw_line(int x0, int y0, int x1, int y1, unsigned short fore_
 }
 
 
-#ifdef Arduino_h
+#if (defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA)
 #include <avr/pgmspace.h>
 
 PROGMEM prog_char characters[95 * 5] = {
@@ -551,7 +551,7 @@ void display_n18::draw_character(int x, int y, const char character, unsigned sh
 		for (int j = 0; j < display_n18::CHAR_HEIGHT; j++)
 		{
 			for (int k = 0; k < font_size; k++)
-#ifdef Arduino_h
+#if (defined ARDUINO_AVR_UNO || defined ARDUINO_AVR_MEDUSA)
 				horizontal[j * font_size + k] = pgm_read_byte_near(characters + (character - 32) * 5 + i) & (1 << j) ? fore_color : back_color;
 #else
 				horizontal[j * font_size + k] = characters[(character - 32) * 5 + i] & (1 << j) ? fore_color : back_color;
