@@ -27,8 +27,9 @@ jdo Mainboards Mainboards FEZL
 jdo Modules Modules
 #special case, because this file is generated base on ../Core/*.h, but is kept one directory above
 # Core, Modules, and Mainboards
-cp $REPODIR/Gadgeteering.h base/include/
+cp $REPODIR/Gadgeteering.h base/include/Gadgeteering.h
 # another special case. We keep FTDI distributions in it's own directory so it doesn't take a lot of work
 # to clean it out of your other trees and so new releases are easy to install, we need a couple of include
 # files from the root of the FTDI release:
-cp $REPODIR/libftd2xx1.1.12/release/*.h  base/include/
+cp $REPODIR/Dist/FEZLynx/Headers/Linux/*.h  base/include/
+cp $REPODIR/Dist/FEZLynx/Libraries/Linux/x86_64/libftd2xx.so.1.1.12 base/lib/libftd2xx.so
