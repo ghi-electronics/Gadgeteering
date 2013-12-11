@@ -20,6 +20,9 @@ limitations under the License.
 
 #include "FEZMedusaS12.h"
 
+#undef FEZ_MEDUSA_S12
+#define FEZ_MEDUSA_SHIELD
+
 namespace gadgeteering
 {
 	namespace mainboards

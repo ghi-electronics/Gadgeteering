@@ -22,6 +22,9 @@ limitations under the License.
 
 #include "FEZMedusaMini.h"
 
+#undef FEZ_MEDUSA_MINI
+#define FEZ_MEDUSA_S12
+
 namespace gadgeteering
 {
 	namespace mainboards
