@@ -18,7 +18,7 @@ limitations under the License.
 
 #include "../Gadgeteering.h"
 
-#define MEDUSA
+#define FEZ_MEDUSA
 #define FEZ_MEDUSA_MINI
 
 namespace gadgeteering
