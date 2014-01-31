@@ -13,23 +13,31 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+/* 
+Upated to new API 20140131
+GHI Electronics SDK version Package 2013 R1
+Arduino Environment (Windows) 1.5.5
+NOTE: for above, it is necessary to use DisplayN18.h from the bitbucket repositor fixes an ifdef (for memory conservation)
+*/
+#include <Wire.h>
+#include <SPI.h>
 
 #include <Gadgeteering.h>
-#include <FEZMedusa.h>
-#include <SPI.h>
-#include <IO60P16.h>
-#include <DisplayN18.h>
-#include <Joystick.h>
+#include <Mainboards/FEZMedusaMini.h>
 
-using namespace GHI;
-using namespace GHI::Interfaces;
-using namespace GHI::Mainboards;
-using namespace GHI::Modules;
 
-FEZMedusa board;
-DisplayN18* display;
-Joystick* joystick;
-CPUPin pwmPin;
+#include <Modules/DisplayN18.h>
+#include <Modules/Joystick.h>
+#include <Modules/Tunes.h>
+
+using namespace gadgeteering;
+using namespace gadgeteering::mainboards;
+using namespace gadgeteering::modules;
+using namespace gadgeteering::interfaces;
+
+
+
+
 
 const unsigned char SCREEN_WIDTH = 128;
 const unsigned char SCREEN_HEIGHT = 160;
@@ -37,12 +45,20 @@ const unsigned char HALF_WIDTH = SCREEN_WIDTH / 2;
 const unsigned char HALF_HEIGHT = SCREEN_HEIGHT / 2;
 
 const long US_PER_FRAME = 33333; // (1 * 1000 * 1000) / 30
+const long BEEP_TIME = 300;
 
 const unsigned char PADDLE_WIDTH = 40;
 const unsigned char PADDLE_HEIGHT = 4;
 const unsigned char BALL_LENGTH = 6;
 const unsigned char STARTING_LIVES = 5;
 const unsigned char SPEED = 4;
+
+
+fez_medusa_mini board;
+display_n18 *display;
+joystick *joy_stick;
+tunes *beeper;
+cpu_pin pwmPin;
 
 unsigned short PADDLE_COLOR;
 unsigned short BALL_COLOR;
@@ -58,48 +74,41 @@ char lives;
 long start, sleepFor;
 unsigned char paddleX;
 
-//board.setPWM(board.getSocket(2)->pins[9], 500, 0.5, 10000);
+
   
 void setup() {
-  display = new DisplayN18(1);
-  joystick = new Joystick(3);
-  pwmPin = board.getSocket(2)->pins[9];
+  display = new display_n18(1);
+  joy_stick = new joystick(3); 
+  //pwmPin = board.get_socket(2).pins[9];
+  beeper = new tunes(2);
   
-  PADDLE_COLOR = DisplayN18::rgbToShort(255, 0, 255);
-  BALL_COLOR = DisplayN18::rgbToShort(255, 0, 0);
-  TEXT_COLOR = DisplayN18::rgbToShort(0, 255, 0);
-  BACKGROUND_COLOR = DisplayN18::rgbToShort(0, 0, 255);
+  PADDLE_COLOR = display_n18::rgb_to_short(255, 0, 255);
+  BALL_COLOR = display_n18::rgb_to_short(255, 0, 0);
+  TEXT_COLOR = display_n18::rgb_to_short(0, 255, 0);
+  BACKGROUND_COLOR = display_n18::rgb_to_short(0, 0, 255);
   
-  display->fillRect(0, 0, 128, 20, BACKGROUND_COLOR);
-  display->drawString(34, 0, "FEZ Medusa", TEXT_COLOR, BACKGROUND_COLOR);
-  display->drawString(1, 10, "Press Button To Start", TEXT_COLOR, BACKGROUND_COLOR);
+ 
+display->clear(BACKGROUND_COLOR);
+display->draw_string(5, 0, "FEZ Medusa", TEXT_COLOR, BACKGROUND_COLOR,2); //34
+display->draw_string(1, 18, "Press Button To Start", TEXT_COLOR, BACKGROUND_COLOR); //10
   
-  for (unsigned char y = 20, r = 0, g = 0, b = 255; y < 160; y++) {
-    display->fillRect(0, y, 128, 1, DisplayN18::rgbToShort(r, g, b));
-    
-    if (r == 255)
-      if (g == 255)
-        b -= 5;
-      else
-        g += 5;
-    else
-      r += 5; 
-  }
-  
-  while(!joystick->isPressed()) 
+ while(!joy_stick->is_pressed()) 
     ;
       
-  System::RandomNumberSeed((int)System::TimeElapsed());
+ system::random_seed((int)system::time_elapsed());
   
   lives = STARTING_LIVES;
   
   setBall();
+
 }
 
 void loop() {
-  if (joystick->isPressed())
+  //lives = STARTING_LIVES;  // uncomment for never ending game
+
+  if (joy_stick->is_pressed())
   {
-    while(joystick->isPressed()) 
+    while(joy_stick->is_pressed()) 
       ;
       
     setBall();
@@ -109,14 +118,14 @@ void loop() {
   if (lives == 0)
     return;
   
-  start = (long)System::TimeElapsed();
+  start = (long)system::time_elapsed();
    
   drawLives();
    
   drawPaddle(BACKGROUND_COLOR);
   drawBall(BACKGROUND_COLOR);
   
-  paddleX = (int)(joystick->getX() * (SCREEN_WIDTH - PADDLE_WIDTH));
+  paddleX = (int)(joy_stick->get_x() * (SCREEN_WIDTH - PADDLE_WIDTH));
   
   if (tickBall())
     return;
@@ -124,17 +133,18 @@ void loop() {
   drawPaddle(PADDLE_COLOR);
   drawBall(BALL_COLOR);
       
-  sleepFor = (US_PER_FRAME - ((long)System::TimeElapsed() - start)) / 1000;
+  sleepFor = (US_PER_FRAME - ((long)system::time_elapsed() - start)) / 1000;
   if (sleepFor > 0)
-    System::Sleep(sleepFor);
+    system::sleep(sleepFor);
+ 
 }
 
 void setBall()
 {  
-  ballX = System::RandomNumber(0, SCREEN_WIDTH - BALL_LENGTH);
-  ballY = System::RandomNumber(0, SCREEN_HEIGHT - 75);
-  stepX = (System::RandomNumber(0, 1) ? 1 : -1) * SPEED;
-  stepY = (System::RandomNumber(0, 1) ? 1 : -1) * SPEED;
+  ballX = system::random_number(0, SCREEN_WIDTH - BALL_LENGTH);
+  ballY = system::random_number(0, SCREEN_HEIGHT - 75);
+  stepX = (system::random_number(0, 1) ? 1 : -1) * SPEED;
+  stepY = (system::random_number(0, 1) ? 1 : -1) * SPEED;
   
   if (stepX == 0)
     stepX = 1;
@@ -146,18 +156,18 @@ void setBall()
 
 void drawBall(unsigned short color)
 {
-  display->fillRect(ballX, ballY, BALL_LENGTH, BALL_LENGTH, color);
+  display->fill_rect(ballX, ballY, BALL_LENGTH, BALL_LENGTH, color);
 }
 
 void drawPaddle(unsigned short color)
 {
-  display->fillRect(paddleX, SCREEN_HEIGHT - PADDLE_HEIGHT, PADDLE_WIDTH, PADDLE_HEIGHT, color);
+  display->fill_rect(paddleX, SCREEN_HEIGHT - PADDLE_HEIGHT, PADDLE_WIDTH, PADDLE_HEIGHT, color);
 }
 
 void drawLives()
 {
-  display->drawString(0, 0, "Lives: ", TEXT_COLOR, BACKGROUND_COLOR);
-  display->drawCharacter(42, 0, (char)(lives + 48), TEXT_COLOR, BACKGROUND_COLOR);
+  display->draw_string(0, 0, "Lives: ", TEXT_COLOR, BACKGROUND_COLOR);
+  display->draw_character(42, 0, (char)(lives + 48), TEXT_COLOR, BACKGROUND_COLOR);
 }
 
 bool tickBall()
@@ -166,7 +176,8 @@ bool tickBall()
   {
     stepY *= -1;
     ballY += stepY;
-    board.setPWM(pwmPin, 900, 0.5, 65);
+    //board.set_pwm(pwmPin, 900, 0.5, 65);
+    beeper->set(900,0.5); system::sleep(BEEP_TIME); beeper->set(0.0,0.0);
     return false;
   }
   
@@ -191,12 +202,13 @@ bool subtractLife()
 {
   lives--;
   
-  board.setPWM(pwmPin, 125, 0.5, 250);
+  //board.set_pwm(pwmPin, 125, 0.5, 250);
+  beeper->set(125,0.5); system::sleep(BEEP_TIME); beeper->set(0.0,0.0);
   
   if (lives == 0)
   {
      display->clear(BACKGROUND_COLOR);
-     display->drawString(16, 72, "You Lose", TEXT_COLOR, BACKGROUND_COLOR, 2);
+     display->draw_string(16, 72, "You Lose", TEXT_COLOR, BACKGROUND_COLOR, 2);
   }
   
   return lives == 0;
