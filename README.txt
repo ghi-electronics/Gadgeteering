@@ -1,3 +1,7 @@
+# Gadgeteering
+
+This is the repository for our Gadgeteering drivers. While we are keeping it up, it is no longer being actively maintained.
+
 The repository is organized as follows:
 
 -Core: contains the core Gadgeteering framework files such as mainboard and digital inputs.
